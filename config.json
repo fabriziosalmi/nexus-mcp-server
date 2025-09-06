@@ -3,6 +3,13 @@
   "enabled_tools": [
     "calculator",
     "filesystem_reader",
-    "web_fetcher"
+    "web_fetcher",
+    "crypto_tools",
+    "encoding_tools",
+    "datetime_tools",
+    "uuid_tools",
+    "string_tools",
+    "validator_tools",
+    "system_info"
   ]
 }
