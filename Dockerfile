@@ -42,8 +42,8 @@ RUN chown -R nexus:nexus /app
 # Switcha all'utente non-root
 USER nexus
 
-# Espone la porta per comunicazioni (opzionale, MCP usa stdio di default)
-EXPOSE 8000
+# Espone la porta per comunicazioni HTTP
+EXPOSE 9999
 
 # Copia e configura entrypoint script
 COPY entrypoint.sh /app/entrypoint.sh
