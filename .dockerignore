@@ -1,0 +1,74 @@
+# Nexus MCP Server - Docker Ignore File
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# Test files
+test/
+tests/
+*_test.py
+test_*.py
+
+# Development tools
+.coverage
+.pytest_cache/
+.mypy_cache/
+.bandit
+.flake8
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Docker files (don't copy into themselves)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Scripts (unless needed in container)
+scripts/
+
+# MCP configs (development only)
+mcp-configs/
+
+# Development dependencies
+requirements-dev.txt
+dev-requirements.txt

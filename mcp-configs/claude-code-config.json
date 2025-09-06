@@ -1,0 +1,29 @@
+{
+  "mcpServers": {
+    "nexus-server": {
+      "command": "python",
+      "args": ["multi_server.py"],
+      "cwd": "/path/to/nexus-mcp-server",
+      "env": {
+        "PYTHONPATH": "/path/to/nexus-mcp-server",
+        "MCP_SERVER_NAME": "NexusServer",
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "nexus-server-docker": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--network=host",
+        "-v", "/path/to/nexus-mcp-server/safe_files:/app/safe_files:rw",
+        "-v", "/path/to/nexus-mcp-server/config.json:/app/config.json:ro",
+        "nexus-mcp-server:latest"
+      ],
+      "env": {
+        "MCP_SERVER_NAME": "NexusServer-Docker"
+      }
+    }
+  }
+}

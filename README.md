@@ -110,12 +110,25 @@ nexus-mcp-server/
 
 ## 🚀 Quick Start
 
-### 1. Setup Ambiente
+### Deployment Automatico (Raccomandato)
 
 ```bash
-# Clona/scarica il progetto
+# Clona il progetto
+git clone <repository-url> nexus-mcp-server
 cd nexus-mcp-server
 
+# Deployment completo con script automatico
+./scripts/deploy.sh full
+
+# Oppure deployment specifico:
+./scripts/deploy.sh local    # Solo ambiente locale
+./scripts/deploy.sh docker   # Solo Docker
+./scripts/deploy.sh compose  # Docker Compose
+```
+
+### 1. Setup Ambiente Locale
+
+```bash
 # Crea ambiente virtuale
 python -m venv .venv
 
@@ -127,11 +140,27 @@ source .venv/bin/activate  # Linux/macOS
 pip install -r requirements.txt
 ```
 
-### 2. Avvia il Server
+### 2. Docker Setup
 
 ```bash
-# Il server si avvia automaticamente tramite client
+# Build immagine Docker
+docker build -t nexus-mcp-server:latest .
+
+# Avvia con Docker Compose
+docker-compose up -d nexus-mcp
+
+# Test container
+docker run --rm -i nexus-mcp-server:latest python -c "print('OK')"
+```
+
+### 3. Utilizzo
+
+```bash
+# Locale
 python client.py <nome_tool> '<argomenti_json>'
+
+# Docker
+docker run --rm -i -v "./safe_files:/app/safe_files:rw" nexus-mcp-server:latest python client.py <tool> '<args>'
 ```
 
 ### 3. Esempi di Utilizzo

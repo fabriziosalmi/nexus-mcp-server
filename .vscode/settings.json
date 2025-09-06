@@ -1,0 +1,39 @@
+{
+  "mcp.servers": {
+    "nexus-mcp-local": {
+      "command": "python",
+      "args": ["multi_server.py"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "MCP_SERVER_NAME": "NexusServer-Local",
+        "LOG_LEVEL": "INFO"
+      }
+    },
+    "nexus-mcp-docker": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--network=host",
+        "-v", "${workspaceFolder}/safe_files:/app/safe_files:rw",
+        "-v", "${workspaceFolder}/config.json:/app/config.json:ro",
+        "nexus-mcp-server:latest"
+      ],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "MCP_SERVER_NAME": "NexusServer-Docker"
+      }
+    }
+  },
+  "mcp.defaultServer": "nexus-mcp-local",
+  "python.defaultInterpreterPath": "./.venv/bin/python",
+  "python.terminal.activateEnvironment": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    ".venv": false
+  },
+  "docker.enableDockerComposeLanguageService": true
+}
