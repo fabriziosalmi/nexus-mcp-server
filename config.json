@@ -23,6 +23,16 @@
     "qr_code_tools",
     "regex_tools",
     "file_converter",
-    "pdf_tools"
+    "pdf_tools",
+    "code_analysis_tools",
+    "docker_tools",
+    "git_tools",
+    "process_management_tools",
+    "code_generation_tools",
+    "database_tools",
+    "environment_tools",
+    "backup_tools",
+    "log_analysis_tools",
+    "code_execution_tools"
   ]
 }
