@@ -13,6 +13,7 @@ import uvicorn
 from multi_server import load_configuration, dynamically_register_tools
 from mcp.server.fastmcp import FastMCP
 from monitoring import get_monitoring
+from monitoring_decorators import monitor_tool_execution
 
 # Configurazione logging
 logging.basicConfig(
@@ -140,6 +141,11 @@ async def execute_tool(request: ToolRequest):
     """Esegue un tool specificato."""
     global mcp_server, tool_registry
     
+    # Start monitoring
+    import time
+    start_time = time.time()
+    monitoring = get_monitoring()
+    
     if not mcp_server:
         raise HTTPException(status_code=500, detail="Server MCP non inizializzato")
     
@@ -261,6 +267,10 @@ async def execute_tool(request: ToolRequest):
             else:
                 raise HTTPException(status_code=404, detail=f"Tool '{request.tool_name}' non supportato")
         
+        # Record successful execution
+        duration = time.time() - start_time
+        monitoring.record_tool_call(request.tool_name, "success", duration)
+        
         return {
             "tool_name": request.tool_name,
             "arguments": request.arguments,
@@ -269,11 +279,17 @@ async def execute_tool(request: ToolRequest):
         }
         
     except TypeError as e:
+        # Record error
+        duration = time.time() - start_time
+        monitoring.record_tool_call(request.tool_name, "error", duration)
         raise HTTPException(
             status_code=400, 
             detail=f"Argomenti non validi per il tool '{request.tool_name}': {str(e)}"
         )
     except Exception as e:
+        # Record error
+        duration = time.time() - start_time
+        monitoring.record_tool_call(request.tool_name, "error", duration)
         logging.error(f"Errore durante esecuzione tool '{request.tool_name}': {e}")
         raise HTTPException(
             status_code=500, 
