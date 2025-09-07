@@ -17,6 +17,11 @@
     "data_analysis",
     "image_processing",
     "audio_processing",
-    "video_processing"
+    "video_processing",
+    "unit_converter",
+    "qr_code_tools",
+    "regex_tools",
+    "file_converter",
+    "pdf_tools"
   ]
 }
