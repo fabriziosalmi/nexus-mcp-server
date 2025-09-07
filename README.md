@@ -4,8 +4,8 @@
 
 ## 📊 Panoramica Tool e Funzioni
 
-🛠️ **Tool Disponibili**: **44**  
-⚙️ **Funzioni Totali**: **224**
+🛠️ **Tool Disponibili**: **49**  
+⚙️ **Funzioni Totali**: **249**
 
 ## 📋 Tabella Completa Tool
 
@@ -14,7 +14,7 @@
 | API Testing Tools | `api_testing_tools.py` | 4 | Testing e documentazione API REST |
 | Archive Tools | `archive_tools.py` | 4 | Gestione archivi ZIP, TAR, 7Z |
 | Audio Processing | `audio_processing.py` | 6 | Elaborazione e analisi di file audio |
-| Backup Tools | `backup_tools.py` | 5 | Gestione backup e archivi |
+| Backup Tools | `backup_tools.py` | 5 | Gestione backup e archivi avanzata |
 | Calculator | `calculator.py` | 2 | Operazioni matematiche di base |
 | Cloud Tools | `cloud_tools.py` | 10 | Servizi e API per piattaforme cloud |
 | Code Analysis Tools | `code_analysis_tools.py` | 4 | Analisi qualità e metriche del codice |
@@ -55,6 +55,7 @@
 | Video Processing | `video_processing.py` | 5 | Elaborazione file video |
 | Weather Tools | `weather_tools.py` | 3 | Informazioni meteorologiche |
 | Web Fetcher | `web_fetcher.py` | 1 | Recupero contenuti web |
+| **Workflow Orchestration** | `workflows.py` | 1 | **Meta-tool per orchestrazione workflow complessi** |
 
 ## 🎯 Filosofia di Progettazione
 
@@ -340,6 +341,63 @@
 - `compare_archive_formats(file_types, total_size_mb)` - Confronto efficienza formati archivio
 - `generate_archive_script(archive_type, source_dir, archive_name, options)` - Script bash/PowerShell per archiviazione
 
+## 🔄 Workflow Orchestration (Advanced Meta-Tool) - **NUOVO**
+
+### 🚀 Workflow Tools (`workflows.py`) - **RIVOLUZIONARIO**
+**Orchestrazione Meta-Tool per workflow complessi**
+- `analyze_repository(url, analysis_depth)` - **META-TOOL**: Workflow completo di analisi repository
+  - Catena multiple operazioni: clone → analisi complessità → scan sicurezza → analisi struttura → archivio → cleanup
+  - Livelli profondità: "quick", "standard", "deep"
+  - Riduce da 6+ chiamate individuali a 1 singola operazione
+  - Report comprensivo con tracking workflow e gestione errori
+  - Cleanup automatico risorse e gestione directory temporanee
+
+#### Vantaggi Chiave
+- **Riduzione Complessità**: Singola chiamata sostituisce multiple operazioni
+- **Risultati Ricchi**: Analisi comprensiva con reporting aggregato
+- **Resilienza Errori**: Gestione errori elegante con reporting dettagliato
+- **Gestione Risorse**: Cleanup automatico previene problemi spazio disco
+- **Analisi Flessibile**: Livelli configurabili per diversi casi d'uso
+
+#### Struttura Output Workflow
+```json
+{
+  "workflow_id": "repo_analysis_20250907_094500",
+  "repository_url": "https://github.com/user/repo.git",
+  "final_status": "completed",
+  "steps_completed": ["repository_clone", "code_complexity", "secret_detection", "structure_analysis", "cleanup"],
+  "summary": {
+    "code_analysis": {"files_analyzed": 25, "total_lines": 1500, "languages_detected": 3},
+    "security_analysis": {"secrets_found": 0, "risk_level": "LOW"}
+  },
+  "duration_seconds": 2.45
+}
+```
+
+### 🌍 Environment Tools (`environment_tools.py`) - **NUOVO**
+**Gestione variabili ambiente e configurazioni**
+- `manage_environment_variables(action, variables, variable_name)` - Gestisce variabili d'ambiente (list, get, set, unset, validate)
+- `create_environment_file(env_type, variables, file_path)` - Crea file configurazione (.env, .ini, .json, .yaml)
+- `analyze_system_environment()` - Analizza ambiente sistema con diagnostica completa
+- `backup_restore_environment(action, backup_path, variables)` - Backup/ripristino configurazioni ambiente
+- `validate_configuration_file(file_path, config_type)` - Valida file configurazione comuni
+
+### 📊 Log Analysis Tools (`log_analysis_tools.py`) - **NUOVO**
+**Parsing e analisi file log avanzata**
+- `parse_log_file(file_path, log_format, max_lines)` - Parsing log con formati multipli (apache, nginx, syslog, json)
+- `analyze_log_patterns(log_data, pattern_type)` - Analizza pattern specifici (errors, requests, performance, security)
+- `generate_log_report(log_data, report_type)` - Genera report comprensivi (summary, detailed, timeline, alerts)
+- `filter_log_entries(log_data, filters)` - Filtra log per criteri specifici
+- `export_log_analysis(analysis_data, export_format, file_path)` - Export analisi (json, csv, html, text)
+
+### 💾 Backup Tools (`backup_tools.py`) - **NUOVO**
+**Gestione backup e archivi avanzata**
+- `create_archive(source_path, archive_type, include_patterns, exclude_patterns)` - Crea archivi ZIP/TAR con filtri avanzati
+- `extract_archive(archive_path, destination_path, verify_integrity)` - Estrae archivi con verifica integrità
+- `create_backup_manifest(backup_path, source_paths, metadata)` - Crea manifest di backup con checksums
+- `verify_backup_integrity(manifest_path, backup_base_path)` - Verifica integrità backup usando manifest
+- `compress_files(file_paths, compression_level, algorithm)` - Comprime file individuali (gzip, bzip2, zip)
+
 ## 🏗️ Struttura del Progetto
 
 ```
@@ -387,7 +445,19 @@ nexus-mcp-server/
     ├── api_testing_tools.py    # 🚀 Testing API REST
     ├── template_tools.py       # 📋 Generazione template
     ├── markdown_tools.py       # 📝 Elaborazione Markdown
-    └── archive_tools.py        # 📦 Gestione archivi
+    ├── archive_tools.py        # 📦 Gestione archivi
+    ├── code_analysis_tools.py  # 🔍 Analisi qualità codice
+    ├── code_execution_tools.py # 🚀 Esecuzione codice sicura + Dynamic Tools
+    ├── code_generation_tools.py # 🏗️ Generazione codice e template
+    ├── database_tools.py       # 🗄️ Gestione database SQLite
+    ├── docker_tools.py         # 🐳 Gestione container Docker
+    ├── git_tools.py            # 📋 Gestione repository Git
+    ├── process_management_tools.py # ⚙️ Gestione processi sistema
+    ├── environment_tools.py    # 🌍 Gestione variabili ambiente (NUOVO)
+    ├── backup_tools.py         # 💾 Gestione backup avanzati (NUOVO)
+    ├── log_analysis_tools.py   # 📊 Analisi log avanzata (NUOVO)
+    └── workflows.py            # 🔄 Orchestrazione workflow (NUOVO)
+```
 ```
 
 ## 🎯 Dynamic One-Time Tools (Advanced Feature)
@@ -599,6 +669,61 @@ python client.py cloud_health_checker '{"endpoints": ["https://api.example.com",
 python client.py cloud_security_scanner '{"config_text": "{\\"Action\\": \\"*\\", \\"Resource\\": \\"*\\"}", "cloud_provider": "aws"}'
 python client.py multi_cloud_resource_tracker '{"resources": [{"provider": "aws", "type": "ec2", "name": "web-server", "region": "us-east-1"}]}'
 python client.py cloud_config_validator '{"config_text": "{\\"AWSTemplateFormatVersion\\": \\"2010-09-09\\"}", "config_type": "json"}'
+
+# Environment Tools (NUOVO)
+python client.py manage_environment_variables '{"action": "list"}'
+python client.py manage_environment_variables '{"action": "get", "variable_name": "PATH"}'
+python client.py manage_environment_variables '{"action": "set", "variables": {"CUSTOM_VAR": "value123"}}'
+python client.py create_environment_file '{"env_type": "env", "variables": {"DB_HOST": "localhost", "DB_PORT": "5432"}}'
+python client.py analyze_system_environment '{}'
+python client.py backup_restore_environment '{"action": "backup", "variables": ["PATH", "HOME", "USER"]}'
+python client.py validate_configuration_file '{"file_path": "/path/to/config.json", "config_type": "json"}'
+
+# Backup Tools (NUOVO)  
+python client.py create_archive '{"source_path": "/path/to/backup", "archive_type": "zip", "exclude_patterns": ["*.tmp", "*.log"]}'
+python client.py extract_archive '{"archive_path": "/path/to/archive.zip", "verify_integrity": true}'
+python client.py create_backup_manifest '{"backup_path": "/backup/dir", "source_paths": ["/home/user/docs"]}'
+python client.py verify_backup_integrity '{"manifest_path": "/backup/manifest.json"}'
+python client.py compress_files '{"file_paths": ["/file1.txt", "/file2.txt"], "algorithm": "gzip", "compression_level": 6}'
+
+# Log Analysis Tools (NUOVO)
+python client.py parse_log_file '{"file_path": "/var/log/access.log", "log_format": "auto", "max_lines": 1000}'
+python client.py analyze_log_patterns '{"log_data": [...], "pattern_type": "errors"}'
+python client.py generate_log_report '{"log_data": [...], "report_type": "summary"}'
+python client.py filter_log_entries '{"log_data": [...], "filters": {"level": "ERROR", "message_contains": "timeout"}}'
+python client.py export_log_analysis '{"analysis_data": {...}, "export_format": "html"}'
+
+# Workflow Orchestration (NUOVO - META-TOOL)
+python client.py analyze_repository '{"url": "https://github.com/user/repo.git", "analysis_depth": "standard"}'
+python client.py analyze_repository '{"url": "https://github.com/user/repo.git", "analysis_depth": "deep"}'
+
+# Database Tools
+python client.py create_sqlite_database '{"database_name": "test_db", "tables": [{"name": "users", "columns": [{"name": "id", "type": "INTEGER", "primary_key": true}, {"name": "name", "type": "TEXT"}]}]}'
+python client.py validate_sql_query '{"query": "SELECT * FROM users WHERE id = 1", "database_type": "sqlite"}'
+python client.py execute_safe_query '{"database_path": "/tmp/test.db", "query": "SELECT COUNT(*) FROM users"}'
+
+# Docker Tools
+python client.py check_docker_status '{}'
+python client.py list_docker_containers '{"status": "running"}'
+python client.py list_docker_images '{}'
+python client.py validate_dockerfile '{"dockerfile_content": "FROM python:3.9\\nCOPY . /app\\nWORKDIR /app"}'
+
+# Git Tools
+python client.py analyze_git_repository '{"repo_path": "."}'
+python client.py git_diff_analysis '{"file_path": "README.md", "staged": false}'
+python client.py git_commit_history '{"limit": 10}'
+python client.py generate_gitignore '{"language": "python", "additional_patterns": ["*.custom"]}'
+
+# Process Management Tools
+python client.py list_processes_by_criteria '{"criteria": "cpu_usage", "limit": 10}'
+python client.py monitor_process '{"pid": 1234, "duration": 30}'
+python client.py execute_with_limits '{"command": "echo hello", "timeout": 10, "memory_limit_mb": 50}'
+python client.py analyze_system_resources '{}'
+
+# Code Execution Tools (Dynamic Tools)
+python client.py execute_python_code '{"code": "print(\\"Hello World\\")", "timeout": 30}'
+python client.py create_and_run_tool '{"python_code": "import datetime\\nprint(datetime.datetime.now())", "timeout": 60}'
+python client.py validate_python_syntax '{"code": "def hello(): return \\"world\\"", "strict_mode": true}'
 ```
 
 ## 🔌 Integrazione VSCode con Docker/Docker Compose
@@ -856,9 +981,15 @@ Modifica `config.json` per controllare quali tool sono attivi:
   "comment": "Pannello di controllo per il server MCP Nexus",
   "enabled_tools": [
     "calculator",
+    "filesystem_reader",
+    "web_fetcher",
     "crypto_tools",
-    "string_tools",
+    "encoding_tools",
+    "datetime_tools",
     "uuid_tools",
+    "string_tools",
+    "validator_tools",
+    "system_info",
     "network_tools",
     "security_tools",
     "network_security_tools",
@@ -872,7 +1003,28 @@ Modifica `config.json` per controllare quali tool sono attivi:
     "regex_tools",
     "file_converter",
     "pdf_tools",
-    "cloud_tools"
+    "code_analysis_tools",
+    "docker_tools",
+    "git_tools",
+    "process_management_tools",
+    "code_generation_tools",
+    "database_tools",
+    "environment_tools",
+    "backup_tools",
+    "log_analysis_tools",
+    "code_execution_tools",
+    "cloud_tools",
+    "weather_tools",
+    "url_tools",
+    "text_analysis_tools",
+    "email_tools",
+    "color_tools",
+    "json_yaml_tools",
+    "api_testing_tools",
+    "template_tools",
+    "markdown_tools",
+    "archive_tools",
+    "workflows"
   ]
 }
 ```
