@@ -445,21 +445,3 @@ Abilita logging dettagliato modificando il livello in `multi_server.py`:
 logging.basicConfig(level=logging.DEBUG, ...)
 ```
 
-## 🔄 Changelog
-
-### v2.0.0 (Corrente)
-- ➕ Aggiunti 15 nuovi tool (Crypto, Encoding, DateTime, UUID, String, Validator, System, Network, Security, Performance, Data Analysis, Image Processing, Audio Processing, Video Processing)
-- 🔧 Migliorata configurazione tool
-- 📚 Documentazione completa
-- 🧪 Test estesi
-
-### v1.0.0
-- 🚀 Release iniziale
-- 🧮 Calculator tool
-- 📁 Filesystem reader tool  
-- 🌐 Web fetcher tool
-- ⚙️ Sistema configurazione dinamica
-
----
-
-**Nexus MCP Server** - *Il tuo hub centrale per tool MCP* 🚀
