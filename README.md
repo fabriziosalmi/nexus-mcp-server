@@ -4,8 +4,8 @@
 
 ## 📊 Panoramica Tool e Funzioni
 
-🛠️ **Tool Disponibili**: **45**  
-⚙️ **Funzioni Totali**: **225+**
+🛠️ **Tool Disponibili**: **46**  
+⚙️ **Funzioni Totali**: **232+**
 
 ## 📋 Tabella Completa Tool
 
@@ -13,6 +13,7 @@
 |------|------|----------|-------------|
 | API Testing Tools | `api_testing_tools.py` | 4 | Testing e documentazione API REST |
 | Archive Tools | `archive_tools.py` | 4 | Gestione archivi ZIP, TAR, 7Z |
+| **Async Task Queue** | `async_task_queue.py` | 7 | **Gestione coda asincrona per task a lunga esecuzione** |
 | Audio Processing | `audio_processing.py` | 6 | Elaborazione e analisi di file audio |
 | Backup Tools | `backup_tools.py` | 5 | Gestione backup e archivi avanzata |
 | Calculator | `calculator.py` | 2 | Operazioni matematiche di base |
@@ -435,6 +436,25 @@ Per informazioni dettagliate sull'interfaccia web, consultare: **[UI_CONFIGURATI
 - `verify_backup_integrity(manifest_path, backup_base_path)` - Verifica integrità backup usando manifest
 - `compress_files(file_paths, compression_level, algorithm)` - Comprime file individuali (gzip, bzip2, zip)
 
+### 🔄 Async Task Queue (`async_task_queue.py`) - **NUOVO**
+**Gestione coda asincrona per task a lunga esecuzione**
+- `queue_long_running_task(name, description, task_type, duration, custom_data)` - Sottomette task asincroni
+- `get_task_status(task_id)` - Controlla status e risultati di task specifici
+- `list_all_tasks(status_filter, limit)` - Lista tutti i task con filtri opzionali
+- `cancel_task(task_id)` - Cancella task in esecuzione o in attesa
+- `remove_task(task_id)` - Rimuove completamente task dalla coda
+- `get_queue_info()` - Ottiene informazioni e statistiche sulla coda
+- `cleanup_completed_tasks(max_age_hours)` - Cleanup manuale task completati/falliti
+
+#### Caratteristiche Principali
+- **Esecuzione Asincrona**: Thread pool per task paralleli (configurabile max_workers)
+- **Persistenza Task**: Storage JSON per sopravvivenza riavvii server
+- **Tracking Stato**: PENDING → RUNNING → COMPLETED/FAILED/CANCELLED
+- **Tipi Task Multipli**: sleep, cpu_intensive, io_intensive, custom
+- **Cleanup Automatico**: Timer background per rimozione task vecchi
+- **Thread Safety**: Protezione accesso concorrente con lock
+- **Gestione Errori**: Exception handling comprensivo e logging
+
 ## 🏗️ Struttura del Progetto
 
 ```
@@ -493,6 +513,7 @@ nexus-mcp-server/
     ├── environment_tools.py    # 🌍 Gestione variabili ambiente (NUOVO)
     ├── backup_tools.py         # 💾 Gestione backup avanzati (NUOVO)
     ├── log_analysis_tools.py   # 📊 Analisi log avanzata (NUOVO)
+    ├── async_task_queue.py     # 🔄 Coda task asincroni a lunga esecuzione (NUOVO)
     └── workflows.py            # 🔄 Orchestrazione workflow (NUOVO)
 ```
 ```
@@ -722,6 +743,19 @@ python client.py extract_archive '{"archive_path": "/path/to/archive.zip", "veri
 python client.py create_backup_manifest '{"backup_path": "/backup/dir", "source_paths": ["/home/user/docs"]}'
 python client.py verify_backup_integrity '{"manifest_path": "/backup/manifest.json"}'
 python client.py compress_files '{"file_paths": ["/file1.txt", "/file2.txt"], "algorithm": "gzip", "compression_level": 6}'
+
+# Async Task Queue (NUOVO - GESTIONE TASK ASINCRONI)
+python client.py queue_long_running_task '{"name": "Long Sleep Task", "description": "Task che dorme per 30 secondi", "task_type": "sleep", "duration": 30}'
+python client.py queue_long_running_task '{"name": "CPU Intensive", "description": "Task CPU-intensive", "task_type": "cpu_intensive", "duration": 15}'
+python client.py queue_long_running_task '{"name": "IO Operations", "description": "Task con operazioni I/O", "task_type": "io_intensive", "duration": 10}'
+python client.py queue_long_running_task '{"name": "Custom Task", "description": "Task personalizzato", "task_type": "custom", "custom_data": "dati personalizzati"}'
+python client.py get_task_status '{"task_id": "uuid-del-task"}'
+python client.py list_all_tasks '{"status_filter": "running", "limit": 10}'
+python client.py list_all_tasks '{"status_filter": "completed", "limit": 5}'
+python client.py cancel_task '{"task_id": "uuid-del-task"}'
+python client.py remove_task '{"task_id": "uuid-del-task"}'
+python client.py get_queue_info '{}'
+python client.py cleanup_completed_tasks '{"max_age_hours": 12}'
 
 # Log Analysis Tools (NUOVO)
 python client.py parse_log_file '{"file_path": "/var/log/access.log", "log_format": "auto", "max_lines": 1000}'
@@ -1061,7 +1095,8 @@ Modifica `config.json` per controllare quali tool sono attivi:
     "template_tools",
     "markdown_tools",
     "archive_tools",
-    "workflows"
+    "workflows",
+    "async_task_queue"
   ]
 }
 ```

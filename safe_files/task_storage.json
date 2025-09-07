@@ -31,23 +31,7 @@
         "args": "(3,)",
         "kwargs": "{}"
       }
-    },
-    {
-      "task_id": "7c6c4e6e-3392-4a19-bfc4-4dfc1623299f",
-      "name": "Quick Custom Task",
-      "description": "A custom task that finishes quickly",
-      "status": "completed",
-      "created_at": "2025-09-07T17:55:11.675394+00:00",
-      "started_at": "2025-09-07T17:55:11.677903+00:00",
-      "completed_at": "2025-09-07T17:55:13.678707+00:00",
-      "progress": 100.0,
-      "result": "Task personalizzato completato con dati: test data for quick completion",
-      "error": null,
-      "metadata": {
-        "args": "('test data for quick completion',)",
-        "kwargs": "{}"
-      }
     }
   ],
-  "saved_at": "2025-09-07T17:55:13.679049+00:00"
+  "saved_at": "2025-09-07T17:55:59.691703+00:00"
 }
