@@ -4,12 +4,14 @@ import subprocess
 import os
 import tempfile
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
+from datetime import datetime, timedelta
+from collections import defaultdict, Counter
 import re
 
 def register_tools(mcp):
-    """Registra i tool Git con l'istanza del server MCP."""
-    logging.info("📋 Registrazione tool-set: Git Repository Tools")
+    """Registra i tool Git avanzati con l'istanza del server MCP."""
+    logging.info("🔀 Registrazione tool-set: Git Repository Tools")
 
     @mcp.tool()
     def analyze_git_repository(repo_path: str = ".") -> Dict[str, Any]:
@@ -568,3 +570,729 @@ def register_tools(mcp):
                 "success": False,
                 "error": str(e)
             }
+
+    @mcp.tool()
+    def manage_git_remotes(action: str, remote_name: str = "", remote_url: str = "") -> Dict[str, Any]:
+        """
+        Gestisce remote Git (list, add, remove, update).
+        
+        Args:
+            action: Azione da eseguire (list, add, remove, set-url, fetch, push)
+            remote_name: Nome del remote
+            remote_url: URL del remote (per add/set-url)
+        """
+        try:
+            if action == "list":
+                # Lista remotes con dettagli
+                result = subprocess.run(['git', 'remote', '-v'], capture_output=True, text=True, timeout=10)
+                
+                if result.returncode != 0:
+                    return {"success": False, "error": "Failed to list remotes"}
+                
+                remotes = {}
+                for line in result.stdout.strip().split('\n'):
+                    if line.strip():
+                        parts = line.split()
+                        if len(parts) >= 3:
+                            name = parts[0]
+                            url = parts[1]
+                            operation = parts[2].strip('()')
+                            
+                            if name not in remotes:
+                                remotes[name] = {}
+                            remotes[name][operation] = url
+                
+                # Ottieni info aggiuntive per ogni remote
+                remote_details = []
+                for name, urls in remotes.items():
+                    # Controlla connettività
+                    connectivity_result = subprocess.run(
+                        ['git', 'ls-remote', '--exit-code', name], 
+                        capture_output=True, text=True, timeout=30
+                    )
+                    
+                    remote_info = {
+                        "name": name,
+                        "fetch_url": urls.get("fetch", ""),
+                        "push_url": urls.get("push", ""),
+                        "reachable": connectivity_result.returncode == 0,
+                        "refs_count": len(connectivity_result.stdout.split('\n')) if connectivity_result.returncode == 0 else 0
+                    }
+                    remote_details.append(remote_info)
+                
+                return {
+                    "success": True,
+                    "action": action,
+                    "remotes": remote_details,
+                    "total_remotes": len(remote_details)
+                }
+            
+            elif action == "add":
+                if not remote_name or not remote_url:
+                    return {"success": False, "error": "remote_name and remote_url required for add"}
+                
+                result = subprocess.run(['git', 'remote', 'add', remote_name, remote_url], 
+                                      capture_output=True, text=True, timeout=10)
+                
+                if result.returncode != 0:
+                    return {"success": False, "error": result.stderr.strip()}
+                
+                return {
+                    "success": True,
+                    "action": action,
+                    "remote_name": remote_name,
+                    "remote_url": remote_url,
+                    "message": f"Remote '{remote_name}' added successfully"
+                }
+            
+            elif action == "remove":
+                if not remote_name:
+                    return {"success": False, "error": "remote_name required for remove"}
+                
+                result = subprocess.run(['git', 'remote', 'remove', remote_name], 
+                                      capture_output=True, text=True, timeout=10)
+                
+                if result.returncode != 0:
+                    return {"success": False, "error": result.stderr.strip()}
+                
+                return {
+                    "success": True,
+                    "action": action,
+                    "remote_name": remote_name,
+                    "message": f"Remote '{remote_name}' removed successfully"
+                }
+            
+            elif action == "set-url":
+                if not remote_name or not remote_url:
+                    return {"success": False, "error": "remote_name and remote_url required for set-url"}
+                
+                result = subprocess.run(['git', 'remote', 'set-url', remote_name, remote_url], 
+                                      capture_output=True, text=True, timeout=10)
+                
+                if result.returncode != 0:
+                    return {"success": False, "error": result.stderr.strip()}
+                
+                return {
+                    "success": True,
+                    "action": action,
+                    "remote_name": remote_name,
+                    "new_url": remote_url,
+                    "message": f"Remote '{remote_name}' URL updated successfully"
+                }
+            
+            elif action in ["fetch", "push"]:
+                if not remote_name:
+                    return {"success": False, "error": f"remote_name required for {action}"}
+                
+                cmd = ['git', action, remote_name]
+                if action == "fetch":
+                    cmd.append('--dry-run')  # Safe fetch simulation
+                
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+                
+                return {
+                    "success": result.returncode == 0,
+                    "action": action,
+                    "remote_name": remote_name,
+                    "output": result.stdout.strip(),
+                    "error": result.stderr.strip() if result.returncode != 0 else None
+                }
+            
+            else:
+                return {"success": False, "error": f"Unsupported action: {action}"}
+                
+        except subprocess.TimeoutExpired:
+            return {"success": False, "error": f"Git {action} command timed out"}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def analyze_file_blame(file_path: str, start_line: int = 1, end_line: int = None) -> Dict[str, Any]:
+        """
+        Analizza blame/annotazioni per un file.
+        
+        Args:
+            file_path: Percorso del file
+            start_line: Riga di inizio (1-indexed)
+            end_line: Riga di fine (None per tutto il file)
+        """
+        try:
+            if not os.path.exists(file_path):
+                return {"success": False, "error": f"File {file_path} not found"}
+            
+            # Comando git blame
+            cmd = ['git', 'blame', '--line-porcelain', file_path]
+            if start_line > 1 or end_line:
+                range_spec = f"{start_line},{end_line or ''}"
+                cmd.extend(['-L', range_spec])
+            
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            
+            if result.returncode != 0:
+                return {"success": False, "error": result.stderr.strip()}
+            
+            # Parse blame output
+            blame_data = []
+            current_commit = {}
+            author_stats = defaultdict(int)
+            commit_stats = defaultdict(int)
+            
+            for line in result.stdout.split('\n'):
+                if line.startswith('\t'):
+                    # Riga di codice
+                    blame_data.append({
+                        **current_commit,
+                        "line_content": line[1:]  # Rimuovi tab
+                    })
+                    author_stats[current_commit.get('author', 'Unknown')] += 1
+                    commit_stats[current_commit.get('commit_hash', 'Unknown')] += 1
+                elif ' ' in line:
+                    # Metadati commit
+                    key, value = line.split(' ', 1)
+                    if key == 'author':
+                        current_commit['author'] = value
+                    elif key == 'author-time':
+                        current_commit['author_time'] = datetime.fromtimestamp(int(value)).isoformat()
+                    elif key == 'summary':
+                        current_commit['summary'] = value
+                    elif len(key) == 40:  # SHA hash
+                        current_commit['commit_hash'] = key[:8]
+            
+            # Calcola statistiche
+            total_lines = len(blame_data)
+            
+            return {
+                "success": True,
+                "file_path": file_path,
+                "range": {
+                    "start_line": start_line,
+                    "end_line": end_line or total_lines,
+                    "total_lines": total_lines
+                },
+                "blame_data": blame_data,
+                "statistics": {
+                    "total_lines": total_lines,
+                    "unique_authors": len(author_stats),
+                    "unique_commits": len(commit_stats),
+                    "top_authors": dict(Counter(author_stats).most_common(5)),
+                    "most_recent_commits": dict(Counter(commit_stats).most_common(5))
+                }
+            }
+            
+        except subprocess.TimeoutExpired:
+            return {"success": False, "error": "Git blame command timed out"}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def manage_git_tags(action: str, tag_name: str = "", commit_hash: str = "", 
+                       message: str = "") -> Dict[str, Any]:
+        """
+        Gestisce tag Git (list, create, delete, show).
+        
+        Args:
+            action: Azione (list, create, delete, show)
+            tag_name: Nome del tag
+            commit_hash: Hash commit per tag (default: HEAD)
+            message: Messaggio per tag annotato
+        """
+        try:
+            if action == "list":
+                # Lista tutti i tag
+                result = subprocess.run(['git', 'tag', '--sort=-version:refname'], 
+                                      capture_output=True, text=True, timeout=10)
+                
+                if result.returncode != 0:
+                    return {"success": False, "error": "Failed to list tags"}
+                
+                tags = result.stdout.strip().split('\n') if result.stdout.strip() else []
+                
+                # Ottieni dettagli per ogni tag
+                tag_details = []
+                for tag in tags[:20]:  # Limita a 20 tag per performance
+                    # Ottieni info tag
+                    show_result = subprocess.run(['git', 'show', '--format=%H|%an|%ad|%s', 
+                                                '--no-patch', tag], 
+                                               capture_output=True, text=True, timeout=5)
+                    
+                    tag_info = {"name": tag}
+                    
+                    if show_result.returncode == 0 and show_result.stdout.strip():
+                        parts = show_result.stdout.strip().split('|')
+                        if len(parts) >= 4:
+                            tag_info.update({
+                                "commit_hash": parts[0][:8],
+                                "author": parts[1],
+                                "date": parts[2],
+                                "message": parts[3]
+                            })
+                    
+                    # Verifica se è tag annotato
+                    type_result = subprocess.run(['git', 'cat-file', '-t', tag], 
+                                               capture_output=True, text=True, timeout=5)
+                    tag_info["annotated"] = type_result.stdout.strip() == "tag"
+                    
+                    tag_details.append(tag_info)
+                
+                return {
+                    "success": True,
+                    "action": action,
+                    "total_tags": len(tags),
+                    "tags": tag_details,
+                    "latest_tag": tags[0] if tags else None
+                }
+            
+            elif action == "create":
+                if not tag_name:
+                    return {"success": False, "error": "tag_name required for create"}
+                
+                cmd = ['git', 'tag']
+                
+                if message:
+                    cmd.extend(['-a', tag_name, '-m', message])
+                else:
+                    cmd.append(tag_name)
+                
+                if commit_hash:
+                    cmd.append(commit_hash)
+                
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+                
+                if result.returncode != 0:
+                    return {"success": False, "error": result.stderr.strip()}
+                
+                return {
+                    "success": True,
+                    "action": action,
+                    "tag_name": tag_name,
+                    "annotated": bool(message),
+                    "commit_hash": commit_hash or "HEAD",
+                    "message": f"Tag '{tag_name}' created successfully"
+                }
+            
+            elif action == "delete":
+                if not tag_name:
+                    return {"success": False, "error": "tag_name required for delete"}
+                
+                result = subprocess.run(['git', 'tag', '-d', tag_name], 
+                                      capture_output=True, text=True, timeout=10)
+                
+                if result.returncode != 0:
+                    return {"success": False, "error": result.stderr.strip()}
+                
+                return {
+                    "success": True,
+                    "action": action,
+                    "tag_name": tag_name,
+                    "message": f"Tag '{tag_name}' deleted successfully"
+                }
+            
+            elif action == "show":
+                if not tag_name:
+                    return {"success": False, "error": "tag_name required for show"}
+                
+                result = subprocess.run(['git', 'show', tag_name], 
+                                      capture_output=True, text=True, timeout=10)
+                
+                if result.returncode != 0:
+                    return {"success": False, "error": result.stderr.strip()}
+                
+                return {
+                    "success": True,
+                    "action": action,
+                    "tag_name": tag_name,
+                    "tag_info": result.stdout[:2000]  # Limita output per sicurezza
+                }
+            
+            else:
+                return {"success": False, "error": f"Unsupported action: {action}"}
+                
+        except subprocess.TimeoutExpired:
+            return {"success": False, "error": f"Git tag {action} command timed out"}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def detect_merge_conflicts() -> Dict[str, Any]:
+        """
+        Rileva e analizza merge conflicts nel repository.
+        """
+        try:
+            # Controlla se siamo in uno stato di merge
+            merge_head_exists = os.path.exists('.git/MERGE_HEAD')
+            
+            # Ottieni file con conflitti
+            result = subprocess.run(['git', 'diff', '--name-only', '--diff-filter=U'], 
+                                  capture_output=True, text=True, timeout=10)
+            
+            conflict_files = result.stdout.strip().split('\n') if result.stdout.strip() else []
+            
+            # Analizza ogni file con conflitti
+            conflict_details = []
+            total_conflicts = 0
+            
+            for file_path in conflict_files:
+                if not os.path.exists(file_path):
+                    continue
+                
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    # Conta marker di conflitto
+                    conflict_markers = {
+                        'start': content.count('<<<<<<<'),
+                        'separator': content.count('======='),
+                        'end': content.count('>>>>>>>')
+                    }
+                    
+                    file_conflicts = min(conflict_markers.values())
+                    total_conflicts += file_conflicts
+                    
+                    # Trova posizioni conflitti
+                    conflict_positions = []
+                    lines = content.split('\n')
+                    in_conflict = False
+                    conflict_start = None
+                    
+                    for i, line in enumerate(lines, 1):
+                        if line.startswith('<<<<<<<'):
+                            in_conflict = True
+                            conflict_start = i
+                        elif line.startswith('>>>>>>>') and in_conflict:
+                            conflict_positions.append({
+                                'start_line': conflict_start,
+                                'end_line': i,
+                                'lines_affected': i - conflict_start + 1
+                            })
+                            in_conflict = False
+                    
+                    conflict_details.append({
+                        'file': file_path,
+                        'conflicts_count': file_conflicts,
+                        'conflict_positions': conflict_positions,
+                        'file_size_lines': len(lines)
+                    })
+                    
+                except Exception as e:
+                    conflict_details.append({
+                        'file': file_path,
+                        'error': f"Could not analyze: {str(e)}"
+                    })
+            
+            # Ottieni info merge se in corso
+            merge_info = {}
+            if merge_head_exists:
+                try:
+                    with open('.git/MERGE_HEAD', 'r') as f:
+                        merge_commit = f.read().strip()
+                    
+                    # Ottieni info sui commit che si stanno mergiando
+                    current_result = subprocess.run(['git', 'rev-parse', 'HEAD'], 
+                                                  capture_output=True, text=True, timeout=5)
+                    
+                    if current_result.returncode == 0:
+                        merge_info = {
+                            'current_commit': current_result.stdout.strip()[:8],
+                            'merging_commit': merge_commit[:8],
+                            'merge_in_progress': True
+                        }
+                except:
+                    merge_info = {'merge_in_progress': True}
+            
+            return {
+                "success": True,
+                "has_conflicts": len(conflict_files) > 0,
+                "merge_in_progress": merge_head_exists,
+                "conflict_summary": {
+                    "files_with_conflicts": len(conflict_files),
+                    "total_conflicts": total_conflicts
+                },
+                "conflicted_files": conflict_details,
+                "merge_info": merge_info,
+                "resolution_suggestions": _generate_conflict_resolution_suggestions(conflict_details)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def analyze_repository_health() -> Dict[str, Any]:
+        """
+        Analizza la salute generale del repository Git.
+        """
+        try:
+            health_report = {
+                "success": True,
+                "timestamp": datetime.now().isoformat(),
+                "overall_health": "unknown",
+                "checks": {}
+            }
+            
+            issues = []
+            warnings = []
+            recommendations = []
+            
+            # 1. Controlla integrità repository
+            fsck_result = subprocess.run(['git', 'fsck', '--no-progress'], 
+                                       capture_output=True, text=True, timeout=30)
+            health_report["checks"]["integrity"] = {
+                "passed": fsck_result.returncode == 0,
+                "issues": fsck_result.stderr.split('\n') if fsck_result.stderr else []
+            }
+            
+            if fsck_result.returncode != 0:
+                issues.append("Repository integrity issues detected")
+            
+            # 2. Controlla dimensioni repository
+            du_result = subprocess.run(['du', '-sh', '.git'], 
+                                     capture_output=True, text=True, timeout=10)
+            repo_size = du_result.stdout.split()[0] if du_result.returncode == 0 else "unknown"
+            
+            # 3. Conta oggetti
+            count_result = subprocess.run(['git', 'count-objects', '-v'], 
+                                        capture_output=True, text=True, timeout=10)
+            object_stats = {}
+            if count_result.returncode == 0:
+                for line in count_result.stdout.split('\n'):
+                    if ' ' in line:
+                        key, value = line.split(' ', 1)
+                        try:
+                            object_stats[key] = int(value)
+                        except ValueError:
+                            object_stats[key] = value
+            
+            health_report["checks"]["size_analysis"] = {
+                "repository_size": repo_size,
+                "object_statistics": object_stats
+            }
+            
+            # 4. Controlla branch non merged
+            merged_result = subprocess.run(['git', 'branch', '--merged'], 
+                                         capture_output=True, text=True, timeout=10)
+            all_result = subprocess.run(['git', 'branch'], 
+                                      capture_output=True, text=True, timeout=10)
+            
+            if merged_result.returncode == 0 and all_result.returncode == 0:
+                merged_branches = set(b.strip().replace('* ', '') for b in merged_result.stdout.split('\n') if b.strip())
+                all_branches = set(b.strip().replace('* ', '') for b in all_result.stdout.split('\n') if b.strip())
+                unmerged_branches = all_branches - merged_branches
+                
+                health_report["checks"]["branch_hygiene"] = {
+                    "total_branches": len(all_branches),
+                    "merged_branches": len(merged_branches),
+                    "unmerged_branches": len(unmerged_branches),
+                    "unmerged_list": list(unmerged_branches)
+                }
+                
+                if len(unmerged_branches) > 10:
+                    warnings.append(f"Many unmerged branches ({len(unmerged_branches)})")
+            
+            # 5. Controlla commit recenti
+            recent_result = subprocess.run(['git', 'log', '--since=30.days.ago', '--oneline'], 
+                                         capture_output=True, text=True, timeout=10)
+            recent_commits = len(recent_result.stdout.split('\n')) if recent_result.stdout.strip() else 0
+            
+            health_report["checks"]["activity"] = {
+                "commits_last_30_days": recent_commits,
+                "active": recent_commits > 0
+            }
+            
+            if recent_commits == 0:
+                warnings.append("No commits in the last 30 days")
+            
+            # 6. Controlla file grandi
+            large_files_result = subprocess.run(['git', 'rev-list', '--objects', '--all'], 
+                                              capture_output=True, text=True, timeout=30)
+            
+            if large_files_result.returncode == 0:
+                # Analizza file grandi (>10MB)
+                large_files = []
+                for line in large_files_result.stdout.split('\n')[:1000]:  # Limita per performance
+                    if ' ' in line:
+                        obj_hash, filename = line.split(' ', 1)
+                        try:
+                            size_result = subprocess.run(['git', 'cat-file', '-s', obj_hash], 
+                                                       capture_output=True, text=True, timeout=2)
+                            if size_result.returncode == 0:
+                                size = int(size_result.stdout.strip())
+                                if size > 10 * 1024 * 1024:  # >10MB
+                                    large_files.append({
+                                        'file': filename,
+                                        'size_mb': round(size / (1024 * 1024), 2)
+                                    })
+                        except:
+                            continue
+                        
+                        if len(large_files) >= 10:  # Limita risultati
+                            break
+                
+                health_report["checks"]["large_files"] = {
+                    "files_over_10mb": len(large_files),
+                    "large_files": large_files
+                }
+                
+                if len(large_files) > 0:
+                    warnings.append(f"Found {len(large_files)} large files (>10MB)")
+            
+            # Genera raccomandazioni
+            if object_stats.get('size-pack', 0) > 100 * 1024 * 1024:  # >100MB
+                recommendations.append("Consider running 'git gc --aggressive' to optimize repository")
+            
+            if len(unmerged_branches) > 5:
+                recommendations.append("Consider cleaning up old branches that are no longer needed")
+            
+            # Calcola salute generale
+            critical_issues = len(issues)
+            total_warnings = len(warnings)
+            
+            if critical_issues > 0:
+                overall_health = "poor"
+            elif total_warnings > 3:
+                overall_health = "fair"
+            elif total_warnings > 0:
+                overall_health = "good"
+            else:
+                overall_health = "excellent"
+            
+            health_report.update({
+                "overall_health": overall_health,
+                "issues": issues,
+                "warnings": warnings,
+                "recommendations": recommendations,
+                "summary": {
+                    "critical_issues": critical_issues,
+                    "warnings": total_warnings,
+                    "recommendations": len(recommendations)
+                }
+            })
+            
+            return health_report
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def search_git_history(query: str, search_type: str = "commit", 
+                          author: str = "", since: str = "", until: str = "") -> Dict[str, Any]:
+        """
+        Cerca nella cronologia Git.
+        
+        Args:
+            query: Termine di ricerca
+            search_type: Tipo ricerca (commit, file, content)
+            author: Filtra per autore
+            since: Data inizio (es. "2024-01-01")
+            until: Data fine (es. "2024-12-31")
+        """
+        try:
+            results = []
+            
+            if search_type == "commit":
+                # Cerca nei messaggi di commit
+                cmd = ['git', 'log', '--grep', query, '--oneline']
+                
+                if author:
+                    cmd.extend(['--author', author])
+                if since:
+                    cmd.extend(['--since', since])
+                if until:
+                    cmd.extend(['--until', until])
+                
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+                
+                if result.returncode == 0:
+                    for line in result.stdout.strip().split('\n'):
+                        if line.strip():
+                            parts = line.split(' ', 1)
+                            if len(parts) >= 2:
+                                results.append({
+                                    'type': 'commit',
+                                    'hash': parts[0],
+                                    'message': parts[1],
+                                    'match_type': 'commit_message'
+                                })
+            
+            elif search_type == "file":
+                # Cerca file per nome
+                cmd = ['git', 'log', '--name-only', '--pretty=format:', '--all']
+                
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+                
+                if result.returncode == 0:
+                    unique_files = set()
+                    for line in result.stdout.split('\n'):
+                        if line.strip() and query.lower() in line.lower():
+                            unique_files.add(line.strip())
+                    
+                    for file_path in list(unique_files)[:50]:  # Limita risultati
+                        results.append({
+                            'type': 'file',
+                            'path': file_path,
+                            'match_type': 'filename'
+                        })
+            
+            elif search_type == "content":
+                # Cerca nel contenuto dei file
+                cmd = ['git', 'log', '-S', query, '--oneline']
+                
+                if author:
+                    cmd.extend(['--author', author])
+                if since:
+                    cmd.extend(['--since', since])
+                if until:
+                    cmd.extend(['--until', until])
+                
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+                
+                if result.returncode == 0:
+                    for line in result.stdout.strip().split('\n'):
+                        if line.strip():
+                            parts = line.split(' ', 1)
+                            if len(parts) >= 2:
+                                results.append({
+                                    'type': 'content_change',
+                                    'hash': parts[0],
+                                    'message': parts[1],
+                                    'match_type': 'content_modification'
+                                })
+            
+            return {
+                "success": True,
+                "query": query,
+                "search_type": search_type,
+                "filters": {
+                    "author": author or None,
+                    "since": since or None,
+                    "until": until or None
+                },
+                "results": results,
+                "total_matches": len(results)
+            }
+            
+        except subprocess.TimeoutExpired:
+            return {"success": False, "error": "Git search command timed out"}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    # Helper functions
+    def _generate_conflict_resolution_suggestions(conflict_details: List[Dict]) -> List[str]:
+        """Genera suggerimenti per risolvere conflitti."""
+        suggestions = []
+        
+        if not conflict_details:
+            return ["No conflicts detected"]
+        
+        total_conflicts = sum(d.get('conflicts_count', 0) for d in conflict_details)
+        
+        suggestions.append(f"Found {total_conflicts} conflicts in {len(conflict_details)} files")
+        suggestions.append("Use 'git status' to see all conflicted files")
+        suggestions.append("Edit each file to resolve conflicts between <<<<<<< and >>>>>>>")
+        suggestions.append("After resolving, use 'git add <file>' to mark as resolved")
+        suggestions.append("Finally, use 'git commit' to complete the merge")
+        
+        # Suggerimenti specifici
+        if len(conflict_details) > 5:
+            suggestions.append("Consider using a merge tool: 'git mergetool'")
+        
+        return suggestions

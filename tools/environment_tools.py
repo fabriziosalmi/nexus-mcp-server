@@ -5,12 +5,20 @@ import json
 import tempfile
 import shutil
 import logging
-from typing import Dict, List, Any, Optional
 import configparser
 import subprocess
+import platform
+import sys
+import time
+import psutil
+import socket
+from typing import Dict, List, Any, Optional, Tuple
+from datetime import datetime, timezone
+from pathlib import Path
+import re
 
 def register_tools(mcp):
-    """Registra i tool di gestione ambiente con l'istanza del server MCP."""
+    """Registra i tool di gestione ambiente avanzati con l'istanza del server MCP."""
     logging.info("🌍 Registrazione tool-set: Environment Management Tools")
 
     @mcp.tool()
@@ -682,3 +690,789 @@ def register_tools(mcp):
                 "success": False,
                 "error": str(e)
             }
+
+    @mcp.tool()
+    def monitor_system_resources(duration: int = 10, interval: int = 1) -> Dict[str, Any]:
+        """
+        Monitora risorse di sistema in tempo reale.
+        
+        Args:
+            duration: Durata monitoraggio in secondi (max 60)
+            interval: Intervallo campionamento in secondi
+        """
+        try:
+            if duration > 60:
+                duration = 60
+            if interval < 1:
+                interval = 1
+                
+            samples = []
+            start_time = time.time()
+            
+            for i in range(min(duration // interval, 60)):
+                sample_time = time.time()
+                
+                # CPU usage
+                cpu_percent = psutil.cpu_percent(interval=0.1)
+                cpu_count = psutil.cpu_count()
+                cpu_freq = psutil.cpu_freq()
+                
+                # Memory usage
+                memory = psutil.virtual_memory()
+                swap = psutil.swap_memory()
+                
+                # Disk usage
+                disk_usage = psutil.disk_usage('/')
+                disk_io = psutil.disk_io_counters()
+                
+                # Network usage
+                network_io = psutil.net_io_counters()
+                
+                # Process count
+                process_count = len(psutil.pids())
+                
+                sample = {
+                    "timestamp": datetime.fromtimestamp(sample_time).isoformat(),
+                    "cpu": {
+                        "percent": round(cpu_percent, 2),
+                        "count": cpu_count,
+                        "frequency_mhz": round(cpu_freq.current, 2) if cpu_freq else None
+                    },
+                    "memory": {
+                        "total_gb": round(memory.total / (1024**3), 2),
+                        "used_gb": round(memory.used / (1024**3), 2),
+                        "available_gb": round(memory.available / (1024**3), 2),
+                        "percent": memory.percent
+                    },
+                    "swap": {
+                        "total_gb": round(swap.total / (1024**3), 2),
+                        "used_gb": round(swap.used / (1024**3), 2),
+                        "percent": swap.percent
+                    },
+                    "disk": {
+                        "total_gb": round(disk_usage.total / (1024**3), 2),
+                        "used_gb": round(disk_usage.used / (1024**3), 2),
+                        "free_gb": round(disk_usage.free / (1024**3), 2),
+                        "percent": round((disk_usage.used / disk_usage.total) * 100, 2),
+                        "read_mb": round(disk_io.read_bytes / (1024**2), 2) if disk_io else 0,
+                        "write_mb": round(disk_io.write_bytes / (1024**2), 2) if disk_io else 0
+                    },
+                    "network": {
+                        "bytes_sent_mb": round(network_io.bytes_sent / (1024**2), 2),
+                        "bytes_recv_mb": round(network_io.bytes_recv / (1024**2), 2),
+                        "packets_sent": network_io.packets_sent,
+                        "packets_recv": network_io.packets_recv
+                    },
+                    "processes": process_count
+                }
+                
+                samples.append(sample)
+                
+                if i < duration // interval - 1:
+                    time.sleep(interval)
+            
+            # Calcola statistiche aggregate
+            if samples:
+                cpu_values = [s["cpu"]["percent"] for s in samples]
+                memory_values = [s["memory"]["percent"] for s in samples]
+                
+                aggregated_stats = {
+                    "cpu_avg": round(sum(cpu_values) / len(cpu_values), 2),
+                    "cpu_max": max(cpu_values),
+                    "cpu_min": min(cpu_values),
+                    "memory_avg": round(sum(memory_values) / len(memory_values), 2),
+                    "memory_max": max(memory_values),
+                    "memory_min": min(memory_values)
+                }
+            else:
+                aggregated_stats = {}
+            
+            # Genera raccomandazioni
+            recommendations = _generate_performance_recommendations(samples)
+            
+            return {
+                "success": True,
+                "monitoring_duration": duration,
+                "sample_interval": interval,
+                "samples_collected": len(samples),
+                "samples": samples,
+                "aggregated_stats": aggregated_stats,
+                "recommendations": recommendations,
+                "system_health": _assess_system_health(aggregated_stats)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def manage_processes(action: str, process_name: str = "", pid: int = 0, 
+                        command: str = "") -> Dict[str, Any]:
+        """
+        Gestisce processi di sistema.
+        
+        Args:
+            action: Azione (list, find, info, kill, start)
+            process_name: Nome processo per ricerca
+            pid: PID processo specifico
+            command: Comando da eseguire per start
+        """
+        try:
+            if action == "list":
+                processes = []
+                for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent', 'status']):
+                    try:
+                        pinfo = proc.info
+                        processes.append({
+                            "pid": pinfo['pid'],
+                            "name": pinfo['name'],
+                            "cpu_percent": round(pinfo['cpu_percent'] or 0, 2),
+                            "memory_percent": round(pinfo['memory_percent'] or 0, 2),
+                            "status": pinfo['status']
+                        })
+                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                        continue
+                
+                # Ordina per CPU usage
+                processes.sort(key=lambda x: x['cpu_percent'], reverse=True)
+                
+                return {
+                    "success": True,
+                    "action": action,
+                    "total_processes": len(processes),
+                    "processes": processes[:50],  # Top 50 per performance
+                    "top_cpu_processes": processes[:10]
+                }
+            
+            elif action == "find":
+                if not process_name:
+                    return {"success": False, "error": "process_name required for find action"}
+                
+                matching_processes = []
+                for proc in psutil.process_iter(['pid', 'name', 'cmdline', 'status']):
+                    try:
+                        if process_name.lower() in proc.info['name'].lower():
+                            matching_processes.append({
+                                "pid": proc.info['pid'],
+                                "name": proc.info['name'],
+                                "cmdline": ' '.join(proc.info['cmdline']) if proc.info['cmdline'] else '',
+                                "status": proc.info['status']
+                            })
+                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                        continue
+                
+                return {
+                    "success": True,
+                    "action": action,
+                    "search_term": process_name,
+                    "matches_found": len(matching_processes),
+                    "matching_processes": matching_processes
+                }
+            
+            elif action == "info":
+                if not pid:
+                    return {"success": False, "error": "pid required for info action"}
+                
+                try:
+                    proc = psutil.Process(pid)
+                    
+                    # Raccoglie informazioni dettagliate
+                    proc_info = {
+                        "pid": proc.pid,
+                        "name": proc.name(),
+                        "status": proc.status(),
+                        "create_time": datetime.fromtimestamp(proc.create_time()).isoformat(),
+                        "cpu_percent": proc.cpu_percent(),
+                        "memory_info": {
+                            "rss_mb": round(proc.memory_info().rss / (1024**2), 2),
+                            "vms_mb": round(proc.memory_info().vms / (1024**2), 2),
+                            "percent": round(proc.memory_percent(), 2)
+                        },
+                        "cmdline": proc.cmdline(),
+                        "cwd": proc.cwd(),
+                        "exe": proc.exe(),
+                        "num_threads": proc.num_threads(),
+                        "open_files": len(proc.open_files()),
+                        "connections": len(proc.connections())
+                    }
+                    
+                    return {
+                        "success": True,
+                        "action": action,
+                        "process_info": proc_info
+                    }
+                    
+                except psutil.NoSuchProcess:
+                    return {"success": False, "error": f"Process with PID {pid} not found"}
+                except psutil.AccessDenied:
+                    return {"success": False, "error": f"Access denied for process {pid}"}
+            
+            elif action == "kill":
+                if not pid:
+                    return {"success": False, "error": "pid required for kill action"}
+                
+                try:
+                    proc = psutil.Process(pid)
+                    proc_name = proc.name()
+                    proc.terminate()
+                    
+                    # Aspetta che il processo termini
+                    try:
+                        proc.wait(timeout=5)
+                        terminated = True
+                    except psutil.TimeoutExpired:
+                        proc.kill()  # Force kill se non termina
+                        terminated = True
+                    
+                    return {
+                        "success": True,
+                        "action": action,
+                        "pid": pid,
+                        "process_name": proc_name,
+                        "terminated": terminated
+                    }
+                    
+                except psutil.NoSuchProcess:
+                    return {"success": False, "error": f"Process with PID {pid} not found"}
+                except psutil.AccessDenied:
+                    return {"success": False, "error": f"Access denied for process {pid}"}
+            
+            elif action == "start":
+                if not command:
+                    return {"success": False, "error": "command required for start action"}
+                
+                try:
+                    # Avvia processo in background
+                    process = subprocess.Popen(command.split(), 
+                                             stdout=subprocess.PIPE, 
+                                             stderr=subprocess.PIPE)
+                    
+                    return {
+                        "success": True,
+                        "action": action,
+                        "command": command,
+                        "pid": process.pid,
+                        "started": True
+                    }
+                    
+                except Exception as e:
+                    return {"success": False, "error": f"Failed to start process: {str(e)}"}
+            
+            else:
+                return {"success": False, "error": "Invalid action. Use: list, find, info, kill, start"}
+                
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def generate_config_template(template_type: str, application: str, 
+                                environment: str = "development") -> Dict[str, Any]:
+        """
+        Genera template di configurazione per applicazioni comuni.
+        
+        Args:
+            template_type: Tipo template (docker, k8s, nginx, apache, database)
+            application: Nome applicazione
+            environment: Ambiente (development, staging, production)
+        """
+        try:
+            templates = {
+                "docker": _generate_docker_template,
+                "k8s": _generate_k8s_template,
+                "kubernetes": _generate_k8s_template,
+                "nginx": _generate_nginx_template,
+                "apache": _generate_apache_template,
+                "database": _generate_database_template,
+                "systemd": _generate_systemd_template
+            }
+            
+            if template_type not in templates:
+                return {
+                    "success": False,
+                    "error": f"Unsupported template type. Available: {', '.join(templates.keys())}"
+                }
+            
+            # Genera template
+            template_content = templates[template_type](application, environment)
+            
+            # Crea file temporaneo
+            temp_dir = tempfile.mkdtemp(prefix="nexus_config_")
+            template_file = os.path.join(temp_dir, f"{application}_{template_type}_config")
+            
+            with open(template_file, 'w') as f:
+                f.write(template_content)
+            
+            return {
+                "success": True,
+                "template_type": template_type,
+                "application": application,
+                "environment": environment,
+                "template_file": template_file,
+                "template_content": template_content,
+                "content_length": len(template_content),
+                "lines": len(template_content.split('\n'))
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def compare_environments(env1_data: Dict[str, str], env2_data: Dict[str, str],
+                           env1_name: str = "Environment 1", env2_name: str = "Environment 2") -> Dict[str, Any]:
+        """
+        Confronta due configurazioni ambiente.
+        
+        Args:
+            env1_data: Primo ambiente (dict di variabili)
+            env2_data: Secondo ambiente (dict di variabili)
+            env1_name: Nome primo ambiente
+            env2_name: Nome secondo ambiente
+        """
+        try:
+            # Trova differenze
+            only_in_env1 = set(env1_data.keys()) - set(env2_data.keys())
+            only_in_env2 = set(env2_data.keys()) - set(env1_data.keys())
+            common_keys = set(env1_data.keys()) & set(env2_data.keys())
+            
+            # Trova valori diversi per chiavi comuni
+            different_values = {}
+            for key in common_keys:
+                if env1_data[key] != env2_data[key]:
+                    different_values[key] = {
+                        env1_name: env1_data[key],
+                        env2_name: env2_data[key]
+                    }
+            
+            # Analizza pattern
+            env1_patterns = _analyze_env_patterns(env1_data)
+            env2_patterns = _analyze_env_patterns(env2_data)
+            
+            # Genera raccomandazioni
+            recommendations = []
+            
+            if only_in_env1:
+                recommendations.append(f"Variables only in {env1_name}: {', '.join(list(only_in_env1)[:5])}")
+            
+            if only_in_env2:
+                recommendations.append(f"Variables only in {env2_name}: {', '.join(list(only_in_env2)[:5])}")
+            
+            if different_values:
+                recommendations.append(f"{len(different_values)} variables have different values")
+            
+            # Calcola similarità
+            total_unique_keys = len(set(env1_data.keys()) | set(env2_data.keys()))
+            similarity_score = len(common_keys) / total_unique_keys * 100 if total_unique_keys > 0 else 0
+            
+            return {
+                "success": True,
+                "env1_name": env1_name,
+                "env2_name": env2_name,
+                "comparison_summary": {
+                    "total_vars_env1": len(env1_data),
+                    "total_vars_env2": len(env2_data),
+                    "common_variables": len(common_keys),
+                    "only_in_env1": len(only_in_env1),
+                    "only_in_env2": len(only_in_env2),
+                    "different_values": len(different_values),
+                    "similarity_percentage": round(similarity_score, 2)
+                },
+                "differences": {
+                    "only_in_env1": list(only_in_env1),
+                    "only_in_env2": list(only_in_env2),
+                    "different_values": different_values
+                },
+                "pattern_analysis": {
+                    env1_name: env1_patterns,
+                    env2_name: env2_patterns
+                },
+                "recommendations": recommendations,
+                "compatibility": "High" if similarity_score > 80 else "Medium" if similarity_score > 60 else "Low"
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def check_dependencies(dependencies: List[str], check_type: str = "command") -> Dict[str, Any]:
+        """
+        Verifica disponibilità di dipendenze di sistema.
+        
+        Args:
+            dependencies: Lista dipendenze da verificare
+            check_type: Tipo controllo (command, python_package, system_library)
+        """
+        try:
+            if not dependencies:
+                return {"success": False, "error": "Dependencies list cannot be empty"}
+            
+            dependency_status = {}
+            available_count = 0
+            missing_dependencies = []
+            
+            for dep in dependencies:
+                status = {"available": False, "version": None, "location": None, "error": None}
+                
+                try:
+                    if check_type == "command":
+                        # Verifica comando disponibile
+                        result = subprocess.run([dep, "--version"], 
+                                              capture_output=True, text=True, timeout=10)
+                        if result.returncode == 0:
+                            status["available"] = True
+                            status["version"] = result.stdout.split('\n')[0].strip()
+                            status["location"] = shutil.which(dep)
+                        else:
+                            # Prova senza --version
+                            result = subprocess.run([dep], 
+                                                  capture_output=True, text=True, timeout=5)
+                            if result.returncode == 0 or "not found" not in result.stderr.lower():
+                                status["available"] = True
+                                status["location"] = shutil.which(dep)
+                    
+                    elif check_type == "python_package":
+                        # Verifica package Python
+                        try:
+                            import importlib
+                            module = importlib.import_module(dep)
+                            status["available"] = True
+                            status["version"] = getattr(module, '__version__', 'Unknown')
+                            status["location"] = getattr(module, '__file__', 'Unknown')
+                        except ImportError as e:
+                            status["error"] = str(e)
+                    
+                    elif check_type == "system_library":
+                        # Verifica libreria di sistema (basic check)
+                        if platform.system() == "Linux":
+                            result = subprocess.run(["ldconfig", "-p"], 
+                                                  capture_output=True, text=True, timeout=10)
+                            if dep in result.stdout:
+                                status["available"] = True
+                        elif platform.system() == "Darwin":  # macOS
+                            result = subprocess.run(["find", "/usr/lib", "-name", f"*{dep}*"], 
+                                                  capture_output=True, text=True, timeout=10)
+                            if result.stdout.strip():
+                                status["available"] = True
+                                status["location"] = result.stdout.split('\n')[0]
+                    
+                    if status["available"]:
+                        available_count += 1
+                    else:
+                        missing_dependencies.append(dep)
+                        
+                except subprocess.TimeoutExpired:
+                    status["error"] = "Check timed out"
+                except Exception as e:
+                    status["error"] = str(e)
+                
+                dependency_status[dep] = status
+            
+            # Genera raccomandazioni di installazione
+            installation_hints = []
+            if missing_dependencies:
+                if check_type == "command":
+                    if platform.system() == "Linux":
+                        installation_hints.append(f"Try: sudo apt-get install {' '.join(missing_dependencies)}")
+                    elif platform.system() == "Darwin":
+                        installation_hints.append(f"Try: brew install {' '.join(missing_dependencies)}")
+                elif check_type == "python_package":
+                    installation_hints.append(f"Try: pip install {' '.join(missing_dependencies)}")
+            
+            return {
+                "success": True,
+                "check_type": check_type,
+                "total_dependencies": len(dependencies),
+                "available_dependencies": available_count,
+                "missing_dependencies": len(missing_dependencies),
+                "dependency_status": dependency_status,
+                "missing_list": missing_dependencies,
+                "installation_hints": installation_hints,
+                "system_info": {
+                    "platform": platform.system(),
+                    "architecture": platform.machine(),
+                    "python_version": platform.python_version()
+                }
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def setup_deployment_environment(deployment_type: str, application_name: str,
+                                   config: Dict[str, Any] = None) -> Dict[str, Any]:
+        """
+        Configura ambiente per deployment.
+        
+        Args:
+            deployment_type: Tipo deployment (docker, systemd, nginx, basic)
+            application_name: Nome applicazione
+            config: Configurazione specifica
+        """
+        try:
+            config = config or {}
+            setup_results = []
+            created_files = []
+            
+            # Directory base per deployment
+            base_dir = config.get("base_dir", f"/tmp/nexus_deployment_{application_name}")
+            os.makedirs(base_dir, exist_ok=True)
+            
+            if deployment_type == "docker":
+                # Setup Docker deployment
+                dockerfile_content = _generate_dockerfile(application_name, config)
+                dockerfile_path = os.path.join(base_dir, "Dockerfile")
+                
+                with open(dockerfile_path, 'w') as f:
+                    f.write(dockerfile_content)
+                created_files.append(dockerfile_path)
+                
+                # Docker Compose se richiesto
+                if config.get("create_compose", True):
+                    compose_content = _generate_docker_compose(application_name, config)
+                    compose_path = os.path.join(base_dir, "docker-compose.yml")
+                    
+                    with open(compose_path, 'w') as f:
+                        f.write(compose_content)
+                    created_files.append(compose_path)
+                
+                setup_results.append("Docker configuration created")
+            
+            elif deployment_type == "systemd":
+                # Setup systemd service
+                service_content = _generate_systemd_service(application_name, config)
+                service_path = os.path.join(base_dir, f"{application_name}.service")
+                
+                with open(service_path, 'w') as f:
+                    f.write(service_content)
+                created_files.append(service_path)
+                
+                setup_results.append("Systemd service file created")
+            
+            elif deployment_type == "nginx":
+                # Setup Nginx configuration
+                nginx_content = _generate_nginx_config(application_name, config)
+                nginx_path = os.path.join(base_dir, f"{application_name}.conf")
+                
+                with open(nginx_path, 'w') as f:
+                    f.write(nginx_content)
+                created_files.append(nginx_path)
+                
+                setup_results.append("Nginx configuration created")
+            
+            elif deployment_type == "basic":
+                # Setup basic deployment structure
+                directories = ["bin", "config", "logs", "data"]
+                for dir_name in directories:
+                    dir_path = os.path.join(base_dir, dir_name)
+                    os.makedirs(dir_path, exist_ok=True)
+                
+                # Create basic startup script
+                startup_script = os.path.join(base_dir, "bin", "start.sh")
+                with open(startup_script, 'w') as f:
+                    f.write(f"""#!/bin/bash
+# Startup script for {application_name}
+cd "$(dirname "$0")/.."
+echo "Starting {application_name}..."
+# Add your application startup command here
+""")
+                os.chmod(startup_script, 0o755)
+                created_files.append(startup_script)
+                
+                setup_results.append("Basic deployment structure created")
+            
+            # Crea file environment
+            env_file = os.path.join(base_dir, ".env")
+            env_content = f"""# Environment configuration for {application_name}
+APP_NAME={application_name}
+APP_ENV={config.get('environment', 'production')}
+APP_PORT={config.get('port', 8080)}
+APP_HOST={config.get('host', '0.0.0.0')}
+"""
+            
+            with open(env_file, 'w') as f:
+                f.write(env_content)
+            created_files.append(env_file)
+            
+            # Crea README con istruzioni
+            readme_file = os.path.join(base_dir, "README.md")
+            readme_content = _generate_deployment_readme(deployment_type, application_name, config)
+            
+            with open(readme_file, 'w') as f:
+                f.write(readme_content)
+            created_files.append(readme_file)
+            
+            return {
+                "success": True,
+                "deployment_type": deployment_type,
+                "application_name": application_name,
+                "base_directory": base_dir,
+                "setup_results": setup_results,
+                "created_files": created_files,
+                "file_count": len(created_files),
+                "next_steps": _get_deployment_next_steps(deployment_type)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    # Helper functions for enhanced functionality
+    def _generate_performance_recommendations(samples: List[Dict]) -> List[str]:
+        """Genera raccomandazioni performance."""
+        recommendations = []
+        
+        if samples:
+            avg_cpu = sum(s["cpu"]["percent"] for s in samples) / len(samples)
+            avg_memory = sum(s["memory"]["percent"] for s in samples) / len(samples)
+            
+            if avg_cpu > 80:
+                recommendations.append("High CPU usage detected - consider optimizing applications or upgrading hardware")
+            
+            if avg_memory > 85:
+                recommendations.append("High memory usage detected - check for memory leaks or increase RAM")
+            
+            # Check for swap usage
+            if any(s["swap"]["percent"] > 10 for s in samples):
+                recommendations.append("Swap usage detected - consider increasing RAM")
+        
+        return recommendations
+
+    def _assess_system_health(stats: Dict) -> str:
+        """Valuta salute sistema."""
+        if not stats:
+            return "Unknown"
+        
+        cpu_avg = stats.get("cpu_avg", 0)
+        memory_avg = stats.get("memory_avg", 0)
+        
+        if cpu_avg > 90 or memory_avg > 95:
+            return "Critical"
+        elif cpu_avg > 75 or memory_avg > 85:
+            return "Warning"
+        elif cpu_avg > 50 or memory_avg > 70:
+            return "Fair"
+        else:
+            return "Good"
+
+    def _generate_docker_template(app_name: str, environment: str) -> str:
+        """Genera template Dockerfile."""
+        return f"""# Dockerfile for {app_name}
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy application code
+COPY . .
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+# Change ownership
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \\
+  CMD curl -f http://localhost:3000/health || exit 1
+
+# Start application
+CMD ["npm", "start"]
+"""
+
+    def _generate_k8s_template(app_name: str, environment: str) -> str:
+        """Genera template Kubernetes."""
+        return f"""apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {app_name}
+  labels:
+    app: {app_name}
+    environment: {environment}
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {app_name}
+  template:
+    metadata:
+      labels:
+        app: {app_name}
+    spec:
+      containers:
+      - name: {app_name}
+        image: {app_name}:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: "{environment}"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {app_name}-service
+spec:
+  selector:
+    app: {app_name}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: ClusterIP
+"""
+
+    def _analyze_env_patterns(env_data: Dict[str, str]) -> Dict[str, Any]:
+        """Analizza pattern nelle variabili ambiente."""
+        patterns = {
+            "database_vars": [],
+            "api_vars": [],
+            "security_vars": [],
+            "port_vars": [],
+            "url_vars": []
+        }
+        
+        for key, value in env_data.items():
+            key_upper = key.upper()
+            
+            if any(db in key_upper for db in ["DB", "DATABASE", "MYSQL", "POSTGRES", "MONGO"]):
+                patterns["database_vars"].append(key)
+            
+            if any(api in key_upper for api in ["API", "TOKEN", "KEY"]):
+                patterns["api_vars"].append(key)
+            
+            if any(sec in key_upper for sec in ["SECRET", "PASSWORD", "PRIVATE", "CREDENTIAL"]):
+                patterns["security_vars"].append(key)
+            
+            if "PORT" in key_upper or (value.isdigit() and 1000 <= int(value) <= 65535):
+                patterns["port_vars"].append(key)
+            
+            if value.startswith(("http://", "https://", "ftp://", "ws://", "wss://")):
+                patterns["url_vars"].append(key)
+        
+        return patterns

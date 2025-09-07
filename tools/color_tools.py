@@ -3,9 +3,13 @@
 import logging
 import colorsys
 import re
+import math
+import json
+from typing import Dict, List, Any, Optional, Tuple
+from datetime import datetime, timezone
 
 def register_tools(mcp):
-    """Registra i tool per la gestione colori con l'istanza del server MCP."""
+    """Registra i tool per la gestione colori avanzata con l'istanza del server MCP."""
     logging.info("🎨 Registrazione tool-set: Color Tools")
 
     @mcp.tool()
@@ -327,3 +331,560 @@ Gradazione completa:"""
             
         except Exception as e:
             return f"ERRORE: {str(e)}"
+
+    @mcp.tool()
+    def generate_gradient(start_color: str, end_color: str, steps: int = 5, 
+                         gradient_type: str = "linear") -> Dict[str, Any]:
+        """
+        Genera un gradiente tra due colori con numero specificato di step.
+        
+        Args:
+            start_color: Colore iniziale (hex)
+            end_color: Colore finale (hex)
+            steps: Numero di step nel gradiente (3-20)
+            gradient_type: Tipo di gradiente (linear, ease-in, ease-out, ease-in-out)
+        """
+        try:
+            if not 3 <= steps <= 20:
+                return {"success": False, "error": "Steps deve essere tra 3 e 20"}
+            
+            start_rgb = _parse_hex_color(start_color)
+            end_rgb = _parse_hex_color(end_color)
+            
+            if not start_rgb:
+                return {"success": False, "error": f"Colore iniziale '{start_color}' non valido"}
+            if not end_rgb:
+                return {"success": False, "error": f"Colore finale '{end_color}' non valido"}
+            
+            # Funzioni di easing
+            def linear(t):
+                return t
+            
+            def ease_in(t):
+                return t * t
+            
+            def ease_out(t):
+                return 1 - (1 - t) * (1 - t)
+            
+            def ease_in_out(t):
+                return 2 * t * t if t < 0.5 else 1 - 2 * (1 - t) * (1 - t)
+            
+            easing_functions = {
+                "linear": linear,
+                "ease-in": ease_in,
+                "ease-out": ease_out,
+                "ease-in-out": ease_in_out
+            }
+            
+            if gradient_type not in easing_functions:
+                return {"success": False, "error": f"Tipo gradiente non supportato: {gradient_type}"}
+            
+            easing_func = easing_functions[gradient_type]
+            gradient_colors = []
+            
+            for i in range(steps):
+                t = i / (steps - 1)
+                eased_t = easing_func(t)
+                
+                # Interpolazione RGB
+                interpolated_rgb = tuple(
+                    int(start_rgb[j] * (1 - eased_t) + end_rgb[j] * eased_t)
+                    for j in range(3)
+                )
+                
+                hex_color = f"#{interpolated_rgb[0]:02X}{interpolated_rgb[1]:02X}{interpolated_rgb[2]:02X}"
+                
+                gradient_colors.append({
+                    "step": i + 1,
+                    "position": round(t * 100, 1),
+                    "hex": hex_color,
+                    "rgb": interpolated_rgb,
+                    "css_stop": f"{hex_color} {round(t * 100, 1)}%"
+                })
+            
+            # Genera CSS
+            css_linear = f"linear-gradient(90deg, {', '.join([color['css_stop'] for color in gradient_colors])})"
+            css_radial = f"radial-gradient(circle, {', '.join([color['css_stop'] for color in gradient_colors])})"
+            
+            return {
+                "success": True,
+                "start_color": start_color.upper(),
+                "end_color": end_color.upper(),
+                "steps": steps,
+                "gradient_type": gradient_type,
+                "colors": gradient_colors,
+                "css": {
+                    "linear": css_linear,
+                    "radial": css_radial
+                },
+                "analysis": _analyze_gradient_harmony(gradient_colors)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def simulate_color_blindness(colors: List[str], blindness_type: str = "deuteranopia") -> Dict[str, Any]:
+        """
+        Simula come i colori appaiono a persone con daltonismo.
+        
+        Args:
+            colors: Lista di colori in formato hex
+            blindness_type: Tipo di daltonismo (protanopia, deuteranopia, tritanopia, achromatopsia)
+        """
+        try:
+            if len(colors) > 10:
+                return {"success": False, "error": "Massimo 10 colori supportati"}
+            
+            blindness_types = {
+                "protanopia": "Cecità al rosso",
+                "deuteranopia": "Cecità al verde", 
+                "tritanopia": "Cecità al blu",
+                "achromatopsia": "Acromatopsia (scala di grigi)"
+            }
+            
+            if blindness_type not in blindness_types:
+                return {"success": False, "error": f"Tipo non supportato. Disponibili: {list(blindness_types.keys())}"}
+            
+            simulated_colors = []
+            
+            for color in colors:
+                rgb = _parse_hex_color(color)
+                if not rgb:
+                    return {"success": False, "error": f"Colore '{color}' non valido"}
+                
+                simulated_rgb = _simulate_colorblind_vision(rgb, blindness_type)
+                simulated_hex = f"#{simulated_rgb[0]:02X}{simulated_rgb[1]:02X}{simulated_rgb[2]:02X}"
+                
+                # Calcola differenza percettiva
+                difference = _calculate_color_difference(rgb, simulated_rgb)
+                
+                simulated_colors.append({
+                    "original_color": color.upper(),
+                    "original_rgb": rgb,
+                    "simulated_color": simulated_hex,
+                    "simulated_rgb": simulated_rgb,
+                    "difference_score": round(difference, 2),
+                    "visibility": "Buona" if difference < 10 else "Media" if difference < 30 else "Scarsa"
+                })
+            
+            return {
+                "success": True,
+                "blindness_type": blindness_type,
+                "description": blindness_types[blindness_type],
+                "simulated_colors": simulated_colors,
+                "accessibility_analysis": _analyze_colorblind_accessibility(simulated_colors),
+                "recommendations": _generate_colorblind_recommendations(simulated_colors)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def analyze_color_psychology(colors: List[str]) -> Dict[str, Any]:
+        """
+        Analizza la psicologia e significato dei colori.
+        
+        Args:
+            colors: Lista di colori in formato hex
+        """
+        try:
+            if len(colors) > 8:
+                return {"success": False, "error": "Massimo 8 colori supportati"}
+            
+            color_analyses = []
+            
+            for color in colors:
+                rgb = _parse_hex_color(color)
+                if not rgb:
+                    return {"success": False, "error": f"Colore '{color}' non valido"}
+                
+                analysis = _analyze_single_color_psychology(rgb, color)
+                color_analyses.append(analysis)
+            
+            # Analisi combinazione colori
+            combination_analysis = _analyze_color_combination_psychology(color_analyses)
+            
+            return {
+                "success": True,
+                "individual_analysis": color_analyses,
+                "combination_analysis": combination_analysis,
+                "overall_mood": _determine_overall_mood(color_analyses),
+                "design_recommendations": _generate_psychology_design_tips(color_analyses)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def find_closest_named_color(color: str, color_system: str = "css") -> Dict[str, Any]:
+        """
+        Trova il colore nominato più vicino a un colore dato.
+        
+        Args:
+            color: Colore in formato hex
+            color_system: Sistema di colori (css, pantone, ral, x11)
+        """
+        try:
+            rgb = _parse_hex_color(color)
+            if not rgb:
+                return {"success": False, "error": f"Colore '{color}' non valido"}
+            
+            color_databases = _get_color_databases()
+            
+            if color_system not in color_databases:
+                return {"success": False, "error": f"Sistema non supportato. Disponibili: {list(color_databases.keys())}"}
+            
+            named_colors = color_databases[color_system]
+            closest_matches = []
+            
+            for name, named_rgb in named_colors.items():
+                distance = _calculate_color_distance(rgb, named_rgb)
+                closest_matches.append({
+                    "name": name,
+                    "hex": f"#{named_rgb[0]:02X}{named_rgb[1]:02X}{named_rgb[2]:02X}",
+                    "rgb": named_rgb,
+                    "distance": round(distance, 2)
+                })
+            
+            # Ordina per distanza
+            closest_matches.sort(key=lambda x: x["distance"])
+            
+            return {
+                "success": True,
+                "input_color": color.upper(),
+                "input_rgb": rgb,
+                "color_system": color_system,
+                "closest_match": closest_matches[0],
+                "alternative_matches": closest_matches[1:6],  # Top 5 alternative
+                "exact_match": closest_matches[0]["distance"] == 0
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def generate_color_scheme(base_color: str, scheme_type: str = "monochromatic", 
+                            count: int = 5) -> Dict[str, Any]:
+        """
+        Genera schemi di colori professionali basati su teoria del colore.
+        
+        Args:
+            base_color: Colore base in formato hex
+            scheme_type: Tipo schema (monochromatic, analogous, complementary, triadic, tetradic, split_complementary)
+            count: Numero di colori da generare (3-10)
+        """
+        try:
+            if not 3 <= count <= 10:
+                return {"success": False, "error": "Count deve essere tra 3 e 10"}
+            
+            rgb = _parse_hex_color(base_color)
+            if not rgb:
+                return {"success": False, "error": f"Colore base '{base_color}' non valido"}
+            
+            h, s, v = colorsys.rgb_to_hsv(rgb[0]/255, rgb[1]/255, rgb[2]/255)
+            h_deg = h * 360
+            
+            scheme_generators = {
+                "monochromatic": lambda: _generate_monochromatic_scheme(h, s, v, count),
+                "analogous": lambda: _generate_analogous_scheme(h, s, v, count),
+                "complementary": lambda: _generate_complementary_scheme(h, s, v, count),
+                "triadic": lambda: _generate_triadic_scheme(h, s, v, count),
+                "tetradic": lambda: _generate_tetradic_scheme(h, s, v, count),
+                "split_complementary": lambda: _generate_split_complementary_scheme(h, s, v, count)
+            }
+            
+            if scheme_type not in scheme_generators:
+                return {"success": False, "error": f"Schema non supportato. Disponibili: {list(scheme_generators.keys())}"}
+            
+            hsv_colors = scheme_generators[scheme_type]()
+            
+            color_scheme = []
+            for i, (h_val, s_val, v_val) in enumerate(hsv_colors):
+                rgb_color = colorsys.hsv_to_rgb(h_val, s_val, v_val)
+                rgb_int = tuple(int(c * 255) for c in rgb_color)
+                hex_color = f"#{rgb_int[0]:02X}{rgb_int[1]:02X}{rgb_int[2]:02X}"
+                
+                color_scheme.append({
+                    "index": i + 1,
+                    "hex": hex_color,
+                    "rgb": rgb_int,
+                    "hsv": (round(h_val * 360, 1), round(s_val * 100, 1), round(v_val * 100, 1)),
+                    "role": _determine_color_role(i, scheme_type, len(hsv_colors))
+                })
+            
+            return {
+                "success": True,
+                "base_color": base_color.upper(),
+                "scheme_type": scheme_type,
+                "color_count": len(color_scheme),
+                "color_scheme": color_scheme,
+                "harmony_analysis": _analyze_color_harmony(color_scheme),
+                "usage_suggestions": _generate_usage_suggestions(scheme_type, color_scheme)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def analyze_color_temperature(colors: List[str]) -> Dict[str, Any]:
+        """
+        Analizza la temperatura dei colori (caldi, freddi, neutri).
+        
+        Args:
+            colors: Lista di colori in formato hex
+        """
+        try:
+            if len(colors) > 10:
+                return {"success": False, "error": "Massimo 10 colori supportati"}
+            
+            color_temperatures = []
+            
+            for color in colors:
+                rgb = _parse_hex_color(color)
+                if not rgb:
+                    return {"success": False, "error": f"Colore '{color}' non valido"}
+                
+                temperature_analysis = _calculate_color_temperature(rgb, color)
+                color_temperatures.append(temperature_analysis)
+            
+            # Analisi complessiva
+            warm_colors = [c for c in color_temperatures if c["temperature_category"] == "Caldo"]
+            cool_colors = [c for c in color_temperatures if c["temperature_category"] == "Freddo"]
+            neutral_colors = [c for c in color_temperatures if c["temperature_category"] == "Neutro"]
+            
+            overall_temperature = _determine_overall_temperature(color_temperatures)
+            
+            return {
+                "success": True,
+                "color_temperatures": color_temperatures,
+                "summary": {
+                    "warm_colors": len(warm_colors),
+                    "cool_colors": len(cool_colors),
+                    "neutral_colors": len(neutral_colors),
+                    "overall_temperature": overall_temperature
+                },
+                "design_implications": _generate_temperature_design_advice(overall_temperature),
+                "seasonal_associations": _get_seasonal_associations(color_temperatures)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def export_color_palette(colors: List[str], export_format: str = "css", 
+                           palette_name: str = "Custom Palette") -> Dict[str, Any]:
+        """
+        Esporta palette di colori in vari formati per tool di design.
+        
+        Args:
+            colors: Lista di colori in formato hex
+            export_format: Formato export (css, scss, json, ase, gpl, xml)
+            palette_name: Nome della palette
+        """
+        try:
+            if len(colors) > 20:
+                return {"success": False, "error": "Massimo 20 colori supportati"}
+            
+            if not all(_parse_hex_color(color) for color in colors):
+                return {"success": False, "error": "Uno o più colori non sono validi"}
+            
+            export_functions = {
+                "css": _export_css_variables,
+                "scss": _export_scss_variables,
+                "json": _export_json_palette,
+                "ase": _export_ase_info,  # Adobe Swatch Exchange info
+                "gpl": _export_gimp_palette,
+                "xml": _export_xml_palette
+            }
+            
+            if export_format not in export_functions:
+                return {"success": False, "error": f"Formato non supportato. Disponibili: {list(export_functions.keys())}"}
+            
+            exported_content = export_functions[export_format](colors, palette_name)
+            
+            return {
+                "success": True,
+                "palette_name": palette_name,
+                "export_format": export_format,
+                "color_count": len(colors),
+                "exported_content": exported_content,
+                "filename_suggestion": _suggest_filename(palette_name, export_format),
+                "usage_instructions": _get_usage_instructions(export_format)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    # Helper functions for enhanced functionality
+    def _parse_hex_color(color: str) -> Optional[Tuple[int, int, int]]:
+        """Parse colore hex in RGB."""
+        hex_match = re.match(r'^#?([0-9A-Fa-f]{6})$', color.strip())
+        if hex_match:
+            hex_val = hex_match.group(1)
+            return tuple(int(hex_val[i:i+2], 16) for i in (0, 2, 4))
+        return None
+
+    def _simulate_colorblind_vision(rgb: Tuple[int, int, int], blindness_type: str) -> Tuple[int, int, int]:
+        """Simula visione daltonismo."""
+        r, g, b = rgb
+        
+        if blindness_type == "protanopia":
+            # Cecità al rosso
+            new_r = int(0.567 * r + 0.433 * g)
+            new_g = int(0.558 * r + 0.442 * g)
+            new_b = int(0.242 * g + 0.758 * b)
+        elif blindness_type == "deuteranopia":
+            # Cecità al verde
+            new_r = int(0.625 * r + 0.375 * g)
+            new_g = int(0.7 * r + 0.3 * g)
+            new_b = int(0.3 * g + 0.7 * b)
+        elif blindness_type == "tritanopia":
+            # Cecità al blu
+            new_r = int(0.95 * r + 0.05 * g)
+            new_g = int(0.433 * g + 0.567 * b)
+            new_b = int(0.475 * g + 0.525 * b)
+        elif blindness_type == "achromatopsia":
+            # Scala di grigi
+            gray = int(0.299 * r + 0.587 * g + 0.114 * b)
+            new_r = new_g = new_b = gray
+        else:
+            return rgb
+        
+        return (
+            max(0, min(255, new_r)),
+            max(0, min(255, new_g)),
+            max(0, min(255, new_b))
+        )
+
+    def _calculate_color_difference(rgb1: Tuple[int, int, int], rgb2: Tuple[int, int, int]) -> float:
+        """Calcola differenza percettiva tra colori (Delta E)."""
+        r1, g1, b1 = rgb1
+        r2, g2, b2 = rgb2
+        
+        # Formula Delta E semplificata
+        return math.sqrt((r2-r1)**2 + (g2-g1)**2 + (b2-b1)**2)
+
+    def _analyze_single_color_psychology(rgb: Tuple[int, int, int], hex_color: str) -> Dict[str, Any]:
+        """Analizza psicologia di un singolo colore."""
+        h, s, v = colorsys.rgb_to_hsv(rgb[0]/255, rgb[1]/255, rgb[2]/255)
+        h_deg = h * 360
+        
+        # Determina colore dominante
+        if h_deg < 15 or h_deg >= 345:
+            base_color = "Rosso"
+            psychology = {
+                "emotions": ["passione", "energia", "forza", "amore"],
+                "traits": ["dinamismo", "aggressività", "leadership"],
+                "use_cases": ["call-to-action", "emergency", "food", "entertainment"]
+            }
+        elif h_deg < 45:
+            base_color = "Arancione"
+            psychology = {
+                "emotions": ["entusiasmo", "creatività", "avventura"],
+                "traits": ["socievolezza", "ottimismo", "spontaneità"],
+                "use_cases": ["brands giovanili", "sport", "entertainment"]
+            }
+        elif h_deg < 75:
+            base_color = "Giallo"
+            psychology = {
+                "emotions": ["felicità", "ottimismo", "energia"],
+                "traits": ["intelligenza", "creatività", "attenzione"],
+                "use_cases": ["bambini", "warning", "food", "education"]
+            }
+        elif h_deg < 165:
+            base_color = "Verde"
+            psychology = {
+                "emotions": ["natura", "crescita", "armonia", "pace"],
+                "traits": ["equilibrio", "freschezza", "salute"],
+                "use_cases": ["health", "environment", "finance", "outdoor"]
+            }
+        elif h_deg < 245:
+            base_color = "Blu"
+            psychology = {
+                "emotions": ["calma", "fiducia", "professionalità"],
+                "traits": ["stabilità", "lealtà", "intelletto"],
+                "use_cases": ["corporate", "technology", "healthcare", "finance"]
+            }
+        elif h_deg < 285:
+            base_color = "Viola"
+            psychology = {
+                "emotions": ["lusso", "mistero", "creatività"],
+                "traits": ["spiritualità", "immaginazione", "regalità"],
+                "use_cases": ["luxury", "beauty", "creative", "spiritual"]
+            }
+        else:
+            base_color = "Rosa/Magenta"
+            psychology = {
+                "emotions": ["amore", "compassione", "nurturing"],
+                "traits": ["femminilità", "dolcezza", "romanticismo"],
+                "use_cases": ["beauty", "fashion", "children", "romance"]
+            }
+        
+        return {
+            "hex": hex_color.upper(),
+            "rgb": rgb,
+            "base_color": base_color,
+            "saturation_level": "Alta" if s > 0.7 else "Media" if s > 0.3 else "Bassa",
+            "brightness_level": "Alta" if v > 0.7 else "Media" if v > 0.3 else "Bassa",
+            "psychology": psychology
+        }
+
+    def _get_color_databases(self) -> Dict[str, Dict[str, Tuple[int, int, int]]]:
+        """Restituisce database di colori nominati."""
+        return {
+            "css": {
+                "red": (255, 0, 0),
+                "green": (0, 128, 0),
+                "blue": (0, 0, 255),
+                "white": (255, 255, 255),
+                "black": (0, 0, 0),
+                "yellow": (255, 255, 0),
+                "cyan": (0, 255, 255),
+                "magenta": (255, 0, 255),
+                "orange": (255, 165, 0),
+                "purple": (128, 0, 128),
+                "pink": (255, 192, 203),
+                "brown": (165, 42, 42),
+                "gray": (128, 128, 128),
+                "navy": (0, 0, 128),
+                "olive": (128, 128, 0),
+                "lime": (0, 255, 0),
+                "aqua": (0, 255, 255),
+                "teal": (0, 128, 128),
+                "silver": (192, 192, 192),
+                "maroon": (128, 0, 0)
+            }
+        }
+
+    def _export_css_variables(self, colors: List[str], palette_name: str) -> str:
+        """Esporta palette come variabili CSS."""
+        css = f"/* {palette_name} */\n:root {{\n"
+        
+        for i, color in enumerate(colors, 1):
+            var_name = f"--color-{i:02d}"
+            css += f"  {var_name}: {color.upper()};\n"
+        
+        css += "}\n\n/* Usage examples */\n"
+        css += ".primary { color: var(--color-01); }\n"
+        css += ".secondary { color: var(--color-02); }\n"
+        
+        return css
+
+    def _export_json_palette(self, colors: List[str], palette_name: str) -> str:
+        """Esporta palette come JSON."""
+        palette_data = {
+            "name": palette_name,
+            "created": datetime.now(timezone.utc).isoformat(),
+            "colors": []
+        }
+        
+        for i, color in enumerate(colors, 1):
+            rgb = _parse_hex_color(color)
+            palette_data["colors"].append({
+                "id": f"color-{i:02d}",
+                "hex": color.upper(),
+                "rgb": {"r": rgb[0], "g": rgb[1], "b": rgb[2]} if rgb else None
+            })
+        
+        return json.dumps(palette_data, indent=2)

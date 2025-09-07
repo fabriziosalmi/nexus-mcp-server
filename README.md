@@ -109,416 +109,314 @@ Per informazioni dettagliate sull'interfaccia web, consultare: **[UI_CONFIGURATI
 - `add(a, b)` - Addizione
 - `multiply(a, b)` - Moltiplicazione
 
-### 📁 Filesystem Reader (`filesystem_reader.py`) 
-**Lettura sicura di file con sandbox**
-- `read_safe_file(filename)` - Legge file dalla directory sandbox `safe_files/`
-- ✅ **Protezione contro path traversal**
-- ✅ **Validazione percorsi**
+## 📝 Calcolatrice Avanzata
 
-### 🌐 Web Fetcher (`web_fetcher.py`)
-**Recupero contenuti web**
-- `fetch_url_content(url)` - Scarica contenuto HTML da URL
-- ✅ **Timeout configurabile**
-- ✅ **Limitazione dimensioni**
-- ✅ **Gestione redirect**
+Sistema di calcolo matematico completo con funzioni avanzate, teoria dei numeri, statistiche e valutazione sicura di espressioni.
 
-### 🔐 Crypto Tools (`crypto_tools.py`)
-**Strumenti crittografici e hashing**
-- `generate_hash(text, algorithm)` - Hash SHA256, SHA1, MD5, SHA512
-- `generate_hmac(message, secret_key, algorithm)` - HMAC per autenticazione
-- `generate_random_token(length, encoding)` - Token sicuri (hex/base64/urlsafe)
+### Funzionalità Principali
 
-### 🔤 Encoding Tools (`encoding_tools.py`)
-**Codifica e decodifica dati**
-- `base64_encode(text)` / `base64_decode(encoded_text)` - Codifica Base64
-- `url_encode(text)` / `url_decode(encoded_text)` - URL encoding/decoding
-- `html_escape(text)` - Escape caratteri HTML
-- `json_format(json_string, indent)` - Formattazione e validazione JSON
+- **Operazioni Base**: Aritmetica fondamentale con controlli di sicurezza
+- **Funzioni Avanzate**: Trigonometria, logaritmi, radici, potenze
+- **Teoria dei Numeri**: GCD, LCM, fattorizzazione, numeri primi
+- **Statistiche**: Media, mediana, deviazione standard, varianza
+- **Conversioni Unità**: Lunghezza, peso, temperatura, volume, tempo
+- **Calcoli Finanziari**: Interessi semplici e composti
+- **Valutazione Espressioni**: Parser sicuro per espressioni complesse
+- **Costanti Matematiche**: Accesso a costanti importanti
 
-### 📅 DateTime Tools (`datetime_tools.py`)
-**Manipolazione date e timestamp**
-- `current_timestamp()` - Timestamp corrente in vari formati
-- `unix_to_date(timestamp)` - Converte Unix timestamp in data
-- `date_to_unix(date_string)` - Converte data in Unix timestamp  
-- `date_math(start_date, operation, amount, unit)` - Operazioni matematiche su date
+### Tool Disponibili
 
-### 🆔 UUID Tools (`uuid_tools.py`)
-**Generazione identificatori unici**
-- `generate_uuid4()` / `generate_uuid1()` - UUID versioni 1 e 4
-- `generate_multiple_uuids(count, version)` - Generazione multipla UUID
-- `generate_short_id(length, use_uppercase)` - ID brevi alfanumerici
-- `generate_nanoid(length, alphabet)` - Nano ID personalizzabili
-- `uuid_info(uuid_string)` - Analisi e informazioni UUID
+#### Operazioni Base
 
-### 📝 String Tools (`string_tools.py`)
-**Manipolazione avanzata stringhe**
-- `string_case_convert(text, case_type)` - Conversioni case (camel, snake, kebab, etc.)
-- `string_stats(text)` - Statistiche dettagliate stringa
-- `string_clean(text, operation)` - Pulizia e normalizzazione testo
-- `string_wrap(text, width, break_long_words)` - Word wrapping
-- `string_find_replace(text, find, replace, case_sensitive)` - Trova e sostituisci
+##### `add(a, b)` & `multiply(a, b)`
+Operazioni aritmetiche fondamentali (esistenti).
 
-### ✅ Validator Tools (`validator_tools.py`)
-**Validazione dati e formati**
-- `validate_email(email)` - Validazione indirizzi email
-- `validate_url(url)` - Validazione e analisi URL
-- `validate_ip_address(ip)` - Validazione IP (IPv4/IPv6)
-- `validate_phone(phone, country_code)` - Validazione numeri telefono
-- `validate_credit_card(card_number)` - Validazione carte credito (algoritmo Luhn)
-
-### 💻 System Info (`system_info.py`)
-**Informazioni sistema e monitoraggio**
-- `system_overview()` - Panoramica completa sistema
-- `memory_usage()` - Utilizzo RAM e SWAP
-- `cpu_info()` - Informazioni CPU e utilizzo
-- `disk_usage(path)` - Utilizzo spazio disco
-- `network_info()` - Informazioni interfacce di rete
-- `running_processes(limit)` - Top processi per utilizzo CPU
-
-### 🌐 Network Tools (`network_tools.py`)
-**Strumenti diagnostici di rete**
-- `ping_host(host, count)` - Ping verso host specificato
-- `dns_lookup(hostname, record_type)` - Lookup DNS (A, AAAA, MX, NS, TXT)
-- `port_scan(host, ports)` - Scansione porte specifiche
-- `traceroute(host, max_hops)` - Traceroute verso destinazione
-- `whois_lookup(domain)` - Informazioni whois dominio
-- `check_website_status(url, timeout)` - Status e performance sito web
-- `get_public_ip()` - IP pubblico corrente
-
-### 🔒 Security Tools (`security_tools.py`)
-**Strumenti sicurezza e crittografia**
-- `generate_secure_password(length, include_symbols, exclude_ambiguous)` - Password sicure
-- `password_strength_check(password)` - Analisi robustezza password
-- `generate_api_key(length, format_type)` - Chiavi API sicure
-- `hash_file_content(content, algorithms)` - Hash per verifica integrità
-- `jwt_decode_header(jwt_token)` - Decodifica header JWT (senza verifica)
-- `check_common_ports(host)` - Controllo porte comuni per sicurezza
-- `ssl_certificate_check(domain, port)` - Verifica certificati SSL/TLS
-
-### 🛡️ Network Security Tools (`network_security_tools.py`)
-**Strumenti avanzati di sicurezza di rete**
-- `ip_threat_intelligence(ip_address)` - Analisi threat intelligence per indirizzi IP
-- `scan_security_headers(url, follow_redirects)` - Scansione header di sicurezza HTTP
-- `discover_subdomains(domain, wordlist_size)` - Scoperta sottodomini per security assessment
-- `grab_service_banner(host, port, timeout)` - Estrazione banner servizi per fingerprinting
-- `analyze_certificate_chain(domain, port)` - Analisi approfondita catena certificati SSL
-
-### ⚡ Performance Tools (`performance_tools.py`)
-**Monitoraggio e benchmark performance**
-- `benchmark_function_performance(code, iterations)` - Benchmark codice Python
-- `monitor_system_performance(duration_seconds)` - Monitoraggio sistema real-time
-- `analyze_memory_usage()` - Analisi dettagliata memoria
-- `disk_performance_test(test_size_mb)` - Test velocità disco
-- `network_latency_test(hosts)` - Test latenza rete
-- `cpu_stress_test(duration_seconds)` - Stress test CPU
-
-### 📊 Data Analysis Tools (`data_analysis.py`)
-**Analisi e elaborazione dati**
-- `analyze_csv_data(csv_content, delimiter)` - Analisi statistiche CSV
-- `analyze_json_structure(json_content)` - Analisi struttura JSON
-- `statistical_analysis(numbers)` - Statistiche descrittive complete
-- `text_analysis(text)` - Analisi linguistica e sentiment
-- `correlation_analysis(dataset1, dataset2)` - Correlazione tra dataset
-
-### 🖼️ Image Processing Tools (`image_processing.py`)
-**Elaborazione e analisi immagini**
-- `analyze_image_metadata(image_base64)` - Metadata ed EXIF
-- `resize_image(image_base64, width, height, maintain_aspect)` - Ridimensionamento
-- `convert_image_format(image_base64, target_format)` - Conversione formato
-- `apply_image_filters(image_base64, filters)` - Filtri (blur, sharpen, sepia, etc.)
-- `create_thumbnail(image_base64, size, quality)` - Generazione thumbnail
-- `extract_dominant_colors(image_base64, num_colors)` - Palette colori dominanti
-
-### 🎵 Audio Processing Tools (`audio_processing.py`)
-**Elaborazione e analisi audio**
-- `analyze_audio_metadata(audio_base64)` - Metadata audio WAV
-- `generate_sine_wave(frequency, duration, sample_rate, amplitude)` - Generazione onde sinusoidali
-- `analyze_audio_spectrum(audio_base64, fft_size)` - Analisi spettro di frequenza
-- `adjust_audio_volume(audio_base64, volume_factor)` - Regolazione volume
-- `convert_audio_format(audio_base64, target_format, quality)` - Conversione formato
-- `extract_audio_features(audio_base64)` - Estrazione caratteristiche audio
-
-### 🎬 Video Processing Tools (`video_processing.py`)
-**Elaborazione e analisi video**
-- `analyze_video_metadata(video_base64)` - Metadata e formato video
-- `create_video_thumbnail_placeholder(width, height, color, text)` - Placeholder thumbnail
-- `analyze_video_structure(video_base64)` - Struttura MP4 (atom/box analysis)
-- `estimate_video_properties(video_base64)` - Stima proprietà da euristica
-- `create_video_info_summary(video_base64)` - Riassunto completo informazioni
-
-### 🔄 Unit Converter Tools (`unit_converter.py`)
-**Conversioni unità di misura**
-- `convert_length(value, from_unit, to_unit)` - Conversioni lunghezza (mm, cm, m, km, in, ft, yd, mi)
-- `convert_weight(value, from_unit, to_unit)` - Conversioni peso (mg, g, kg, t, oz, lb, st)
-- `convert_temperature(value, from_unit, to_unit)` - Conversioni temperatura (C, F, K, R)
-- `convert_volume(value, from_unit, to_unit)` - Conversioni volume (ml, l, gal, qt, pt, cup, floz)
-- `convert_area(value, from_unit, to_unit)` - Conversioni area (mm2, cm2, m2, km2, in2, ft2, yd2, ac, ha)
-- `list_available_units()` - Elenca tutte le unità disponibili per categoria
-
-### 📱 QR Code Tools (`qr_code_tools.py`)
-**Generazione e analisi QR code**
-- `generate_qr_code(text, size, border, error_correction)` - Genera QR code da testo
-- `generate_qr_code_url(url, size)` - Genera QR code per URL
-- `generate_qr_code_wifi(ssid, password, security, hidden)` - QR code configurazione WiFi
-- `generate_qr_code_contact(name, phone, email, organization)` - QR code contatto vCard
-- `generate_qr_code_sms(phone, message)` - QR code per SMS
-- `analyze_qr_content(content)` - Analizza tipo e contenuto QR code
-- `qr_code_formats_info()` - Informazioni formati QR supportati
-
-### 🔍 Regex Tools (`regex_tools.py`)
-**Strumenti espressioni regolari**
-- `regex_test(pattern, text, flags)` - Testa pattern regex su testo
-- `regex_match_details(pattern, text, flags)` - Dettagli corrispondenze con posizioni
-- `regex_replace(pattern, text, replacement, flags, count)` - Sostituisce con regex
-- `regex_split(pattern, text, flags, maxsplit)` - Divide testo con regex
-- `regex_validate_pattern(pattern)` - Valida e analizza pattern regex
-- `regex_common_patterns()` - Libreria pattern regex comuni
-- `regex_extract_emails(text)` - Estrae indirizzi email da testo
-- `regex_extract_urls(text)` - Estrae URL da testo
-
-### 🔄 File Converter Tools (`file_converter.py`)
-**Conversioni formato file**
-- `csv_to_json(csv_content, delimiter, has_header)` - Converte CSV in JSON
-- `json_to_csv(json_content, delimiter, include_header)` - Converte JSON in CSV
-- `json_to_xml(json_content, root_name)` - Converte JSON in XML
-- `xml_to_json(xml_content)` - Converte XML in JSON
-- `txt_to_json_lines(text_content, line_key)` - Converte testo in JSON righe
-- `json_lines_to_txt(json_content, line_field)` - Converte JSON in testo
-- `detect_file_format(content)` - Rileva automaticamente formato file
-- `conversion_help()` - Guida completa conversioni disponibili
-
-### 📄 PDF Tools (`pdf_tools.py`)
-**Strumenti elaborazione PDF**
-- `analyze_pdf_metadata(pdf_base64)` - Analizza metadata e struttura PDF
-- `create_simple_pdf_info(title, author, subject, pages)` - Genera informazioni PDF
-- `pdf_text_extraction_guide()` - Guida estrazione testo da PDF
-- `validate_pdf_structure(pdf_base64)` - Valida struttura PDF
-- `pdf_security_check(pdf_base64)` - Controlla impostazioni sicurezza PDF
-- `pdf_tools_info()` - Documentazione completa strumenti PDF
-
-### ☁️ Cloud Platform Tools (`cloud_tools.py`)
-**Strumenti per servizi cloud e multi-cloud**
-- `aws_service_status(service, region)` - Verifica stato servizi AWS
-- `azure_service_status(service, region)` - Verifica stato servizi Azure
-- `gcp_service_status(service, region)` - Verifica stato servizi Google Cloud
-- `cloudflare_dns_lookup(domain, record_type)` - Query DNS tramite Cloudflare
-- `digitalocean_status_check()` - Verifica stato servizi DigitalOcean
-- `cloud_cost_calculator(service_type, usage_hours, instance_type)` - Calcolo costi cloud
-- `cloud_health_checker(endpoints)` - Controllo salute endpoint cloud
-- `cloud_security_scanner(config_text, cloud_provider)` - Scansione sicurezza configurazioni
-- `multi_cloud_resource_tracker(resources)` - Tracciamento risorse multi-cloud
-- `cloud_config_validator(config_text, config_type)` - Validazione file configurazione cloud
-
-### 🌦️ Weather Tools (`weather_tools.py`)
-**Strumenti meteorologici e analisi clima**
-- `get_weather_info(city, country_code, units)` - Informazioni meteo per città
-- `parse_weather_data(weather_json)` - Analisi dati meteorologici JSON
-- `weather_alert_formatter(temperature, humidity, wind_speed)` - Generazione avvisi meteo
-
-### 🔗 URL Tools (`url_tools.py`)
-**Manipolazione e validazione URL**
-- `validate_url(url)` - Validazione e analisi URL completa
-- `url_shortener_simulator(url, custom_alias)` - Simulatore accorciamento URL
-- `extract_domain_info(url)` - Estrazione informazioni dettagliate dominio
-- `build_query_url(base_url, params)` - Costruzione URL con parametri query
-
-### 📝 Text Analysis Tools (`text_analysis_tools.py`)
-**Analisi linguistica e sentiment**
-- `analyze_text_sentiment(text)` - Analisi sentiment con dizionario multilingue
-- `word_frequency_analysis(text, top_n)` - Analisi frequenza parole con stop words
-- `readability_score(text)` - Calcolo indici di leggibilità (Flesch)
-- `detect_language_simple(text)` - Rilevamento lingua con pattern matching
-
-### 📧 Email Tools (`email_tools.py`)
-**Gestione email e template**
-- `validate_email_advanced(email)` - Validazione email con controlli RFC
-- `generate_email_template(template_type, sender_name, recipient_name, subject)` - Template email professionali
-- `parse_email_header(email_text)` - Analisi header email con controlli sicurezza
-- `generate_email_signature(name, title, company, phone, email, website)` - Firme email HTML/testo
-
-### 🎨 Color Tools (`color_tools.py`)
-**Conversione e analisi colori**
-- `convert_color_format(color, target_format)` - Conversione tra HEX, RGB, HSL, HSV
-- `generate_color_palette(base_color, palette_type)` - Palette complementari, triadiche, analoghe
-- `analyze_color_contrast(color1, color2)` - Analisi contrasto WCAG per accessibilità
-- `color_mixer(color1, color2, ratio)` - Miscelazione colori con gradazioni
-
-### 📄 JSON/YAML Tools (`json_yaml_tools.py`)
-**Manipolazione avanzata JSON e YAML**
-- `validate_json_advanced(json_string)` - Validazione JSON con analisi strutturale
-- `convert_json_yaml(data, source_format, target_format)` - Conversione bidirezionale JSON/YAML
-- `json_diff_comparison(json1, json2)` - Confronto JSON con differenze dettagliate
-- `json_path_extractor(json_string, json_path)` - Estrazione valori con path notation
-- `json_minify_beautify(json_string, operation)` - Minificazione/beautificazione JSON
-
-### 🚀 API Testing Tools (`api_testing_tools.py`)
-**Testing e documentazione API REST**
-- `build_http_request(method, url, headers, body, auth_type)` - Costruzione richieste HTTP complete
-- `validate_api_response(response_body, expected_status, expected_schema)` - Validazione risposte API
-- `generate_api_test_suite(base_url, endpoints, auth_method)` - Suite test automatica con curl/Python
-- `parse_api_documentation(api_spec, spec_format)` - Analisi documentazione OpenAPI/Swagger/Postman
-
-### 📋 Template Tools (`template_tools.py`)
-**Generazione template codice e configurazioni**
-- `generate_dockerfile_template(base_image, language, port, additional_packages)` - Template Dockerfile per varie tecnologie
-- `generate_config_template(config_type, app_name, environment)` - Template configurazione (nginx, docker-compose, k8s, env)
-- `generate_code_template(template_type, class_name, language, features)` - Template codice (classi, API, test)
-
-### 📝 Markdown Tools (`markdown_tools.py`)
-**Elaborazione documenti Markdown**
-- `markdown_to_html(markdown_text)` - Conversione Markdown to HTML
-- `generate_markdown_table(headers, data, alignment)` - Generazione tabelle Markdown
-- `analyze_markdown_structure(markdown_text)` - Analisi struttura documento con statistiche
-- `generate_markdown_toc(markdown_text, max_level)` - Generazione indice automatico
-- `format_markdown_document(title, author, content, include_metadata)` - Formattazione documenti completi
-
-### 📦 Archive Tools (`archive_tools.py`)
-**Gestione archivi avanzata**
-- `create_zip_archive(file_list, archive_name, compression_level)` - Simulazione archivi ZIP con analisi
-- `analyze_archive_structure(archive_type, file_list)` - Analisi struttura archivi con raccomandazioni
-- `compare_archive_formats(file_types, total_size_mb)` - Confronto efficienza formati archivio
-- `generate_archive_script(archive_type, source_dir, archive_name, options)` - Script bash/PowerShell per archiviazione
-
-## 🔄 Workflow Orchestration (Advanced Meta-Tool) - **NUOVO**
-
-### 🚀 Workflow Tools (`workflows.py`) - **RIVOLUZIONARIO**
-**Orchestrazione Meta-Tool per workflow complessi**
-- `analyze_repository(url, analysis_depth)` - **META-TOOL**: Workflow completo di analisi repository
-  - Catena multiple operazioni: clone → analisi complessità → scan sicurezza → analisi struttura → archivio → cleanup
-  - Livelli profondità: "quick", "standard", "deep"
-  - Riduce da 6+ chiamate individuali a 1 singola operazione
-  - Report comprensivo con tracking workflow e gestione errori
-  - Cleanup automatico risorse e gestione directory temporanee
-
-#### Vantaggi Chiave
-- **Riduzione Complessità**: Singola chiamata sostituisce multiple operazioni
-- **Risultati Ricchi**: Analisi comprensiva con reporting aggregato
-- **Resilienza Errori**: Gestione errori elegante con reporting dettagliato
-- **Gestione Risorse**: Cleanup automatico previene problemi spazio disco
-- **Analisi Flessibile**: Livelli configurabili per diversi casi d'uso
-
-#### Struttura Output Workflow
+##### `subtract(a, b)`
 ```json
 {
-  "workflow_id": "repo_analysis_20250907_094500",
-  "repository_url": "https://github.com/user/repo.git",
-  "final_status": "completed",
-  "steps_completed": ["repository_clone", "code_complexity", "secret_detection", "structure_analysis", "cleanup"],
-  "summary": {
-    "code_analysis": {"files_analyzed": 25, "total_lines": 1500, "languages_detected": 3},
-    "security_analysis": {"secrets_found": 0, "risk_level": "LOW"}
-  },
-  "duration_seconds": 2.45
+  "name": "subtract",
+  "arguments": {"a": 10, "b": 3}
 }
 ```
 
-### 🌍 Environment Tools (`environment_tools.py`) - **NUOVO**
-**Gestione variabili ambiente e configurazioni**
-- `manage_environment_variables(action, variables, variable_name)` - Gestisce variabili d'ambiente (list, get, set, unset, validate)
-- `create_environment_file(env_type, variables, file_path)` - Crea file configurazione (.env, .ini, .json, .yaml)
-- `analyze_system_environment()` - Analizza ambiente sistema con diagnostica completa
-- `backup_restore_environment(action, backup_path, variables)` - Backup/ripristino configurazioni ambiente
-- `validate_configuration_file(file_path, config_type)` - Valida file configurazione comuni
-
-### 📊 Log Analysis Tools (`log_analysis_tools.py`) - **NUOVO**
-**Parsing e analisi file log avanzata**
-- `parse_log_file(file_path, log_format, max_lines)` - Parsing log con formati multipli (apache, nginx, syslog, json)
-- `analyze_log_patterns(log_data, pattern_type)` - Analizza pattern specifici (errors, requests, performance, security)
-- `generate_log_report(log_data, report_type)` - Genera report comprensivi (summary, detailed, timeline, alerts)
-- `filter_log_entries(log_data, filters)` - Filtra log per criteri specifici
-- `export_log_analysis(analysis_data, export_format, file_path)` - Export analisi (json, csv, html, text)
-
-### 💾 Backup Tools (`backup_tools.py`) - **NUOVO**
-**Gestione backup e archivi avanzata**
-- `create_archive(source_path, archive_type, include_patterns, exclude_patterns)` - Crea archivi ZIP/TAR con filtri avanzati
-- `extract_archive(archive_path, destination_path, verify_integrity)` - Estrae archivi con verifica integrità
-- `create_backup_manifest(backup_path, source_paths, metadata)` - Crea manifest di backup con checksums
-- `verify_backup_integrity(manifest_path, backup_base_path)` - Verifica integrità backup usando manifest
-- `compress_files(file_paths, compression_level, algorithm)` - Comprime file individuali (gzip, bzip2, zip)
-
-### 🔄 Async Task Queue (`async_task_queue.py`) - **NUOVO**
-**Gestione coda asincrona per task a lunga esecuzione**
-- `queue_long_running_task(name, description, task_type, duration, custom_data)` - Sottomette task asincroni
-- `get_task_status(task_id)` - Controlla status e risultati di task specifici
-- `list_all_tasks(status_filter, limit)` - Lista tutti i task con filtri opzionali
-- `cancel_task(task_id)` - Cancella task in esecuzione o in attesa
-- `remove_task(task_id)` - Rimuove completamente task dalla coda
-- `get_queue_info()` - Ottiene informazioni e statistiche sulla coda
-- `cleanup_completed_tasks(max_age_hours)` - Cleanup manuale task completati/falliti
-
-#### Caratteristiche Principali
-- **Esecuzione Asincrona**: Thread pool per task paralleli (configurabile max_workers)
-- **Persistenza Task**: Storage JSON per sopravvivenza riavvii server
-- **Tracking Stato**: PENDING → RUNNING → COMPLETED/FAILED/CANCELLED
-- **Tipi Task Multipli**: sleep, cpu_intensive, io_intensive, custom
-- **Cleanup Automatico**: Timer background per rimozione task vecchi
-- **Thread Safety**: Protezione accesso concorrente con lock
-- **Gestione Errori**: Exception handling comprensivo e logging
-
-## 🏗️ Struttura del Progetto
-
+##### `divide(a, b)`
+Divisione con controlli di sicurezza e informazioni dettagliate.
+```json
+{
+  "name": "divide",
+  "arguments": {"a": 15, "b": 4}
+}
 ```
-nexus-mcp-server/
-├── .venv/                      # Ambiente virtuale Python
-├── multi_server.py             # 🎯 Orchestratore principale
-├── config.json                 # ⚙️ Configurazione tool
-├── requirements.txt            # 📦 Dipendenze Python
-├── client.py                   # 🧪 Client di test
-├── README.md                   # 📖 Questa documentazione
-├── safe_files/                 # 🔒 Directory sandbox sicura
-│   └── esempio.txt
-└── tools/                      # 🛠️ Moduli tool
-    ├── __init__.py
-    ├── calculator.py           # 🧮 Tool matematici
-    ├── filesystem_reader.py    # 📁 Lettore file sicuro
-    ├── web_fetcher.py          # 🌐 Recupero contenuti web
-    ├── crypto_tools.py         # 🔐 Strumenti crittografici
-    ├── encoding_tools.py       # 🔤 Codifica/decodifica
-    ├── datetime_tools.py       # 📅 Manipolazione date
-    ├── uuid_tools.py           # 🆔 Generazione UUID/ID
-    ├── string_tools.py         # 📝 Manipolazione stringhe
-    ├── validator_tools.py      # ✅ Validazione dati
-    ├── system_info.py          # 💻 Informazioni sistema
-    ├── network_tools.py        # 🌐 Strumenti diagnostici rete
-    ├── security_tools.py       # 🔒 Strumenti sicurezza
-    ├── network_security_tools.py # 🛡️ Strumenti sicurezza di rete
-    ├── performance_tools.py    # ⚡ Monitoraggio performance
-    ├── data_analysis.py        # 📊 Analisi dati
-    ├── image_processing.py     # 🖼️ Elaborazione immagini
-    ├── audio_processing.py     # 🎵 Elaborazione audio
-    ├── video_processing.py     # 🎬 Elaborazione video
-    ├── unit_converter.py       # 🔄 Conversioni unità misura
-    ├── qr_code_tools.py        # 📱 Generazione QR code
-    ├── regex_tools.py          # 🔍 Strumenti regex
-    ├── file_converter.py       # 🔄 Conversioni formato file
-    ├── pdf_tools.py            # 📄 Strumenti PDF
-    ├── cloud_tools.py          # ☁️ Strumenti cloud platform
-    ├── weather_tools.py        # 🌦️ Strumenti meteorologici
-    ├── url_tools.py            # 🔗 Manipolazione URL
-    ├── text_analysis_tools.py  # 📝 Analisi testo e sentiment
-    ├── email_tools.py          # 📧 Gestione email e template
-    ├── color_tools.py          # 🎨 Conversione e analisi colori
-    ├── json_yaml_tools.py      # 📄 Manipolazione JSON/YAML
-    ├── api_testing_tools.py    # 🚀 Testing API REST
-    ├── template_tools.py       # 📋 Generazione template
-    ├── markdown_tools.py       # 📝 Elaborazione Markdown
-    ├── archive_tools.py        # 📦 Gestione archivi
-    ├── code_analysis_tools.py  # 🔍 Analisi qualità codice
-    ├── code_execution_tools.py # 🚀 Esecuzione codice sicura + Dynamic Tools
-    ├── code_generation_tools.py # 🏗️ Generazione codice e template
-    ├── database_tools.py       # 🗄️ Gestione database SQLite
-    ├── docker_tools.py         # 🐳 Gestione container Docker
-    ├── git_tools.py            # 📋 Gestione repository Git
-    ├── process_management_tools.py # ⚙️ Gestione processi sistema
-    ├── environment_tools.py    # 🌍 Gestione variabili ambiente (NUOVO)
-    ├── backup_tools.py         # 💾 Gestione backup avanzati (NUOVO)
-    ├── log_analysis_tools.py   # 📊 Analisi log avanzata (NUOVO)
-    ├── async_task_queue.py     # 🔄 Coda task asincroni a lunga esecuzione (NUOVO)
-    └── workflows.py            # 🔄 Orchestrazione workflow (NUOVO)
-```
+**Output**: `{"result": 3.75, "remainder": 3, "is_integer": false}`
+
+#### Operazioni Avanzate
+
+##### `power(base, exponent)`
+Calcolo potenze con protezione overflow.
+```json
+{
+  "name": "power",
+  "arguments": {"base": 2, "exponent": 10}
+}
 ```
 
-## 🎯 Dynamic One-Time Tools (Advanced Feature)
+##### `square_root(number)`
+```json
+{
+  "name": "square_root",
+  "arguments": {"number": 16}
+}
+```
+
+##### `nth_root(number, n)`
+Radice n-esima con supporto per radici dispari di numeri negativi.
+```json
+{
+  "name": "nth_root",
+  "arguments": {"number": 27, "n": 3}
+}
+```
+
+##### `factorial(n)`
+```json
+{
+  "name": "factorial",
+  "arguments": {"n": 5}
+}
+```
+
+#### Funzioni Trigonometriche
+
+##### `trigonometric_functions(angle, unit, functions)`
+```json
+{
+  "name": "trigonometric_functions",
+  "arguments": {
+    "angle": 45,
+    "unit": "degrees",
+    "functions": ["sin", "cos", "tan", "cot", "sec", "csc"]
+  }
+}
+```
+
+**Unità supportate**: `radians`, `degrees`
+**Funzioni**: `sin`, `cos`, `tan`, `cot`, `sec`, `csc`
+
+#### Logaritmi
+
+##### `logarithms(number, base)`
+```json
+{
+  "name": "logarithms",
+  "arguments": {"number": 100, "base": 10}
+}
+```
+**Output**: Logaritmi in base naturale, 10, 2 e base specificata.
+
+#### Statistiche
+
+##### `statistics_functions(numbers, operation)`
+```json
+{
+  "name": "statistics_functions",
+  "arguments": {
+    "numbers": [1, 2, 3, 4, 5, 5, 6],
+    "operation": "all"
+  }
+}
+```
+
+**Operazioni disponibili**:
+- `mean`: Media aritmetica
+- `median`: Mediana
+- `mode`: Moda
+- `stdev`: Deviazione standard
+- `variance`: Varianza
+- `range`: Range (max - min)
+- `all`: Tutte le statistiche
+
+#### Teoria dei Numeri
+
+##### `number_theory(a, b, operation)`
+```json
+{
+  "name": "number_theory",
+  "arguments": {"a": 48, "b": 18, "operation": "gcd"}
+}
+```
+
+**Operazioni**:
+- `gcd`: Massimo Comune Divisore
+- `lcm`: Minimo Comune Multiplo
+- `prime_factors`: Fattorizzazione in primi
+- `is_prime`: Test di primalità
+
+#### Conversioni Unità
+
+##### `unit_converter(value, from_unit, to_unit, unit_type)`
+```json
+{
+  "name": "unit_converter",
+  "arguments": {
+    "value": 100,
+    "from_unit": "meter",
+    "to_unit": "foot",
+    "unit_type": "length"
+  }
+}
+```
+
+**Tipi di unità supportati**:
+
+**Length**: `meter`, `kilometer`, `centimeter`, `millimeter`, `inch`, `foot`, `yard`, `mile`
+
+**Weight**: `kilogram`, `gram`, `pound`, `ounce`, `ton`
+
+**Temperature**: `celsius`, `fahrenheit`, `kelvin`
+
+**Volume**: `liter`, `milliliter`, `gallon`, `quart`, `pint`, `cup`
+
+**Time**: `second`, `minute`, `hour`, `day`, `week`, `year`
+
+#### Calcoli Finanziari
+
+##### `financial_calculator(principal, rate, time, calculation_type, compound_frequency)`
+```json
+{
+  "name": "financial_calculator",
+  "arguments": {
+    "principal": 1000,
+    "rate": 5,
+    "time": 3,
+    "calculation_type": "compound_interest",
+    "compound_frequency": 12
+  }
+}
+```
+
+**Tipi di calcolo**:
+- `simple_interest`: Interesse semplice
+- `compound_interest`: Interesse composto
+- `present_value`: Valore attuale
+
+#### Valutazione Espressioni
+
+##### `expression_evaluator(expression, variables)`
+```json
+{
+  "name": "expression_evaluator",
+  "arguments": {
+    "expression": "2 * pi * r + sqrt(x**2 + y**2)",
+    "variables": {"r": 5, "x": 3, "y": 4}
+  }
+}
+```
+
+**Funzioni disponibili**:
+- Aritmetiche: `+`, `-`, `*`, `/`, `**`, `%`
+- Matematiche: `sin`, `cos`, `tan`, `log`, `sqrt`, `exp`, `abs`
+- Costanti: `pi`, `e`
+- Custom: Variabili definite dall'utente
+
+**Caratteristiche di sicurezza**:
+- Ambiente di esecuzione isolato
+- Whitelist di funzioni permesse
+- Validazione input rigorosa
+- Prevenzione injection attacks
+
+#### Costanti Matematiche
+
+##### `mathematical_constants()`
+```json
+{
+  "name": "mathematical_constants",
+  "arguments": {}
+}
+```
+
+**Costanti incluse**:
+- π (pi): 3.14159...
+- e (eulero): 2.71828...
+- φ (sezione aurea): 1.61803...
+- √2, √3
+- γ (Eulero-Mascheroni): 0.57721...
+
+### Esempi di Utilizzo Avanzato
+
+#### Calcolo Complesso Multi-step
+```json
+// 1. Calcola area cerchio
+{
+  "name": "expression_evaluator",
+  "arguments": {
+    "expression": "pi * r**2",
+    "variables": {"r": 5}
+  }
+}
+
+// 2. Statistiche su dataset
+{
+  "name": "statistics_functions",
+  "arguments": {
+    "numbers": [78.5, 113.1, 50.3, 201.1, 153.9],
+    "operation": "all"
+  }
+}
+
+// 3. Conversione risultato
+{
+  "name": "unit_converter",
+  "arguments": {
+    "value": 78.5,
+    "from_unit": "meter",
+    "to_unit": "foot",
+    "unit_type": "length"
+  }
+}
+```
+
+#### Analisi Finanziaria
+```json
+// Confronto interesse semplice vs composto
+{
+  "name": "financial_calculator",
+  "arguments": {
+    "principal": 10000,
+    "rate": 7.5,
+    "time": 10,
+    "calculation_type": "compound_interest",
+    "compound_frequency": 4
+  }
+}
+```
+
+#### Problemi di Geometria
+```json
+{
+  "name": "expression_evaluator",
+  "arguments": {
+    "expression": "sqrt((x2-x1)**2 + (y2-y1)**2)",
+    "variables": {"x1": 0, "y1": 0, "x2": 3, "y2": 4}
+  }
+}
+```
+
+### Controlli di Sicurezza
+
+- **Overflow Protection**: Limiti su operazioni che potrebbero causare overflow
+- **Division by Zero**: Gestione automatica divisioni per zero
+- **Input Validation**: Validazione rigorosa di tutti gli input
+- **Safe Evaluation**: Ambiente isolato per valutazione espressioni
+- **Error Handling**: Gestione completa degli errori con messaggi informativi
+
+### Precisione e Limiti
+
+- **Precisione Decimale**: 50 cifre significative per calcoli di alta precisione
+- **Fattoriale**: Limitato a n ≤ 170 per evitare overflow
+- **Potenze**: Controlli automatici per evitare risultati troppo grandi
+- **Espressioni**: Lunghezza massima e caratteri permessi controllati
+
+## 🚀 Dynamic One-Time Tools (Advanced Feature)
 
 **Nexus** includes the revolutionary **Dynamic One-Time Tools** feature - the most advanced capability that allows LLMs to create custom tools on-the-fly for specific tasks that don't have existing solutions.
 
@@ -795,433 +693,1475 @@ python client.py analyze_system_resources '{}'
 python client.py execute_python_code '{"code": "print(\\"Hello World\\")", "timeout": 30}'
 python client.py create_and_run_tool '{"python_code": "import datetime\\nprint(datetime.datetime.now())", "timeout": 60}'
 python client.py validate_python_syntax '{"code": "def hello(): return \\"world\\"", "strict_mode": true}'
-```
+## 🚀 Code Generation Tools
 
-## 🔌 Integrazione VSCode con Docker/Docker Compose
+Suite completa per generazione automatica di codice, scaffolding progetti, design patterns e documentazione con supporto multi-linguaggio e framework.
 
-### Prerequisiti
+### Funzionalità Principali
 
-- **VSCode** con estensione **Continue** o **Claude Code** installata
-- **Docker** installato e funzionante
-- **Docker Compose** (opzionale, per deployment orchestrato)
+- **Class & API Generation**: Generazione classi, endpoint REST, modelli
+- **Database Schema**: Schema SQL, migrazioni, modelli ORM
+- **Project Scaffolding**: Strutture complete progetto con framework
+- **Design Patterns**: Implementazioni pattern GoF e architetturali
+- **Frontend Components**: Componenti React, Vue, Angular, Svelte
+- **API Documentation**: OpenAPI, Postman, Markdown
+- **CI/CD Pipelines**: GitHub Actions, GitLab CI, Jenkins
+- **Code Modernization**: Refactoring e conversione legacy
+- **Docker & Config**: Dockerfile, configurazioni multi-ambiente
 
-### 📋 Setup VSCode - Versione Docker
+### Tool Disponibili
 
-#### 1. Build dell'immagine Docker
+#### Generazione Base
 
-```bash
-# Assicurati di essere nella directory del progetto
-cd nexus-mcp-server
+##### `generate_python_class`
+Genera classi Python complete con metodi e documentazione.
 
-# Build dell'immagine
-docker build -t nexus-mcp-server:latest .
+**Parametri:**
+- `class_name` (str): Nome della classe (PascalCase)
+- `attributes` (List[str]): Lista attributi della classe
+- `methods` (List[str]): Lista metodi da generare
+- `parent_class` (str): Classe genitore (opzionale)
 
-# Verifica che l'immagine sia stata creata
-docker images | grep nexus-mcp-server
-```
-
-#### 2. Configurazione VSCode
-
-Crea o modifica il file di configurazione MCP in VSCode (solitamente in `%APPDATA%\Code\User\globalStorage\rooveterinaryinc.roo-cline\settings\cline_mcp_settings.json` su Windows o `~/.vscode/settings.json`):
-
+**Esempio:**
 ```json
 {
-  "mcpServers": {
-    "nexus-docker": {
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "--network=host",
-        "-v", "./safe_files:/app/safe_files:rw",
-        "-v", "./config.json:/app/config.json:ro",
-        "nexus-mcp-server:latest"
-      ],
-      "env": {
-        "MCP_SERVER_NAME": "NexusServer-Docker"
-      }
-    }
+  "name": "generate_python_class",
+  "arguments": {
+    "class_name": "UserManager",
+    "attributes": ["users", "database_connection"],
+    "methods": ["add_user", "remove_user", "find_user", "update_user"],
+    "parent_class": "BaseManager"
   }
 }
 ```
 
-#### 3. Test della configurazione
+##### `generate_api_endpoints`
+Genera endpoint REST completi per risorsa.
 
-```bash
-# Test rapido del container
-docker run --rm -i \
-  -v "$(pwd)/safe_files:/app/safe_files:rw" \
-  -v "$(pwd)/config.json:/app/config.json:ro" \
-  nexus-mcp-server:latest \
-  python client.py system_overview '{}'
-```
+**Parametri:**
+- `resource_name` (str): Nome risorsa (es. "user", "product")
+- `operations` (List[str]): Operazioni HTTP (GET, POST, PUT, DELETE)
+- `framework` (str): Framework web (`flask`, `fastapi`, `django`)
 
-### 🐳 Setup VSCode - Versione Docker Compose
-
-#### 1. Avvio del servizio con Docker Compose
-
-```bash
-# Avvia il server in background
-docker-compose up -d nexus-mcp
-
-# Verifica che il container sia in esecuzione
-docker-compose ps
-
-# Visualizza i log (opzionale)
-docker-compose logs -f nexus-mcp
-```
-
-#### 2. Configurazione VSCode per Docker Compose
-
+**Esempio:**
 ```json
 {
-  "mcpServers": {
-    "nexus-compose": {
-      "command": "docker-compose",
-      "args": ["exec", "-T", "nexus-mcp", "python", "multi_server.py"],
-      "cwd": ".",
-      "env": {
-        "MCP_SERVER_NAME": "NexusServer-Compose"
-      }
-    }
+  "name": "generate_api_endpoints",
+  "arguments": {
+    "resource_name": "product",
+    "operations": ["GET", "POST", "PUT", "DELETE"],
+    "framework": "fastapi"
   }
 }
 ```
 
-#### 3. Test con Docker Compose
+#### Database & Schema
 
-```bash
-# Test attraverso docker-compose
-docker-compose exec nexus-mcp python client.py add '{"a": 42, "b": 8}'
+##### `generate_database_schema`
+Genera schema database con migrazioni e modelli ORM.
 
-# Test di più funzioni
-docker-compose exec nexus-mcp python client.py system_overview '{}'
-docker-compose exec nexus-mcp python client.py generate_uuid4 '{}'
-```
+**Parametri:**
+- `table_name` (str): Nome tabella
+- `fields` (List[Dict]): Campi con tipo, vincoli, indici
+- `database_type` (str): DBMS (`postgresql`, `mysql`, `sqlite`, `mongodb`)
+- `include_migrations` (bool): Include script migrazione
 
-### 📂 Configurazioni Pre-configurate
-
-Il progetto include file di configurazione pronti all'uso nella directory `mcp-configs/`:
-
-```bash
-# Copia la configurazione VSCode nel tuo ambiente
-cp mcp-configs/vscode-mcp.json ~/.vscode/mcp-servers.json
-
-# Oppure per Continue/Claude Code
-cp mcp-configs/claude-code-config.json %APPDATA%\Code\User\globalStorage\rooveterinaryinc.roo-cline\settings\
-```
-
-### 🔧 Configurazione Avanzata
-
-#### Variabili d'ambiente personalizzate
-
-```yaml
-# docker-compose.override.yml
-services:
-  nexus-mcp:
-    environment:
-      - LOG_LEVEL=DEBUG
-      - MCP_SERVER_NAME=NexusServer-Dev
-      - CUSTOM_CONFIG_PATH=/app/config-dev.json
-    volumes:
-      - ./config-dev.json:/app/config-dev.json:ro
-```
-
-#### Configurazione di rete personalizzata
-
-```yaml
-# Per esporre il server su una porta specifica
-services:
-  nexus-mcp:
-    ports:
-      - "8080:9999"
-    environment:
-      - MCP_HTTP_PORT=9999
-```
-
-### 🧪 Testing e Verifica
-
-#### 1. Test di connettività
-
-```bash
-# Test Docker diretto
-docker run --rm nexus-mcp-server:latest python -c "print('✅ Container funzionante')"
-
-# Test Docker Compose
-docker-compose exec nexus-mcp python -c "print('✅ Compose funzionante')"
-```
-
-#### 2. Test funzionalità MCP
-
-```bash
-# Test tool matematici
-docker-compose exec nexus-mcp python client.py add '{"a": 10, "b": 5}'
-
-# Test tool di sicurezza
-docker-compose exec nexus-mcp python client.py generate_secure_password '{"length": 16}'
-
-# Test tool di sistema
-docker-compose exec nexus-mcp python client.py memory_usage '{}'
-```
-
-#### 3. Verifica integrazione VSCode
-
-1. Riavvia VSCode dopo aver configurato il server MCP
-2. Apri la palette comandi (`Ctrl+Shift+P`)
-3. Cerca "MCP" o "Continue" per verificare che il server sia riconosciuto
-4. Testa una richiesta semplice come "Calcola 5 + 3 usando Nexus"
-
-### 🚨 Troubleshooting
-
-#### Problema: Container non si avvia
-
-```bash
-# Verifica i log
-docker-compose logs nexus-mcp
-
-# Verifica che le dipendenze siano installate
-docker run --rm nexus-mcp-server:latest pip list
-```
-
-#### Problema: VSCode non riconosce il server
-
-```bash
-# Verifica la sintassi del file di configurazione
-jq . < ~/.vscode/mcp-servers.json
-
-# Verifica che Docker sia raggiungibile
-docker --version
-docker-compose --version
-```
-
-#### Problema: Errori di permessi sui volumi
-
-```bash
-# Verifica permessi directory safe_files
-ls -la safe_files/
-
-# Correggi permessi se necessario
-chmod 755 safe_files/
-```
-
-#### Problema: Timeout di connessione
-
-```bash
-# Aumenta timeout nel docker-compose.yml
-services:
-  nexus-mcp:
-    healthcheck:
-      timeout: 30s
-      interval: 60s
-```
-
-### 📊 Monitoraggio e Performance
-
-#### Utilizzo risorse
-
-```bash
-# Monitora utilizzo risorse
-docker stats nexus-mcp-server
-
-# Verifica health check
-docker inspect nexus-mcp-server | grep -A 10 -B 5 Health
-```
-
-#### Log analysis
-
-```bash
-# Log in tempo reale
-docker-compose logs -f nexus-mcp
-
-# Log con timestamp
-docker-compose logs -t nexus-mcp
-
-# Ultimi 100 log
-docker-compose logs --tail=100 nexus-mcp
-```
-
-## ⚙️ Configurazione
-
-### Abilitare/Disabilitare Tool
-
-Modifica `config.json` per controllare quali tool sono attivi:
-
+**Esempio:**
 ```json
 {
-  "comment": "Pannello di controllo per il server MCP Nexus",
-  "enabled_tools": [
-    "calculator",
-    "filesystem_reader",
-    "web_fetcher",
-    "crypto_tools",
-    "encoding_tools",
-    "datetime_tools",
-    "uuid_tools",
-    "string_tools",
-    "validator_tools",
-    "system_info",
-    "network_tools",
-    "security_tools",
-    "network_security_tools",
-    "performance_tools",
-    "data_analysis",
-    "image_processing",
-    "audio_processing",
-    "video_processing",
-    "unit_converter",
-    "qr_code_tools",
-    "regex_tools",
-    "file_converter",
-    "pdf_tools",
-    "code_analysis_tools",
-    "docker_tools",
-    "git_tools",
-    "process_management_tools",
-    "code_generation_tools",
-    "database_tools",
-    "environment_tools",
-    "backup_tools",
-    "log_analysis_tools",
-    "code_execution_tools",
-    "cloud_tools",
-    "weather_tools",
-    "url_tools",
-    "text_analysis_tools",
-    "email_tools",
-    "color_tools",
-    "json_yaml_tools",
-    "api_testing_tools",
-    "template_tools",
-    "markdown_tools",
-    "archive_tools",
-    "workflows",
-    "async_task_queue"
-  ]
+  "name": "generate_database_schema",
+  "arguments": {
+    "table_name": "users",
+    "fields": [
+      {"name": "id", "type": "uuid", "primary_key": true},
+      {"name": "email", "type": "string", "unique": true, "not_null": true},
+      {"name": "name", "type": "string", "not_null": true},
+      {"name": "created_at", "type": "datetime", "default": "NOW()"},
+      {"name": "is_active", "type": "boolean", "default": true}
+    ],
+    "database_type": "postgresql",
+    "include_migrations": true
+  }
 }
 ```
 
-**Riavvia il server per applicare le modifiche.**
+#### Project Scaffolding
 
-### Aggiungere Nuovi Tool
+##### `generate_project_scaffold`
+Genera struttura completa progetto con framework.
 
-1. Crea un nuovo file `.py` nella cartella `tools/`
-2. Implementa la funzione `register_tools(mcp)`:
+**Parametri:**
+- `project_name` (str): Nome progetto
+- `project_type` (str): Tipo (`web`, `api`, `cli`, `desktop`, `microservice`)
+- `framework` (str): Framework specifico
+- `features` (List[str]): Feature da includere
 
-```python
-# tools/my_tool.py
-import logging
+**Tipi di Progetto Supportati:**
+- **Web**: `react`, `vue`, `angular`, `svelte`
+- **API**: `fastapi`, `flask`, `express`, `spring`
+- **CLI**: `click`, `argparse`, `typer`
+- **Microservizio**: `fastapi`, `spring-boot`, `express`
 
-def register_tools(mcp):
-    logging.info("📝 Registrazione tool-set: My Tool")
+**Feature Disponibili:**
+- `auth`: Sistema autenticazione
+- `database`: Setup database
+- `tests`: Struttura test
+- `docker`: Containerizzazione
+- `github_actions`: CI/CD
+- `typescript`: TypeScript support
+- `redux`: State management
+- `tailwind`: CSS framework
 
-    @mcp.tool()
-    def my_function(param: str) -> str:
-        """Descrizione della funzione."""
-        return f"Risultato: {param}"
+**Esempio:**
+```json
+{
+  "name": "generate_project_scaffold",
+  "arguments": {
+    "project_name": "ecommerce-api",
+    "project_type": "api",
+    "framework": "fastapi",
+    "features": ["auth", "database", "tests", "docker", "github_actions"]
+  }
+}
 ```
 
-3. Aggiungi `"my_tool"` alla lista `enabled_tools` in `config.json`
+#### Design Patterns
 
-## 🔒 Sicurezza
+##### `generate_design_pattern`
+Implementa design pattern comuni con documentazione.
 
-### Filesystem Reader
-- **Sandbox**: Accesso limitato alla directory `safe_files/`
-- **Path Traversal Protection**: Blocca `../`, `/`, `\\`
-- **Path Resolution**: Verifica che il file sia effettivamente nel sandbox
+**Pattern Supportati:**
+- **Creational**: Singleton, Factory, Builder, Prototype
+- **Structural**: Adapter, Decorator, Facade, Proxy
+- **Behavioral**: Observer, Strategy, Command, State
 
-### Web Fetcher
-- **Timeout**: Richieste limitate a 10 secondi
-- **Content Size**: Limite 4000 caratteri per response
-- **User-Agent**: Identificazione richieste server
-
-### General
-- **Input Validation**: Tutti i parametri vengono validati
-- **Error Handling**: Gestione sicura degli errori senza leak
-- **Logging**: Monitoraggio completo attività
-
-## 📋 Requisiti Sistema
-
-- **Python**: 3.8+
-- **Sistema Operativo**: Linux, macOS, Windows
-- **RAM**: Minimo 512MB
-- **Dipendenze**: Vedere `requirements.txt`
-
-### Dipendenze Principali
-
-```
-mcp[cli]>=1.13.1      # Model Context Protocol
-httpx>=0.28.1         # HTTP client asincrono  
-psutil>=7.0.0         # Informazioni sistema
-python-dateutil>=2.9  # Parsing date avanzato
+**Esempio:**
+```json
+{
+  "name": "generate_design_pattern",
+  "arguments": {
+    "pattern_name": "observer",
+    "language": "python",
+    "class_names": ["NewsAgency", "NewsChannel"],
+    "custom_params": {"event_types": ["breaking", "sports", "weather"]}
+  }
+}
 ```
 
-## 🧪 Testing
+#### Frontend Components
 
-### Test Singolo Tool
-```bash
-python client.py <tool_name> '<json_args>'
+##### `generate_frontend_component`
+Genera componenti frontend con styling e test.
+
+**Framework Supportati:**
+- **React**: Functional, Class, Hooks
+- **Vue**: Composition API, Options API
+- **Angular**: Component, Service, Module
+- **Svelte**: Component con stores
+
+**Styling Options:**
+- `css`: CSS vanilla
+- `scss`: Sass/SCSS
+- `styled-components`: CSS-in-JS
+- `tailwind`: Tailwind CSS
+- `module.css`: CSS Modules
+
+**Esempio:**
+```json
+{
+  "name": "generate_frontend_component",
+  "arguments": {
+    "component_name": "ProductCard",
+    "framework": "react",
+    "component_type": "functional",
+    "props": [
+      {"name": "product", "type": "object", "required": true},
+      {"name": "onAddToCart", "type": "function", "required": false},
+      {"name": "showDescription", "type": "boolean", "default": true}
+    ],
+    "styling": "styled-components"
+  }
+}
 ```
 
-### Test Completo Sistema
-```bash
-# Test matematica
-python client.py add '{"a": 10, "b": 5}'
+#### Documentation
 
-# Test sicurezza filesystem  
-python client.py read_safe_file '{"filename": "../config.json"}'  # Dovrebbe fallire
+##### `generate_api_documentation`
+Genera documentazione API completa con esempi.
 
-# Test validatori
-python client.py validate_email '{"email": "invalid.email"}'
+**Formati Supportati:**
+- **OpenAPI**: Specifica OpenAPI 3.0
+- **Postman**: Collection Postman
+- **Markdown**: Documentazione Markdown
+- **Insomnia**: Collection Insomnia
 
-# Test sistema
-python client.py system_overview '{}'
+**Esempio:**
+```json
+{
+  "name": "generate_api_documentation",
+  "arguments": {
+    "api_name": "E-commerce API",
+    "endpoints": [
+      {
+        "path": "/products",
+        "method": "GET",
+        "description": "Get all products",
+        "parameters": [
+          {"name": "limit", "type": "integer", "in": "query"},
+          {"name": "category", "type": "string", "in": "query"}
+        ],
+        "responses": {
+          "200": {"description": "Success", "schema": "ProductList"}
+        }
+      }
+    ],
+    "doc_format": "openapi",
+    "include_examples": true
+  }
+}
 ```
 
-## 🤝 Contribuire
+#### CI/CD & DevOps
 
-### Aggiungere Nuovi Tool
+##### `generate_cicd_pipeline`
+Genera pipeline CI/CD per diverse piattaforme.
 
-1. **Fork** il repository
-2. **Crea** un branch per il tuo tool: `git checkout -b feature/awesome-tool`
-3. **Implementa** il tool seguendo le convenzioni esistenti
-4. **Testa** completamente la funzionalità
-5. **Documenta** nel README
-6. **Crea** una Pull Request
+**Piattaforme Supportate:**
+- **GitHub Actions**: Workflow YAML
+- **GitLab CI**: .gitlab-ci.yml
+- **Jenkins**: Jenkinsfile
+- **Azure DevOps**: Pipeline YAML
 
-### Linee Guida Tool
+**Deployment Target:**
+- `docker`: Container deployment
+- `kubernetes`: K8s deployment
+- `aws`: AWS services
+- `heroku`: Heroku deployment
+- `vercel`: Vercel deployment
 
-- ✅ **Sicurezza**: Valida tutti gli input
-- ✅ **Documentazione**: Docstring complete
-- ✅ **Error Handling**: Gestione robusta errori  
-- ✅ **Logging**: Info per debugging
-- ✅ **Encoding**: UTF-8 header nei file
-
-## 📜 Licenza
-
-Questo progetto è rilasciato sotto licenza MIT. Vedi file `LICENSE` per dettagli.
-
-## 🆘 Supporto
-
-### Problemi Comuni
-
-**Q: Il server non trova un tool abilitato**  
-A: Verifica che il file `.py` esista in `tools/` e sia presente in `config.json`
-
-**Q: Errori di encoding**  
-A: Assicurati che tutti i file abbiano header `# -*- coding: utf-8 -*-`
-
-**Q: Tool sistema non funziona**  
-A: Verifica che `psutil` sia installato: `pip install psutil`
-
-**Q: Timeout nelle richieste web**  
-A: Il timeout è configurato a 10 secondi. Alcune risorse potrebbero essere lente.
-
-### Debug
-
-Abilita logging dettagliato modificando il livello in `multi_server.py`:
-
-```python
-logging.basicConfig(level=logging.DEBUG, ...)
+**Esempio:**
+```json
+{
+  "name": "generate_cicd_pipeline",
+  "arguments": {
+    "project_name": "my-web-app",
+    "platform": "github_actions",
+    "language": "python",
+    "stages": ["build", "test", "deploy"],
+    "deployment_target": "docker"
+  }
+}
 ```
 
+##### `generate_dockerfile_template`
+Genera Dockerfile ottimizzati per linguaggio.
+
+**Esempio:**
+```json
+{
+  "name": "generate_dockerfile_template",
+  "arguments": {
+    "base_image": "python:3.11-slim",
+    "language": "python",
+    "port": 8000
+  }
+}
+```
+
+#### Testing
+
+##### `generate_test_template`
+Genera template test unitari e integrazione.
+
+**Framework Supportati:**
+- **Python**: unittest, pytest
+- **JavaScript**: Jest, Mocha, Cypress
+- **Java**: JUnit, TestNG
+
+**Esempio:**
+```json
+{
+  "name": "generate_test_template",
+  "arguments": {
+    "test_type": "unit",
+    "class_name": "UserService",
+    "methods": ["create_user", "authenticate", "update_profile"],
+    "framework": "pytest"
+  }
+}
+```
+
+#### Code Modernization
+
+##### `modernize_legacy_code`
+Modernizza e refactorizza codice legacy.
+
+**Tipi di Modernizzazione:**
+- `refactor`: Refactoring same language
+- `convert`: Conversione linguaggio
+- `optimize`: Ottimizzazione performance
+
+**Esempio:**
+```json
+{
+  "name": "modernize_legacy_code",
+  "arguments": {
+    "legacy_code": "old_python_code_here",
+    "source_language": "python2",
+    "target_language": "python3",
+    "modernization_type": "convert"
+  }
+}
+```
+
+#### Configuration
+
+##### `generate_config_file`
+Genera file configurazione multi-ambiente.
+
+**Formati Supportati:**
+- `json`: Configurazione JSON
+- `yaml`: File YAML
+- `ini`: File INI/CFG
+- `env`: Environment variables
+
+**Esempio:**
+```json
+{
+  "name": "generate_config_file",
+  "arguments": {
+    "config_type": "yaml",
+    "application_name": "my-app",
+    "environment": "production"
+  }
+}
+```
+
+### Esempi di Utilizzo Avanzato
+
+#### Sviluppo Full-Stack Completo
+```json
+// 1. Genera progetto backend
+{
+  "name": "generate_project_scaffold",
+  "arguments": {
+    "project_name": "task-manager-api",
+    "project_type": "api",
+    "framework": "fastapi",
+    "features": ["auth", "database", "tests", "docker"]
+  }
+}
+
+// 2. Genera schema database
+{
+  "name": "generate_database_schema",
+  "arguments": {
+    "table_name": "tasks",
+    "fields": [
+      {"name": "id", "type": "uuid", "primary_key": true},
+      {"name": "title", "type": "string", "not_null": true},
+      {"name": "completed", "type": "boolean", "default": false}
+    ],
+    "database_type": "postgresql"
+  }
+}
+
+// 3. Genera frontend
+{
+  "name": "generate_project_scaffold",
+  "arguments": {
+    "project_name": "task-manager-ui",
+    "project_type": "web",
+    "framework": "react",
+    "features": ["typescript", "tailwind", "tests"]
+  }
+}
+
+// 4. Genera pipeline CI/CD
+{
+  "name": "generate_cicd_pipeline",
+  "arguments": {
+    "project_name": "task-manager",
+    "platform": "github_actions",
+    "language": "python",
+    "stages": ["build", "test", "deploy"]
+  }
+}
+```
+
+#### Microservizi con Documentazione
+```json
+// 1. Genera microservizio
+{
+  "name": "generate_project_scaffold",
+  "arguments": {
+    "project_name": "user-service",
+    "project_type": "microservice",
+    "framework": "fastapi",
+    "features": ["auth", "database", "docker", "monitoring"]
+  }
+}
+
+// 2. Genera API documentation
+{
+  "name": "generate_api_documentation",
+  "arguments": {
+    "api_name": "User Service API",
+    "endpoints": [...],
+    "doc_format": "openapi"
+  }
+}
+```
+
+#### Sistema Enterprise
+```json
+// 1. Design pattern per architettura
+{
+  "name": "generate_design_pattern",
+  "arguments": {
+    "pattern_name": "facade",
+    "language": "python",
+    "class_names": ["PaymentFacade", "PaymentGateway"]
+  }
+}
+
+// 2. Database schema complesso
+{
+  "name": "generate_database_schema",
+  "arguments": {
+    "table_name": "orders",
+    "fields": [...],
+    "database_type": "postgresql",
+    "include_migrations": true
+  }
+}
+```
+
+### Best Practices
+
+1. **Naming Conventions**: Usa PascalCase per classi, snake_case per funzioni
+2. **Project Structure**: Segui convenzioni framework per organizzazione
+3. **Documentation**: Genera sempre documentazione con esempi
+4. **Testing**: Include test per ogni componente generato
+5. **Security**: Usa pattern sicuri e validation input
+6. **Performance**: Ottimizza query database e componenti
+7. **Maintainability**: Genera codice pulito e ben documentato
+8. **CI/CD**: Setup pipeline dal primo commit
+
+### Template Personalizzati
+
+Il sistema supporta template personalizzati per:
+- **Aziende**: Standard aziendali specifici
+- **Team**: Convenzioni team development
+- **Progetti**: Template progetto ricorrenti
+- **Architetture**: Pattern architetturali custom
+
+# 🎨 Color Tools
+
+Suite completa per gestione professionale dei colori con teoria del colore, accessibilità, psicologia e strumenti di design.
+
+### Funzionalità Principali
+
+- **Conversioni Formato**: Hex, RGB, HSL, HSV con precisione professionale
+- **Palette Generation**: Schemi armonici basati su teoria del colore
+- **Accessibilità**: Analisi contrasto WCAG e simulazione daltonismo
+- **Gradient Creator**: Generazione gradienti con easing personalizzabile
+- **Psicologia Colore**: Analisi significato e impatto emotivo
+- **Color Matching**: Ricerca colori nominati in database professionali
+- **Temperature Analysis**: Classificazione colori caldi/freddi
+- **Export Tools**: Esportazione per software di design
+
+### Tool Disponibili
+
+#### Conversioni e Analisi Base
+
+##### `convert_color_format`
+Converte colori tra formati con informazioni complete.
+
+**Parametri:**
+- `color` (str): Colore sorgente (hex, rgb, nome)
+- `target_format` (str): Formato destinazione
+
+**Formati Supportati:**
+- **HEX**: `#FF0000`, `#ff0000`
+- **RGB**: `rgb(255,0,0)`, `255,0,0`
+- **HSL**: Hue, Saturation, Lightness
+- **HSV**: Hue, Saturation, Value
+- **Nomi**: red, green, blue, etc.
+
+**Esempio:**
+```json
+{
+  "name": "convert_color_format",
+  "arguments": {
+    "color": "#3498db",
+    "target_format": "hsl"
+  }
+}
+```
+
+##### `analyze_color_contrast`
+Analisi contrasto WCAG per accessibilità.
+
+**Esempio:**
+```json
+{
+  "name": "analyze_color_contrast",
+  "arguments": {
+    "color1": "#000000",
+    "color2": "#FFFFFF"
+  }
+}
+```
+
+**Standard WCAG:**
+- **AA Normal**: Contrasto ≥ 4.5:1
+- **AA Large**: Contrasto ≥ 3.0:1  
+- **AAA Normal**: Contrasto ≥ 7.0:1
+- **AAA Large**: Contrasto ≥ 4.5:1
+
+#### Palette e Schemi Colore
+
+##### `generate_color_palette`
+Genera palette armoniose secondo teoria del colore.
+
+**Tipi di Palette:**
+- `complementary`: Colori opposti sulla ruota
+- `triadic`: 3 colori equidistanti (120°)
+- `analogous`: Colori adiacenti
+- `monochromatic`: Variazioni stesso colore
+
+##### `generate_color_scheme`
+Schemi colore professionali avanzati.
+
+**Schemi Disponibili:**
+- **Monochromatica**: Variazioni luminosità/saturazione
+- **Analogous**: Colori adiacenti (±30°)
+- **Complementary**: Colore opposto + variazioni
+- **Triadic**: 3 colori a 120° di distanza
+- **Tetradica**: 4 colori in quadrato/rettangolo
+- **Split Complementary**: Base + 2 colori adiacenti al complementare
+
+**Esempio:**
+```json
+{
+  "name": "generate_color_scheme",
+  "arguments": {
+    "base_color": "#E74C3C",
+    "scheme_type": "triadic",
+    "count": 6
+  }
+}
+```
+
+#### Gradienti e Interpolazione
+
+##### `generate_gradient`
+Generazione gradienti con curve di easing.
+
+**Parametri:**
+- `start_color` (str): Colore iniziale
+- `end_color` (str): Colore finale  
+- `steps` (int): Numero step (3-20)
+- `gradient_type` (str): Tipo easing
+
+**Tipi di Easing:**
+- `linear`: Transizione lineare
+- `ease-in`: Accelerazione graduale
+- `ease-out`: Decelerazione graduale
+- `ease-in-out`: Accelerazione poi decelerazione
+
+**Esempio:**
+```json
+{
+  "name": "generate_gradient",
+  "arguments": {
+    "start_color": "#FF6B6B",
+    "end_color": "#4ECDC4", 
+    "steps": 7,
+    "gradient_type": "ease-in-out"
+  }
+}
+```
+
+**Output include:**
+- Step intermedi con posizione
+- CSS `linear-gradient()` e `radial-gradient()`
+- Analisi armonia cromatica
+
+##### `color_mixer`
+Miscelazione precisa di due colori.
+
+**Esempio:**
+```json
+{
+  "name": "color_mixer",
+  "arguments": {
+    "color1": "#FF0000",
+    "color2": "#0000FF",
+    "ratio": 0.3
+  }
+}
+```
+
+#### Accessibilità e Inclusività
+
+##### `simulate_color_blindness`
+Simulazione visione daltonismo per test accessibilità.
+
+**Tipi di Daltonismo:**
+- **Protanopia**: Cecità al rosso (~1% uomini)
+- **Deuteranopia**: Cecità al verde (~1% uomini)
+- **Tritanopia**: Cecità al blu (~0.003% popolazione)
+- **Achromatopsia**: Visione monocromatica (rara)
+
+**Esempio:**
+```json
+{
+  "name": "simulate_color_blindness",
+  "arguments": {
+    "colors": ["#FF0000", "#00FF00", "#0000FF"],
+    "blindness_type": "deuteranopia"
+  }
+}
+```
+
+**Output include:**
+- Colori simulati per ciascun tipo
+- Score di differenza percettiva
+- Raccomandazioni accessibilità
+
+#### Psicologia e Significato
+
+##### `analyze_color_psychology`
+Analisi psicologica e significato culturale dei colori.
+
+**Esempio:**
+```json
+{
+  "name": "analyze_color_psychology",
+  "arguments": {
+    "colors": ["#E74C3C", "#3498DB", "#2ECC71"]
+  }
+}
+```
+
+**Analisi include:**
+- **Emozioni Associate**: Sentimenti evocati
+- **Tratti Caratteristici**: Personalità e attributi
+- **Casi d'Uso**: Settori e applicazioni ideali
+- **Analisi Combinazione**: Effetto dei colori insieme
+- **Mood Generale**: Atmosfera complessiva
+
+##### `analyze_color_temperature`
+Classificazione temperatura cromatica.
+
+**Categorie:**
+- **Caldi**: Rosso, arancione, giallo (energia, passione)
+- **Freddi**: Blu, verde, viola (calma, professionalità)
+- **Neutri**: Grigi, beige (equilibrio, versatilità)
+
+#### Ricerca e Matching
+
+##### `find_closest_named_color`
+Trova colore nominato più simile.
+
+**Database Supportati:**
+- **CSS**: Colori web standard
+- **Pantone**: Sistema colori professionale
+- **RAL**: Standard europeo industriale
+- **X11**: Colori sistema Unix/Linux
+
+**Esempio:**
+```json
+{
+  "name": "find_closest_named_color",
+  "arguments": {
+    "color": "#FF6B6B",
+    "color_system": "css"
+  }
+}
+```
+
+#### Export e Integrazione
+
+##### `export_color_palette`
+Esportazione palette per software di design.
+
+**Formati di Export:**
+- **CSS**: Variabili CSS custom properties
+- **SCSS**: Variabili Sass/SCSS
+- **JSON**: Formato programmatico
+- **ASE**: Adobe Swatch Exchange (info)
+- **GPL**: GIMP Palette
+- **XML**: Formato XML generico
+
+**Esempio:**
+```json
+{
+  "name": "export_color_palette",
+  "arguments": {
+    "colors": ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FECA57"],
+    "export_format": "css",
+    "palette_name": "Summer Vibes"
+  }
+}
+```
+
+### Esempi di Utilizzo Avanzato
+
+#### Design System Completo
+```json
+// 1. Genera schema colore primario
+{
+  "name": "generate_color_scheme",
+  "arguments": {
+    "base_color": "#2C3E50",
+    "scheme_type": "analogous",
+    "count": 5
+  }
+}
+
+// 2. Testa accessibilità
+{
+  "name": "analyze_color_contrast",
+  "arguments": {
+    "color1": "#2C3E50",
+    "color2": "#FFFFFF"
+  }
+}
+
+// 3. Simula daltonismo
+{
+  "name": "simulate_color_blindness",
+  "arguments": {
+    "colors": ["#2C3E50", "#3498DB", "#E74C3C"],
+    "blindness_type": "deuteranopia"
+  }
+}
+
+// 4. Esporta per sviluppo
+{
+  "name": "export_color_palette",
+  "arguments": {
+    "colors": ["#2C3E50", "#3498DB", "#E74C3C"],
+    "export_format": "css",
+    "palette_name": "Brand Colors"
+  }
+}
+```
+
+#### Analisi Brand Identity
+```json
+// 1. Analizza psicologia colori brand
+{
+  "name": "analyze_color_psychology",
+  "arguments": {
+    "colors": ["#FF6B35", "#004225", "#F7931E"]
+  }
+}
+
+// 2. Classifica temperatura
+{
+  "name": "analyze_color_temperature",
+  "arguments": {
+    "colors": ["#FF6B35", "#004225", "#F7931E"]
+  }
+}
+
+// 3. Genera gradienti per UI
+{
+  "name": "generate_gradient",
+  "arguments": {
+    "start_color": "#FF6B35",
+    "end_color": "#F7931E",
+    "steps": 5,
+    "gradient_type": "ease-out"
+  }
+}
+```
+
+#### Sviluppo Interfaccia Accessibile
+```json
+// 1. Verifica contrasti multipli
+{
+  "name": "analyze_color_contrast",
+  "arguments": {
+    "color1": "#333333",
+    "color2": "#FFFFFF"
+  }
+}
+
+// 2. Test daltonismo completo
+{
+  "name": "simulate_color_blindness",
+  "arguments": {
+    "colors": ["#007bff", "#28a745", "#dc3545"],
+    "blindness_type": "protanopia"
+  }
+}
+
+// 3. Alternative accessibili
+{
+  "name": "find_closest_named_color",
+  "arguments": {
+    "color": "#007bff",
+    "color_system": "css"
+  }
+}
+```
+
+### Teoria del Colore Integrata
+
+#### Ruota Cromatica
+- **Primari**: Rosso, Blu, Giallo
+- **Secondari**: Verde, Arancione, Viola
+- **Terziari**: Combinazioni primari + secondari
+
+#### Proprietà Colore
+- **Hue (Tonalità)**: Posizione sulla ruota (0-360°)
+- **Saturation (Saturazione)**: Intensità colore (0-100%)
+- **Value/Lightness**: Luminosità (0-100%)
+
+#### Armonie Cromatiche
+- **Monocromatica**: Stesso hue, diversa saturazione/luminosità
+- **Analoga**: Colori adiacenti (±30° sulla ruota)
+- **Complementare**: Colori opposti (180°)
+- **Triadica**: 3 colori equidistanti (120°)
+- **Tetradica**: 4 colori in quadrato/rettangolo
+
+### Accessibilità Web (WCAG)
+
+#### Livelli di Conformità
+- **A**: Livello minimo accessibilità
+- **AA**: Standard raccomandato (4.5:1 normale, 3:1 grande)
+- **AAA**: Livello superiore (7:1 normale, 4.5:1 grande)
+
+#### Best Practices
+1. **Testa sempre** il contrasto con strumenti
+2. **Non affidarti solo** al colore per informazioni
+3. **Considera daltonismo** (8% uomini, 0.5% donne)
+4. **Usa pattern** aggiuntivi per differenziazione
+5. **Testa con utenti reali** quando possibile
+
+## 🔒 Security Tools
+
+Strumenti avanzati per sicurezza informatica, audit e protezione:
+
+### Funzionalità Principali
+
+- **Password Security**: Generazione e analisi forza password
+- **Crittografia**: Encryption/decryption con algoritmi sicuri
+- **Token Generation**: Creazione token sicuri per vari usi
+- **Vulnerability Scanning**: Scanner vulnerabilità automatizzato
+- **Security Audit**: Audit completo di sicurezza sistemi/web
+- **SSL/TLS Analysis**: Controllo certificati e configurazione
+- **Security Headers**: Analisi header di sicurezza HTTP
+- **Security Reporting**: Generazione report sicurezza dettagliati
+
+### Tool Disponibili
+
+#### `generate_secure_password(length?: int, include_symbols?: bool, exclude_ambiguous?: bool)`
+Generazione password sicure:
+- Lunghezza configurabile (8-128 caratteri)
+- Inclusione/esclusione simboli e caratteri ambigui
+- Calcolo entropia e forza password
+- Classificazione automatica sicurezza
+
+#### `password_strength_check(password: string)`
+Analisi dettagliata forza password:
+- Controllo caratteri (maiuscole, minuscole, numeri, simboli)
+- Rilevamento pattern comuni e sequenze
+- Punteggio forza con suggerimenti miglioramento
+- Classificazione da "Molto Debole" a "Molto Forte"
+
+#### `generate_api_key(length?: int, format_type?: string)`
+Generazione chiavi API sicure:
+- Formati: hex, base64, alphanumeric
+- Calcolo entropia bit
+- Lunghezza personalizzabile
+- Standard industry best practices
+
+#### `generate_secure_tokens(token_type: string, count?: int, options?: string)`
+Generazione token specializzati:
+- Tipi: session, csrf, api, uuid, otp
+- Opzioni personalizzazione per tipo
+- Raccomandazioni sicurezza specifiche
+- Batch generation fino a 100 token
+
+#### `comprehensive_security_audit(target: string, scan_type?: string)`
+Audit sicurezza completo:
+- Tipi scan: basic, network, web, full
+- Port scanning con analisi vulnerabilità
+- Controllo SSL/TLS e certificati
+- Risk scoring automatico
+- Report findings e raccomandazioni
+
+#### `vulnerability_scanner(target: string, scan_depth?: string)`
+Scanner vulnerabilità avanzato:
+- Profondità: surface, deep, aggressive
+- Check porte aperte, SSL, DNS, HTTP headers
+- Rilevamento service banners e credenziali default
+- Test directory traversal e SQL injection
+- Risk assessment con severity classification
+
+#### `encrypt_decrypt_data(data: string, operation: string, key?: string, algorithm?: string)`
+Crittografia/decrittografia sicura:
+- Algoritmi: Fernet (AES), Base64 encoding
+- Generazione chiavi automatica
+- Operazioni encrypt/decrypt
+- Note sicurezza e best practices
+
+#### `security_headers_analyzer(url: string)`
+Analisi header sicurezza HTTP:
+- Check HSTS, CSP, X-Frame-Options, etc.
+- Scoring sicurezza e grading (A-F)
+- Identificazione header mancanti
+- Raccomandazioni implementazione
+
+#### `generate_security_report(data: string)`
+Generazione report sicurezza completi:
+- Aggregazione risultati multiple scan
+- Executive summary con metriche chiave
+- Risk assessment dettagliato
+- Raccomandazioni prioritizzate
+- Compliance status evaluation
+
+#### `hash_file_content(content: string, algorithms?: string[])`
+Hashing contenuti per integrità:
+- Algoritmi: MD5, SHA1, SHA256, SHA512
+- Multiple hash simultanei
+- Verifica integrità file
+- Forensic analysis support
+
+#### `jwt_decode_header(jwt_token: string)`
+Decodifica JWT token (senza verifica):
+- Estrazione header e payload
+- Analisi struttura token
+- Warning sicurezza appropriati
+- Debug e troubleshooting
+
+#### `check_common_ports(host: string)`
+Scanning porte comuni:
+- Check servizi standard (FTP, SSH, HTTP, etc.)
+- Identificazione servizi esposti
+- Warning sicurezza automatici
+- Risk level assessment
+
+#### `ssl_certificate_check(domain: string, port?: int)`
+Controllo certificati SSL/TLS:
+- Validità e scadenza certificati
+- Analisi issuer e subject
+- Warning pre-scadenza
+- Serial number e dettagli tecnici
+
+### Esempi di Utilizzo
+
+```javascript
+// Audit sicurezza completo
+const audit = await comprehensive_security_audit("example.com", "full");
+console.log(`Risk Level: ${audit.audit_result.risk_level}`);
+
+// Scan vulnerabilità approfondito
+const vulnScan = await vulnerability_scanner("192.168.1.1", "deep");
+console.log(`Vulnerabilities: ${vulnScan.vulnerability_report.total_vulnerabilities}`);
+
+// Generazione password sicura
+const password = await generate_secure_password(16, true, true);
+console.log(`Password: ${password.password} (${password.strength})`);
+
+// Analisi header sicurezza
+const headers = await security_headers_analyzer("https://example.com");
+console.log(`Security Grade: ${headers.analysis.security_grade}`);
+
+// Crittografia dati
+const encrypted = await encrypt_decrypt_data("sensitive data", "encrypt", null, "fernet");
+const decrypted = await encrypt_decrypt_data(encrypted.encrypted_data, "decrypt", encrypted.key, "fernet");
+
+// Generazione token sicuri
+const tokens = await generate_secure_tokens("api", 5, JSON.stringify({prefix: "myapp"}));
+
+// Report sicurezza completo
+const scanData = JSON.stringify({
+  port_scan: audit.audit_result.port_scan,
+  ssl_analysis: audit.audit_result.ssl_analysis
+});
+const report = await generate_security_report(scanData);
+```
+
+### Security Standards & Compliance
+
+**Password Security:**
+- NIST SP 800-63B guidelines
+- Minimum 12 caratteri raccomandati
+- Entropy calculation algorithm
+- Pattern detection avanzato
+
+**Encryption Standards:**
+- Fernet (AES 128 in CBC mode with HMAC)
+- Cryptographically secure random generation
+- Key derivation best practices
+- Forward secrecy support
+
+**Token Security:**
+- Cryptographically secure random sources
+- Industry-standard token formats
+- Appropriate entropy levels
+- Usage-specific recommendations
+
+**Vulnerability Assessment:**
+- OWASP Top 10 coverage
+- CVE database integration potential
+- Risk scoring methodology
+- Severity classification standards
+
+### Security Best Practices
+
+**Password Management:**
+- Use strong, unique passwords
+- Implement 2FA/MFA where possible
+- Regular password rotation policies
+- Secure password storage (hashing)
+
+**API Security:**
+- Rotate API keys regularly
+- Use HTTPS only
+- Implement rate limiting
+- Monitor API usage patterns
+
+**Web Security:**
+- Implement all security headers
+- Use HTTPS everywhere
+- Regular security assessments
+- Keep software updated
+
+**Network Security:**
+- Minimize exposed services
+- Use VPNs for sensitive access
+- Implement network segmentation
+- Regular port scans and monitoring
+
+### Limitazioni e Considerazioni
+
+**Scan Limitations:**
+- Network scans may trigger security alerts
+- Some checks require network access
+- Rate limiting may affect deep scans
+- False positives possible in automated scans
+
+**Encryption Notes:**
+- Keys must be stored securely
+- Fernet requires cryptography library
+- Base64 is encoding, not encryption
+- Key rotation policies recommended
+
+**Compliance Considerations:**
+- Results may vary by implementation
+- Professional security audit recommended
+- Regular updates to threat intelligence
+- Local regulations may apply
+
+# 📜 Text Analysis Tools
+
+Strumenti avanzati per analisi del testo, estrazione informazioni e linguistica computazionale.
+
+## Funzionalità Principali
+
+- **Analisi Sentimentale**: Valutazione sentimenti (positivo, negativo, neutro)
+- **Estrazione Entità**: Riconoscimento entità nominate (persone, organizzazioni, luoghi)
+- **Riconoscimento Linguistico**: Identificazione lingua del testo
+- **Tokenizzazione**: Suddivisione testo in parole, frasi, paragrafi
+- **Lemmatizzazione**: Riduzione parole alla radice (lemma)
+- **Analisi Frequenza**: Conteggio e analisi parole più frequenti
+- **N-grams**: Estrazione e analisi n-grams (sequenze di n parole)
+- **Stop Words**: Rimozione parole comuni e poco informative
+
+## Tool Disponibili
+
+### `sentiment_analysis(text: string)`
+Analisi del sentimento di un testo.
+
+**Esempio:**
+```json
+{
+  "name": "sentiment_analysis",
+  "arguments": {
+    "text": "Il prodotto è fantastico e ha superato le mie aspettative!"
+  }
+}
+```
+
+**Output**: `{"sentiment": "positivo", "score": 0.95}`
+
+### `entity_extraction(text: string)`
+Estrazione delle entità nominate da un testo.
+
+**Esempio:**
+```json
+{
+  "name": "entity_extraction",
+  "arguments": {
+    "text": "Apple sta sviluppando un nuovo iPhone a San Francisco."
+  }
+}
+```
+
+**Output**: `{"entities": [{"type": "ORG", "value": "Apple"}, {"type": "PRODUCT", "value": "iPhone"}, {"type": "LOCATION", "value": "San Francisco"}]}`
+
+### `language_detection(text: string)`
+Riconoscimento della lingua di un testo.
+
+**Esempio:**
+```json
+{
+  "name": "language_detection",
+  "arguments": {
+    "text": "Ciao, come posso aiutarti oggi?"
+  }
+}
+```
+
+**Output**: `{"language": "Italian", "confidence": 0.98}`
+
+### `text_tokenization(text: string, mode: string)`
+Tokenizzazione del testo in parole o frasi.
+
+**Esempio:**
+```json
+{
+  "name": "text_tokenization",
+  "arguments": {
+    "text": "Nexus è un server MCP avanzato.",
+    "mode": "word"
+  }
+}
+```
+
+**Output**: `["Nexus", "è", "un", "server", "MCP", "avanzato"]`
+
+### `lemmatization(text: string)`
+Lemmatizzazione del testo.
+
+**Esempio:**
+```json
+{
+  "name": "lemmatization",
+  "arguments": {
+    "text": "correndo corse correrò"
+  }
+}
+```
+
+**Output**: `["correre", "correre", "correre"]`
+
+### `frequency_analysis(text: string)`
+Analisi della frequenza delle parole nel testo.
+
+**Esempio:**
+```json
+{
+  "name": "frequency_analysis",
+  "arguments": {
+    "text": "ciao ciao come va va va"
+  }
+}
+```
+
+**Output**: `{"words": {"ciao": 2, "come": 1, "va": 3}}`
+
+### `ngrams_extraction(text: string, n: int)`
+Estrazione di n-grams dal testo.
+
+**Esempio:**
+```json
+{
+  "name": "ngrams_extraction",
+  "arguments": {
+    "text": "Il gatto e il topo sono amici.",
+    "n": 2
+  }
+}
+```
+
+**Output**: `["Il gatto", "gatto e", "e il", "il topo", "topo sono", "sono amici"]`
+
+### `stopwords_removal(text: string)`
+Rimozione delle stop words dal testo.
+
+**Esempio:**
+```json
+{
+  "name": "stopwords_removal",
+  "arguments": {
+    "text": "Il rapido castoro marrone salta sopra il pigro cane."
+  }
+}
+```
+
+**Output**: `["rapido", "castoro", "marrone", "salta", "sopra", "pigro", "cane"]`
+
+### Esempi di Utilizzo
+
+```javascript
+// Analisi del sentimento
+const sentiment = await sentiment_analysis("Questo è il miglior servizio che abbia mai usato!");
+console.log(`Sentiment: ${sentiment.sentiment}, Score: ${sentiment.score}`);
+
+// Estrazione delle entità
+const entities = await entity_extraction("Barack Obama è nato a Honolulu, Hawaii.");
+console.log(`Entità trovate: ${JSON.stringify(entities)}`);
+
+// Riconoscimento della lingua
+const language = await language_detection("Bonjour tout le monde");
+console.log(`Lingua: ${language.language}, Confidenza: ${language.confidence}`);
+
+// Tokenizzazione
+const tokens = await text_tokenization("Nexus è un server MCP avanzato.", "word");
+console.log(`Token: ${tokens.join(", ")}`);
+
+// Lemmatizzazione
+const lemmas = await lemmatization("correndo corse correrò");
+console.log(`Lemmi: ${lemmas.join(", ")}`);
+
+// Analisi della frequenza
+const freq = await frequency_analysis("ciao ciao come va va va");
+console.log(`Frequenza parole: ${JSON.stringify(freq.words)}`);
+
+// Estrazione di n-grams
+const ngrams = await ngrams_extraction("Il gatto e il topo sono amici.", 2);
+console.log(`N-grams: ${ngrams.join(", ")}`);
+
+// Rimozione delle stop words
+const noStopwords = await stopwords_removal("Il rapido castoro marrone salta sopra il pigro cane.");
+console.log(`Testo senza stop words: ${noStopwords.join(" ")}`);
+```
+
+### Metriche e Analisi
+
+**Sentiment Analysis:**
+- Algoritmo basato su modelli di linguaggio pre-addestrati
+- Classificazione in positivo, negativo, neutro
+- Punteggio di confidenza
+
+**Entity Recognition:**
+- Modelli CRF o BERT-based per riconoscimento entità
+- Classificazione entità in categorie predefinite
+- Supporto per entità sovrapposte
+
+**Language Detection:**
+- Modelli n-gram e statistici per rilevamento lingua
+- Supporto per più di 100 lingue
+- Affidabilità > 98% per lingue comuni
+
+**Tokenization:**
+- Tokenizzazione basata su spazi bianchi e punteggiatura
+- Supporto per lingue con scrittura complessa
+- Opzioni di tokenizzazione personalizzabili
+
+**Lemmatization:**
+- Basata su dizionari e regole morfologiche
+- Supporto per lingue con flessione complessa
+- Opzioni di personalizzazione per domini specifici
+
+**Frequency Analysis:**
+- Conteggio parole e caratteri
+- Analisi distribuzione frequenze
+- Report dettagliato su richiesta
+
+**N-grams Extraction:**
+- Estrazione sequenziale di n parole
+- Supporto per n-grams da 1 a 5
+- Opzioni di filtro per frequenza e lunghezza
+
+**Stopwords Removal:**
+- Liste personalizzabili di stop words
+- Supporto per lingue multiple
+- Opzioni di normalizzazione testo
+
+### Linguistica Computazionale
+
+#### Modelli di Linguaggio
+- Basati su architetture Transformer
+- Addestrati su grandi corpora testuali
+- Capacità di comprensione e generazione testo
+
+#### Reti Neurali
+- Reti neurali profonde per estrazione caratteristiche
+- Architetture CNN e RNN per compiti specifici
+
+#### Algoritmi di Machine Learning
+- Classificazione, regressione, clustering
+- Modelli supervisionati e non supervisionati
+- Tecniche di ensemble e boosting
+
+#### Elaborazione del Linguaggio Naturale (NLP)
+- Tokenizzazione, stemming, lemmatizzazione
+- Riconoscimento entità, analisi sentimentale
+- Traduzione automatica, generazione testo
+
+#### Statistiche e Probabilità
+- Modelli basati su frequenze e probabilità
+- Analisi statistica dei testi
+- Modelli di Markov per sequenze
+
+## 📝 String Tools
+
+Strumenti avanzati per manipolazione, analisi e trasformazione di stringhe:
+
+### Funzionalità Principali
+
+- **Case Conversion**: Trasformazione maiuscole/minuscole con formati avanzati
+- **Text Analysis**: Analisi dettagliata con metriche leggibilità e linguistiche
+- **Encoding/Decoding**: Supporto Base64, URL, HTML, Hex encoding
+- **Format Operations**: Indentazione, allineamento, padding avanzati
+- **Validation**: Validazione email, URL, telefoni, carte credito, JSON
+- **String Comparison**: Algoritmi similarità, diff, Levenshtein distance
+- **Batch Processing**: Operazioni multiple simultanee su stringhe
+- **Text Cleaning**: Normalizzazione e pulizia testo avanzata
+
+### Tool Disponibili
+
+#### `string_case_convert(text: string, case_type: string)`
+Conversioni case multiple:
+- Tipi: upper, lower, title, sentence, camel, snake, kebab
+- Gestione caratteri speciali e spazi
+- Output formattato con etichette
+
+#### `string_stats(text: string)`
+Statistiche base testo:
+- Conteggio caratteri, parole, frasi, linee
+- Analisi lettere, numeri, spazi, caratteri speciali
+- Metriche strutturali essenziali
+
+#### `string_clean(text: string, operation: string)`
+Pulizia e normalizzazione:
+- Operazioni: trim, normalize_spaces, remove_special, letters_only, numbers_only
+- Rimozione caratteri indesiderati
+- Normalizzazione spaziatura
+
+#### `string_wrap(text: string, width?: int, break_long_words?: bool)`
+Text wrapping avanzato:
+- Larghezza configurabile (10-200)
+- Controllo rottura parole lunghe
+- Preservazione formattazione
+
+#### `string_find_replace(text: string, find: string, replace: string, case_sensitive?: bool)`
+Ricerca e sostituzione:
+- Case sensitive/insensitive
+- Conteggio occorrenze
+- Report dettagliato modifiche
+
+#### `string_advanced_analysis(text: string)`
+Analisi approfondita testo:
+- Statistiche caratteri e parole dettagliate
+- Frequenza caratteri e parole più comuni
+- Metriche leggibilità (Flesch Reading Ease)
+- Analisi linguistica con rilevamento script Unicode
+- Stima tempo lettura
+- Informazioni encoding e Unicode
+
+#### `string_encoding_operations(text: string, operation: string, encoding?: string)`
+Encoding/Decoding completo:
+- Base64: encode/decode con encoding personalizzabile
+- URL: encode/decode per sicurezza web
+- HTML: escape/unescape entità HTML
+- Hex: conversione esadecimale bidirezionale
+- Supporto encoding multipli (UTF-8, ASCII, etc.)
+
+#### `string_format_operations(text: string, operation: string, options?: string)`
+Formattazione avanzata:
+- **Indent/Dedent**: Controllo indentazione con caratteri personalizzabili
+- **Alignment**: Center, ljust, rjust con riempimento custom
+- **Padding**: Padding laterale configurabile
+- **Truncate**: Troncamento con suffisso personalizzabile
+- **Zero Fill**: Riempimento zeri per numeri
+- Opzioni JSON per controllo fine
+
+#### `string_validation(text: string, validation_type: string, options?: string)`
+Validazione formati specializzata:
+- **Email**: Pattern RFC-compliant
+- **URL**: HTTP/HTTPS con parametri
+- **Phone**: Formati internazionali (E.164, Italia, USA)
+- **Credit Card**: Algoritmo Luhn per validazione
+- **UUID**: Versioni 1-5 con analisi versione
+- **IP Address**: IPv4/IPv6 con rilevamento versione
+- **JSON**: Parsing con analisi struttura
+- Report dettagliato errori e metadati
+
+#### `string_comparison(text1: string, text2: string, comparison_type?: string)`
+Confronto stringhe avanzato:
+- **Similarity**: Ratio similarità con SequenceMatcher
+- **Levenshtein**: Distanza edit con normalizzazione
+- **Diff**: Unified diff con conteggio modifiche
+- **Common Substrings**: Sottostringhe comuni con lunghezza minima
+- Percentuali similarità e metriche dettagliate
+
+#### `string_batch_operations(operations_json: string)`
+Processing batch multiplo:
+- Fino a 100 operazioni simultanee
+- Supporto: case_convert, clean, stats, encoding, validation
+- Statistiche successo/fallimento aggregate
+- Report esecuzione dettagliato
+
+### Esempi di Utilizzo
+
+```javascript
+// Analisi completa testo
+const analysis = await string_advanced_analysis("Il gatto camminava sul tetto.");
+console.log(`Leggibilità: ${analysis.analysis.readability.level}`);
+console.log(`Tempo lettura: ${analysis.analysis.readability.estimated_reading_time_minutes} min`);
+
+// Encoding multiplo
+const base64 = await string_encoding_operations("Hello World!", "base64_encode");
+const url = await string_encoding_operations("hello world!", "url_encode");
+
+// Validazione dati
+const email = await string_validation("user@example.com", "email");
+const phone = await string_validation("+39 123 456 7890", "phone");
+const json = await string_validation('{"name": "test"}', "json");
+
+// Formattazione avanzata
+const centered = await string_format_operations("Title", "center", 
+  JSON.stringify({width: 20, fill_char: "="}));
+const indented = await string_format_operations("Code\nBlock", "indent",
+  JSON.stringify({size: 4, char: " "}));
+
+// Confronto stringhe
+const similarity = await string_comparison("hello world", "hallo world", "similarity");
+const diff = await string_comparison("version 1", "version 2", "diff");
+
+// Batch processing
+const batchOps = JSON.stringify([
+  {type: "case_convert", text: "Hello World", options: {case_type: "snake"}},
+  {type: "validation", text: "test@example.com", options: {validation_type: "email"}},
+  {type: "encoding", text: "encode me", options: {operation: "base64_encode"}}
+]);
+const batchResult = await string_batch_operations(batchOps);
+```
+
+### Metriche e Analisi
+
+**Readability Scoring:**
+- Algoritmo basato su Flesch Reading Ease
+- Considerazione lunghezza frasi e sillabe
+- Livelli: Molto Facile → Molto Difficile
+- Stima tempo lettura (200 WPM)
+
+**Language Detection:**
+- Analisi script Unicode
+- Rilevamento parole comuni (italiano, inglese, spagnolo)
+- Categorizzazione caratteri Unicode
+- Compatibilità ASCII e encoding
+
+**String Similarity:**
+- SequenceMatcher ratio (0-1)
+- Levenshtein distance con normalizzazione
+- Common substring analysis
+- Diff unified format
+
+**Validation Accuracy:**
+- Email: Pattern RFC-compliant
+- Credit Card: Algoritmo Luhn checksum
+- Phone: Pattern internazionali multipli
+- UUID: Validazione versione e formato
+- IP: IPv4/IPv6 pattern matching

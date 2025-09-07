@@ -9,5 +9,3110 @@
     "datetime_tools",
     "uuid_tools",
     "validator_tools"
-  ]
+  ],
+  "tools": {
+    "async_task_queue": {
+      "enabled": true,
+      "description": "Gestione coda task asincroni per operazioni a lunga durata",
+      "features": [
+        "Esecuzione asincrona con priorità",
+        "Sistema retry automatico",
+        "Monitoraggio progresso tempo reale",
+        "Persistenza su file",
+        "Ricerca e filtri avanzati",
+        "Operazioni batch",
+        "Cleanup automatico"
+      ],
+      "settings": {
+        "max_workers": 4,
+        "storage_path": "safe_files/task_storage.json",
+        "cleanup_interval_minutes": 5,
+        "auto_cleanup_hours": 24
+      },
+      "priority_levels": ["low", "normal", "high", "urgent"],
+      "supported_task_types": [
+        "sleep",
+        "cpu_intensive", 
+        "io_intensive",
+        "progress_demo",
+        "custom"
+      ]
+    },
+    "audio_processing": {
+      "enabled": true,
+      "description": "Elaborazione e analisi avanzata file audio con algoritmi DSP",
+      "version": "2.0",
+      "features": [
+        "Analisi metadata multi-formato",
+        "Generazione waveform avanzata con modulazione",
+        "Elaborazione audio (trim, concatenate, volume)",
+        "Analisi spettrale con FFT ottimizzata",
+        "Rilevamento features per ML",
+        "Effetti audio (fade, crossfade)",
+        "Valutazione qualità automatica",
+        "Supporto formati professionali"
+      ],
+      "supported_formats": {
+        "input": ["WAV", "MP3", "FLAC", "OGG", "M4A", "AIFF"],
+        "output": ["WAV"],
+        "native_processing": ["WAV"]
+      },
+      "audio_limits": {
+        "max_duration_seconds": 30,
+        "max_files_concatenation": 10,
+        "supported_sample_rates": [8000, 11025, 16000, 22050, 44100, 48000, 96000],
+        "bit_depth": 16,
+        "max_amplitude": 1.0,
+        "max_volume_factor": 5.0
+      },
+      "algorithms": {
+        "fft": "Recursive FFT with Hanning window",
+        "pitch_detection": "Autocorrelation-based",
+        "onset_detection": "Energy threshold with adaptive learning",
+        "spectral_analysis": "Centroid and bandwidth estimation",
+        "quality_metrics": "SNR, THD, and clipping detection"
+      },
+      "waveform_types": [
+        "sine",
+        "square", 
+        "triangle",
+        "sawtooth",
+        "noise"
+      ],
+      "effects": [
+        "amplitude_modulation",
+        "fade_in_out",
+        "crossfade",
+        "volume_adjustment",
+        "trim_extract"
+      ],
+      "quality_assessment": {
+        "metrics": ["SNR", "THD", "Dynamic Range", "Clipping Detection"],
+        "classifications": ["Professional", "Broadcast", "CD Quality", "Acceptable", "Low"],
+        "recommendations": true
+      }
+    },
+    "backup_tools": {
+      "enabled": true,
+      "description": "Sistema completo backup con incrementali, crittografia e tracking",
+      "version": "2.0",
+      "features": [
+        "Backup incrementali con delta detection",
+        "Crittografia file con chiavi personalizzate", 
+        "Database SQLite per tracking cronologia",
+        "Verifica integrità con hash multipli",
+        "Ripristino selettivo con pattern matching",
+        "Gestione retention automatica",
+        "Compressione multi-algoritmo",
+        "Sicurezza path traversal protection"
+      ],
+      "backup_types": ["full", "incremental"],
+      "archive_formats": ["zip", "tar", "tar.gz", "tar.bz2"],
+      "compression_algorithms": ["gzip", "bzip2", "zip"],
+      "hash_algorithms": ["sha256", "md5"],
+      "encryption_methods": ["xor_demo"],
+      "limits": {
+        "max_file_size_mb": 1024,
+        "max_total_size_gb": 10,
+        "max_retention_days": 365,
+        "max_backup_history": 1000,
+        "chunk_size_bytes": 8192
+      },
+      "security": {
+        "path_traversal_protection": true,
+        "input_validation": true,
+        "safe_extraction": true,
+        "encryption_available": true
+      },
+      "database": {
+        "type": "SQLite",
+        "path": "safe_files/backup_history.db",
+        "tables": ["backups", "backup_files"],
+        "auto_vacuum": true
+      },
+      "default_exclusions": [
+        "*.pyc",
+        "__pycache__",
+        ".git",
+        ".svn", 
+        ".DS_Store",
+        "Thumbs.db",
+        "*.tmp",
+        "*.temp",
+        "node_modules",
+        ".env"
+      ],
+      "retention_policies": {
+        "default_days": 30,
+        "max_days": 365,
+        "cleanup_schedule": "manual",
+        "dry_run_default": true
+      },
+      "performance": {
+        "parallel_processing": false,
+        "streaming_large_files": true,
+        "progress_reporting": true,
+        "memory_efficient": true
+      }
+    },
+    "calculator": {
+      "enabled": true,
+      "description": "Sistema di calcolo matematico avanzato con funzioni complete",
+      "version": "2.0",
+      "features": [
+        "Operazioni aritmetiche base con controlli sicurezza",
+        "Funzioni trigonometriche complete",
+        "Logaritmi e funzioni esponenziali",
+        "Teoria dei numeri (GCD, LCM, primi)",
+        "Statistiche descrittive complete",
+        "Conversioni unità multi-categoria",
+        "Calcoli finanziari (interessi, investimenti)",
+        "Valutazione sicura espressioni matematiche",
+        "Costanti matematiche fondamentali"
+      ],
+      "categories": {
+        "basic_arithmetic": ["add", "subtract", "multiply", "divide"],
+        "advanced_math": ["power", "square_root", "nth_root", "factorial"],
+        "trigonometry": ["trigonometric_functions"],
+        "logarithms": ["logarithms"],
+        "statistics": ["statistics_functions"],
+        "number_theory": ["number_theory"],
+        "conversions": ["unit_converter"],
+        "financial": ["financial_calculator"],
+        "expressions": ["expression_evaluator"],
+        "constants": ["mathematical_constants"]
+      },
+      "safety_features": {
+        "overflow_protection": true,
+        "division_by_zero_handling": true,
+        "input_validation": true,
+        "safe_expression_evaluation": true,
+        "result_bounds_checking": true
+      },
+      "precision": {
+        "decimal_places": 50,
+        "max_factorial": 170,
+        "max_power_base": 1000,
+        "max_power_exponent": 100,
+        "max_result_magnitude": 1e15
+      },
+      "supported_units": {
+        "length": ["meter", "kilometer", "centimeter", "millimeter", "inch", "foot", "yard", "mile"],
+        "weight": ["kilogram", "gram", "pound", "ounce", "ton"],
+        "temperature": ["celsius", "fahrenheit", "kelvin"],
+        "volume": ["liter", "milliliter", "gallon", "quart", "pint", "cup"],
+        "time": ["second", "minute", "hour", "day", "week", "year"]
+      },
+      "trigonometric_functions": ["sin", "cos", "tan", "cot", "sec", "csc"],
+      "angle_units": ["radians", "degrees"],
+      "logarithm_bases": ["natural", "base_10", "base_2", "custom"],
+      "statistical_operations": ["mean", "median", "mode", "stdev", "variance", "range"],
+      "number_theory_operations": ["gcd", "lcm", "prime_factors", "is_prime"],
+      "financial_calculations": ["simple_interest", "compound_interest", "present_value"],
+      "expression_evaluation": {
+        "safe_functions": ["abs", "round", "min", "max", "sin", "cos", "tan", "log", "sqrt", "exp", "pow"],
+        "constants": ["pi", "e"],
+        "security_level": "high",
+        "max_expression_length": 1000
+      }
+    },
+    "cloud_tools": {
+      "enabled": true,
+      "description": "Suite completa strumenti cloud multi-provider per gestione, sicurezza e ottimizzazione",
+      "version": "2.0",
+      "features": [
+        "Monitoraggio real-time servizi cloud con API ufficiali",
+        "Analisi DNS avanzata con controlli sicurezza",
+        "Ottimizzazione costi con raccomandazioni specifiche",
+        "Security audit con framework compliance multipli",
+        "Performance monitoring con metriche dettagliate", 
+        "Pianificazione migrazione multi-cloud",
+        "Validazione Infrastructure as Code",
+        "Health checking endpoint avanzato"
+      ],
+      "supported_providers": {
+        "public_clouds": ["aws", "azure", "gcp"],
+        "specialized_services": ["cloudflare", "digitalocean"],
+        "monitoring_apis": ["github", "atlassian", "slack"]
+      },
+      "monitoring_capabilities": {
+        "service_status": {
+          "real_time_apis": true,
+          "fallback_simulation": true,
+          "component_level_detail": true,
+          "historical_data": false
+        },
+        "dns_analysis": {
+          "record_types": ["A", "AAAA", "MX", "TXT", "CNAME", "NS", "SOA", "SRV", "PTR", "CAA"],
+          "security_checks": ["SPF", "DMARC", "CAA"],
+          "performance_metrics": true,
+          "dns_over_https": true
+        },
+        "performance_monitoring": {
+          "metrics": ["latency", "availability", "throughput", "dns_timing"],
+          "security_headers": true,
+          "content_analysis": true,
+          "global_endpoints": true
+        }
+      },
+      "cost_optimization": {
+        "supported_services": ["compute", "storage", "database", "bandwidth"],
+        "optimization_types": ["right_sizing", "reserved_instances", "storage_classes", "spot_instances"],
+        "targets": ["cost", "performance", "balanced"],
+        "roi_analysis": true,
+        "multi_cloud_comparison": true
+      },
+      "security_audit": {
+        "compliance_frameworks": ["general", "pci-dss", "hipaa", "sox", "gdpr"],
+        "audit_categories": [
+          "network_security",
+          "access_controls", 
+          "encryption",
+          "logging_monitoring",
+          "compliance_specific"
+        ],
+        "severity_levels": ["critical", "high", "medium", "low", "info"],
+        "remediation_planning": true,
+        "effort_estimation": true
+      },
+      "migration_planning": {
+        "migration_types": ["lift_and_shift", "re_architect", "hybrid"],
+        "resource_mapping": {
+          "aws_to_azure": true,
+          "aws_to_gcp": true,
+          "azure_to_aws": true,
+          "cross_provider": true
+        },
+        "cost_estimation": true,
+        "risk_analysis": true,
+        "timeline_estimation": true,
+        "phase_planning": true
+      },
+      "config_validation": {
+        "formats": ["json", "yaml", "terraform", "cloudformation", "arm", "ansible"],
+        "security_scanning": true,
+        "syntax_validation": true,
+        "best_practices": true,
+        "size_limits": {
+          "max_config_size_kb": 100,
+          "max_config_lines": 10000
+        }
+      },
+      "api_integrations": {
+        "cloudflare_dns": "https://cloudflare-dns.com/dns-query",
+        "digitalocean_status": "https://status.digitalocean.com/api/v2/status.json",
+        "github_status": "https://www.githubstatus.com/api/v2/status.json",
+        "timeout_seconds": 30,
+        "retry_attempts": 3
+      },
+      "performance_thresholds": {
+        "response_time_warning_ms": 1000,
+        "response_time_critical_ms": 2000,
+        "dns_resolution_warning_ms": 100,
+        "availability_threshold_percent": 99.0
+      },
+      "cost_estimation_matrix": {
+        "compute_hourly_rates": {
+          "small": 0.02,
+          "medium": 0.05,
+          "large": 0.10,
+          "xlarge": 0.20
+        },
+        "storage_monthly_rates": {
+          "standard": 0.10,
+          "infrequent": 0.025,
+          "archive": 0.004
+        },
+        "migration_base_costs": {
+          "assessment": 5000,
+          "data_transfer_per_tb": 1000,
+          "downtime_per_hour": 2000,
+          "testing": 3000,
+          "training": 2000
+        }
+      },
+      "security_recommendations": {
+        "network": [
+          "Restrict 0.0.0.0/0 access",
+          "Implement network segmentation",
+          "Enable VPC Flow Logs"
+        ],
+        "access": [
+          "Enable MFA for all users",
+          "Apply least privilege principle",
+          "Regular access reviews"
+        ],
+        "encryption": [
+          "Encrypt data at rest",
+          "Use TLS for data in transit",
+          "Proper key management"
+        ]
+      }
+    },
+    "code_analysis_tools": {
+      "enabled": true,
+      "description": "Suite completa analisi codice con focus su sicurezza e qualità",
+      "version": "2.0",
+      "features": [
+        "Analisi sintassi con AST parsing",
+        "Security vulnerability scanning",
+        "Analisi dipendenze e import tracking",
+        "Quality metrics e complexity analysis",
+        "Documentazione coverage e quality",
+        "Performance analysis e optimization",
+        "Test coverage estimation",
+        "Code improvement suggestions",
+        "Multi-language pattern detection"
+      ],
+      "supported_languages": {
+        "python": {
+          "analysis_level": "complete",
+          "features": ["ast_parsing", "security_scan", "style_check", "complexity_metrics"],
+          "frameworks": ["unittest", "pytest", "doctest"]
+        },
+        "javascript": {
+          "analysis_level": "pattern_based", 
+          "features": ["security_scan", "style_check", "pattern_detection"],
+          "frameworks": ["jest", "mocha", "jasmine"]
+        }
+      },
+      "security_vulnerabilities": {
+        "python": [
+          "SQL Injection",
+          "Command Injection", 
+          "Path Traversal",
+          "Hardcoded Secrets",
+          "Insecure Randomness",
+          "Unsafe Deserialization"
+        ],
+        "javascript": [
+          "XSS (Cross-Site Scripting)",
+          "Prototype Pollution",
+          "Code Injection"
+        ]
+      },
+      "code_metrics": {
+        "complexity": ["cyclomatic", "halstead", "maintainability_index"],
+        "quality": ["style_score", "documentation_coverage", "test_coverage"],
+        "security": ["vulnerability_count", "security_score"],
+        "maintainability": ["pattern_adherence", "anti_pattern_count"]
+      },
+      "analysis_categories": {
+        "syntax": ["validate", "parse_ast", "count_constructs"],
+        "security": ["vulnerability_scan", "dependency_check", "secret_detection"],
+        "style": ["formatting", "naming_conventions", "best_practices"],
+        "patterns": ["design_patterns", "anti_patterns", "code_smells"],
+        "documentation": ["docstring_coverage", "comment_analysis", "api_docs"],
+        "performance": ["optimization_opportunities", "bottleneck_detection"],
+        "testing": ["coverage_estimation", "framework_detection", "test_quality"],
+        "dependencies": ["import_analysis", "security_assessment", "version_tracking"]
+      },
+      "severity_levels": ["Critical", "High", "Medium", "Low", "Info"],
+      "rating_scales": {
+        "security": ["Excellent", "Good", "Fair", "Poor"],
+        "quality": ["Excellent", "Good", "Fair", "Poor"], 
+        "complexity": ["Very Low", "Low", "Medium", "High", "Very High"],
+        "maintainability": ["Excellent", "Good", "Fair", "Needs Improvement"]
+      },
+      "thresholds": {
+        "max_cyclomatic_complexity": 20,
+        "max_function_length": 50,
+        "min_documentation_coverage": 70,
+        "max_nesting_level": 4,
+        "min_test_coverage": 60
+      },
+      "integrations": {
+        "ci_cd": ["GitHub Actions", "GitLab CI", "Jenkins"],
+        "ides": ["VS Code", "PyCharm", "IntelliJ"],
+        "quality_gates": ["SonarQube", "CodeClimate", "Codacy"]
+      }
+    },
+    "code_execution_tools": {
+      "enabled": true,
+      "description": "Sistema avanzato esecuzione codice multi-linguaggio con sandbox sicuro",
+      "version": "2.0",
+      "features": [
+        "Esecuzione Python sicura con sandbox",
+        "Esecuzione JavaScript/Node.js",
+        "Shell command execution con whitelist",
+        "Profiling avanzato tempo e memoria",
+        "Debugging con breakpoint e trace",
+        "Batch execution sequenziale/parallela",
+        "Dynamic tool creation runtime",
+        "Resource monitoring sistema",
+        "Code optimization suggestions",
+        "Execution history e caching"
+      ],
+      "supported_languages": {
+        "python": {
+          "execution_environment": "subprocess_sandbox",
+          "max_timeout_seconds": 300,
+          "max_memory_mb": 500,
+          "security_level": "high",
+          "features": ["ast_validation", "resource_limits", "module_whitelist"]
+        },
+        "javascript": {
+          "runtime": "node.js",
+          "execution_environment": "subprocess_sandbox", 
+          "max_timeout_seconds": 180,
+          "max_memory_mb": 256,
+          "security_level": "high",
+          "features": ["api_filtering", "global_restrictions"]
+        },
+        "shell": {
+          "execution_environment": "subprocess_restricted",
+          "max_timeout_seconds": 180,
+          "max_memory_mb": 100,
+          "security_level": "maximum",
+          "features": ["command_whitelist", "path_restrictions"]
+        }
+      },
+      "security_features": {
+        "sandbox_isolation": true,
+        "resource_limits": true,
+        "code_scanning": true,
+        "module_whitelist": true,
+        "network_isolation": true,
+        "filesystem_restrictions": true,
+        "docker_support": true
+      },
+      "execution_limits": {
+        "max_concurrent_executions": 5,
+        "max_batch_size": 10,
+        "max_code_length": 100000,
+        "max_execution_history": 100
+      },
+      "profiling_capabilities": {
+        "time_profiling": {
+          "enabled": true,
+          "tools": ["cProfile", "pstats"],
+          "max_profile_time": 30
+        },
+        "memory_profiling": {
+          "enabled": true,
+          "tools": ["tracemalloc", "psutil"],
+          "max_memory_trace": "100MB"
+        },
+        "debugging": {
+          "enabled": true,
+          "features": ["breakpoints", "variable_trace", "execution_flow"],
+          "max_debug_time": 60
+        }
+      },
+      "whitelisted_modules": {
+        "python": [
+          "math", "random", "datetime", "json", "re", "string",
+          "collections", "itertools", "functools", "operator",
+          "decimal", "fractions", "statistics", "uuid", "hashlib",
+          "base64", "binascii", "calendar", "time"
+        ],
+        "javascript": [
+          "console", "JSON", "Math", "Date", "String", "Array",
+          "Object", "Number", "Boolean", "RegExp"
+        ]
+      },
+      "blocked_patterns": {
+        "python": [
+          "import os", "import sys", "import subprocess", "import shutil",
+          "eval(", "exec(", "__import__", "open(", "file("
+        ],
+        "javascript": [
+          "require(", "process.", "fs.", "eval(", "Function(",
+          "__dirname", "__filename", "global.", "module."
+        ],
+        "shell": [
+          "rm ", "sudo ", "chmod ", "chown ", "passwd ", "kill ",
+          "mount ", "umount ", "format ", "fdisk "
+        ]
+      },
+      "resource_monitoring": {
+        "cpu_monitoring": true,
+        "memory_monitoring": true,
+        "disk_monitoring": true,
+        "execution_tracking": true,
+        "performance_metrics": true
+      },
+      "dynamic_tools": {
+        "enabled": true,
+        "docker_isolation": true,
+        "max_tool_execution_time": 300,
+        "max_tool_memory_mb": 512,
+        "security_scanning": "enhanced",
+        "allowed_libraries": "whitelisted_only"
+      },
+      "optimization_analysis": {
+        "python": [
+          "list_comprehensions",
+          "string_operations",
+          "loop_efficiency", 
+          "dictionary_access",
+          "algorithm_complexity"
+        ],
+        "javascript": [
+          "dom_operations",
+          "variable_declarations",
+          "function_optimizations",
+          "async_patterns"
+        ]
+      },
+      "execution_modes": {
+        "sandbox": "Isolated subprocess with resource limits",
+        "docker": "Full container isolation (when available)",
+        "debug": "Execution with debugging and tracing",
+        "profile": "Performance profiling enabled",
+        "batch": "Multiple code snippets execution"
+      }
+    },
+    "code_generation_tools": {
+      "enabled": true,
+      "description": "Suite completa generazione codice, scaffolding e documentazione",
+      "version": "2.0",
+      "features": [
+        "Generazione classi e API endpoint",
+        "Database schema e migrazioni",
+        "Project scaffolding completo",
+        "Design pattern implementation",
+        "Frontend component generation",
+        "API documentation multi-format",
+        "CI/CD pipeline generation",
+        "Code modernization e refactoring",
+        "Docker e configuration files"
+      ],
+      "supported_languages": {
+        "backend": ["python", "javascript", "typescript", "java", "go", "csharp"],
+        "frontend": ["react", "vue", "angular", "svelte"],
+        "database": ["postgresql", "mysql", "sqlite", "mongodb"],
+        "config": ["json", "yaml", "ini", "env", "toml"]
+      },
+      "frameworks": {
+        "web_backend": {
+          "python": ["flask", "fastapi", "django", "quart"],
+          "javascript": ["express", "koa", "fastify", "nest"],
+          "java": ["spring", "quarkus", "micronaut"],
+          "go": ["gin", "echo", "fiber"]
+        },
+        "web_frontend": {
+          "react": ["cra", "next", "gatsby", "vite"],
+          "vue": ["vue-cli", "nuxt", "vite"],
+          "angular": ["angular-cli"],
+          "svelte": ["sveltekit", "vite"]
+        },
+        "mobile": {
+          "react_native": ["expo", "cli"],
+          "flutter": ["dart"],
+          "ionic": ["angular", "react", "vue"]
+        }
+      },
+      "design_patterns": {
+        "creational": ["singleton", "factory", "builder", "prototype", "abstract_factory"],
+        "structural": ["adapter", "decorator", "facade", "proxy", "composite", "bridge"],
+        "behavioral": ["observer", "strategy", "command", "state", "chain_of_responsibility", "mediator"]
+      },
+      "project_types": {
+        "web": ["spa", "ssr", "static", "pwa"],
+        "api": ["rest", "graphql", "grpc", "websocket"],
+        "cli": ["simple", "interactive", "daemon"],
+        "desktop": ["electron", "tauri", "native"],
+        "microservice": ["containerized", "serverless", "event_driven"],
+        "mobile": ["native", "hybrid", "cross_platform"]
+      },
+      "database_features": {
+        "schema_generation": true,
+        "migration_scripts": true,
+        "orm_models": ["sqlalchemy", "django_orm", "sequelize", "typeorm"],
+        "query_builders": true,
+        "seed_data": true,
+        "indexes_optimization": true
+      },
+      "cicd_platforms": {
+        "github_actions": {
+          "workflows": ["ci", "cd", "security", "dependency_check"],
+          "deployment_targets": ["docker", "kubernetes", "aws", "azure", "vercel"]
+        },
+        "gitlab_ci": {
+          "pipelines": ["build", "test", "deploy", "security"],
+          "deployment_targets": ["gitlab_pages", "kubernetes", "aws"]
+        },
+        "jenkins": {
+          "pipeline_types": ["declarative", "scripted"],
+          "integrations": ["docker", "kubernetes", "aws"]
+        },
+        "azure_devops": {
+          "pipeline_types": ["yaml", "classic"],
+          "deployment_targets": ["azure", "kubernetes"]
+        }
+      },
+      "documentation_formats": {
+        "api": ["openapi", "postman", "insomnia", "markdown"],
+        "code": ["sphinx", "jsdoc", "rustdoc", "godoc"],
+        "project": ["readme", "wiki", "gitbook", "docusaurus"]
+      },
+      "code_quality": {
+        "linting": ["eslint", "pylint", "golangci-lint", "rubocop"],
+        "formatting": ["prettier", "black", "gofmt", "rustfmt"],
+        "security": ["bandit", "eslint-security", "gosec", "brakeman"],
+        "testing": ["jest", "pytest", "go-test", "rspec"]
+      },
+      "containerization": {
+        "docker": {
+          "base_images": ["alpine", "slim", "distroless"],
+          "features": ["multi_stage", "security", "optimization"],
+          "orchestration": ["docker-compose", "kubernetes", "swarm"]
+        },
+        "security": {
+          "non_root_user": true,
+          "minimal_attack_surface": true,
+          "vulnerability_scanning": true,
+          "secrets_management": true
+        }
+      },
+      "modernization": {
+        "refactoring": {
+          "python": ["2to3", "modernize", "pyupgrade"],
+          "javascript": ["es5_to_es6", "commonjs_to_esm"],
+          "java": ["java8_features", "modern_syntax"]
+        },
+        "optimization": {
+          "performance": ["algorithm_improvement", "caching", "lazy_loading"],
+          "memory": ["object_pooling", "garbage_collection"],
+          "network": ["connection_pooling", "batching"]
+        },
+        "security": {
+          "vulnerability_fixes": true,
+          "deprecated_api_updates": true,
+          "encryption_upgrades": true
+        }
+      },
+      "validation": {
+        "naming_conventions": true,
+        "code_standards": true,
+        "dependency_security": true,
+        "license_compatibility": true
+      },
+      "output_options": {
+        "file_structure": "hierarchical",
+        "code_formatting": "language_specific",
+        "documentation": "comprehensive",
+        "examples": "included",
+        "tests": "optional"
+      }
+    },
+    "color_tools": {
+      "enabled": true,
+      "description": "Suite professionale gestione colori con teoria, accessibilità e psicologia",
+      "version": "2.0",
+      "features": [
+        "Conversioni formato multi-standard",
+        "Generazione palette teoria del colore", 
+        "Analisi accessibilità WCAG completa",
+        "Simulazione daltonismo accurata",
+        "Gradient creator con easing",
+        "Psicologia e significato colori",
+        "Color matching database professionali",
+        "Export per software design",
+        "Analisi temperatura cromatica"
+      ],
+      "color_formats": {
+        "input": ["hex", "rgb", "hsl", "hsv", "named_colors"],
+        "output": ["hex", "rgb", "hsl", "hsv", "css", "scss"],
+        "precision": "high"
+      },
+      "color_spaces": {
+        "rgb": "sRGB color space",
+        "hsl": "Hue, Saturation, Lightness",
+        "hsv": "Hue, Saturation, Value", 
+        "lab": "CIE LAB (future)",
+        "xyz": "CIE XYZ (future)"
+      },
+      "palette_generation": {
+        "harmony_types": [
+          "monochromatic",
+          "analogous", 
+          "complementary",
+          "triadic",
+          "tetradic",
+          "split_complementary"
+        ],
+        "max_colors": 10,
+        "theory_based": true
+      },
+      "gradient_generation": {
+        "max_steps": 20,
+        "easing_functions": ["linear", "ease-in", "ease-out", "ease-in-out"],
+        "output_formats": ["css", "svg", "json"],
+        "interpolation": "rgb_linear"
+      },
+      "accessibility": {
+        "wcag_compliance": {
+          "levels": ["A", "AA", "AAA"],
+          "contrast_ratios": {
+            "AA_normal": 4.5,
+            "AA_large": 3.0,
+            "AAA_normal": 7.0,
+            "AAA_large": 4.5
+          }
+        },
+        "color_blindness": {
+          "types": ["protanopia", "deuteranopia", "tritanopia", "achromatopsia"],
+          "simulation_accuracy": "medical_grade",
+          "prevalence_data": true
+        }
+      },
+      "psychology_analysis": {
+        "emotional_mapping": true,
+        "cultural_contexts": ["western", "eastern", "universal"],
+        "industry_applications": [
+          "technology", "healthcare", "finance", "food",
+          "fashion", "education", "entertainment", "sports"
+        ],
+        "personality_traits": true
+      },
+      "color_databases": {
+        "css": {
+          "colors_count": 147,
+          "web_safe": true
+        },
+        "pantone": {
+          "subset": "common_colors",
+          "professional": true
+        },
+        "ral": {
+          "industrial_standard": true,
+          "european_standard": true
+        },
+        "x11": {
+          "system_colors": true,
+          "unix_standard": true
+        }
+      },
+      "temperature_analysis": {
+        "categories": ["warm", "cool", "neutral"],
+        "psychological_effects": true,
+        "seasonal_associations": true,
+        "design_implications": true
+      },
+      "export_formats": {
+        "css": {
+          "custom_properties": true,
+          "class_generation": true
+        },
+        "scss": {
+          "variables": true,
+          "mixins": true
+        },
+        "json": {
+          "structured_data": true,
+          "metadata": true
+        },
+        "ase": {
+          "adobe_compatible": true,
+          "info_only": true
+        },
+        "gpl": {
+          "gimp_compatible": true,
+          "full_support": true
+        }
+      },
+      "validation": {
+        "color_format_validation": true,
+        "range_checking": true,
+        "accessibility_warnings": true,
+        "harmony_analysis": true
+      },
+      "limits": {
+        "max_colors_per_request": 20,
+        "max_gradient_steps": 20,
+        "max_palette_size": 10,
+        "max_simultaneous_analysis": 8
+      },
+      "professional_features": {
+        "color_harmony_analysis": true,
+        "brand_color_suggestions": true,
+        "seasonal_palette_generation": true,
+        "industry_specific_recommendations": true,
+        "cultural_color_meanings": true
+      }
+    },
+    "crypto_tools": {
+      "enabled": true,
+      "description": "Suite completa strumenti crittografici professionali per sicurezza applicazioni",
+      "version": "2.0",
+      "features": [
+        "Hashing sicuro multi-algoritmo",
+        "HMAC per autenticazione messaggi",
+        "Cifratura simmetrica AES/Fernet",
+        "Password hashing con salt (PBKDF2/scrypt)",
+        "Generazione keypair RSA",
+        "Token crittograficamente sicuri",
+        "Analisi entropia e casualità",
+        "Password generation sicura",
+        "Timing-safe comparisons",
+        "Security assessment tools"
+      ],
+      "algorithms": {
+        "hashing": {
+          "supported": ["sha256", "sha512", "sha1", "md5"],
+          "recommended": ["sha256", "sha512"],
+          "deprecated": ["md5", "sha1"]
+        },
+        "password_hashing": {
+          "pbkdf2": {
+            "min_iterations": 10000,
+            "recommended_iterations": 100000,
+            "salt_length": 16
+          },
+          "scrypt": {
+            "n": 16384,
+            "r": 8,
+            "p": 1,
+            "salt_length": 16
+          }
+        },
+        "symmetric_encryption": {
+          "fernet": {
+            "cipher": "AES-128-CBC",
+            "authentication": "HMAC-SHA256",
+            "key_derivation": "PBKDF2-HMAC-SHA256"
+          },
+          "aes256_gcm": {
+            "cipher": "AES-256-GCM",
+            "authentication": "built-in",
+            "key_derivation": "PBKDF2-HMAC-SHA256"
+          }
+        },
+        "asymmetric_keys": {
+          "rsa": {
+            "supported_sizes": [2048, 3072, 4096],
+            "recommended_size": 2048,
+            "public_exponent": 65537,
+            "format": "PEM/PKCS8"
+          }
+        }
+      },
+      "security_standards": {
+        "compliance": ["FIPS-140-2", "NIST-SP-800-63B", "OWASP"],
+        "entropy_requirements": {
+          "min_bits": 128,
+          "recommended_bits": 256,
+          "sources": "cryptographically_secure"
+        },
+        "timing_attack_protection": true,
+        "side_channel_resistance": "implemented"
+      },
+      "token_generation": {
+        "max_length": 128,
+        "min_length": 8,
+        "encodings": ["hex", "base64", "urlsafe"],
+        "entropy_source": "os.urandom/secrets"
+      },
+      "password_generation": {
+        "max_length": 128,
+        "min_length": 8,
+        "character_sets": {
+          "lowercase": "a-z",
+          "uppercase": "A-Z", 
+          "digits": "0-9",
+          "symbols": "!@#$%^&*()_+-=[]{}|;:,.<>?"
+        },
+        "ambiguous_chars": "0O1lI|",
+        "strength_analysis": true
+      },
+      "entropy_analysis": {
+        "shannon_entropy": true,
+        "character_distribution": true,
+        "pattern_detection": true,
+        "compressibility_estimate": true,
+        "security_assessment": true
+      },
+      "validation": {
+        "input_sanitization": true,
+        "parameter_bounds_checking": true,
+        "algorithm_whitelisting": true,
+        "secure_defaults": true
+      },
+      "dependencies": {
+        "required": ["hashlib", "hmac", "secrets", "base64"],
+        "optional": ["cryptography"],
+        "cryptography_features": [
+          "Advanced encryption (AES-GCM, Fernet)",
+          "Key derivation (PBKDF2, scrypt)",
+          "RSA key generation",
+          "Timing-safe operations"
+        ]
+      },
+      "performance": {
+        "hashing": "optimized",
+        "encryption": "hardware_accelerated",
+        "key_derivation": "memory_hard_functions",
+        "random_generation": "os_entropy_pool"
+      },
+      "use_cases": {
+        "authentication": ["password_hashing", "hmac_verification"],
+        "encryption": ["data_protection", "secure_storage"],
+        "tokens": ["session_management", "api_keys", "csrf_protection"],
+        "integrity": ["data_verification", "file_checksums"],
+        "key_management": ["keypair_generation", "key_derivation"]
+      }
+    },
+    "data_analysis": {
+      "enabled": true,
+      "description": "Suite completa analisi dati con statistiche, ML e time series",
+      "version": "2.0",
+      "features": [
+        "Analisi CSV e JSON strutturale",
+        "Statistiche descrittive e inferenziali",
+        "Time series analysis completa",
+        "Anomaly detection multi-metodo",
+        "Data quality assessment",
+        "Hypothesis testing statistico", 
+        "Cluster analysis e segmentazione",
+        "Text analysis e sentiment",
+        "Correlation analysis avanzata",
+        "Visualization data preparation"
+      ],
+      "data_formats": {
+        "input": ["csv", "json", "numeric_arrays", "text"],
+        "delimiters": [",", ";", "\t", "|"],
+        "encoding": "utf-8",
+        "max_file_size_mb": 50
+      },
+      "statistical_methods": {
+        "descriptive": {
+          "central_tendency": ["mean", "median", "mode"],
+          "dispersion": ["std_dev", "variance", "range", "iqr"],
+          "distribution": ["skewness", "kurtosis", "normality_test"],
+          "quantiles": ["quartiles", "percentiles", "deciles"]
+        },
+        "inferential": {
+          "hypothesis_tests": ["ttest", "welch_ttest", "mann_whitney", "kstest"],
+          "correlation": ["pearson", "spearman", "kendall"],
+          "regression": ["linear", "polynomial"],
+          "confidence_intervals": true
+        }
+      },
+      "time_series": {
+        "analysis_types": ["trend", "seasonal", "decomposition", "forecast"],
+        "supported_frequencies": ["daily", "weekly", "monthly", "yearly"],
+        "date_formats": [
+          "YYYY-MM-DD", "DD/MM/YYYY", "MM/DD/YYYY",
+          "YYYY-MM-DD HH:MM:SS", "ISO8601"
+        ],
+        "forecasting_methods": ["linear_trend", "moving_average", "exponential_smoothing"]
+      },
+      "anomaly_detection": {
+        "methods": ["iqr", "zscore", "statistical", "isolation_forest"],
+        "sensitivity_range": [1.0, 3.0],
+        "output_metrics": ["anomaly_count", "percentage", "severity", "indices"]
+      },
+      "clustering": {
+        "algorithms": ["kmeans", "hierarchical", "dbscan"],
+        "max_clusters": 20,
+        "max_dimensions": 10,
+        "quality_metrics": ["silhouette", "wcss", "calinski_harabasz"]
+      },
+      "data_quality": {
+        "assessments": [
+          "completeness", "consistency", "uniqueness", 
+          "validity", "accuracy", "timeliness"
+        ],
+        "scoring": {
+          "excellent": [90, 100],
+          "good": [70, 89],
+          "fair": [50, 69], 
+          "poor": [0, 49]
+        },
+        "validation_patterns": {
+          "email": "^[\\w\\.-]+@[\\w\\.-]+\\.[a-zA-Z]{2,}$",
+          "phone": "^[\\+]?[1-9][\\d\\s\\-\\(\\)]{7,15}$",
+          "date": "various_formats",
+          "url": "^https?:\\/\\/.+"
+        }
+      },
+      "text_analysis": {
+        "metrics": [
+          "character_count", "word_count", "sentence_count",
+          "paragraph_count", "average_word_length", "readability"
+        ],
+        "sentiment": {
+          "methods": ["lexicon_based", "rule_based"],
+          "languages": ["english"],
+          "output": ["polarity", "subjectivity", "confidence"]
+        },
+        "preprocessing": {
+          "tokenization": true,
+          "stop_word_removal": false,
+          "stemming": false,
+          "case_normalization": true
+        }
+      },
+      "visualization_prep": {
+        "chart_types": [
+          "line", "bar", "scatter", "histogram", 
+          "pie", "box_plot", "heatmap", "area"
+        ],
+        "data_transformations": [
+          "aggregation", "binning", "sorting", 
+          "filtering", "grouping", "pivoting"
+        ],
+        "output_formats": ["json", "csv", "arrays"]
+      },
+      "performance": {
+        "max_data_points": 100000,
+        "chunk_processing": true,
+        "memory_optimization": true,
+        "parallel_processing": false
+      },
+      "validation": {
+        "input_sanitization": true,
+        "type_checking": true,
+        "range_validation": true,
+        "missing_value_handling": "automatic"
+      },
+      "output_options": {
+        "precision": 4,
+        "confidence_intervals": true,
+        "statistical_significance": true,
+        "effect_sizes": true,
+        "recommendations": true
+      }
+    },
+    "database_tools": {
+      "enabled": true,
+      "description": "Suite completa gestione database con SQLite, import/export e ottimizzazione",
+      "version": "2.0",
+      "features": [
+        "Creazione database SQLite con schema",
+        "Import/export dati multi-formato",
+        "Validazione query SQL sicura",
+        "Generazione schema da entità",
+        "Sistema backup completo",
+        "Ottimizzazione performance automatica",
+        "Documentazione database automatica",
+        "Validazione integrità dati",
+        "Esecuzione query sicura"
+      ],
+      "supported_databases": {
+        "sqlite": {
+          "native_support": true,
+          "features": ["full_management", "performance_optimization", "backup_restore"],
+          "max_file_size_gb": 10
+        },
+        "postgresql": {
+          "support_level": "import_export",
+          "requires": "psycopg2",
+          "features": ["data_export", "schema_generation"]
+        },
+        "mysql": {
+          "support_level": "import_export", 
+          "requires": "mysql-connector-python",
+          "features": ["data_export", "schema_generation"]
+        }
+      },
+      "data_formats": {
+        "import": ["json", "csv", "dict_list", "sql"],
+        "export": ["json", "csv", "sql", "markdown"],
+        "max_import_records": 100000,
+        "auto_schema_detection": true
+      },
+      "query_validation": {
+        "supported_dialects": ["sqlite", "mysql", "postgresql"],
+        "security_checks": ["dangerous_operations", "sql_injection", "syntax_validation"],
+        "performance_analysis": ["complexity_scoring", "optimization_suggestions"],
+        "safe_execution": {
+          "allowed_operations": ["SELECT"],
+          "max_rows": 1000,
+          "timeout_seconds": 30
+        }
+      },
+      "backup_system": {
+        "methods": ["vacuum_into", "file_copy"],
+        "integrity_check": true,
+        "compression_analysis": true,
+        "checksum_verification": "md5",
+        "automatic_naming": true
+      },
+      "performance_optimization": {
+        "analysis_types": ["quick", "full", "indexes_only"],
+        "optimizations": ["vacuum", "analyze", "index_suggestions"],
+        "query_performance": ["slow_query_detection", "execution_plan_analysis"],
+        "recommendations": ["missing_indexes", "query_optimization", "schema_improvements"]
+      },
+      "documentation_generation": {
+        "formats": ["markdown", "json", "html"],
+        "includes": [
+          "database_overview", "table_schemas", "relationships",
+          "indexes", "constraints", "data_samples", "er_diagram"
+        ],
+        "auto_generation": true
+      },
+      "data_integrity": {
+        "validation_types": [
+          "foreign_key_constraints", "null_constraints",
+          "unique_constraints", "data_type_validation", "custom_rules"
+        ],
+        "severity_levels": ["low", "medium", "high", "critical"],
+        "auto_fix_suggestions": true
+      },
+      "schema_generation": {
+        "input_formats": ["entity_relationship", "json_schema", "existing_data"],
+        "output_formats": ["sql_ddl", "migration_scripts"],
+        "relationship_types": ["one_to_one", "one_to_many", "many_to_many"],
+        "auto_indexing": true
+      },
+      "security": {
+        "query_whitelist": ["SELECT", "PRAGMA table_info", "PRAGMA index_list"],
+        "dangerous_keywords": ["DROP", "DELETE", "UPDATE", "INSERT", "EXEC", "EVAL"],
+        "input_sanitization": true,
+        "file_access_control": "sandboxed",
+        "backup_encryption": "optional"
+      },
+      "performance_limits": {
+        "max_query_complexity": 10,
+        "max_table_size_mb": 1000,
+        "max_concurrent_connections": 5,
+        "query_timeout_seconds": 30,
+        "memory_limit_mb": 512
+      },
+      "file_management": {
+        "temp_directory": "auto_generated",
+        "backup_directory": "database_backups",
+        "cleanup_policy": "automatic",
+        "file_permissions": "restricted"
+      }
+    },
+    "datetime_tools": {
+      "enabled": true,
+      "description": "Suite completa gestione date, orari e fusi orari con funzionalità avanzate",
+      "version": "2.0",
+      "features": [
+        "Timestamp conversions Unix/ISO",
+        "Timezone conversions mondiali",
+        "Duration calculations avanzati",
+        "Multi-format date formatting",
+        "Recurring date patterns",
+        "Calendar information dettagliata",
+        "Age calculations e milestones",
+        "Advanced date validation",
+        "World time zones support",
+        "Business days calculations"
+      ],
+      "supported_formats": {
+        "input": [
+          "ISO 8601", "Unix timestamp", "European (DD/MM/YYYY)",
+          "American (MM/DD/YYYY)", "Descriptive", "Relative"
+        ],
+        "output": [
+          "ISO 8601", "RFC 2822", "Unix timestamp", "Excel serial",
+          "Julian day", "Custom strftime", "Localized"
+        ]
+      },
+      "timezone_support": {
+        "database": "IANA/Olson (pytz)",
+        "total_timezones": "600+",
+        "dst_handling": true,
+        "historical_data": true,
+        "major_zones": [
+          "UTC", "Europe/London", "Europe/Rome", "Europe/Paris",
+          "America/New_York", "America/Los_Angeles", "America/Chicago",
+          "Asia/Tokyo", "Asia/Shanghai", "Asia/Dubai", "Asia/Kolkata",
+          "Australia/Sydney", "Pacific/Auckland"
+        ]
+      },
+      "calendar_features": {
+        "gregorian_calendar": true,
+        "leap_year_handling": true,
+        "business_days": true,
+        "weekend_detection": true,
+        "basic_holidays": ["new_year", "christmas"],
+        "week_numbering": "ISO 8601",
+        "calendar_matrix": true
+      },
+      "duration_calculations": {
+        "precision": "microseconds",
+        "units": ["years", "months", "weeks", "days", "hours", "minutes", "seconds"],
+        "business_days": true,
+        "holiday_exclusion": "basic",
+        "weekend_handling": "configurable"
+      },
+      "recurring_patterns": {
+        "supported": ["daily", "weekly", "monthly", "yearly", "weekdays", "weekends"],
+        "max_occurrences": 100,
+        "date_range_limit": "10 years",
+        "rrule_support": true
+      },
+      "validation": {
+        "strict_mode": true,
+        "fuzzy_parsing": true,
+        "format_detection": "automatic",
+        "range_validation": {
+          "min_year": 1,
+          "max_year": 9999,
+          "reasonable_range": [1900, 2100]
+        },
+        "leap_year_validation": true,
+        "timezone_validation": true
+      },
+      "age_calculations": {
+        "exact_precision": true,
+        "milestone_tracking": [18, 21, 30, 40, 50, 65, 70, 80, 90, 100],
+        "zodiac_signs": true,
+        "generation_classification": true,
+        "next_birthday": true,
+        "life_statistics": true
+      },
+      "performance": {
+        "timezone_caching": true,
+        "parse_optimization": true,
+        "bulk_operations": "supported",
+        "memory_efficient": true
+      },
+      "dependencies": {
+        "required": ["datetime", "calendar", "time"],
+        "optional": ["dateutil", "pytz"],
+        "dateutil_features": ["fuzzy_parsing", "relative_dates"],
+        "pytz_features": ["timezone_database", "dst_handling"]
+      },
+      "localization": {
+        "supported_locales": ["en", "it", "fr", "es", "de"],
+        "month_names": "localized",
+        "day_names": "localized",
+        "date_formats": "region_specific"
+      },
+      "output_options": {
+        "json_serializable": true,
+        "iso_format_default": true,
+        "timezone_aware": true,
+        "precision_control": true
+      }
+    },
+    "docker_tools": {
+      "enabled": true,
+      "description": "Suite completa gestione Docker con container, network, volume e security",
+      "version": "2.0",
+      "features": [
+        "Container lifecycle management",
+        "Image build e gestione",
+        "Network management avanzato",
+        "Volume e storage management",
+        "Resource monitoring real-time",
+        "Security scanning e compliance",
+        "Docker Compose generation",
+        "Cleanup e maintenance automation",
+        "Dockerfile validation e optimization"
+      ],
+      "supported_operations": {
+        "containers": [
+          "list", "start", "stop", "restart", "pause", "unpause",
+          "remove", "logs", "inspect", "run", "exec"
+        ],
+        "images": [
+          "list", "build", "pull", "push", "remove", "inspect",
+          "tag", "save", "load", "prune"
+        ],
+        "networks": [
+          "list", "create", "remove", "inspect", "connect", "disconnect", "prune"
+        ],
+        "volumes": [
+          "list", "create", "remove", "inspect", "prune"
+        ]
+      },
+      "build_features": {
+        "dockerfile_validation": true,
+        "multi_stage_support": true,
+        "build_args": true,
+        "cache_management": true,
+        "buildkit_support": true,
+        "security_scanning": "basic"
+      },
+      "monitoring": {
+        "resource_tracking": ["cpu", "memory", "network_io", "block_io"],
+        "real_time_stats": true,
+        "aggregated_metrics": true,
+        "performance_recommendations": true,
+        "max_monitoring_duration": 60
+      },
+      "security_features": {
+        "dockerfile_analysis": true,
+        "image_vulnerability_scan": "basic",
+        "privilege_checking": true,
+        "secrets_detection": true,
+        "port_security_analysis": true,
+        "user_validation": true
+      },
+      "network_management": {
+        "supported_drivers": ["bridge", "host", "overlay", "macvlan"],
+        "custom_subnets": true,
+        "dns_configuration": true,
+        "inter_container_communication": true
+      },
+      "volume_management": {
+        "supported_drivers": ["local", "nfs", "cifs"],
+        "bind_mounts": true,
+        "named_volumes": true,
+        "volume_plugins": "basic_support"
+      },
+      "compose_generation": {
+        "version_support": ["3.0", "3.8"],
+        "service_dependencies": true,
+        "environment_variables": true,
+        "volume_management": true,
+        "network_configuration": true
+      },
+      "cleanup_operations": {
+        "containers": "stopped_containers",
+        "images": "dangling_images",
+        "volumes": "unused_volumes",
+        "networks": "unused_networks",
+        "system_prune": true
+      },
+      "performance_limits": {
+        "max_build_time": 600,
+        "max_command_timeout": 120,
+        "max_log_lines": 1000,
+        "max_monitoring_samples": 60
+      },
+      "dependencies": {
+        "required": ["docker"],
+        "optional": ["docker-compose"],
+        "minimum_docker_version": "20.10.0",
+        "recommended_docker_version": "24.0.0"
+      },
+      "platform_support": {
+        "linux": "full_support",
+        "macos": "full_support_docker_desktop",
+        "windows": "partial_support_wsl2"
+      },
+      "output_formats": {
+        "json": true,
+        "yaml": "docker_compose",
+        "table": "listing_operations",
+        "logs": "text_format"
+      }
+    },
+    "email_tools": {
+      "enabled": true,
+      "description": "Suite completa gestione email con validazione, composizione e analisi sicurezza",
+      "version": "2.0",
+      "features": [
+        "Advanced email validation singola e batch",
+        "Email composition multi-format (plain, HTML, Markdown)",
+        "Spam e phishing detection avanzato",
+        "Template email professionali personalizzabili",
+        "Email analytics e insights",
+        "Header parsing e analisi sicurezza",
+        "SMTP configuration validation",
+        "Data extraction da email completi",
+        "Professional email signature generation"
+      ],
+      "validation_features": {
+        "single_validation": {
+          "rfc_compliance": true,
+          "length_checks": true,
+          "character_validation": true,
+          "domain_verification": true,
+          "suspicious_detection": true
+        },
+        "batch_validation": {
+          "max_emails": 1000,
+          "dns_checking": true,
+          "domain_analysis": true,
+          "quality_scoring": true,
+          "duplicate_detection": true
+        },
+        "supported_checks": [
+          "format_validation", "length_validation", "character_validation",
+          "domain_existence", "mx_record_check", "temporary_email_detection"
+        ]
+      },
+      "composition_features": {
+        "supported_formats": ["plain", "html", "markdown"],
+        "template_types": ["welcome", "follow_up", "newsletter", "reminder", "thank_you"],
+        "personalization": true,
+        "signature_integration": true,
+        "header_generation": true,
+        "content_analysis": true
+      },
+      "security_features": {
+        "spam_detection": {
+          "keyword_analysis": true,
+          "formatting_analysis": true,
+          "url_analysis": true,
+          "header_analysis": true,
+          "phishing_detection": true,
+          "classification_levels": ["legitimate", "suspicious", "likely_spam", "high_risk"]
+        },
+        "header_analysis": {
+          "standard_headers": ["from", "to", "subject", "date", "message_id"],
+          "security_headers": ["return_path", "reply_to", "x_mailer"],
+          "authentication_analysis": true,
+          "spoofing_detection": true
+        }
+      },
+      "data_extraction": {
+        "supported_data_types": [
+          "email_addresses", "urls", "phone_numbers", 
+          "dates", "attachments", "headers"
+        ],
+        "content_analysis": true,
+        "metadata_extraction": true,
+        "encoding_detection": true
+      },
+      "smtp_validation": {
+        "supported_security": ["none", "ssl", "tls", "starttls"],
+        "standard_ports": {
+          "25": "smtp_standard",
+          "587": "submission_recommended", 
+          "465": "smtps_ssl",
+          "2525": "alternative"
+        },
+        "connectivity_testing": true,
+        "configuration_scoring": true
+      },
+      "analytics_capabilities": {
+        "sender_analysis": true,
+        "recipient_analysis": true,
+        "subject_analysis": true,
+        "domain_analysis": true,
+        "temporal_analysis": true,
+        "content_statistics": true,
+        "max_dataset_size": 10000
+      },
+      "template_system": {
+        "professional_templates": 5,
+        "customizable_content": true,
+        "multi_language_support": ["en", "it"],
+        "variable_substitution": true,
+        "html_generation": true
+      },
+      "output_formats": {
+        "validation": "detailed_json",
+        "composition": ["plain_text", "html", "full_email"],
+        "analytics": "comprehensive_json",
+        "templates": ["text", "html"]
+      },
+      "compliance": {
+        "gdpr_awareness": true,
+        "can_spam_compliance": true,
+        "privacy_protection": true,
+        "data_minimization": true
+      },
+      "performance_limits": {
+        "max_batch_validation": 1000,
+        "max_analytics_emails": 10000,
+        "max_content_length": 100000,
+        "max_header_size": 10000
+      }
+    },
+    "encoding_tools": {
+      "enabled": true,
+      "description": "Suite completa encoding, hash, compressione e trasformazione dati",
+      "version": "2.0",
+      "features": [
+        "Base64 e URL encoding standard",
+        "HTML escaping e sicurezza web",
+        "Hex encoding con formattazione",
+        "Hash functions crittografiche",
+        "HMAC message authentication",
+        "Data compression multi-algoritmo",
+        "JWT token encoding/decoding",
+        "Character encoding conversion",
+        "Quoted-Printable MIME encoding",
+        "CSV formatting e data analysis"
+      ],
+      "supported_encodings": {
+        "base_encodings": ["base64", "hex", "url_percent", "html_escape"],
+        "character_encodings": [
+          "utf-8", "utf-16", "utf-32", "ascii", "latin-1", "iso-8859-1",
+          "cp1252", "cp1251", "koi8-r", "gb2312", "big5", "shift_jis"
+        ],
+        "special_encodings": ["quoted_printable", "mime", "csv_escape"]
+      },
+      "hash_functions": {
+        "secure_algorithms": ["sha256", "sha512", "sha384", "blake2b", "blake2s"],
+        "legacy_algorithms": ["md5", "sha1", "sha224"],
+        "output_formats": ["hex", "base64", "binary"],
+        "hmac_support": true
+      },
+      "compression": {
+        "algorithms": ["gzip", "zlib", "deflate"],
+        "compression_levels": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        "default_level": 6,
+        "base64_output": true,
+        "metrics_included": true
+      },
+      "jwt_support": {
+        "algorithms": ["HS256", "HS512"],
+        "payload_validation": true,
+        "expiration_handling": true,
+        "header_analysis": true,
+        "security_warnings": true,
+        "requires_pyjwt": true
+      },
+      "data_analysis": {
+        "encoding_detection": true,
+        "character_analysis": true,
+        "unicode_support": true,
+        "recommendations": true,
+        "efficiency_metrics": true
+      },
+      "security_features": {
+        "secure_random": true,
+        "timing_safe_comparison": false,
+        "algorithm_recommendations": true,
+        "deprecation_warnings": true,
+        "best_practices_hints": true
+      },
+      "performance_limits": {
+        "max_input_size_mb": 100,
+        "max_jwt_payload_kb": 8,
+        "max_compression_ratio": 1000,
+        "timeout_seconds": 30
+      },
+      "output_formats": {
+        "structured_json": true,
+        "error_details": true,
+        "metrics_included": true,
+        "recommendations": true
+      }
+    },
+    "environment_tools": {
+      "enabled": true,
+      "description": "Suite completa gestione ambiente sistema, monitoraggio e deployment automation",
+      "version": "2.0",
+      "features": [
+        "Environment variables management sicuro",
+        "System resource monitoring real-time",
+        "Process management e controllo",
+        "Configuration template generation",
+        "Environment comparison e diff",
+        "Dependency checking multi-platform",
+        "Deployment environment setup",
+        "Configuration file validation",
+        "Backup/restore configurazioni"
+      ],
+      "environment_management": {
+        "variable_operations": ["list", "get", "set", "unset", "validate"],
+        "security_features": {
+          "sensitive_pattern_detection": true,
+          "automatic_masking": true,
+          "secure_backup": true
+        },
+        "supported_formats": ["env", "ini", "json", "yaml"],
+        "validation_types": ["required_vars", "optional_vars", "pattern_matching"]
+      },
+      "system_monitoring": {
+        "metrics": [
+          "cpu_usage", "memory_usage", "disk_usage", "network_io",
+          "disk_io", "swap_usage", "process_count"
+        ],
+        "monitoring_duration": {
+          "min_seconds": 1,
+          "max_seconds": 60,
+          "default_interval": 1
+        },
+        "health_assessment": true,
+        "performance_recommendations": true
+      },
+      "process_management": {
+        "operations": ["list", "find", "info", "kill", "start"],
+        "safety_features": {
+          "process_validation": true,
+          "graceful_termination": true,
+          "access_control": true
+        },
+        "monitoring_capabilities": ["cpu_usage", "memory_usage", "io_stats", "thread_count"]
+      },
+      "configuration_templates": {
+        "supported_types": [
+          "docker", "kubernetes", "nginx", "apache", 
+          "systemd", "database"
+        ],
+        "environments": ["development", "staging", "production"],
+        "customization": true,
+        "best_practices_included": true
+      },
+      "dependency_checking": {
+        "check_types": ["command", "python_package", "system_library"],
+        "platforms": ["linux", "macos", "windows"],
+        "installation_hints": true,
+        "version_detection": true
+      },
+      "deployment_automation": {
+        "deployment_types": ["docker", "systemd", "nginx", "basic"],
+        "auto_file_generation": true,
+        "directory_structure_setup": true,
+        "documentation_generation": true
+      },
+      "backup_restore": {
+        "backup_types": ["full", "selective", "non_sensitive"],
+        "formats": ["json"],
+        "metadata_included": true,
+        "timestamp_tracking": true
+      },
+      "comparison_analysis": {
+        "diff_detection": true,
+        "pattern_analysis": true,
+        "similarity_scoring": true,
+        "recommendations": true
+      },
+      "security_features": {
+        "sensitive_data_protection": true,
+        "pattern_based_masking": [
+          "PASSWORD", "SECRET", "KEY", "TOKEN", 
+          "AUTH", "PRIVATE", "CREDENTIAL"
+        ],
+        "secure_operations": true,
+        "audit_logging": false
+      },
+      "platform_support": {
+        "linux": "full_support",
+        "macos": "full_support", 
+        "windows": "partial_support",
+        "cross_platform_compatibility": true
+      },
+      "performance_limits": {
+        "max_monitoring_duration": 60,
+        "max_processes_listed": 1000,
+        "max_environment_variables": 1000,
+        "max_file_size_mb": 10
+      }
+    },
+    "file_converter": {
+      "enabled": true,
+      "description": "Suite completa conversione file con validazione, trasformazioni e ottimizzazione",
+      "version": "2.0",
+      "features": [
+        "Multi-format bidirectional conversion",
+        "Batch processing capabilities",
+        "Advanced data validation",
+        "Data structure transformations",
+        "Output optimization",
+        "Template generation",
+        "Format auto-detection",
+        "Structure analysis"
+      ],
+      "supported_formats": {
+        "core_formats": ["json", "xml", "csv", "txt"],
+        "extended_formats": ["yaml", "toml"],
+        "format_detection": "automatic",
+        "bidirectional_support": true
+      },
+      "conversion_matrix": {
+        "json": ["xml", "csv", "yaml", "toml", "txt"],
+        "xml": ["json", "yaml", "csv"],
+        "csv": ["json", "xml", "yaml"],
+        "yaml": ["json", "xml", "toml"],
+        "toml": ["json", "yaml"],
+        "txt": ["json"]
+      },
+      "validation_features": {
+        "syntax_validation": true,
+        "structure_analysis": true,
+        "format_detection": true,
+        "strict_mode": true,
+        "error_reporting": "detailed",
+        "suggestions": true
+      },
+      "transformation_capabilities": {
+        "supported_operations": [
+          "filter", "map", "aggregate", "sort", "flatten"
+        ],
+        "filter_conditions": ["equals", "greater_than", "less_than", "contains"],
+        "aggregation_functions": ["count", "sum", "avg", "min", "max"],
+        "mapping_types": ["rename_fields", "type_conversion", "value_transformation"]
+      },
+      "batch_processing": {
+        "max_items": 100,
+        "parallel_processing": false,
+        "progress_tracking": true,
+        "error_isolation": true
+      },
+      "optimization_goals": {
+        "size": "minimize_file_size",
+        "readability": "enhance_formatting",
+        "performance": "optimize_parsing_speed"
+      },
+      "format_specific_features": {
+        "json": {
+          "syntax_validation": true,
+          "depth_analysis": true,
+          "key_counting": true,
+          "minification": true,
+          "pretty_printing": true
+        },
+        "xml": {
+          "well_formed_validation": true,
+          "attribute_handling": true,
+          "namespace_support": "basic",
+          "depth_analysis": true,
+          "pretty_printing": true
+        },
+        "csv": {
+          "delimiter_detection": ["comma", "semicolon", "tab", "pipe"],
+          "header_detection": true,
+          "column_consistency_check": true,
+          "empty_cell_handling": true
+        },
+        "yaml": {
+          "indentation_validation": true,
+          "flow_style_support": true,
+          "unicode_support": true,
+          "comment_preservation": false
+        },
+        "toml": {
+          "section_support": true,
+          "type_validation": true,
+          "syntax_checking": true
+        }
+      },
+      "template_generation": {
+        "code_templates": ["python", "javascript"],
+        "conversion_patterns": "industry_standard",
+        "best_practices_included": true,
+        "example_usage": true
+      },
+      "dependencies": {
+        "required": ["json", "csv", "xml.etree.ElementTree"],
+        "optional": ["PyYAML", "toml"],
+        "yaml_features": "requires_pyyaml",
+        "toml_features": "requires_toml"
+      },
+      "performance_limits": {
+        "max_file_size_mb": 50,
+        "max_nesting_depth": 50,
+        "max_array_length": 100000,
+        "batch_size_limit": 100
+      },
+      "error_handling": {
+        "graceful_degradation": true,
+        "detailed_error_messages": true,
+        "suggestion_system": true,
+        "recovery_hints": true
+      }
+    },
+    "filesystem_reader": {
+      "enabled": true,
+      "description": "Suite sicura lettura file con sandbox, analisi contenuto e ricerca avanzata",
+      "version": "2.0",
+      "features": [
+        "Sandbox file system sicuro",
+        "Lettura file con validazione",
+        "Directory listing e navigazione",
+        "Metadata file dettagliati",
+        "Analisi contenuto multi-formato",
+        "Ricerca file avanzata",
+        "Range reading per file grandi",
+        "Batch operations con limiti"
+      ],
+      "security": {
+        "sandbox_enabled": true,
+        "sandbox_directory": "safe_files",
+        "path_validation": "strict",
+        "allowed_extensions": [
+          ".txt", ".json", ".csv", ".xml", ".yaml", ".yml", 
+          ".md", ".log", ".py", ".js", ".html", ".css"
+        ],
+        "blocked_patterns": ["..", "/", "\\", "~", "$", "|", "&", ";", "`", "*", "?"],
+        "max_file_size_mb": 10,
+        "max_files_batch": 50,
+        "encoding_required": "utf-8"
+      },
+      "capabilities": {
+        "file_operations": [
+          "read_safe_file", "read_file_range", "get_file_metadata"
+        ],
+        "directory_operations": [
+          "list_safe_directory", "search_files"
+        ],
+        "analysis_operations": [
+          "analyze_file_content", "get_sandbox_info"
+        ]
+      },
+      "file_analysis": {
+        "analysis_types": ["basic", "detailed", "structure"],
+        "supported_formats": {
+          "json": {
+            "validation": true,
+            "structure_analysis": true,
+            "syntax_checking": true
+          },
+          "csv": {
+            "delimiter_detection": true,
+            "column_analysis": true,
+            "data_row_counting": true
+          },
+          "code": {
+            "languages": ["python", "javascript"],
+            "metrics": ["lines", "comments", "functions"],
+            "syntax_awareness": "basic"
+          },
+          "text": {
+            "statistics": ["characters", "words", "lines"],
+            "encoding_detection": true,
+            "whitespace_analysis": true
+          }
+        }
+      },
+      "search_features": {
+        "search_types": ["name", "extension", "content"],
+        "pattern_matching": ["wildcards", "regex"],
+        "content_preview": true,
+        "recursive_search": true,
+        "result_limiting": true
+      },
+      "metadata_features": {
+        "timestamps": ["created", "modified", "accessed"],
+        "file_properties": ["size", "permissions", "mime_type"],
+        "checksums": ["md5", "sha256"],
+        "content_analysis": "text_files_only"
+      },
+      "performance_limits": {
+        "max_file_size_mb": 10,
+        "max_batch_files": 50,
+        "max_search_results": 50,
+        "max_content_lines": 1000,
+        "checksum_size_limit_mb": 1
+      },
+      "auto_setup": {
+        "create_sandbox": true,
+        "example_files": [
+          "exemplo.txt", "config.json", "data.csv", "notes.md"
+        ],
+        "example_directories": ["logs", "configs"],
+        "populate_examples": true
+      }
+    },
+    "git_tools": {
+      "enabled": true,
+      "description": "Suite completa gestione Git con analisi avanzate e workflow automation",
+      "version": "2.0",
+      "features": [
+        "Repository analysis e statistiche",
+        "Remote management completo",
+        "Commit history e search avanzata",
+        "Branch analysis e sync status",
+        "File blame e annotazioni",
+        "Tag management e release",
+        "Merge conflict detection",
+        "Repository health checks",
+        "GitIgnore generation",
+        "Workflow automation helpers"
+      ],
+      "capabilities": {
+        "repository_analysis": [
+          "analyze_git_repository", "analyze_repository_health",
+          "git_branch_analysis", "detect_merge_conflicts"
+        ],
+        "history_analysis": [
+          "git_commit_history", "search_git_history", "analyze_file_blame"
+        ],
+        "remote_operations": [
+          "manage_git_remotes"
+        ],
+        "tag_operations": [
+          "manage_git_tags"
+        ],
+        "diff_analysis": [
+          "git_diff_analysis"
+        ],
+        "utilities": [
+          "generate_gitignore"
+        ]
+      },
+      "supported_operations": {
+        "read_only": true,
+        "analysis_only": true,
+        "no_modifications": true,
+        "safe_commands": ["log", "show", "diff", "blame", "status", "branch", "remote", "tag"]
+      },
+      "remote_management": {
+        "operations": ["list", "add", "remove", "set-url", "fetch", "push"],
+        "connectivity_testing": true,
+        "url_validation": true,
+        "safe_operations_only": true
+      },
+      "search_capabilities": {
+        "search_types": ["commit", "file", "content"],
+        "filters": ["author", "since", "until"],
+        "pattern_matching": true,
+        "result_limiting": true
+      },
+      "health_checks": {
+        "integrity_check": "git_fsck",
+        "size_analysis": true,
+        "branch_hygiene": true,
+        "activity_monitoring": true,
+        "large_file_detection": true,
+        "performance_recommendations": true
+      },
+      "blame_analysis": {
+        "line_range_support": true,
+        "author_statistics": true,
+        "commit_tracking": true,
+        "contribution_analysis": true
+      },
+      "tag_management": {
+        "list_tags": true,
+        "create_tags": true,
+        "delete_tags": true,
+        "annotated_tags": true,
+        "lightweight_tags": true,
+        "tag_sorting": "version"
+      },
+      "conflict_detection": {
+        "merge_state_detection": true,
+        "conflict_file_analysis": true,
+        "conflict_position_mapping": true,
+        "resolution_suggestions": true
+      },
+      "gitignore_templates": {
+        "supported_languages": ["python", "javascript", "java", "generic"],
+        "custom_patterns": true,
+        "template_customization": true
+      },
+      "performance_limits": {
+        "max_commit_history": 100,
+        "max_search_results": 50,
+        "max_blame_lines": 1000,
+        "command_timeout_seconds": 60
+      },
+      "security": {
+        "read_only_operations": true,
+        "no_repository_modifications": true,
+        "safe_command_whitelist": true,
+        "timeout_protection": true
+      }
+    },
+    "image_processing": {
+      "enabled": true,
+      "description": "Suite completa elaborazione immagini con analisi, trasformazioni e batch processing",
+      "version": "2.0",
+      "features": [
+        "Image metadata e EXIF analysis",
+        "Format conversion con ottimizzazione",
+        "Geometric transformations complete",
+        "Image enhancement automatico",
+        "Filter application artistici",
+        "Watermarking testo e immagine",
+        "Batch processing operazioni",
+        "Image comparison e similarità",
+        "Histogram analysis dettagliata",
+        "Color palette extraction"
+      ],
+      "supported_formats": {
+        "input": ["JPEG", "PNG", "WEBP", "BMP", "TIFF", "GIF"],
+        "output": ["JPEG", "PNG", "WEBP", "BMP", "TIFF"],
+        "preferred_web": ["WEBP", "JPEG", "PNG"],
+        "transparency_support": ["PNG", "WEBP", "TIFF"]
+      },
+      "analysis_capabilities": {
+        "metadata_extraction": {
+          "basic_info": ["format", "dimensions", "mode", "aspect_ratio"],
+          "exif_data": "full_extraction",
+          "color_analysis": ["average_color", "brightness", "dominant_channel"],
+          "file_properties": ["size", "transparency"]
+        },
+        "histogram_analysis": {
+          "channel_statistics": ["mean", "std", "min", "max"],
+          "color_balance": true,
+          "brightness_analysis": true,
+          "contrast_analysis": true,
+          "enhancement_recommendations": true
+        },
+        "color_extraction": {
+          "dominant_colors": "up_to_10",
+          "color_formats": ["RGB", "HEX", "HSV"],
+          "color_naming": "approximate",
+          "palette_analysis": true
+        }
+      },
+      "transformation_capabilities": {
+        "geometric": {
+          "rotation": "any_angle",
+          "flipping": ["horizontal", "vertical"],
+          "cropping": "coordinate_based",
+          "auto_orientation": "exif_based"
+        },
+        "resize": {
+          "maintain_aspect_ratio": true,
+          "resampling_algorithm": "LANCZOS",
+          "max_dimensions": [4096, 4096]
+        }
+      },
+      "enhancement_features": {
+        "automatic": [
+          "auto_level", "auto_color", "equalize", "noise_reduction"
+        ],
+        "manual": [
+          "brightness", "contrast", "gamma", "sharpen"
+        ],
+        "filters": [
+          "blur", "sharpen", "edge_enhance", "grayscale", "sepia"
+        ]
+      },
+      "watermarking": {
+        "text_watermark": {
+          "font_support": "system_fonts",
+          "positioning": ["top_left", "top_right", "bottom_left", "bottom_right", "center"],
+          "color_control": "RGBA",
+          "transparency": true
+        },
+        "image_watermark": {
+          "opacity_control": true,
+          "auto_sizing": true,
+          "positioning": "flexible",
+          "format_support": "all_supported"
+        }
+      },
+      "batch_processing": {
+        "max_images": 10,
+        "supported_operations": [
+          "resize", "convert", "thumbnail", "filter", "enhance"
+        ],
+        "parallel_processing": false,
+        "progress_tracking": true,
+        "error_isolation": true
+      },
+      "comparison_features": {
+        "comparison_types": ["hash", "histogram", "structural"],
+        "similarity_scoring": "percentage_based",
+        "similarity_levels": [
+          "nearly_identical", "very_similar", "moderately_similar", 
+          "somewhat_similar", "different"
+        ],
+        "auto_sizing": "common_dimensions"
+      },
+      "security_features": {
+        "input_validation": {
+          "max_file_size_mb": 10,
+          "max_dimensions": [4096, 4096],
+          "format_verification": "header_based",
+          "malicious_content_check": "basic"
+        },
+        "processing_limits": {
+          "timeout_seconds": 30,
+          "memory_limits": "system_dependent",
+          "batch_size_limit": 10
+        }
+      },
+      "optimization": {
+        "jpeg_quality": 95,
+        "png_optimization": true,
+        "webp_quality": 95,
+        "auto_format_selection": false,
+        "thumbnail_optimization": true
+      },
+      "dependencies": {
+        "required": ["PIL", "Pillow"],
+        "optional": ["numpy"],
+        "minimum_pillow_version": "8.0.0"
+      },
+      "performance": {
+        "max_processing_time": 30,
+        "memory_efficient": true,
+        "batch_optimization": true,
+        "thumbnail_caching": false
+      }
+    },
+    "json_yaml_tools": {
+      "enabled": true,
+      "description": "Suite completa manipolazione JSON/YAML con schema validation e trasformazioni avanzate",
+      "version": "2.0",
+      "features": [
+        "Advanced JSON/YAML validation",
+        "JSON Schema validation e generation",
+        "Data transformation pipeline",
+        "Format conversion bidirezionale",
+        "Structure analysis dettagliata",
+        "Data merging intelligente",
+        "Query operations avanzate",
+        "Batch processing capabilities",
+        "Diff e comparison tools",
+        "Custom validation rules"
+      ],
+      "validation_capabilities": {
+        "json_validation": {
+          "syntax_checking": true,
+          "structure_analysis": true,
+          "quality_scoring": true,
+          "performance_metrics": true,
+          "custom_rules": true
+        },
+        "yaml_validation": {
+          "syntax_checking": true,
+          "indentation_analysis": true,
+          "quality_scoring": "A-D_grading",
+          "best_practices": true,
+          "style_consistency": true
+        },
+        "schema_validation": {
+          "json_schema_draft": "7",
+          "type_validation": true,
+          "constraint_checking": true,
+          "required_properties": true,
+          "custom_formats": "basic"
+        }
+      },
+      "transformation_features": {
+        "supported_operations": [
+          "filter", "map", "sort", "group", "flatten", "extract"
+        ],
+        "filter_conditions": ["equals", "greater_than", "less_than", "contains"],
+        "mapping_types": ["rename_fields", "restructure", "type_conversion"],
+        "sorting": ["ascending", "descending", "custom_key"],
+        "grouping": "key_based",
+        "flattening": "configurable_separator"
+      },
+      "query_capabilities": {
+        "query_types": ["jpath", "filter", "search"],
+        "jsonpath_support": "basic_implementation",
+        "filter_operators": ["=", "!=", ">", "<", ">=", "<=", "contains"],
+        "text_search": "case_insensitive",
+        "result_limiting": true
+      },
+      "merge_strategies": {
+        "deep_merge": "recursive_object_merging",
+        "shallow_merge": "top_level_only",
+        "array_concat": "array_concatenation",
+        "conflict_resolution": "last_wins"
+      },
+      "conversion_features": {
+        "formats": ["JSON", "YAML"],
+        "bidirectional": true,
+        "formatting_options": ["minify", "beautify"],
+        "encoding": "UTF-8",
+        "indentation_control": true
+      },
+      "batch_processing": {
+        "max_files": 50,
+        "validation_types": ["syntax", "schema", "custom"],
+        "parallel_processing": false,
+        "progress_tracking": true,
+        "error_isolation": true
+      },
+      "schema_generation": {
+        "auto_inference": true,
+        "type_detection": "smart",
+        "required_field_detection": true,
+        "constraint_generation": "basic",
+        "metadata_inclusion": true
+      },
+      "comparison_tools": {
+        "diff_detection": "comprehensive",
+        "similarity_scoring": true,
+        "path_tracking": true,
+        "type_aware_comparison": true
+      },
+      "performance_limits": {
+        "max_file_size_mb": 10,
+        "max_batch_files": 50,
+        "max_nesting_depth": 50,
+        "query_timeout_seconds": 30
+      },
+      "supported_standards": {
+        "json": "RFC_7159",
+        "yaml": "YAML_1.2",
+        "json_schema": "Draft_7",
+        "encoding": "UTF-8"
+      }
+    },
+    "log_analysis_tools": {
+      "enabled": true,
+      "description": "Suite completa analisi log con ML, correlazione eventi e monitoring real-time",
+      "version": "2.0",
+      "features": [
+        "Advanced multi-format log parsing",
+        "Machine learning anomaly detection",
+        "Cross-source event correlation",
+        "Real-time monitoring e alerting",
+        "Performance analysis approfondita",
+        "Interactive dashboard generation",
+        "Custom parser creation",
+        "Multi-source log aggregation",
+        "Pattern recognition avanzato",
+        "Comprehensive reporting"
+      ],
+      "parsing_capabilities": {
+        "supported_formats": [
+          "apache", "nginx", "syslog", "json", "python", "custom", "generic"
+        ],
+        "auto_detection": true,
+        "custom_parser_generation": true,
+        "max_file_size_mb": 100,
+        "max_lines_per_analysis": 50000,
+        "encoding_support": ["utf-8", "latin-1", "ascii"]
+      },
+      "anomaly_detection": {
+        "algorithms": [
+          "statistical", "pattern", "frequency", "time_series"
+        ],
+        "sensitivity_range": [0.1, 0.99],
+        "baseline_learning": true,
+        "multi_variate_analysis": true,
+        "anomaly_classification": ["low", "medium", "high", "critical"]
+      },
+      "correlation_analysis": {
+        "correlation_types": ["temporal", "causal", "pattern_based"],
+        "cross_source_correlation": true,
+        "correlation_window_seconds": [60, 3600],
+        "min_correlation_score": [0.5, 1.0],
+        "event_chain_detection": true
+      },
+      "performance_metrics": {
+        "response_time_analysis": {
+          "percentiles": [50, 75, 90, 95, 99],
+          "time_series_analysis": true,
+          "baseline_comparison": true
+        },
+        "throughput_analysis": {
+          "requests_per_second": true,
+          "concurrent_users": true,
+          "resource_utilization": true
+        },
+        "error_analysis": {
+          "error_rate_calculation": true,
+          "error_classification": true,
+          "error_trending": true
+        }
+      },
+      "dashboard_features": {
+        "dashboard_types": [
+          "comprehensive", "errors", "performance", "security"
+        ],
+        "time_granularities": ["minute", "hour", "day"],
+        "visualization_types": [
+          "time_series", "heat_maps", "distribution_charts", 
+          "correlation_matrices", "top_lists"
+        ],
+        "export_formats": ["html", "json", "csv"],
+        "interactive_features": true
+      },
+      "monitoring_capabilities": {
+        "real_time_monitoring": true,
+        "alert_generation": true,
+        "threshold_monitoring": {
+          "error_rate_thresholds": true,
+          "performance_thresholds": true,
+          "volume_thresholds": true,
+          "pattern_based_alerts": true
+        },
+        "monitoring_rules": [
+          "error_threshold", "response_time", "pattern_matching", "volume_monitoring"
+        ]
+      },
+      "aggregation_features": {
+        "multi_source_support": true,
+        "max_sources": 10,
+        "aggregation_strategies": [
+          "time_merge", "event_correlation", "source_priority"
+        ],
+        "temporal_gap_detection": true,
+        "cross_source_normalization": true
+      },
+      "custom_parser_creation": {
+        "pattern_learning": true,
+        "regex_generation": true,
+        "field_mapping": true,
+        "parser_validation": true,
+        "success_rate_optimization": true
+      },
+      "filtering_capabilities": {
+        "filter_types": [
+          "level", "time_range", "message_contains", 
+          "message_regex", "line_range"
+        ],
+        "complex_filters": true,
+        "filter_chaining": true,
+        "saved_filters": false
+      },
+      "export_reporting": {
+        "report_types": ["summary", "timeline", "alerts", "detailed"],
+        "export_formats": ["json", "csv", "html", "text"],
+        "scheduled_reports": false,
+        "custom_report_templates": false
+      },
+      "security_features": {
+        "input_validation": true,
+        "file_size_limits": true,
+        "path_traversal_protection": true,
+        "memory_limits": true
+      },
+      "performance_limits": {
+        "max_file_size_mb": 100,
+        "max_entries_per_analysis": 50000,
+        "max_correlation_window_hours": 24,
+        "max_dashboard_data_points": 10000,
+        "analysis_timeout_seconds": 300
+      }
+    },
+    "markdown_tools": {
+      "enabled": true,
+      "description": "Suite completa authoring Markdown con validazione, template e conversione multi-formato",
+      "version": "2.0",
+      "features": [
+        "Advanced Markdown parsing e rendering",
+        "Document validation e quality scoring",
+        "Professional template generation",
+        "Multi-format export capabilities",
+        "Content analysis e optimization",
+        "Presentation creation da Markdown",
+        "Complete project documentation",
+        "Batch processing multipli file",
+        "SEO e accessibility optimization",
+        "Collaboration e review tools"
+      ],
+      "parsing_capabilities": {
+        "markdown_elements": [
+          "headers", "paragraphs", "lists", "tables", "links", 
+          "images", "code_blocks", "blockquotes", "horizontal_rules"
+        ],
+        "advanced_syntax": [
+          "nested_lists", "table_alignment", "code_highlighting",
+          "task_lists", "strikethrough", "footnotes"
+        ],
+        "html_conversion": {
+          "css_themes": ["default", "dark", "professional", "minimal"],
+          "javascript_features": true,
+          "responsive_design": true
+        }
+      },
+      "validation_features": {
+        "validation_rules": [
+          "headers", "links", "images", "lists", "line_length",
+          "structure", "accessibility", "seo"
+        ],
+        "quality_scoring": {
+          "scoring_range": [0, 100],
+          "quality_levels": ["poor", "fair", "good", "excellent"],
+          "improvement_suggestions": true
+        },
+        "accessibility_checks": [
+          "alt_text", "header_hierarchy", "link_context", "color_contrast"
+        ],
+        "seo_optimization": [
+          "header_structure", "keyword_density", "meta_elements", "content_length"
+        ]
+      },
+      "template_system": {
+        "template_types": [
+          "article", "readme", "api_doc", "blog_post", "meeting_notes",
+          "proposal", "technical_spec", "user_guide"
+        ],
+        "customization_options": [
+          "title", "author", "date", "tags", "categories", "metadata"
+        ],
+        "variable_substitution": true,
+        "conditional_content": true
+      },
+      "conversion_formats": {
+        "output_formats": ["html", "latex", "plain_text", "json", "xml"],
+        "html_features": {
+          "css_inclusion": true,
+          "javascript_features": true,
+          "theme_selection": true,
+          "responsive_design": true
+        },
+        "latex_features": {
+          "document_classes": ["article", "report", "book"],
+          "package_support": true,
+          "bibliography": true
+        },
+        "structured_formats": {
+          "json_schema": "hierarchical",
+          "xml_validation": true
+        }
+      },
+      "content_analysis": {
+        "analysis_types": ["comprehensive", "readability", "seo", "structure"],
+        "readability_metrics": [
+          "reading_level", "sentence_complexity", "word_frequency", "paragraph_length"
+        ],
+        "seo_metrics": [
+          "keyword_density", "meta_elements", "header_optimization", "content_structure"
+        ],
+        "structure_metrics": [
+          "hierarchy_consistency", "content_organization", "navigation_clarity"
+        ]
+      },
+      "presentation_features": {
+        "presentation_frameworks": ["reveal_js", "deck_js", "impress_js"],
+        "slide_parsing": "header_based",
+        "media_support": ["images", "videos", "audio", "code"],
+        "themes": ["default", "dark", "professional", "minimal"],
+        "interactive_features": true
+      },
+      "documentation_generation": {
+        "project_docs": [
+          "readme", "changelog", "contributing", "api", "user_guide",
+          "installation", "troubleshooting"
+        ],
+        "auto_population": true,
+        "template_inheritance": true,
+        "cross_referencing": true
+      },
+      "batch_processing": {
+        "max_files": 20,
+        "operations": ["validate", "convert", "analyze", "format"],
+        "parallel_processing": false,
+        "progress_tracking": true,
+        "error_isolation": true
+      },
+      "table_features": {
+        "alignment_options": ["left", "center", "right"],
+        "auto_sizing": true,
+        "data_import": ["csv", "json", "arrays"],
+        "formatting": ["html_preview", "latex_export"]
+      },
+      "toc_generation": {
+        "max_depth": 6,
+        "numbering_styles": ["none", "decimal", "roman"],
+        "anchor_generation": "automatic",
+        "custom_formatting": true
+      }
+    },
+    "network_security_tools": {
+      "enabled": true,
+      "description": "Suite completa security assessment con vulnerability scanning, threat intelligence e compliance",
+      "version": "2.0",
+      "features": [
+        "Advanced vulnerability scanning",
+        "Comprehensive threat intelligence",
+        "Network topology discovery",
+        "Web application security testing",
+        "Advanced TLS/SSL analysis",
+        "DNS security assessment",
+        "Security compliance checking",
+        "Professional security reporting",
+        "Service banner grabbing",
+        "Certificate chain analysis"
+      ],
+      "vulnerability_scanning": {
+        "scan_types": ["basic", "comprehensive", "web_app", "ssl_only"],
+        "target_types": ["ip", "domain", "url", "network"],
+        "vulnerability_categories": [
+          "network", "web_application", "ssl_tls", "configuration", "information_disclosure"
+        ],
+        "risk_scoring": "cvss_based",
+        "max_concurrent_scans": 5
+      },
+      "threat_intelligence": {
+        "indicator_types": ["ip", "domain", "hash", "url"],
+        "intelligence_sources": [
+          "dns_blacklists", "geolocation", "reputation_feeds", "malware_databases"
+        ],
+        "supported_blacklists": ["spamhaus", "sorbs", "spamcop"],
+        "auto_indicator_detection": true,
+        "risk_assessment": "multi_factor"
+      },
+      "network_discovery": {
+        "discovery_types": ["ping_sweep", "port_scan", "comprehensive"],
+        "max_network_size": "/24",
+        "max_hosts_scan": 256,
+        "common_ports": [21, 22, 23, 25, 53, 80, 110, 143, 443, 993, 995, 3389, 5432, 3306],
+        "service_detection": true,
+        "banner_grabbing": true
+      },
+      "web_security": {
+        "assessment_types": ["owasp_top10", "comprehensive", "quick"],
+        "security_tests": [
+          "injection_flaws", "authentication", "security_headers", 
+          "information_disclosure", "access_control"
+        ],
+        "owasp_top10_coverage": [
+          "injection", "broken_authentication", "sensitive_data_exposure",
+          "xml_external_entities", "broken_access_control", "security_misconfiguration",
+          "cross_site_scripting", "insecure_deserialization", "components_vulnerabilities",
+          "insufficient_logging"
+        ],
+        "header_analysis": {
+          "security_headers": [
+            "Strict-Transport-Security", "Content-Security-Policy", "X-Frame-Options",
+            "X-Content-Type-Options", "Referrer-Policy", "Permissions-Policy"
+          ],
+          "compliance_scoring": true
+        }
+      },
+      "tls_ssl_analysis": {
+        "analysis_depths": ["basic", "comprehensive", "expert"],
+        "protocol_testing": ["SSLv2", "SSLv3", "TLSv1.0", "TLSv1.1", "TLSv1.2", "TLSv1.3"],
+        "cipher_suite_analysis": true,
+        "certificate_validation": {
+          "chain_analysis": true,
+          "expiry_checking": true,
+          "san_validation": true,
+          "key_strength_analysis": true
+        },
+        "vulnerability_tests": ["BEAST", "CRIME", "POODLE", "Heartbleed"],
+        "perfect_forward_secrecy": true
+      },
+      "dns_security": {
+        "analysis_types": ["basic", "comprehensive", "dnssec_only"],
+        "record_enumeration": ["A", "AAAA", "MX", "TXT", "NS", "CNAME", "SPF", "DMARC"],
+        "dnssec_validation": true,
+        "dns_over_https": true,
+        "cache_poisoning_tests": true,
+        "zone_transfer_tests": true
+      },
+      "service_analysis": {
+        "banner_grabbing": {
+          "supported_services": [
+            "FTP", "SSH", "Telnet", "SMTP", "HTTP", "POP3", "IMAP", "MySQL", "PostgreSQL"
+          ],
+          "version_detection": true,
+          "service_fingerprinting": true
+        },
+        "common_ports": [21, 22, 23, 25, 53, 80, 110, 143, 443, 3306, 5432],
+        "timeout_seconds": 10
+      },
+      "compliance_frameworks": {
+        "supported_frameworks": ["generic", "pci_dss", "iso27001", "nist"],
+        "automated_checking": true,
+        "compliance_scoring": true,
+        "remediation_guidance": true,
+        "evidence_collection": true
+      },
+      "reporting": {
+        "report_formats": ["summary", "comprehensive", "executive"],
+        "risk_assessment": "automated",
+        "executive_summary": true,
+        "detailed_findings": true,
+        "remediation_recommendations": true,
+        "compliance_mapping": true
+      },
+      "performance_limits": {
+        "max_concurrent_threads": 10,
+        "default_timeout_seconds": 10,
+        "max_ports_per_scan": 100,
+        "max_subdomains_check": 50,
+        "network_scan_limit": "/24"
+      },
+      "security_configuration": {
+        "ethical_use_only": true,
+        "authorized_targets_only": true,
+        "responsible_disclosure": true,
+        "privacy_protection": true,
+        "legal_compliance": true
+      }
+    },
+    "network_tools": {
+      "enabled": true,
+      "description": "Suite completa diagnostica rete, speed testing, monitoring e troubleshooting",
+      "version": "2.0",
+      "features": [
+        "Network connectivity diagnostics",
+        "Bandwidth speed testing",
+        "Advanced DNS analysis",
+        "Network quality assessment",
+        "Interface monitoring real-time",
+        "SSL/TLS connection testing",
+        "Automated troubleshooting",
+        "IP geolocation e ASN info",
+        "Batch operations parallel",
+        "Performance metrics comprehensive"
+      ],
+      "diagnostic_tools": {
+        "ping": {
+          "max_count": 20,
+          "timeout_seconds": 30,
+          "icmp_support": true
+        },
+        "traceroute": {
+          "max_hops": 30,
+          "timeout_seconds": 60,
+          "platform_support": ["linux", "macos", "windows"]
+        },
+        "port_scanning": {
+          "max_ports_per_scan": 20,
+          "timeout_per_port": 3,
+          "tcp_only": true,
+          "common_ports": [21, 22, 23, 25, 53, 80, 110, 143, 443, 993, 995, 3389, 5432, 3306]
+        }
+      },
+      "speed_testing": {
+        "test_types": ["download", "upload", "both"],
+        "duration_range": [5, 60],
+        "default_duration": 10,
+        "quality_metrics": ["latency", "jitter", "packet_loss"],
+        "test_servers": {
+          "default_download": "speedtest servers",
+          "default_upload": "httpbin.org",
+          "custom_server_support": true
+        }
+      },
+      "dns_analysis": {
+        "record_types": ["A", "AAAA", "MX", "NS", "TXT", "CNAME"],
+        "analysis_types": ["basic", "comprehensive", "propagation"],
+        "propagation_servers": ["8.8.8.8", "1.1.1.1", "208.67.222.222"],
+        "performance_testing": true,
+        "security_validation": ["DNSSEC", "SPF", "DMARC"]
+      },
+      "quality_assessment": {
+        "max_target_hosts": 10,
+        "test_duration_range": [30, 300],
+        "metrics": [
+          "average_latency", "min_latency", "max_latency",
+          "jitter", "packet_loss", "success_rate"
+        ],
+        "quality_thresholds": {
+          "excellent": {"latency_ms": 50, "jitter_ms": 5, "packet_loss_percent": 0},
+          "good": {"latency_ms": 100, "jitter_ms": 10, "packet_loss_percent": 1},
+          "fair": {"latency_ms": 200, "jitter_ms": 20, "packet_loss_percent": 3},
+          "poor": {"latency_ms": 500, "jitter_ms": 50, "packet_loss_percent": 10}
+        }
+      },
+      "interface_monitoring": {
+        "duration_range": [10, 300],
+        "interval_range": [1, 60],
+        "metrics": [
+          "bytes_sent", "bytes_recv", "packets_sent", "packets_recv",
+          "errors_in", "errors_out", "drops_in", "drops_out"
+        ],
+        "requires_psutil": true,
+        "fallback_available": true
+      },
+      "ssl_tls_testing": {
+        "test_types": ["basic", "comprehensive", "security"],
+        "default_port": 443,
+        "timeout_seconds": 15,
+        "certificate_validation": true,
+        "protocol_testing": ["TLS1.0", "TLS1.1", "TLS1.2", "TLS1.3"],
+        "security_checks": ["certificate_expiry", "chain_validation", "protocol_support"]
+      },
+      "web_services": {
+        "website_status": {
+          "timeout_range": [5, 30],
+          "follow_redirects": true,
+          "max_redirects": 10,
+          "headers_analysis": true
+        },
+        "whois_lookup": {
+          "timeout_seconds": 30,
+          "platform_dependent": true
+        }
+      },
+      "geolocation": {
+        "ip_services": ["ip-api.com", "ipinfo.io", "geoip-db.com"],
+        "data_provided": [
+          "country", "region", "city", "isp", "organization",
+          "asn", "coordinates", "timezone"
+        ],
+        "security_checks": ["reputation", "threat_intelligence"],
+        "privacy_compliant": true
+      },
+      "troubleshooting": {
+        "issue_types": ["connectivity", "performance", "dns", "ssl", "all"],
+        "automated_diagnosis": true,
+        "recommendation_engine": true,
+        "test_categories": {
+          "connectivity": ["ping", "port_check", "routing"],
+          "performance": ["latency", "bandwidth", "quality"],
+          "dns": ["resolution", "propagation", "security"],
+          "ssl": ["certificate", "protocol", "handshake"]
+        }
+      },
+      "batch_operations": {
+        "max_operations": 50,
+        "max_concurrent": 10,
+        "supported_operations": ["ping", "dns_lookup", "port_scan", "website_status"],
+        "parallel_processing": true,
+        "error_isolation": true,
+        "progress_tracking": true
+      },
+      "performance_limits": {
+        "max_ping_count": 20,
+        "max_traceroute_hops": 30,
+        "max_ports_scan": 20,
+        "max_speed_test_duration": 60,
+        "max_quality_test_duration": 300,
+        "max_interface_monitor_duration": 300
+      },
+      "dependencies": {
+        "required": ["requests", "socket", "subprocess"],
+        "optional": ["dnspython", "psutil"],
+        "platform_tools": ["ping", "traceroute", "whois"]
+      }
+    },
+    "pdf_tools": {
+      "enabled": true,
+      "description": "Advanced PDF analysis and management tools",
+      "functions": [
+        "analyze_pdf_metadata",
+        "validate_pdf_structure", 
+        "pdf_security_check",
+        "compare_pdf_files",
+        "detect_pdf_issues",
+        "batch_pdf_analysis",
+        "create_simple_pdf_info",
+        "pdf_text_extraction_guide",
+        "pdf_tools_info"
+      ],
+      "features": {
+        "metadata_analysis": true,
+        "structure_validation": true,
+        "security_analysis": true,
+        "file_comparison": true,
+        "issue_detection": true,
+        "batch_processing": true,
+        "extraction_guidance": true
+      },
+      "limits": {
+        "max_file_size": "100MB",
+        "max_batch_files": 10,
+        "supported_versions": ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "2.0"]
+      }
+    },
+    "performance_tools": {
+      "enabled": true,
+      "description": "Advanced system performance monitoring and analysis tools",
+      "functions": [
+        "benchmark_function_performance",
+        "monitor_system_performance", 
+        "comprehensive_system_health",
+        "detect_gpu_info",
+        "profile_top_processes",
+        "performance_comparison_test",
+        "analyze_memory_usage",
+        "disk_performance_test",
+        "network_latency_test",
+        "cpu_stress_test"
+      ],
+      "features": {
+        "code_benchmarking": true,
+        "system_monitoring": true,
+        "health_analysis": true,
+        "gpu_detection": true,
+        "process_profiling": true,
+        "performance_testing": true,
+        "memory_analysis": true,
+        "disk_testing": true,
+        "network_testing": true,
+        "stress_testing": true
+      },
+      "limits": {
+        "max_benchmark_iterations": 100000,
+        "max_monitoring_duration": 60,
+        "max_stress_test_duration": 30,
+        "max_processes_profile": 50,
+        "max_disk_test_size_mb": 100,
+        "max_network_hosts": 5
+      },
+      "safety": {
+        "memory_leak_detection": true,
+        "resource_cleanup": true,
+        "timeout_protection": true,
+        "zombie_process_detection": true
+      }
+    },
+    "process_management_tools": {
+      "enabled": true,
+      "description": "Advanced process and system service management tools",
+      "functions": [
+        "list_processes_by_criteria",
+        "monitor_process",
+        "analyze_process_tree", 
+        "manage_system_services",
+        "monitor_resource_usage",
+        "batch_process_operations",
+        "analyze_process_security",
+        "execute_with_limits",
+        "create_sandbox_environment", 
+        "kill_process_safe",
+        "analyze_system_resources"
+      ],
+      "features": {
+        "process_listing": true,
+        "process_monitoring": true,
+        "process_tree_analysis": true,
+        "service_management": true,
+        "resource_monitoring": true,
+        "batch_operations": true,
+        "security_analysis": true,
+        "sandboxed_execution": true,
+        "safe_termination": true,
+        "system_analysis": true
+      },
+      "security": {
+        "dangerous_commands_blocked": true,
+        "critical_processes_protected": true,
+        "resource_limits_enforced": true,
+        "sandbox_isolation": true,
+        "audit_logging": true
+      },
+      "limits": {
+        "max_monitoring_duration": 600,
+        "max_batch_operations": 20,
+        "max_memory_limit_mb": 1000,
+        "max_command_timeout": 300,
+        "max_process_list": 50,
+        "max_tree_output": 100
+      },
+      "supported_init_systems": ["systemd", "upstart", "sysv"],
+      "sandbox_features": {
+        "temporary_directories": true,
+        "resource_constraints": true,
+        "command_whitelist": true,
+        "automatic_cleanup": true
+      }
+    },
+    "regex_tools": {
+      "enabled": true,
+      "description": "Advanced regular expression tools with analysis and optimization",
+      "functions": [
+        "regex_test",
+        "regex_match_details",
+        "regex_replace",
+        "regex_split", 
+        "regex_pattern_builder",
+        "regex_performance_test",
+        "regex_batch_operations",
+        "regex_advanced_validator",
+        "regex_pattern_explainer",
+        "regex_validate_pattern",
+        "regex_common_patterns",
+        "regex_extract_emails",
+        "regex_extract_urls"
+      ],
+      "features": {
+        "pattern_testing": true,
+        "pattern_building": true,
+        "performance_analysis": true,
+        "batch_processing": true,
+        "advanced_validation": true,
+        "pattern_explanation": true,
+        "security_analysis": true,
+        "common_patterns": true,
+        "specialized_extraction": true
+      },
+      "pattern_library": {
+        "email_variants": ["basic", "strict", "international"],
+        "phone_variants": ["italy", "us", "international", "mobile_italy"],
+        "url_variants": ["http", "strict", "with_port"],
+        "ip_variants": ["ipv4", "ipv6", "both"],
+        "date_variants": ["dd/mm/yyyy", "mm/dd/yyyy", "yyyy-mm-dd", "flexible"],
+        "password_variants": ["strong", "medium", "custom_length"],
+        "credit_card_variants": ["visa", "mastercard", "amex", "any"]
+      },
+      "security": {
+        "redos_detection": true,
+        "complexity_analysis": true,
+        "vulnerability_scanning": true,
+        "safe_defaults": true
+      },
+      "performance": {
+        "max_iterations": 10000,
+        "timeout_protection": true,
+        "complexity_scoring": true,
+        "optimization_suggestions": true
+      },
+      "limits": {
+        "max_batch_operations": 50,
+        "max_pattern_length": 1000,
+        "max_text_length": 100000,
+        "max_output_matches": 1000
+      }
+    },
+    "security_tools": {
+      "enabled": true,
+      "description": "Comprehensive security tools for audit, scanning, and protection",
+      "functions": [
+        "generate_secure_password",
+        "password_strength_check",
+        "generate_api_key",
+        "generate_secure_tokens",
+        "comprehensive_security_audit",
+        "vulnerability_scanner",
+        "encrypt_decrypt_data",
+        "security_headers_analyzer",
+        "generate_security_report",
+        "hash_file_content",
+        "jwt_decode_header",
+        "check_common_ports",
+        "ssl_certificate_check"
+      ],
+      "features": {
+        "password_generation": true,
+        "password_analysis": true,
+        "token_generation": true,
+        "encryption_decryption": true,
+        "vulnerability_scanning": true,
+        "security_auditing": true,
+        "ssl_analysis": true,
+        "header_analysis": true,
+        "security_reporting": true,
+        "hash_generation": true,
+        "jwt_decoding": true,
+        "port_scanning": true
+      },
+      "security_standards": {
+        "password_entropy": "NIST SP 800-63B",
+        "encryption_algorithms": ["Fernet", "AES"],
+        "token_generation": "Cryptographically secure random",
+        "vulnerability_assessment": "OWASP Top 10",
+        "ssl_analysis": "Industry best practices"
+      },
+      "scan_capabilities": {
+        "port_scanning": true,
+        "ssl_certificate_check": true,
+        "security_headers": true,
+        "vulnerability_detection": true,
+        "service_banner_grabbing": true,
+        "dns_security_check": true
+      },
+      "encryption_support": {
+        "algorithms": ["fernet", "base64"],
+        "key_generation": true,
+        "secure_random": true,
+        "entropy_calculation": true
+      },
+      "limits": {
+        "max_password_length": 128,
+        "max_tokens_per_request": 100,
+        "scan_timeout_seconds": 30,
+        "max_scan_depth": "aggressive",
+        "max_report_size_mb": 10
+      },
+      "security_notes": {
+        "network_scans_may_trigger_alerts": true,
+        "encryption_keys_must_be_stored_securely": true,
+        "jwt_decoding_without_verification": true,
+        "vulnerability_scans_for_assessment_only": true
+      }
+    },
+    "string_tools": {
+      "enabled": true,
+      "description": "Advanced string manipulation, analysis and transformation tools",
+      "functions": [
+        "string_case_convert",
+        "string_stats",
+        "string_clean",
+        "string_wrap",
+        "string_find_replace",
+        "string_advanced_analysis",
+        "string_encoding_operations",
+        "string_format_operations",
+        "string_validation",
+        "string_comparison",
+        "string_batch_operations"
+      ],
+      "features": {
+        "case_conversion": true,
+        "text_analysis": true,
+        "text_cleaning": true,
+        "text_wrapping": true,
+        "find_replace": true,
+        "advanced_analysis": true,
+        "encoding_decoding": true,
+        "format_operations": true,
+        "validation": true,
+        "comparison": true,
+        "batch_processing": true
+      },
+      "encoding_support": {
+        "formats": ["base64", "url", "html", "hex"],
+        "encodings": ["utf-8", "ascii", "latin1"],
+        "unicode_analysis": true,
+        "script_detection": true
+      },
+      "validation_types": {
+        "email": "RFC-compliant pattern",
+        "url": "HTTP/HTTPS validation",
+        "phone": "International formats (E.164, Italy, USA)",
+        "credit_card": "Luhn algorithm validation",
+        "uuid": "Versions 1-5 with analysis",
+        "ip": "IPv4/IPv6 pattern matching",
+        "json": "JSON parsing with structure analysis"
+      },
+      "analysis_features": {
+        "readability_scoring": "Flesch Reading Ease based",
+        "language_detection": "Heuristic analysis",
+        "frequency_analysis": "Character and word frequency",
+        "unicode_analysis": "Script and category detection",
+        "similarity_algorithms": ["SequenceMatcher", "Levenshtein", "Common substrings"]
+      },
+      "limits": {
+        "max_text_length": 1000000,
+        "max_batch_operations": 100,
+        "max_wrap_width": 200,
+        "min_wrap_width": 10,
+        "max_common_substrings": 10,
+        "min_substring_length": 3
+      },
+      "performance": {
+        "batch_timeout_seconds": 30,
+        "memory_efficient": true,
+        "unicode_optimized": true,
+        "regex_compiled": true
+      }
+    },
+    "system_info": {
+      "enabled": true,
+      "description": "Comprehensive system information, hardware detection and performance monitoring tools",
+      "functions": [
+        "system_overview",
+        "memory_usage",
+        "cpu_info",
+        "disk_usage",
+        "network_info", 
+        "running_processes",
+        "comprehensive_system_report",
+        "hardware_detection",
+        "environment_analysis",
+        "performance_monitoring",
+        "system_services_status"
+      ],
+      "features": {
+        "basic_system_info": true,
+        "hardware_detection": true,
+        "performance_monitoring": true,
+        "environment_analysis": true,
+        "service_management": true,
+        "comprehensive_reporting": true,
+        "cross_platform_support": true,
+        "real_time_monitoring": true
+      },
+      "supported_platforms": {
+        "linux": {
+          "service_manager": "systemd",
+          "features": ["full_sensor_access", "proc_filesystem", "service_control"]
+        },
+        "darwin": {
+          "service_manager": "launchd", 
+          "features": ["basic_sensors", "bsd_process_info"]
+        },
+        "windows": {
+          "service_manager": "Windows Service Manager",
+          "features": ["powershell_integration", "nt_security"]
+        }
+      },
+      "hardware_capabilities": {
+        "cpu_detection": true,
+        "memory_analysis": true,
+        "storage_analysis": true,
+        "sensor_monitoring": true,
+        "battery_status": true,
+        "thermal_monitoring": true,
+        "fan_monitoring": true
+      },
+      "monitoring_features": {
+        "real_time_cpu": true,
+        "memory_tracking": true,
+        "disk_io_stats": true,
+        "network_io_stats": true,
+        "process_monitoring": true,
+        "performance_assessment": true
+      },
+      "limits": {
+        "max_monitoring_duration": 60,
+        "max_process_list": 50,
+        "max_samples_per_monitoring": 10,
+        "command_timeout_seconds": 10
+      },
+      "security": {
+        "permission_aware": true,
+        "sensitive_data_filtering": true,
+        "safe_command_execution": true,
+        "access_control_respect": true
+      }
+    }
+  }
 }

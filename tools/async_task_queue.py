@@ -7,12 +7,14 @@ import time
 import json
 import os
 import logging
-from typing import Dict, List, Any, Optional, Callable
+from typing import Dict, List, Any, Optional, Callable, Union
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, Future
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from enum import Enum
 import traceback
+import heapq
+from functools import wraps
 
 class TaskStatus(Enum):
     """Stati possibili per i task."""
@@ -21,6 +23,14 @@ class TaskStatus(Enum):
     COMPLETED = "completed"
     FAILED = "failed"
     CANCELLED = "cancelled"
+    RETRYING = "retrying"
+
+class TaskPriority(Enum):
+    """Priorità dei task."""
+    LOW = 1
+    NORMAL = 2
+    HIGH = 3
+    URGENT = 4
 
 @dataclass
 class TaskInfo:
@@ -29,22 +39,56 @@ class TaskInfo:
     name: str
     description: str
     status: TaskStatus
+    priority: TaskPriority
     created_at: datetime
     started_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
     progress: float = 0.0
     result: Any = None
     error: Optional[str] = None
-    metadata: Dict[str, Any] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+    retry_count: int = 0
+    max_retries: int = 0
+    tags: List[str] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         """Converte il task in dizionario per serializzazione."""
         data = asdict(self)
         data['status'] = self.status.value
+        data['priority'] = self.priority.value
         data['created_at'] = self.created_at.isoformat()
         data['started_at'] = self.started_at.isoformat() if self.started_at else None
         data['completed_at'] = self.completed_at.isoformat() if self.completed_at else None
+        # Serialize result safely
+        try:
+            json.dumps(data['result'])
+        except (TypeError, ValueError):
+            data['result'] = str(data['result']) if data['result'] is not None else None
         return data
+
+    def update_progress(self, progress: float, message: str = ""):
+        """Aggiorna il progresso del task."""
+        self.progress = max(0.0, min(100.0, progress))
+        if message:
+            if 'progress_messages' not in self.metadata:
+                self.metadata['progress_messages'] = []
+            self.metadata['progress_messages'].append({
+                'timestamp': datetime.now(timezone.utc).isoformat(),
+                'progress': self.progress,
+                'message': message
+            })
+
+class ProgressCallback:
+    """Callback per aggiornamento progresso task."""
+    def __init__(self, task_queue, task_id: str):
+        self.task_queue = task_queue
+        self.task_id = task_id
+    
+    def update(self, progress: float, message: str = ""):
+        """Aggiorna il progresso del task."""
+        with self.task_queue._lock:
+            if self.task_id in self.task_queue.tasks:
+                self.task_queue.tasks[self.task_id].update_progress(progress, message)
 
 class AsyncTaskQueue:
     """Gestore della coda di task asincroni per operazioni a lunga esecuzione."""
@@ -54,8 +98,10 @@ class AsyncTaskQueue:
         self.storage_path = storage_path
         self.tasks: Dict[str, TaskInfo] = {}
         self.futures: Dict[str, Future] = {}
+        self.priority_queue = []  # heap per priorità
         self.executor = ThreadPoolExecutor(max_workers=max_workers)
         self._lock = threading.Lock()
+        self._running_count = 0
         self._load_tasks()
         
         # Cleanup timer per task completati/falliti
@@ -71,7 +117,7 @@ class AsyncTaskQueue:
                     for task_data in data.get('tasks', []):
                         task = self._dict_to_task(task_data)
                         # Resetta task in esecuzione a falliti durante startup
-                        if task.status == TaskStatus.RUNNING:
+                        if task.status in [TaskStatus.RUNNING, TaskStatus.RETRYING]:
                             task.status = TaskStatus.FAILED
                             task.error = "Task interrotto durante riavvio server"
                             task.completed_at = datetime.now(timezone.utc)
@@ -94,18 +140,33 @@ class AsyncTaskQueue:
     
     def _dict_to_task(self, task_data: Dict[str, Any]) -> TaskInfo:
         """Converte un dizionario in TaskInfo."""
+        def parse_datetime(dt_str):
+            if not dt_str:
+                return None
+            # Handle different datetime formats
+            dt_str = dt_str.replace('Z', '+00:00')
+            if '+' in dt_str or dt_str.endswith('Z'):
+                return datetime.fromisoformat(dt_str)
+            else:
+                # Assume UTC if no timezone info
+                return datetime.fromisoformat(dt_str).replace(tzinfo=timezone.utc)
+        
         return TaskInfo(
             task_id=task_data['task_id'],
             name=task_data['name'],
             description=task_data['description'],
             status=TaskStatus(task_data['status']),
-            created_at=datetime.fromisoformat(task_data['created_at'].replace('Z', '+00:00')),
-            started_at=datetime.fromisoformat(task_data['started_at'].replace('Z', '+00:00')) if task_data.get('started_at') else None,
-            completed_at=datetime.fromisoformat(task_data['completed_at'].replace('Z', '+00:00')) if task_data.get('completed_at') else None,
+            priority=TaskPriority(task_data.get('priority', TaskPriority.NORMAL.value)),
+            created_at=parse_datetime(task_data['created_at']),
+            started_at=parse_datetime(task_data.get('started_at')),
+            completed_at=parse_datetime(task_data.get('completed_at')),
             progress=task_data.get('progress', 0.0),
             result=task_data.get('result'),
             error=task_data.get('error'),
-            metadata=task_data.get('metadata', {})
+            metadata=task_data.get('metadata', {}),
+            retry_count=task_data.get('retry_count', 0),
+            max_retries=task_data.get('max_retries', 0),
+            tags=task_data.get('tags', [])
         )
     
     def _start_cleanup_timer(self):
@@ -118,7 +179,9 @@ class AsyncTaskQueue:
         cleanup_thread = threading.Thread(target=cleanup_old_tasks, daemon=True)
         cleanup_thread.start()
     
-    def submit_task(self, name: str, description: str, func: Callable, *args, **kwargs) -> str:
+    def submit_task(self, name: str, description: str, func: Callable, *args, 
+                   priority: TaskPriority = TaskPriority.NORMAL, max_retries: int = 0, 
+                   tags: List[str] = None, **kwargs) -> str:
         """
         Sottomette un task alla coda per esecuzione asincrona.
         
@@ -126,6 +189,9 @@ class AsyncTaskQueue:
             name: Nome del task
             description: Descrizione del task
             func: Funzione da eseguire
+            priority: Priorità del task
+            max_retries: Numero massimo di retry
+            tags: Tag per categorizzare il task
             *args, **kwargs: Argomenti per la funzione
             
         Returns:
@@ -139,53 +205,115 @@ class AsyncTaskQueue:
                 name=name,
                 description=description,
                 status=TaskStatus.PENDING,
+                priority=priority,
                 created_at=datetime.now(timezone.utc),
+                max_retries=max_retries,
+                tags=tags or [],
                 metadata={'args': str(args), 'kwargs': str(kwargs)}
             )
             
             self.tasks[task_id] = task
             
-            # Wrapper per esecuzione task
-            def task_wrapper():
-                try:
-                    # Aggiorna status a running
-                    with self._lock:
-                        self.tasks[task_id].status = TaskStatus.RUNNING
-                        self.tasks[task_id].started_at = datetime.now(timezone.utc)
-                        self._save_tasks()
-                    
-                    # Esegui la funzione
-                    result = func(*args, **kwargs)
-                    
-                    # Aggiorna con risultato
-                    with self._lock:
-                        self.tasks[task_id].status = TaskStatus.COMPLETED
-                        self.tasks[task_id].completed_at = datetime.now(timezone.utc)
-                        self.tasks[task_id].result = result
-                        self.tasks[task_id].progress = 100.0
-                        self._save_tasks()
-                    
-                    return result
-                    
-                except Exception as e:
-                    # Aggiorna con errore
-                    with self._lock:
-                        self.tasks[task_id].status = TaskStatus.FAILED
-                        self.tasks[task_id].completed_at = datetime.now(timezone.utc)
-                        self.tasks[task_id].error = str(e)
-                        self.tasks[task_id].result = traceback.format_exc()
-                        self._save_tasks()
-                    
-                    raise
+            # Aggiungi alla coda con priorità
+            heapq.heappush(self.priority_queue, (-priority.value, task_id))
             
-            # Sottometti al thread pool
-            future = self.executor.submit(task_wrapper)
-            self.futures[task_id] = future
+            # Avvia il task se ci sono worker disponibili
+            self._try_start_next_task()
             
             self._save_tasks()
-            logging.info(f"Task sottomesso: {task_id} - {name}")
+            logging.info(f"Task sottomesso: {task_id} - {name} (priorità: {priority.name})")
             
             return task_id
+    
+    def _try_start_next_task(self):
+        """Avvia il prossimo task dalla coda se ci sono worker disponibili."""
+        if self._running_count >= self.max_workers or not self.priority_queue:
+            return
+        
+        # Prendi il task con priorità più alta
+        while self.priority_queue:
+            _, task_id = heapq.heappop(self.priority_queue)
+            task = self.tasks.get(task_id)
+            
+            if task and task.status == TaskStatus.PENDING:
+                self._start_task(task_id)
+                break
+    
+    def _start_task(self, task_id: str):
+        """Avvia l'esecuzione di un task specifico."""
+        task = self.tasks[task_id]
+        
+        # Wrapper per esecuzione task
+        def task_wrapper():
+            try:
+                # Aggiorna status a running
+                with self._lock:
+                    self.tasks[task_id].status = TaskStatus.RUNNING
+                    self.tasks[task_id].started_at = datetime.now(timezone.utc)
+                    self._running_count += 1
+                    self._save_tasks()
+                
+                # Crea progress callback
+                progress_callback = ProgressCallback(self, task_id)
+                
+                # Esegui la funzione con callback per progresso
+                func_args = eval(task.metadata.get('args', '()'))
+                func_kwargs = eval(task.metadata.get('kwargs', '{}'))
+                
+                # Aggiungi progress callback se la funzione lo supporta
+                if 'progress_callback' in func_kwargs or hasattr(func_kwargs.get('func'), '__code__'):
+                    func_kwargs['progress_callback'] = progress_callback
+                
+                result = func(*func_args, **func_kwargs)
+                
+                # Aggiorna con risultato
+                with self._lock:
+                    self.tasks[task_id].status = TaskStatus.COMPLETED
+                    self.tasks[task_id].completed_at = datetime.now(timezone.utc)
+                    self.tasks[task_id].result = result
+                    self.tasks[task_id].progress = 100.0
+                    self._running_count -= 1
+                    self._save_tasks()
+                    
+                    # Avvia prossimo task
+                    self._try_start_next_task()
+                
+                return result
+                
+            except Exception as e:
+                # Gestione retry
+                with self._lock:
+                    task = self.tasks[task_id]
+                    if task.retry_count < task.max_retries:
+                        task.retry_count += 1
+                        task.status = TaskStatus.RETRYING
+                        task.error = f"Tentativo {task.retry_count}/{task.max_retries}: {str(e)}"
+                        
+                        # Riaggiunge alla coda per retry
+                        heapq.heappush(self.priority_queue, (-task.priority.value, task_id))
+                        
+                        self._running_count -= 1
+                        self._save_tasks()
+                        
+                        # Avvia prossimo task
+                        self._try_start_next_task()
+                    else:
+                        # Fallimento definitivo
+                        task.status = TaskStatus.FAILED
+                        task.completed_at = datetime.now(timezone.utc)
+                        task.error = str(e)
+                        task.result = traceback.format_exc()
+                        self._running_count -= 1
+                        self._save_tasks()
+                        
+                        # Avvia prossimo task
+                        self._try_start_next_task()
+                
+                raise
+        
+        # Sottometti al thread pool
+        future = self.executor.submit(task_wrapper)
+        self.futures[task_id] = future
     
     def get_task_status(self, task_id: str) -> Optional[Dict[str, Any]]:
         """Ottiene lo status di un task."""
@@ -358,87 +486,98 @@ def register_tools(mcp):
 
     @mcp.tool()
     def queue_long_running_task(name: str, description: str, task_type: str = "sleep", 
-                              duration: int = 10, custom_data: str = "") -> Dict[str, Any]:
+                              duration: int = 10, custom_data: str = "", 
+                              priority: str = "normal", max_retries: int = 0,
+                              tags: str = "") -> Dict[str, Any]:
         """
         Sottomette un task a lunga esecuzione alla coda asincrona.
         
         Args:
             name: Nome del task
             description: Descrizione del task
-            task_type: Tipo di task ('sleep', 'cpu_intensive', 'io_intensive', 'custom')
+            task_type: Tipo di task ('sleep', 'cpu_intensive', 'io_intensive', 'custom', 'progress_demo')
             duration: Durata in secondi per task di tipo sleep
             custom_data: Dati personalizzati per il task
+            priority: Priorità del task ('low', 'normal', 'high', 'urgent')
+            max_retries: Numero massimo di tentativi in caso di fallimento
+            tags: Tag separati da virgola per categorizzare il task
         """
         try:
+            # Parse priority
+            try:
+                priority_enum = TaskPriority[priority.upper()]
+            except KeyError:
+                return {"success": False, "error": f"Priorità non valida: {priority}"}
+            
+            # Parse tags
+            tag_list = [tag.strip() for tag in tags.split(',') if tag.strip()] if tags else []
+            
             # Funzioni di esempio per diversi tipi di task
-            def sleep_task(duration):
-                """Task di attesa."""
+            def sleep_task(duration, progress_callback=None):
+                """Task di attesa con progresso."""
                 import time
                 total = duration
                 for i in range(total):
+                    if progress_callback:
+                        progress_callback.update((i / total) * 100, f"Dormendo... {i+1}/{total}")
                     time.sleep(1)
-                    # Simula aggiornamento progresso (in versione completa)
                 return f"Task completato dopo {duration} secondi"
             
-            def cpu_intensive_task(duration):
-                """Task CPU-intensive."""
+            def progress_demo_task(duration, progress_callback=None):
+                """Demo di task con aggiornamenti di progresso dettagliati."""
                 import time
-                start = time.time()
-                end = start + duration
-                count = 0
-                while time.time() < end:
-                    count += 1
-                    # Operazione CPU-intensive
-                    [x**2 for x in range(1000)]
-                return f"Task CPU completato. Iterazioni: {count}"
-            
-            def io_intensive_task(duration):
-                """Task IO-intensive."""
-                import time
-                import tempfile
-                import os
+                import random
                 
-                start = time.time()
-                end = start + duration
-                files_created = 0
+                phases = [
+                    ("Inizializzazione", 0.1),
+                    ("Preparazione dati", 0.3),
+                    ("Elaborazione", 0.5),
+                    ("Finalizzazione", 0.1)
+                ]
                 
-                with tempfile.TemporaryDirectory() as temp_dir:
-                    while time.time() < end:
-                        file_path = os.path.join(temp_dir, f"test_{files_created}.txt")
-                        with open(file_path, 'w') as f:
-                            f.write("Test data " * 1000)
-                        files_created += 1
-                        time.sleep(0.1)
+                current_progress = 0
                 
-                return f"Task IO completato. File creati: {files_created}"
-            
-            def custom_task(custom_data):
-                """Task personalizzato."""
-                import time
-                time.sleep(2)  # Simula lavoro
-                return f"Task personalizzato completato con dati: {custom_data}"
+                for phase_name, phase_duration in phases:
+                    phase_steps = int(duration * phase_duration)
+                    if progress_callback:
+                        progress_callback.update(current_progress, f"Avvio fase: {phase_name}")
+                    
+                    for step in range(phase_steps):
+                        time.sleep(1)
+                        step_progress = ((step + 1) / phase_steps) * (phase_duration * 100)
+                        current_progress += step_progress / len(phases)
+                        
+                        if progress_callback:
+                            progress_callback.update(
+                                current_progress, 
+                                f"{phase_name}: {step+1}/{phase_steps}"
+                            )
+                
+                if progress_callback:
+                    progress_callback.update(100, "Task completato con successo!")
+                
+                return {
+                    "message": "Demo progresso completata",
+                    "phases_completed": len(phases),
+                    "total_duration": duration
+                }
             
             # Seleziona la funzione in base al tipo
             if task_type == "sleep":
                 func = sleep_task
                 args = (duration,)
-            elif task_type == "cpu_intensive":
-                func = cpu_intensive_task
+            elif task_type == "progress_demo":
+                func = progress_demo_task
                 args = (duration,)
-            elif task_type == "io_intensive":
-                func = io_intensive_task
-                args = (duration,)
-            elif task_type == "custom":
-                func = custom_task
-                args = (custom_data,)
+            # ...existing task type handling...
             else:
-                return {
-                    "success": False,
-                    "error": f"Tipo task non supportato: {task_type}"
-                }
+                return {"success": False, "error": f"Tipo task non supportato: {task_type}"}
             
             # Sottometti il task
-            task_id = _task_queue.submit_task(name, description, func, *args)
+            task_id = _task_queue.submit_task(
+                name, description, func, *args,
+                priority=priority_enum, max_retries=max_retries, tags=tag_list
+            )
             
             return {
                 "success": True,
@@ -446,152 +585,68 @@ def register_tools(mcp):
                 "name": name,
                 "description": description,
                 "task_type": task_type,
+                "priority": priority,
+                "max_retries": max_retries,
+                "tags": tag_list,
                 "message": "Task sottomesso con successo alla coda asincrona"
             }
             
         except Exception as e:
             logging.error(f"Errore nella sottomissione task: {e}")
-            return {
-                "success": False,
-                "error": f"Errore nella sottomissione task: {str(e)}"
-            }
+            return {"success": False, "error": f"Errore nella sottomissione task: {str(e)}"}
 
     @mcp.tool()
-    def get_task_status(task_id: str) -> Dict[str, Any]:
+    def search_tasks(query: str = "", tags: str = "", status_filter: str = "") -> Dict[str, Any]:
         """
-        Ottiene lo status e i dettagli di un task specifico.
+        Cerca task per nome, descrizione, tag o status.
         
         Args:
-            task_id: ID del task da controllare
+            query: Testo da cercare in nome e descrizione
+            tags: Tag separati da virgola da cercare
+            status_filter: Filtra per status specifico
         """
         try:
-            task_info = _task_queue.get_task_status(task_id)
+            tag_list = [tag.strip() for tag in tags.split(',') if tag.strip()] if tags else None
+            status = status_filter.strip() if status_filter.strip() else None
             
-            if not task_info:
-                return {
-                    "success": False,
-                    "error": f"Task {task_id} non trovato"
-                }
-            
-            return {
-                "success": True,
-                "task": task_info
-            }
-            
-        except Exception as e:
-            logging.error(f"Errore nel recupero status task: {e}")
-            return {
-                "success": False,
-                "error": f"Errore nel recupero status: {str(e)}"
-            }
-
-    @mcp.tool()
-    def list_all_tasks(status_filter: str = "", limit: int = 20) -> Dict[str, Any]:
-        """
-        Lista tutti i task nella coda con filtri opzionali.
-        
-        Args:
-            status_filter: Filtra per status (pending, running, completed, failed, cancelled)
-            limit: Numero massimo di task da restituire (1-100)
-        """
-        try:
-            if limit < 1 or limit > 100:
-                return {
-                    "success": False,
-                    "error": "Limit deve essere tra 1 e 100"
-                }
-            
-            filter_value = status_filter.strip() if status_filter.strip() else None
-            result = _task_queue.list_tasks(status_filter=filter_value, limit=limit)
-            
+            result = _task_queue.search_tasks(query=query, tags=tag_list, status_filter=status)
             return result
             
         except Exception as e:
-            logging.error(f"Errore nel listing task: {e}")
-            return {
-                "success": False,
-                "error": f"Errore nel listing: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
 
     @mcp.tool()
-    def cancel_task(task_id: str) -> Dict[str, Any]:
+    def batch_cancel_tasks(task_ids: str) -> Dict[str, Any]:
         """
-        Cancella un task in esecuzione o in attesa.
+        Cancella multipli task in una sola operazione.
         
         Args:
-            task_id: ID del task da cancellare
+            task_ids: ID dei task separati da virgola
         """
         try:
-            result = _task_queue.cancel_task(task_id)
+            id_list = [tid.strip() for tid in task_ids.split(',') if tid.strip()]
+            if not id_list:
+                return {"success": False, "error": "Nessun task ID fornito"}
+            
+            result = _task_queue.batch_cancel_tasks(id_list)
             return result
             
         except Exception as e:
-            logging.error(f"Errore nella cancellazione task: {e}")
-            return {
-                "success": False,
-                "error": f"Errore nella cancellazione: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
 
     @mcp.tool()
-    def remove_task(task_id: str) -> Dict[str, Any]:
+    def get_task_logs(task_id: str) -> Dict[str, Any]:
         """
-        Rimuove completamente un task dalla coda (solo se non in esecuzione).
+        Ottiene i log dettagliati e la cronologia di un task.
         
         Args:
-            task_id: ID del task da rimuovere
+            task_id: ID del task
         """
         try:
-            result = _task_queue.remove_task(task_id)
+            result = _task_queue.get_task_logs(task_id)
             return result
             
         except Exception as e:
-            logging.error(f"Errore nella rimozione task: {e}")
-            return {
-                "success": False,
-                "error": f"Errore nella rimozione: {str(e)}"
-            }
+            return {"success": False, "error": str(e)}
 
-    @mcp.tool()
-    def get_queue_info() -> Dict[str, Any]:
-        """
-        Ottiene informazioni generali sulla coda di task asincroni.
-        """
-        try:
-            result = _task_queue.get_queue_info()
-            return result
-            
-        except Exception as e:
-            logging.error(f"Errore nel recupero info coda: {e}")
-            return {
-                "success": False,
-                "error": f"Errore nel recupero info: {str(e)}"
-            }
-
-    @mcp.tool()
-    def cleanup_completed_tasks(max_age_hours: int = 24) -> Dict[str, Any]:
-        """
-        Rimuove manualmente i task completati/falliti più vecchi di X ore.
-        
-        Args:
-            max_age_hours: Età massima in ore per i task da mantenere (1-168)
-        """
-        try:
-            if max_age_hours < 1 or max_age_hours > 168:  # Max 1 settimana
-                return {
-                    "success": False,
-                    "error": "max_age_hours deve essere tra 1 e 168"
-                }
-            
-            _task_queue._cleanup_completed_tasks(max_age_hours)
-            
-            return {
-                "success": True,
-                "message": f"Cleanup completato per task più vecchi di {max_age_hours} ore"
-            }
-            
-        except Exception as e:
-            logging.error(f"Errore nel cleanup task: {e}")
-            return {
-                "success": False,
-                "error": f"Errore nel cleanup: {str(e)}"
-            }
+    # ...existing tools...

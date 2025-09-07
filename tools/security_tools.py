@@ -10,6 +10,10 @@ import subprocess
 import json
 from typing import Dict, List, Optional, Any
 import re
+import time
+from datetime import datetime, timedelta
+import socket
+import ssl
 
 def register_tools(mcp):
     """Registra i tool di sicurezza con l'istanza del server MCP."""
@@ -395,3 +399,938 @@ def register_tools(mcp):
                 "success": False,
                 "error": str(e)
             }
+
+    @mcp.tool()
+    def comprehensive_security_audit(target: str, scan_type: str = "basic") -> Dict[str, Any]:
+        """
+        Esegue un audit di sicurezza completo su un target.
+        
+        Args:
+            target: Hostname/IP/URL da analizzare
+            scan_type: Tipo di scan (basic, network, web, full)
+        """
+        try:
+            audit_result = {
+                "target": target,
+                "scan_type": scan_type,
+                "timestamp": datetime.now().isoformat(),
+                "findings": [],
+                "recommendations": [],
+                "risk_score": 0
+            }
+            
+            # Parse target
+            if target.startswith(('http://', 'https://')):
+                target_type = "web"
+                domain = target.split('//')[1].split('/')[0].split(':')[0]
+            elif '.' in target and not target.replace('.', '').isdigit():
+                target_type = "domain"
+                domain = target
+            else:
+                target_type = "ip"
+                domain = target
+            
+            audit_result["target_type"] = target_type
+            
+            # Basic security checks
+            if scan_type in ["basic", "full"]:
+                # Port scan
+                port_results = check_common_ports(domain)
+                if port_results.get("open_ports"):
+                    audit_result["port_scan"] = port_results
+                    audit_result["risk_score"] += len(port_results["security_warnings"]) * 10
+                
+                # SSL check se applicabile
+                if target_type == "web" and (target.startswith('https://') or ':443' in target):
+                    ssl_results = ssl_certificate_check(domain)
+                    if ssl_results.get("warnings"):
+                        audit_result["ssl_analysis"] = ssl_results
+                        audit_result["risk_score"] += len(ssl_results["warnings"]) * 15
+            
+            # Network security checks
+            if scan_type in ["network", "full"]:
+                network_analysis = analyze_network_security(domain)
+                audit_result["network_analysis"] = network_analysis
+                audit_result["risk_score"] += network_analysis.get("risk_points", 0)
+            
+            # Web security checks
+            if scan_type in ["web", "full"] and target_type == "web":
+                web_analysis = analyze_web_security(target)
+                audit_result["web_analysis"] = web_analysis
+                audit_result["risk_score"] += web_analysis.get("risk_points", 0)
+            
+            # Generate findings and recommendations
+            audit_result["findings"] = generate_security_findings(audit_result)
+            audit_result["recommendations"] = generate_security_recommendations(audit_result)
+            
+            # Risk level classification
+            risk_level = "Low"
+            if audit_result["risk_score"] > 50:
+                risk_level = "Medium"
+            if audit_result["risk_score"] > 100:
+                risk_level = "High"
+            if audit_result["risk_score"] > 200:
+                risk_level = "Critical"
+            
+            audit_result["risk_level"] = risk_level
+            
+            return {
+                "success": True,
+                "audit_result": audit_result
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Security audit failed: {str(e)}"
+            }
+
+    @mcp.tool()
+    def vulnerability_scanner(target: str, scan_depth: str = "surface") -> Dict[str, Any]:
+        """
+        Scanner vulnerabilità comuni.
+        
+        Args:
+            target: Target da scansionare
+            scan_depth: Profondità scan (surface, deep, aggressive)
+        """
+        try:
+            vulnerabilities = {
+                "target": target,
+                "scan_depth": scan_depth,
+                "vulnerabilities_found": [],
+                "scan_timestamp": datetime.now().isoformat()
+            }
+            
+            # Common vulnerability checks
+            vuln_checks = [
+                check_open_ports_vulnerability,
+                check_ssl_vulnerabilities,
+                check_dns_security,
+                check_http_headers_security
+            ]
+            
+            if scan_depth == "deep":
+                vuln_checks.extend([
+                    check_service_banners,
+                    check_default_credentials
+                ])
+            
+            if scan_depth == "aggressive":
+                vuln_checks.extend([
+                    check_directory_traversal,
+                    check_sql_injection_indicators
+                ])
+            
+            total_vulns = 0
+            critical_vulns = 0
+            
+            for check_function in vuln_checks:
+                try:
+                    result = check_function(target)
+                    if result.get("vulnerabilities"):
+                        vulnerabilities["vulnerabilities_found"].extend(result["vulnerabilities"])
+                        total_vulns += len(result["vulnerabilities"])
+                        critical_vulns += len([v for v in result["vulnerabilities"] 
+                                             if v.get("severity") == "Critical"])
+                except Exception as e:
+                    logging.warning(f"Vulnerability check failed: {str(e)}")
+            
+            # Risk assessment
+            risk_score = total_vulns * 10 + critical_vulns * 25
+            
+            vulnerabilities.update({
+                "total_vulnerabilities": total_vulns,
+                "critical_vulnerabilities": critical_vulns,
+                "risk_score": risk_score,
+                "risk_level": "Critical" if critical_vulns > 0 else 
+                             "High" if total_vulns > 5 else
+                             "Medium" if total_vulns > 2 else "Low"
+            })
+            
+            return {
+                "success": True,
+                "vulnerability_report": vulnerabilities
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Vulnerability scan failed: {str(e)}"
+            }
+
+    @mcp.tool()
+    def encrypt_decrypt_data(data: str, operation: str, key: Optional[str] = None, algorithm: str = "aes") -> Dict[str, Any]:
+        """
+        Crittografia/decrittografia dati con algoritmi sicuri.
+        
+        Args:
+            data: Dati da processare
+            operation: 'encrypt' o 'decrypt'
+            key: Chiave (se None, genera automaticamente)
+            algorithm: Algoritmo (aes, fernet)
+        """
+        try:
+            if algorithm == "fernet":
+                from cryptography.fernet import Fernet
+                
+                if operation == "encrypt":
+                    if not key:
+                        key = Fernet.generate_key().decode()
+                    else:
+                        key = key.encode() if isinstance(key, str) else key
+                    
+                    f = Fernet(key)
+                    encrypted_data = f.encrypt(data.encode()).decode()
+                    
+                    return {
+                        "success": True,
+                        "operation": "encrypt",
+                        "algorithm": "fernet",
+                        "encrypted_data": encrypted_data,
+                        "key": key.decode() if isinstance(key, bytes) else key,
+                        "note": "Store key securely - required for decryption"
+                    }
+                
+                elif operation == "decrypt":
+                    if not key:
+                        return {
+                            "success": False,
+                            "error": "Key required for decryption"
+                        }
+                    
+                    key = key.encode() if isinstance(key, str) else key
+                    f = Fernet(key)
+                    decrypted_data = f.decrypt(data.encode()).decode()
+                    
+                    return {
+                        "success": True,
+                        "operation": "decrypt",
+                        "algorithm": "fernet",
+                        "decrypted_data": decrypted_data
+                    }
+            
+            elif algorithm == "base64":
+                # Simple base64 encoding (not encryption)
+                if operation == "encrypt":
+                    encoded_data = base64.b64encode(data.encode()).decode()
+                    return {
+                        "success": True,
+                        "operation": "encode",
+                        "algorithm": "base64",
+                        "encoded_data": encoded_data,
+                        "note": "Base64 is encoding, not encryption"
+                    }
+                elif operation == "decrypt":
+                    decoded_data = base64.b64decode(data.encode()).decode()
+                    return {
+                        "success": True,
+                        "operation": "decode",
+                        "algorithm": "base64",
+                        "decoded_data": decoded_data
+                    }
+            
+            return {
+                "success": False,
+                "error": f"Unsupported algorithm: {algorithm}"
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Encryption/decryption failed: {str(e)}"
+            }
+
+    @mcp.tool()
+    def generate_secure_tokens(token_type: str, count: int = 1, options: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Genera vari tipi di token sicuri.
+        
+        Args:
+            token_type: Tipo (session, csrf, api, uuid, otp)
+            count: Numero di token da generare
+            options: Opzioni aggiuntive (JSON string)
+        """
+        try:
+            import uuid
+            
+            if count > 100:
+                return {
+                    "success": False,
+                    "error": "Maximum 100 tokens per request"
+                }
+            
+            # Parse options
+            opts = {}
+            if options:
+                try:
+                    opts = json.loads(options)
+                except json.JSONDecodeError:
+                    opts = {}
+            
+            tokens = []
+            
+            for _ in range(count):
+                if token_type == "session":
+                    token = secrets.token_urlsafe(32)
+                    tokens.append({
+                        "token": token,
+                        "type": "session",
+                        "length": len(token),
+                        "expires_recommended": "30 minutes"
+                    })
+                
+                elif token_type == "csrf":
+                    token = secrets.token_hex(16)
+                    tokens.append({
+                        "token": token,
+                        "type": "csrf",
+                        "length": len(token),
+                        "usage": "Include in forms and validate server-side"
+                    })
+                
+                elif token_type == "api":
+                    prefix = opts.get("prefix", "ak")
+                    token = f"{prefix}_{secrets.token_urlsafe(24)}"
+                    tokens.append({
+                        "token": token,
+                        "type": "api",
+                        "prefix": prefix,
+                        "security_note": "Store securely, rotate regularly"
+                    })
+                
+                elif token_type == "uuid":
+                    token = str(uuid.uuid4())
+                    tokens.append({
+                        "token": token,
+                        "type": "uuid",
+                        "version": 4,
+                        "uniqueness": "Globally unique"
+                    })
+                
+                elif token_type == "otp":
+                    length = opts.get("length", 6)
+                    if opts.get("numeric_only", True):
+                        token = ''.join(secrets.choice(string.digits) for _ in range(length))
+                    else:
+                        charset = string.ascii_uppercase + string.digits
+                        token = ''.join(secrets.choice(charset) for _ in range(length))
+                    
+                    tokens.append({
+                        "token": token,
+                        "type": "otp",
+                        "length": length,
+                        "expires_recommended": "5 minutes",
+                        "single_use": True
+                    })
+                
+                else:
+                    return {
+                        "success": False,
+                        "error": f"Unsupported token type: {token_type}"
+                    }
+            
+            return {
+                "success": True,
+                "token_type": token_type,
+                "count": count,
+                "tokens": tokens,
+                "generated_at": datetime.now().isoformat(),
+                "security_recommendations": get_token_security_recommendations(token_type)
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Token generation failed: {str(e)}"
+            }
+
+    @mcp.tool()
+    def security_headers_analyzer(url: str) -> Dict[str, Any]:
+        """
+        Analizza gli header di sicurezza di un sito web.
+        
+        Args:
+            url: URL da analizzare
+        """
+        try:
+            import urllib.request
+            import urllib.error
+            
+            # Prepare request
+            req = urllib.request.Request(url)
+            req.add_header('User-Agent', 'Nexus-Security-Scanner/1.0')
+            
+            try:
+                response = urllib.request.urlopen(req, timeout=10)
+                headers = dict(response.headers)
+                status_code = response.getcode()
+            except urllib.error.HTTPError as e:
+                headers = dict(e.headers)
+                status_code = e.code
+            except Exception as e:
+                return {
+                    "success": False,
+                    "error": f"Failed to fetch headers: {str(e)}"
+                }
+            
+            # Security headers to check
+            security_headers = {
+                'strict-transport-security': {
+                    'name': 'HTTP Strict Transport Security (HSTS)',
+                    'importance': 'High',
+                    'description': 'Prevents protocol downgrade attacks'
+                },
+                'content-security-policy': {
+                    'name': 'Content Security Policy (CSP)',
+                    'importance': 'High',
+                    'description': 'Prevents XSS and injection attacks'
+                },
+                'x-frame-options': {
+                    'name': 'X-Frame-Options',
+                    'importance': 'Medium',
+                    'description': 'Prevents clickjacking attacks'
+                },
+                'x-content-type-options': {
+                    'name': 'X-Content-Type-Options',
+                    'importance': 'Medium',
+                    'description': 'Prevents MIME type sniffing'
+                },
+                'referrer-policy': {
+                    'name': 'Referrer Policy',
+                    'importance': 'Medium',
+                    'description': 'Controls referrer information'
+                },
+                'permissions-policy': {
+                    'name': 'Permissions Policy',
+                    'importance': 'Medium',
+                    'description': 'Controls browser features'
+                }
+            }
+            
+            analysis = {
+                "url": url,
+                "status_code": status_code,
+                "analysis_timestamp": datetime.now().isoformat(),
+                "security_headers": {},
+                "missing_headers": [],
+                "security_score": 0
+            }
+            
+            # Check each security header
+            headers_lower = {k.lower(): v for k, v in headers.items()}
+            
+            for header_key, header_info in security_headers.items():
+                if header_key in headers_lower:
+                    analysis["security_headers"][header_key] = {
+                        "present": True,
+                        "value": headers_lower[header_key],
+                        "name": header_info["name"],
+                        "importance": header_info["importance"]
+                    }
+                    
+                    # Score based on importance
+                    if header_info["importance"] == "High":
+                        analysis["security_score"] += 30
+                    elif header_info["importance"] == "Medium":
+                        analysis["security_score"] += 20
+                else:
+                    analysis["missing_headers"].append({
+                        "header": header_key,
+                        "name": header_info["name"],
+                        "importance": header_info["importance"],
+                        "description": header_info["description"]
+                    })
+            
+            # Additional security checks
+            security_issues = []
+            
+            # Check for information disclosure
+            if 'server' in headers_lower:
+                security_issues.append({
+                    "issue": "Server header present",
+                    "severity": "Low",
+                    "description": "Server information disclosed"
+                })
+            
+            if 'x-powered-by' in headers_lower:
+                security_issues.append({
+                    "issue": "X-Powered-By header present",
+                    "severity": "Low", 
+                    "description": "Technology stack disclosed"
+                })
+            
+            # Check HTTPS
+            if not url.startswith('https://'):
+                security_issues.append({
+                    "issue": "Non-HTTPS connection",
+                    "severity": "High",
+                    "description": "Unencrypted connection vulnerable to interception"
+                })
+                analysis["security_score"] -= 40
+            
+            analysis["security_issues"] = security_issues
+            analysis["recommendations"] = generate_header_recommendations(analysis)
+            
+            # Security grade
+            score = analysis["security_score"]
+            if score >= 80:
+                grade = "A"
+            elif score >= 60:
+                grade = "B"
+            elif score >= 40:
+                grade = "C"
+            elif score >= 20:
+                grade = "D"
+            else:
+                grade = "F"
+            
+            analysis["security_grade"] = grade
+            analysis["max_score"] = 140
+            
+            return {
+                "success": True,
+                "analysis": analysis
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Header analysis failed: {str(e)}"
+            }
+
+    @mcp.tool()
+    def generate_security_report(data: str) -> Dict[str, Any]:
+        """
+        Genera un report di sicurezza completo basato sui dati forniti.
+        
+        Args:
+            data: JSON string con risultati di vari scan di sicurezza
+        """
+        try:
+            # Parse input data
+            try:
+                scan_data = json.loads(data)
+            except json.JSONDecodeError:
+                return {
+                    "success": False,
+                    "error": "Invalid JSON data provided"
+                }
+            
+            report = {
+                "report_id": secrets.token_hex(8),
+                "generated_at": datetime.now().isoformat(),
+                "executive_summary": {},
+                "detailed_findings": [],
+                "risk_assessment": {},
+                "recommendations": []
+            }
+            
+            # Analyze aggregated data
+            total_issues = 0
+            critical_issues = 0
+            high_issues = 0
+            medium_issues = 0
+            low_issues = 0
+            
+            # Process different types of scan data
+            for scan_type, scan_result in scan_data.items():
+                if isinstance(scan_result, dict):
+                    # Extract issues based on scan type
+                    if scan_type == "port_scan":
+                        issues = extract_port_scan_issues(scan_result)
+                    elif scan_type == "ssl_analysis":
+                        issues = extract_ssl_issues(scan_result)
+                    elif scan_type == "vulnerability_scan":
+                        issues = extract_vulnerability_issues(scan_result)
+                    elif scan_type == "header_analysis":
+                        issues = extract_header_issues(scan_result)
+                    else:
+                        issues = extract_generic_issues(scan_result)
+                    
+                    report["detailed_findings"].extend(issues)
+                    
+                    # Count by severity
+                    for issue in issues:
+                        severity = issue.get("severity", "Low")
+                        total_issues += 1
+                        if severity == "Critical":
+                            critical_issues += 1
+                        elif severity == "High":
+                            high_issues += 1
+                        elif severity == "Medium":
+                            medium_issues += 1
+                        else:
+                            low_issues += 1
+            
+            # Executive summary
+            report["executive_summary"] = {
+                "total_issues": total_issues,
+                "critical_issues": critical_issues,
+                "high_issues": high_issues,
+                "medium_issues": medium_issues,
+                "low_issues": low_issues,
+                "overall_risk": calculate_overall_risk(critical_issues, high_issues, medium_issues, low_issues)
+            }
+            
+            # Risk assessment
+            risk_score = (critical_issues * 40) + (high_issues * 20) + (medium_issues * 10) + (low_issues * 5)
+            
+            report["risk_assessment"] = {
+                "risk_score": risk_score,
+                "risk_level": "Critical" if critical_issues > 0 else
+                             "High" if high_issues > 2 else
+                             "Medium" if medium_issues > 5 else "Low",
+                "compliance_status": "Non-Compliant" if critical_issues > 0 or high_issues > 3 else "Compliant",
+                "immediate_action_required": critical_issues > 0 or high_issues > 5
+            }
+            
+            # Generate recommendations
+            report["recommendations"] = generate_comprehensive_recommendations(report["detailed_findings"])
+            
+            return {
+                "success": True,
+                "security_report": report
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "error": f"Report generation failed: {str(e)}"
+            }
+
+# Helper functions for the new security tools
+
+def analyze_network_security(domain: str) -> Dict[str, Any]:
+    """Analizza la sicurezza di rete."""
+    try:
+        analysis = {
+            "domain": domain,
+            "dns_analysis": {},
+            "network_topology": {},
+            "risk_points": 0
+        }
+        
+        # DNS security checks
+        try:
+            import dns.resolver
+            # Check for SPF, DMARC, DKIM records
+            txt_records = dns.resolver.resolve(domain, 'TXT')
+            has_spf = any('v=spf1' in str(record) for record in txt_records)
+            has_dmarc = False
+            
+            try:
+                dmarc_records = dns.resolver.resolve(f'_dmarc.{domain}', 'TXT')
+                has_dmarc = len(dmarc_records) > 0
+            except:
+                pass
+            
+            analysis["dns_analysis"] = {
+                "spf_record": has_spf,
+                "dmarc_record": has_dmarc
+            }
+            
+            if not has_spf:
+                analysis["risk_points"] += 10
+            if not has_dmarc:
+                analysis["risk_points"] += 15
+                
+        except:
+            analysis["dns_analysis"] = {"error": "DNS analysis failed"}
+        
+        return analysis
+        
+    except Exception as e:
+        return {"error": str(e), "risk_points": 0}
+
+def analyze_web_security(url: str) -> Dict[str, Any]:
+    """Analizza la sicurezza web."""
+    try:
+        analysis = {
+            "url": url,
+            "risk_points": 0
+        }
+        
+        # Basic HTTP security checks
+        if not url.startswith('https://'):
+            analysis["http_security"] = {
+                "https": False,
+                "risk": "Unencrypted connection"
+            }
+            analysis["risk_points"] += 30
+        else:
+            analysis["http_security"] = {
+                "https": True
+            }
+        
+        return analysis
+        
+    except Exception as e:
+        return {"error": str(e), "risk_points": 0}
+
+def generate_security_findings(audit_result: Dict) -> List[Dict]:
+    """Genera findings di sicurezza."""
+    findings = []
+    
+    if "port_scan" in audit_result:
+        for warning in audit_result["port_scan"].get("security_warnings", []):
+            findings.append({
+                "category": "Network Security",
+                "severity": "Medium",
+                "finding": warning,
+                "impact": "Potential exposure of services"
+            })
+    
+    if "ssl_analysis" in audit_result:
+        for warning in audit_result["ssl_analysis"].get("warnings", []):
+            findings.append({
+                "category": "SSL/TLS Security",
+                "severity": "High" if "scaduto" in warning.lower() else "Medium",
+                "finding": warning,
+                "impact": "Certificate issues affect trust"
+            })
+    
+    return findings
+
+def generate_security_recommendations(audit_result: Dict) -> List[str]:
+    """Genera raccomandazioni di sicurezza."""
+    recommendations = []
+    
+    if audit_result.get("risk_score", 0) > 50:
+        recommendations.append("Implement immediate security measures")
+    
+    if "port_scan" in audit_result and audit_result["port_scan"].get("security_warnings"):
+        recommendations.append("Review and secure exposed services")
+    
+    if "ssl_analysis" in audit_result and audit_result["ssl_analysis"].get("warnings"):
+        recommendations.append("Update SSL certificates and configuration")
+    
+    recommendations.append("Conduct regular security assessments")
+    recommendations.append("Implement monitoring and alerting")
+    
+    return recommendations
+
+# Vulnerability check functions
+def check_open_ports_vulnerability(target: str) -> Dict[str, Any]:
+    """Check for vulnerable open ports."""
+    try:
+        result = check_common_ports(target)
+        vulnerabilities = []
+        
+        for port, service in result.get("open_ports", {}).items():
+            if port in [21, 23]:  # FTP, Telnet
+                vulnerabilities.append({
+                    "type": "Insecure Service",
+                    "port": port,
+                    "service": service,
+                    "severity": "High",
+                    "description": f"Insecure {service} service exposed"
+                })
+        
+        return {"vulnerabilities": vulnerabilities}
+    except:
+        return {"vulnerabilities": []}
+
+def check_ssl_vulnerabilities(target: str) -> Dict[str, Any]:
+    """Check SSL/TLS vulnerabilities."""
+    try:
+        result = ssl_certificate_check(target)
+        vulnerabilities = []
+        
+        if result.get("warnings"):
+            for warning in result["warnings"]:
+                vulnerabilities.append({
+                    "type": "SSL/TLS Issue",
+                    "severity": "High" if "scaduto" in warning.lower() else "Medium",
+                    "description": warning
+                })
+        
+        return {"vulnerabilities": vulnerabilities}
+    except:
+        return {"vulnerabilities": []}
+
+def check_dns_security(target: str) -> Dict[str, Any]:
+    """Check DNS security configuration."""
+    return {"vulnerabilities": []}  # Placeholder
+
+def check_http_headers_security(target: str) -> Dict[str, Any]:
+    """Check HTTP security headers."""
+    return {"vulnerabilities": []}  # Placeholder
+
+def check_service_banners(target: str) -> Dict[str, Any]:
+    """Check for information disclosure in service banners."""
+    return {"vulnerabilities": []}  # Placeholder
+
+def check_default_credentials(target: str) -> Dict[str, Any]:
+    """Check for default credentials."""
+    return {"vulnerabilities": []}  # Placeholder
+
+def check_directory_traversal(target: str) -> Dict[str, Any]:
+    """Check for directory traversal vulnerabilities."""
+    return {"vulnerabilities": []}  # Placeholder
+
+def check_sql_injection_indicators(target: str) -> Dict[str, Any]:
+    """Check for SQL injection indicators."""
+    return {"vulnerabilities": []}  # Placeholder
+
+def get_token_security_recommendations(token_type: str) -> List[str]:
+    """Get security recommendations for token types."""
+    recommendations = {
+        "session": [
+            "Store in httpOnly, secure cookies",
+            "Implement session timeout",
+            "Regenerate on privilege changes"
+        ],
+        "csrf": [
+            "Validate on all state-changing operations",
+            "Use SameSite cookie attribute",
+            "Implement double-submit pattern"
+        ],
+        "api": [
+            "Use HTTPS only",
+            "Implement rate limiting",
+            "Rotate keys regularly"
+        ],
+        "otp": [
+            "Implement attempt limiting",
+            "Use secure delivery channel",
+            "Set short expiration time"
+        ]
+    }
+    
+    return recommendations.get(token_type, ["Follow security best practices"])
+
+def generate_header_recommendations(analysis: Dict) -> List[str]:
+    """Generate recommendations for HTTP security headers."""
+    recommendations = []
+    
+    for missing in analysis.get("missing_headers", []):
+        if missing["importance"] == "High":
+            recommendations.append(f"Implement {missing['name']} header - {missing['description']}")
+    
+    if analysis.get("security_score", 0) < 60:
+        recommendations.append("Review and implement comprehensive security header policy")
+    
+    return recommendations
+
+def extract_port_scan_issues(scan_result: Dict) -> List[Dict]:
+    """Extract issues from port scan results."""
+    issues = []
+    
+    for warning in scan_result.get("security_warnings", []):
+        issues.append({
+            "category": "Network Security",
+            "severity": "Medium",
+            "finding": warning,
+            "source": "Port Scan"
+        })
+    
+    return issues
+
+def extract_ssl_issues(ssl_result: Dict) -> List[Dict]:
+    """Extract issues from SSL analysis."""
+    issues = []
+    
+    for warning in ssl_result.get("warnings", []):
+        severity = "High" if "scaduto" in warning.lower() else "Medium"
+        issues.append({
+            "category": "SSL/TLS Security",
+            "severity": severity,
+            "finding": warning,
+            "source": "SSL Analysis"
+        })
+    
+    return issues
+
+def extract_vulnerability_issues(vuln_result: Dict) -> List[Dict]:
+    """Extract issues from vulnerability scan."""
+    issues = []
+    
+    for vuln in vuln_result.get("vulnerabilities_found", []):
+        issues.append({
+            "category": "Vulnerability",
+            "severity": vuln.get("severity", "Medium"),
+            "finding": vuln.get("description", "Vulnerability detected"),
+            "source": "Vulnerability Scan"
+        })
+    
+    return issues
+
+def extract_header_issues(header_result: Dict) -> List[Dict]:
+    """Extract issues from header analysis."""
+    issues = []
+    
+    for missing in header_result.get("analysis", {}).get("missing_headers", []):
+        severity = "High" if missing["importance"] == "High" else "Medium"
+        issues.append({
+            "category": "Web Security",
+            "severity": severity,
+            "finding": f"Missing {missing['name']} header",
+            "source": "Header Analysis"
+        })
+    
+    return issues
+
+def extract_generic_issues(scan_result: Dict) -> List[Dict]:
+    """Extract issues from generic scan results."""
+    issues = []
+    
+    # Generic extraction logic
+    if isinstance(scan_result, dict):
+        if scan_result.get("risk_level") in ["High", "Critical"]:
+            issues.append({
+                "category": "General Security",
+                "severity": scan_result.get("risk_level", "Medium"),
+                "finding": "High risk detected in scan",
+                "source": "Generic Scan"
+            })
+    
+    return issues
+
+def calculate_overall_risk(critical: int, high: int, medium: int, low: int) -> str:
+    """Calculate overall risk level."""
+    if critical > 0:
+        return "Critical"
+    elif high > 2:
+        return "High"
+    elif high > 0 or medium > 5:
+        return "Medium"
+    else:
+        return "Low"
+
+def generate_comprehensive_recommendations(findings: List[Dict]) -> List[str]:
+    """Generate comprehensive security recommendations."""
+    recommendations = []
+    
+    # Category-based recommendations
+    categories = set(finding.get("category", "") for finding in findings)
+    
+    if "Network Security" in categories:
+        recommendations.append("Review and harden network security configuration")
+    
+    if "SSL/TLS Security" in categories:
+        recommendations.append("Update SSL/TLS certificates and improve configuration")
+    
+    if "Web Security" in categories:
+        recommendations.append("Implement proper HTTP security headers")
+    
+    if "Vulnerability" in categories:
+        recommendations.append("Patch identified vulnerabilities immediately")
+    
+    # Severity-based recommendations
+    critical_count = len([f for f in findings if f.get("severity") == "Critical"])
+    high_count = len([f for f in findings if f.get("severity") == "High"])
+    
+    if critical_count > 0:
+        recommendations.insert(0, "URGENT: Address critical security issues immediately")
+    
+    if high_count > 3:
+        recommendations.append("Prioritize resolution of high-severity issues")
+    
+    recommendations.extend([
+        "Implement regular security monitoring",
+        "Conduct periodic security assessments",
+        "Maintain security incident response plan"
+    ])
+    
+    return recommendations

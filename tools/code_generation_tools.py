@@ -3,11 +3,14 @@
 import os
 import json
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
 import re
+from datetime import datetime, timezone
+import hashlib
+import uuid
 
 def register_tools(mcp):
-    """Registra i tool di generazione codice con l'istanza del server MCP."""
+    """Registra i tool di generazione codice avanzata con l'istanza del server MCP."""
     logging.info("🚀 Registrazione tool-set: Code Generation Tools")
 
     @mcp.tool()
@@ -590,3 +593,956 @@ def register_tools(mcp):
                 "success": False,
                 "error": str(e)
             }
+
+    @mcp.tool()
+    def generate_database_schema(table_name: str, fields: List[Dict[str, Any]], 
+                                database_type: str = "postgresql", 
+                                include_migrations: bool = True) -> Dict[str, Any]:
+        """
+        Genera schema database con migrazioni per diversi DBMS.
+        
+        Args:
+            table_name: Nome della tabella
+            fields: Lista di campi con tipo, vincoli, ecc.
+            database_type: Tipo di database (postgresql, mysql, sqlite, mongodb)
+            include_migrations: Se includere script di migrazione
+        """
+        try:
+            if not table_name or not table_name.isidentifier():
+                return {"success": False, "error": "Invalid table name"}
+            
+            if not fields:
+                return {"success": False, "error": "At least one field is required"}
+            
+            schema_sql = ""
+            migration_up = ""
+            migration_down = ""
+            
+            if database_type.lower() in ["postgresql", "postgres"]:
+                schema_sql = _generate_postgresql_schema(table_name, fields)
+                if include_migrations:
+                    migration_up, migration_down = _generate_postgresql_migrations(table_name, fields)
+            
+            elif database_type.lower() == "mysql":
+                schema_sql = _generate_mysql_schema(table_name, fields)
+                if include_migrations:
+                    migration_up, migration_down = _generate_mysql_migrations(table_name, fields)
+            
+            elif database_type.lower() == "sqlite":
+                schema_sql = _generate_sqlite_schema(table_name, fields)
+                if include_migrations:
+                    migration_up, migration_down = _generate_sqlite_migrations(table_name, fields)
+            
+            elif database_type.lower() == "mongodb":
+                schema_json = _generate_mongodb_schema(table_name, fields)
+                return {
+                    "success": True,
+                    "database_type": database_type,
+                    "collection_name": table_name,
+                    "schema_definition": schema_json,
+                    "validation_rules": _generate_mongodb_validation(table_name, fields),
+                    "indexes": _generate_mongodb_indexes(fields)
+                }
+            
+            else:
+                return {"success": False, "error": f"Unsupported database type: {database_type}"}
+            
+            # Genera anche modelli ORM
+            orm_models = {
+                "sqlalchemy": _generate_sqlalchemy_model(table_name, fields),
+                "django": _generate_django_model(table_name, fields),
+                "sequelize": _generate_sequelize_model(table_name, fields)
+            }
+            
+            result = {
+                "success": True,
+                "database_type": database_type,
+                "table_name": table_name,
+                "schema_sql": schema_sql,
+                "fields_count": len(fields),
+                "orm_models": orm_models
+            }
+            
+            if include_migrations:
+                result["migrations"] = {
+                    "up": migration_up,
+                    "down": migration_down,
+                    "filename": f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_create_{table_name}.sql"
+                }
+            
+            return result
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def generate_project_scaffold(project_name: str, project_type: str, 
+                                 framework: str = "", features: List[str] = None) -> Dict[str, Any]:
+        """
+        Genera scaffolding completo per progetti con struttura directories e file base.
+        
+        Args:
+            project_name: Nome del progetto
+            project_type: Tipo progetto (web, api, cli, desktop, mobile)
+            framework: Framework specifico (react, vue, flask, fastapi, etc.)
+            features: Lista di feature da includere (auth, database, tests, docker)
+        """
+        try:
+            if not project_name or not re.match(r'^[a-zA-Z][a-zA-Z0-9_-]*$', project_name):
+                return {"success": False, "error": "Invalid project name"}
+            
+            features = features or []
+            project_structure = {}
+            generated_files = {}
+            
+            if project_type.lower() == "web" and framework.lower() == "react":
+                project_structure, generated_files = _generate_react_project(project_name, features)
+            
+            elif project_type.lower() == "web" and framework.lower() == "vue":
+                project_structure, generated_files = _generate_vue_project(project_name, features)
+            
+            elif project_type.lower() == "api" and framework.lower() == "fastapi":
+                project_structure, generated_files = _generate_fastapi_project(project_name, features)
+            
+            elif project_type.lower() == "api" and framework.lower() == "flask":
+                project_structure, generated_files = _generate_flask_project(project_name, features)
+            
+            elif project_type.lower() == "cli":
+                project_structure, generated_files = _generate_cli_project(project_name, features)
+            
+            elif project_type.lower() == "microservice":
+                project_structure, generated_files = _generate_microservice_project(project_name, framework, features)
+            
+            else:
+                return {"success": False, "error": f"Unsupported project type/framework: {project_type}/{framework}"}
+            
+            # Aggiungi file comuni se richiesti
+            if "docker" in features:
+                generated_files.update(_generate_docker_files(project_name, project_type, framework))
+            
+            if "github_actions" in features:
+                generated_files.update(_generate_github_actions(project_name, project_type))
+            
+            if "tests" in features:
+                generated_files.update(_generate_test_structure(project_name, project_type, framework))
+            
+            # Genera documentazione
+            generated_files["README.md"] = _generate_project_readme(project_name, project_type, framework, features)
+            generated_files[".gitignore"] = _generate_gitignore(project_type, framework)
+            
+            return {
+                "success": True,
+                "project_name": project_name,
+                "project_type": project_type,
+                "framework": framework,
+                "features": features,
+                "project_structure": project_structure,
+                "generated_files": generated_files,
+                "files_count": len(generated_files),
+                "setup_instructions": _generate_setup_instructions(project_name, project_type, framework, features)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def generate_design_pattern(pattern_name: str, language: str = "python", 
+                               class_names: List[str] = None, 
+                               custom_params: Dict[str, Any] = None) -> Dict[str, Any]:
+        """
+        Genera implementazioni di design pattern comuni.
+        
+        Args:
+            pattern_name: Nome del pattern (singleton, factory, observer, strategy, etc.)
+            language: Linguaggio di programmazione
+            class_names: Nomi delle classi personalizzati
+            custom_params: Parametri aggiuntivi specifici del pattern
+        """
+        try:
+            if not pattern_name:
+                return {"success": False, "error": "Pattern name is required"}
+            
+            class_names = class_names or []
+            custom_params = custom_params or {}
+            
+            pattern_code = ""
+            pattern_description = ""
+            usage_example = ""
+            
+            if pattern_name.lower() == "singleton":
+                pattern_code, pattern_description, usage_example = _generate_singleton_pattern(language, class_names, custom_params)
+            
+            elif pattern_name.lower() == "factory":
+                pattern_code, pattern_description, usage_example = _generate_factory_pattern(language, class_names, custom_params)
+            
+            elif pattern_name.lower() == "observer":
+                pattern_code, pattern_description, usage_example = _generate_observer_pattern(language, class_names, custom_params)
+            
+            elif pattern_name.lower() == "strategy":
+                pattern_code, pattern_description, usage_example = _generate_strategy_pattern(language, class_names, custom_params)
+            
+            elif pattern_name.lower() == "decorator":
+                pattern_code, pattern_description, usage_example = _generate_decorator_pattern(language, class_names, custom_params)
+            
+            elif pattern_name.lower() == "adapter":
+                pattern_code, pattern_description, usage_example = _generate_adapter_pattern(language, class_names, custom_params)
+            
+            elif pattern_name.lower() == "facade":
+                pattern_code, pattern_description, usage_example = _generate_facade_pattern(language, class_names, custom_params)
+            
+            elif pattern_name.lower() == "command":
+                pattern_code, pattern_description, usage_example = _generate_command_pattern(language, class_names, custom_params)
+            
+            else:
+                return {"success": False, "error": f"Unsupported pattern: {pattern_name}"}
+            
+            return {
+                "success": True,
+                "pattern_name": pattern_name,
+                "language": language,
+                "pattern_code": pattern_code,
+                "description": pattern_description,
+                "usage_example": usage_example,
+                "class_names_used": class_names,
+                "benefits": _get_pattern_benefits(pattern_name),
+                "use_cases": _get_pattern_use_cases(pattern_name)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def generate_frontend_component(component_name: str, framework: str, 
+                                  component_type: str = "functional", 
+                                  props: List[Dict[str, Any]] = None,
+                                  styling: str = "css") -> Dict[str, Any]:
+        """
+        Genera componenti frontend per diversi framework.
+        
+        Args:
+            component_name: Nome del componente
+            framework: Framework (react, vue, angular, svelte)
+            component_type: Tipo componente (functional, class, hook)
+            props: Lista di proprietà del componente
+            styling: Tipo di styling (css, scss, styled-components, tailwind)
+        """
+        try:
+            if not component_name or not re.match(r'^[A-Z][a-zA-Z0-9]*$', component_name):
+                return {"success": False, "error": "Invalid component name (must be PascalCase)"}
+            
+            props = props or []
+            component_files = {}
+            
+            if framework.lower() == "react":
+                component_files = _generate_react_component(component_name, component_type, props, styling)
+            
+            elif framework.lower() == "vue":
+                component_files = _generate_vue_component(component_name, component_type, props, styling)
+            
+            elif framework.lower() == "angular":
+                component_files = _generate_angular_component(component_name, component_type, props, styling)
+            
+            elif framework.lower() == "svelte":
+                component_files = _generate_svelte_component(component_name, component_type, props, styling)
+            
+            else:
+                return {"success": False, "error": f"Unsupported framework: {framework}"}
+            
+            # Genera anche test per il componente
+            if framework.lower() in ["react", "vue"]:
+                component_files.update(_generate_component_tests(component_name, framework, props))
+            
+            # Genera Storybook se richiesto
+            if "storybook" in styling:
+                component_files.update(_generate_storybook_story(component_name, framework, props))
+            
+            return {
+                "success": True,
+                "component_name": component_name,
+                "framework": framework,
+                "component_type": component_type,
+                "styling": styling,
+                "props": props,
+                "generated_files": component_files,
+                "files_count": len(component_files),
+                "usage_examples": _generate_component_usage_examples(component_name, framework, props)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def generate_api_documentation(api_name: str, endpoints: List[Dict[str, Any]], 
+                                 doc_format: str = "openapi", 
+                                 include_examples: bool = True) -> Dict[str, Any]:
+        """
+        Genera documentazione API in diversi formati.
+        
+        Args:
+            api_name: Nome dell'API
+            endpoints: Lista di endpoint con metodi, parametri, risposte
+            doc_format: Formato documentazione (openapi, postman, markdown)
+            include_examples: Se includere esempi di request/response
+        """
+        try:
+            if not api_name:
+                return {"success": False, "error": "API name is required"}
+            
+            if not endpoints:
+                return {"success": False, "error": "At least one endpoint is required"}
+            
+            documentation = ""
+            
+            if doc_format.lower() == "openapi":
+                documentation = _generate_openapi_spec(api_name, endpoints, include_examples)
+            
+            elif doc_format.lower() == "postman":
+                documentation = _generate_postman_collection(api_name, endpoints, include_examples)
+            
+            elif doc_format.lower() == "markdown":
+                documentation = _generate_markdown_api_docs(api_name, endpoints, include_examples)
+            
+            elif doc_format.lower() == "insomnia":
+                documentation = _generate_insomnia_collection(api_name, endpoints, include_examples)
+            
+            else:
+                return {"success": False, "error": f"Unsupported documentation format: {doc_format}"}
+            
+            # Genera anche client SDK se richiesto
+            client_sdks = {}
+            if include_examples:
+                client_sdks = {
+                    "python": _generate_python_client(api_name, endpoints),
+                    "javascript": _generate_js_client(api_name, endpoints),
+                    "curl": _generate_curl_examples(endpoints)
+                }
+            print("client_sdks",client_sdks)
+            return {
+                "success": True,
+                "api_name": api_name,
+                "doc_format": doc_format,
+                "endpoints_count": len(endpoints),
+                "documentation": documentation,
+                "client_sdks": client_sdks,
+                "validation_schema": _generate_validation_schema(endpoints) if doc_format == "openapi" else None
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def generate_cicd_pipeline(project_name: str, platform: str, 
+                              language: str, stages: List[str] = None,
+                              deployment_target: str = "docker") -> Dict[str, Any]:
+        """
+        Genera pipeline CI/CD per diverse piattaforme.
+        
+        Args:
+            project_name: Nome del progetto
+            platform: Piattaforma CI/CD (github_actions, gitlab_ci, jenkins, azure_devops)
+            language: Linguaggio di programmazione
+            stages: Stages della pipeline (build, test, deploy, security)
+            deployment_target: Target di deployment (docker, kubernetes, aws, heroku)
+        """
+        try:
+            if not project_name:
+                return {"success": False, "error": "Project name is required"}
+            
+            stages = stages or ["build", "test", "deploy"]
+            pipeline_files = {}
+            
+            if platform.lower() == "github_actions":
+                pipeline_files = _generate_github_actions_pipeline(project_name, language, stages, deployment_target)
+            
+            elif platform.lower() == "gitlab_ci":
+                pipeline_files = _generate_gitlab_ci_pipeline(project_name, language, stages, deployment_target)
+            
+            elif platform.lower() == "jenkins":
+                pipeline_files = _generate_jenkins_pipeline(project_name, language, stages, deployment_target)
+            
+            elif platform.lower() == "azure_devops":
+                pipeline_files = _generate_azure_devops_pipeline(project_name, language, stages, deployment_target)
+            
+            else:
+                return {"success": False, "error": f"Unsupported CI/CD platform: {platform}"}
+            
+            # Aggiungi configurazioni di sicurezza
+            if "security" in stages:
+                pipeline_files.update(_generate_security_configs(platform, language))
+            
+            return {
+                "success": True,
+                "project_name": project_name,
+                "platform": platform,
+                "language": language,
+                "stages": stages,
+                "deployment_target": deployment_target,
+                "pipeline_files": pipeline_files,
+                "setup_instructions": _generate_cicd_setup_instructions(platform, deployment_target)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    @mcp.tool()
+    def modernize_legacy_code(legacy_code: str, source_language: str, 
+                             target_language: str = "", 
+                             modernization_type: str = "refactor") -> Dict[str, Any]:
+        """
+        Modernizza e refactorizza codice legacy.
+        
+        Args:
+            legacy_code: Codice legacy da modernizzare
+            source_language: Linguaggio sorgente
+            target_language: Linguaggio target (se diverso, fa conversione)
+            modernization_type: Tipo di modernizzazione (refactor, convert, optimize)
+        """
+        try:
+            if not legacy_code.strip():
+                return {"success": False, "error": "Legacy code is required"}
+            
+            target_language = target_language or source_language
+            
+            modernized_code = ""
+            improvements = []
+            conversion_notes = []
+            
+            if modernization_type.lower() == "refactor":
+                modernized_code, improvements = _refactor_code(legacy_code, source_language)
+            
+            elif modernization_type.lower() == "convert":
+                if source_language.lower() != target_language.lower():
+                    modernized_code, conversion_notes = _convert_language(legacy_code, source_language, target_language)
+                else:
+                    return {"success": False, "error": "Source and target languages must be different for conversion"}
+            
+            elif modernization_type.lower() == "optimize":
+                modernized_code, improvements = _optimize_code_performance(legacy_code, source_language)
+            
+            else:
+                return {"success": False, "error": f"Unsupported modernization type: {modernization_type}"}
+            
+            # Analizza le metriche di miglioramento
+            metrics = _calculate_improvement_metrics(legacy_code, modernized_code, source_language)
+            
+            return {
+                "success": True,
+                "source_language": source_language,
+                "target_language": target_language,
+                "modernization_type": modernization_type,
+                "original_code": legacy_code,
+                "modernized_code": modernized_code,
+                "improvements": improvements,
+                "conversion_notes": conversion_notes,
+                "improvement_metrics": metrics,
+                "recommendations": _generate_modernization_recommendations(legacy_code, source_language)
+            }
+            
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    # Helper functions for database schema generation
+    def _generate_postgresql_schema(self, table_name: str, fields: List[Dict[str, Any]]) -> str:
+        """Genera schema PostgreSQL."""
+        sql = f"-- PostgreSQL Schema for {table_name}\n"
+        sql += f"CREATE TABLE {table_name} (\n"
+        
+        field_definitions = []
+        for field in fields:
+            field_def = f"    {field['name']} {self._map_to_postgresql_type(field.get('type', 'VARCHAR'))}"
+            
+            if field.get('primary_key'):
+                field_def += " PRIMARY KEY"
+            if field.get('not_null'):
+                field_def += " NOT NULL"
+            if field.get('unique'):
+                field_def += " UNIQUE"
+            if field.get('default'):
+                field_def += f" DEFAULT {field['default']}"
+            
+            field_definitions.append(field_def)
+        
+        sql += ",\n".join(field_definitions)
+        sql += "\n);\n\n"
+        
+        # Aggiungi indici
+        for field in fields:
+            if field.get('index') and not field.get('primary_key'):
+                sql += f"CREATE INDEX idx_{table_name}_{field['name']} ON {table_name}({field['name']});\n"
+        
+        return sql
+
+    def _map_to_postgresql_type(self, field_type: str) -> str:
+        """Mappa tipi generici a tipi PostgreSQL."""
+        type_mapping = {
+            'string': 'VARCHAR(255)',
+            'text': 'TEXT',
+            'integer': 'INTEGER',
+            'bigint': 'BIGINT',
+            'float': 'REAL',
+            'decimal': 'DECIMAL(10,2)',
+            'boolean': 'BOOLEAN',
+            'date': 'DATE',
+            'datetime': 'TIMESTAMP',
+            'json': 'JSONB',
+            'uuid': 'UUID'
+        }
+        return type_mapping.get(field_type.lower(), 'VARCHAR(255)')
+
+    def _generate_sqlalchemy_model(self, table_name: str, fields: List[Dict[str, Any]]) -> str:
+        """Genera modello SQLAlchemy."""
+        model_name = table_name.title().replace('_', '')
+        
+        code = "from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text\n"
+        code += "from sqlalchemy.ext.declarative import declarative_base\n"
+        code += "from datetime import datetime\n\n"
+        code += "Base = declarative_base()\n\n"
+        code += f"class {model_name}(Base):\n"
+        code += f"    __tablename__ = '{table_name}'\n\n"
+        
+        for field in fields:
+            field_type = self._map_to_sqlalchemy_type(field.get('type', 'string'))
+            field_def = f"    {field['name']} = Column({field_type}"
+            
+            if field.get('primary_key'):
+                field_def += ", primary_key=True"
+            if field.get('not_null'):
+                field_def += ", nullable=False"
+            if field.get('unique'):
+                field_def += ", unique=True"
+            
+            field_def += ")\n"
+            code += field_def
+        
+        return code
+
+    def _map_to_sqlalchemy_type(self, field_type: str) -> str:
+        """Mappa tipi a SQLAlchemy."""
+        type_mapping = {
+            'string': 'String(255)',
+            'text': 'Text',
+            'integer': 'Integer',
+            'boolean': 'Boolean',
+            'datetime': 'DateTime'
+        }
+        return type_mapping.get(field_type.lower(), 'String(255)')
+
+    # Helper functions for project scaffolding
+    def _generate_react_project(self, project_name: str, features: List[str]) -> Tuple[Dict, Dict]:
+        """Genera struttura progetto React."""
+        structure = {
+            "src": {
+                "components": {},
+                "pages": {},
+                "hooks": {},
+                "utils": {},
+                "services": {},
+                "styles": {}
+            },
+            "public": {},
+            "tests": {} if "tests" in features else None
+        }
+        
+        files = {
+            "package.json": self._generate_react_package_json(project_name, features),
+            "src/App.js": self._generate_react_app_component(project_name),
+            "src/index.js": self._generate_react_index(project_name),
+            "src/components/Header.js": self._generate_react_header_component(),
+            "public/index.html": self._generate_react_html(project_name)
+        }
+        
+        if "typescript" in features:
+            # Converti a TypeScript
+            files = {k.replace('.js', '.tsx' if 'component' in k.lower() else '.ts'): v 
+                    for k, v in files.items()}
+            files["tsconfig.json"] = self._generate_react_tsconfig()
+        
+        return structure, files
+
+    def _generate_react_package_json(self, project_name: str, features: List[str]) -> str:
+        """Genera package.json per React."""
+        dependencies = {
+            "react": "^18.2.0",
+            "react-dom": "^18.2.0",
+            "react-scripts": "5.0.1"
+        }
+        
+        if "router" in features:
+            dependencies["react-router-dom"] = "^6.8.0"
+        if "redux" in features:
+            dependencies["@reduxjs/toolkit"] = "^1.9.0"
+            dependencies["react-redux"] = "^8.0.5"
+        if "styled-components" in features:
+            dependencies["styled-components"] = "^5.3.6"
+        
+        package_data = {
+            "name": project_name,
+            "version": "0.1.0",
+            "private": True,
+            "dependencies": dependencies,
+            "scripts": {
+                "start": "react-scripts start",
+                "build": "react-scripts build",
+                "test": "react-scripts test",
+                "eject": "react-scripts eject"
+            }
+        }
+        
+        return json.dumps(package_data, indent=2)
+
+    # Helper functions for design patterns
+    def _generate_singleton_pattern(self, language: str, class_names: List[str], custom_params: Dict) -> Tuple[str, str, str]:
+        """Genera pattern Singleton."""
+        class_name = class_names[0] if class_names else "Singleton"
+        
+        if language.lower() == "python":
+            code = f'''class {class_name}:
+    """
+    Singleton pattern implementation.
+    Ensures only one instance of the class exists.
+    """
+    _instance = None
+    _initialized = False
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
+    def __init__(self):
+        if not self._initialized:
+            # Initialize only once
+            self.data = {{}}
+            self.__class__._initialized = True
+    
+    def get_data(self, key):
+        """Get data by key."""
+        return self.data.get(key)
+    
+    def set_data(self, key, value):
+        """Set data by key."""
+        self.data[key] = value
+'''
+            
+            description = "Singleton pattern ensures a class has only one instance and provides global access to it."
+            
+            usage = f'''# Usage Example
+singleton1 = {class_name}()
+singleton2 = {class_name}()
+
+print(singleton1 is singleton2)  # True
+
+singleton1.set_data("key", "value")
+print(singleton2.get_data("key"))  # "value"
+'''
+        
+        return code, description, usage
+
+    def _generate_factory_pattern(self, language: str, class_names: List[str], custom_params: Dict) -> Tuple[str, str, str]:
+        """Genera pattern Factory."""
+        base_class = class_names[0] if class_names else "Product"
+        factory_class = class_names[1] if len(class_names) > 1 else "Factory"
+        
+        if language.lower() == "python":
+            code = f'''from abc import ABC, abstractmethod
+
+class {base_class}(ABC):
+    """Abstract product class."""
+    
+    @abstractmethod
+    def operation(self):
+        """Abstract operation method."""
+        pass
+
+class Concrete{base_class}A({base_class}):
+    """Concrete product A."""
+    
+    def operation(self):
+        return "Product A operation"
+
+class Concrete{base_class}B({base_class}):
+    """Concrete product B."""
+    
+    def operation(self):
+        return "Product B operation"
+
+class {factory_class}:
+    """Factory class for creating products."""
+    
+    @staticmethod
+    def create_product(product_type: str) -> {base_class}:
+        """Create product based on type."""
+        if product_type.lower() == "a":
+            return Concrete{base_class}A()
+        elif product_type.lower() == "b":
+            return Concrete{base_class}B()
+        else:
+            raise ValueError(f"Unknown product type: {{product_type}}")
+'''
+            
+            description = "Factory pattern creates objects without specifying their exact classes."
+            
+            usage = f'''# Usage Example
+factory = {factory_class}()
+
+product_a = factory.create_product("a")
+product_b = factory.create_product("b")
+
+print(product_a.operation())  # "Product A operation"
+print(product_b.operation())  # "Product B operation"
+'''
+        
+        return code, description, usage
+
+    def _get_pattern_benefits(self, pattern_name: str) -> List[str]:
+        """Restituisce i benefici del pattern."""
+        benefits = {
+            "singleton": [
+                "Garantisce una sola istanza",
+                "Accesso globale controllato",
+                "Risparmio di memoria"
+            ],
+            "factory": [
+                "Disaccoppia creazione da utilizzo",
+                "Facilita aggiunta nuovi tipi",
+                "Centralizza logica di creazione"
+            ],
+            "observer": [
+                "Accoppiamento debole",
+                "Comunicazione dinamica",
+                "Supporta broadcast"
+            ]
+        }
+        return benefits.get(pattern_name.lower(), [])
+
+    # Helper functions for CI/CD pipeline generation
+    def _generate_github_actions_pipeline(self, project_name: str, language: str, 
+                                        stages: List[str], deployment_target: str) -> Dict[str, str]:
+        """Genera pipeline GitHub Actions."""
+        workflow = f'''name: {project_name} CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+'''
+        
+        if "build" in stages:
+            workflow += self._generate_github_build_job(language)
+        
+        if "test" in stages:
+            workflow += self._generate_github_test_job(language)
+        
+        if "security" in stages:
+            workflow += self._generate_github_security_job()
+        
+        if "deploy" in stages:
+            workflow += self._generate_github_deploy_job(deployment_target)
+        
+        return {".github/workflows/ci-cd.yml": workflow}
+
+    def _generate_github_build_job(self, language: str) -> str:
+        """Genera job di build per GitHub Actions."""
+        if language.lower() == "python":
+            return '''  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10']
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Build package
+      run: |
+        python setup.py build
+
+'''
+        elif language.lower() in ["javascript", "node"]:
+            return '''  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build
+      run: npm run build
+
+'''
+        return ""
+
+    def _generate_github_test_job(self, language: str) -> str:
+        """Genera job di test per GitHub Actions."""
+        if language.lower() == "python":
+            return '''  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10']
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run tests
+      run: |
+        python -m unittest discover -s tests
+
+'''
+        elif language.lower() in ["javascript", "node"]:
+            return '''  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run tests
+      run: npm test
+
+'''
+        return ""
+
+    def _generate_github_security_job(self) -> str:
+        """Genera job di sicurezza per GitHub Actions."""
+        return '''  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Run security scan
+      run: |
+        # TODO: Aggiungi comandi per la scansione di sicurezza
+        echo "Esecuzione scansione di sicurezza..."
+
+'''
+
+    def _generate_github_deploy_job(self, deployment_target: str) -> str:
+        """Genera job di deploy per GitHub Actions."""
+        if deployment_target.lower() == "docker":
+            return '''  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        dockerfile: Dockerfile
+        tags: ${{ secrets.DOCKER_USERNAME }}/${{ github.repository }}:latest
+    
+    - name: Deploy to Docker
+      run: |
+        docker pull ${{ secrets.DOCKER_USERNAME }}/${{ github.repository }}:latest
+        docker stop my_app || true
+        docker rm my_app || true
+        docker run -d --name my_app -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/${{ github.repository }}:latest
+
+'''
+        elif deployment_target.lower() == "kubernetes":
+            return '''  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
+        kubectl config set-context --current --namespace=${{ secrets.KUBE_NAMESPACE }}
+    
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl rollout restart deployment/my-app-deployment
+        kubectl get pods -w
+
+'''
+        elif deployment_target.lower() == "aws":
+            return '''  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_region: ${{ secrets.AWS_REGION }}
+    
+    - name: Deploy to ECS
+      run: |
+        # TODO: Aggiungi comandi per il deploy su AWS ECS
+        echo "Deploying to AWS ECS..."
+
+'''
+        elif deployment_target.lower() == "heroku":
+            return '''  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.14.10
+      with:
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        process_type: web
+        docker_image: true
+
+'''
+        return ""
+
+    # ...existing code...

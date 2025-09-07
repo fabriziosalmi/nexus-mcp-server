@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # tools/archive_tools.py
 import logging
-import zipfile
-import tarfile
-import gzip
 import os
 import tempfile
 from datetime import datetime
 import json
+import hashlib
+import re
+from typing import Dict, List, Any, Optional, Tuple
 
 def register_tools(mcp):
     """Registra i tool per archivi con l'istanza del server MCP."""
@@ -16,7 +16,7 @@ def register_tools(mcp):
     @mcp.tool()
     def create_zip_archive(file_list: str, archive_name: str = "", compression_level: int = 6) -> str:
         """
-        Simula la creazione di un archivio ZIP.
+        Simula la creazione di un archivio ZIP con analisi avanzata.
         
         Args:
             file_list: Lista file in formato JSON ["file1.txt", "dir/file2.txt"]
@@ -24,653 +24,878 @@ def register_tools(mcp):
             compression_level: Livello compressione (0-9, 0=nessuna, 9=massima)
         """
         try:
-            # Parse file list
+            # Parse e valida file list
             try:
                 files = json.loads(file_list)
                 if not isinstance(files, list):
-                    return "ERRORE: file_list deve essere un array JSON"
-            except json.JSONDecodeError:
-                return "ERRORE: file_list deve essere un JSON valido"
+                    return "❌ ERRORE: file_list deve essere un array JSON"
+            except json.JSONDecodeError as e:
+                return f"❌ ERRORE: JSON non valido - {str(e)}"
             
             if not files:
-                return "ERRORE: Lista file vuota"
+                return "❌ ERRORE: Lista file vuota"
+            
+            # Valida nomi file
+            invalid_files = []
+            for file_path in files:
+                if not isinstance(file_path, str):
+                    invalid_files.append(f"{file_path} (non è una stringa)")
+                elif not file_path.strip():
+                    invalid_files.append("(percorso vuoto)")
+                elif len(file_path) > 260:  # Limite Windows
+                    invalid_files.append(f"{file_path[:50]}... (percorso troppo lungo)")
+            
+            if invalid_files:
+                return f"❌ ERRORE: File non validi trovati:\n" + "\n".join(f"- {f}" for f in invalid_files[:5])
             
             # Valida compression level
-            if not 0 <= compression_level <= 9:
+            if not isinstance(compression_level, int) or not 0 <= compression_level <= 9:
                 compression_level = 6
+                logging.warning(f"Livello compressione non valido, uso default: {compression_level}")
             
             # Genera nome archivio se non fornito
             if not archive_name:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 archive_name = f"archive_{timestamp}.zip"
-            elif not archive_name.endswith('.zip'):
+            elif not archive_name.lower().endswith('.zip'):
                 archive_name += '.zip'
             
-            # Simula analisi file
-            total_files = len(files)
-            estimated_size = sum(len(f) * 100 for f in files)  # Stima approssimativa
+            # Analisi avanzata file
+            analysis = _analyze_file_structure(files)
             
-            # Analizza struttura directory
-            directories = set()
-            file_types = {}
+            # Calcola dimensioni stimate
+            size_estimation = _estimate_compression(files, compression_level, "zip")
             
-            for file_path in files:
-                # Estrae directory
-                dir_path = os.path.dirname(file_path)
-                if dir_path:
-                    directories.add(dir_path)
-                
-                # Analizza estensione
-                ext = os.path.splitext(file_path)[1].lower()
-                if not ext:
-                    ext = '[nessuna]'
-                file_types[ext] = file_types.get(ext, 0) + 1
+            # Genera informazioni di sicurezza
+            security_analysis = _analyze_security_risks(files)
             
-            # Simula compressione
-            compression_ratios = {
-                '.txt': 0.4, '.log': 0.3, '.json': 0.5, '.xml': 0.4,
-                '.jpg': 0.95, '.png': 0.98, '.gif': 0.96, '.mp4': 0.99,
-                '.pdf': 0.9, '.zip': 0.98, '.exe': 0.8, '[nessuna]': 0.6
-            }
-            
-            compressed_size = 0
-            for ext, count in file_types.items():
-                ratio = compression_ratios.get(ext, 0.7)
-                ext_size = (estimated_size // total_files) * count
-                compressed_size += int(ext_size * ratio)
-            
-            # Applica effetto compression level
-            level_factor = 1.0 - (compression_level * 0.05)  # Più alto il livello, più compresso
-            compressed_size = int(compressed_size * level_factor)
-            
-            compression_percent = ((estimated_size - compressed_size) / estimated_size * 100) if estimated_size > 0 else 0
+            # Tempo stimato di creazione
+            estimated_time = _estimate_processing_time(analysis['total_size'], "zip", compression_level)
             
             result = f"""📦 ARCHIVIO ZIP SIMULATO
-Nome archivio: {archive_name}
-File inclusi: {total_files}
-Directory: {len(directories)}
-Livello compressione: {compression_level}/9
+┌─────────────────────────────────────────────────────────
+│ Nome archivio: {archive_name}
+│ File inclusi: {analysis['total_files']:,}
+│ Directory: {len(analysis['directories']):,}
+│ Livello compressione: {compression_level}/9
+│ Tempo stimato: {estimated_time}
+│ Generato: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+└─────────────────────────────────────────────────────────
 
-DIMENSIONI:
-Originale stimata: {estimated_size:,} bytes
-Compressa stimata: {compressed_size:,} bytes
-Riduzione: {compression_percent:.1f}%
+📊 DIMENSIONI:
+Originale stimata: {analysis['total_size']:,} bytes ({analysis['total_size']/1024/1024:.1f} MB)
+Compressa stimata: {size_estimation['compressed_size']:,} bytes ({size_estimation['compressed_size']/1024/1024:.1f} MB)
+Riduzione: {size_estimation['compression_ratio']:.1f}%
+Efficienza: {size_estimation['efficiency']}
 
-TIPI DI FILE:"""
+📋 TIPI DI FILE:"""
             
-            for ext, count in sorted(file_types.items()):
-                result += f"\n{ext:10} {count:3d} file"
-            
-            result += f"""
-
-DIRECTORY INCLUSE:"""
-            if directories:
-                for dir_path in sorted(directories)[:10]:
-                    result += f"\n  {dir_path}/"
-                if len(directories) > 10:
-                    result += f"\n  ... e altre {len(directories) - 10} directory"
-            else:
-                result += "\n  (tutti i file nella root)"
-            
-            result += f"""
-
-COMANDO EQUIVALENTE:
-zip -r -{compression_level} {archive_name} {' '.join(files[:5])}{'...' if len(files) > 5 else ''}
-
-💡 NOTA: Questa è una simulazione. Per creare archivi reali, usa strumenti appropriati del sistema operativo."""
-            
-            return result
-            
-        except Exception as e:
-            return f"ERRORE: {str(e)}"
-
-    @mcp.tool()
-    def analyze_archive_structure(archive_type: str, file_list: str) -> str:
-        """
-        Analizza la struttura di un archivio.
-        
-        Args:
-            archive_type: Tipo archivio (zip, tar, tar.gz, tar.bz2)
-            file_list: Lista file nell'archivio in formato JSON
-        """
-        try:
-            # Parse file list
-            try:
-                files = json.loads(file_list)
-                if not isinstance(files, list):
-                    return "ERRORE: file_list deve essere un array JSON"
-            except json.JSONDecodeError:
-                return "ERRORE: file_list deve essere un JSON valido"
-            
-            if not files:
-                return "ERRORE: Lista file vuota"
-            
-            # Analizza struttura
-            analysis = {
-                'total_files': len(files),
-                'directories': set(),
-                'file_types': {},
-                'depth_levels': {},
-                'largest_files': [],
-                'empty_dirs': set(),
-                'duplicates': {}
-            }
-            
-            # Analizza ogni file
-            for file_path in files:
-                # Directory
-                dir_path = os.path.dirname(file_path)
-                if dir_path:
-                    parts = dir_path.split('/')
-                    for i in range(len(parts)):
-                        analysis['directories'].add('/'.join(parts[:i+1]))
-                
-                # Profondità
-                depth = len(file_path.split('/')) - 1
-                analysis['depth_levels'][depth] = analysis['depth_levels'].get(depth, 0) + 1
-                
-                # Tipo file
-                filename = os.path.basename(file_path)
-                ext = os.path.splitext(filename)[1].lower()
-                if not ext:
-                    ext = '[nessuna estensione]'
-                analysis['file_types'][ext] = analysis['file_types'].get(ext, 0) + 1
-                
-                # Possibili duplicati (per nome)
-                if filename in analysis['duplicates']:
-                    analysis['duplicates'][filename].append(file_path)
-                else:
-                    analysis['duplicates'][filename] = [file_path]
-            
-            # Filtra duplicati reali
-            real_duplicates = {name: paths for name, paths in analysis['duplicates'].items() if len(paths) > 1}
-            
-            # Caratteristiche per tipo archivio
-            archive_info = {
-                'zip': {
-                    'compression': 'Deflate/Store',
-                    'encryption': 'AES-256 supportata',
-                    'metadata': 'Timestamp, attributi file',
-                    'max_size': '4GB per file (ZIP64 per maggiori)'
-                },
-                'tar': {
-                    'compression': 'Nessuna (solo archiviazione)',
-                    'encryption': 'Non supportata nativamente',
-                    'metadata': 'UNIX permissions, ownership, timestamp',
-                    'max_size': 'Praticamente illimitata'
-                },
-                'tar.gz': {
-                    'compression': 'Gzip',
-                    'encryption': 'Non supportata nativamente',
-                    'metadata': 'UNIX permissions, ownership, timestamp',
-                    'max_size': 'Praticamente illimitata'
-                },
-                'tar.bz2': {
-                    'compression': 'Bzip2 (migliore compressione)',
-                    'encryption': 'Non supportata nativamente',
-                    'metadata': 'UNIX permissions, ownership, timestamp',
-                    'max_size': 'Praticamente illimitata'
-                }
-            }
-            
-            info = archive_info.get(archive_type, {})
-            
-            result = f"""📊 ANALISI STRUTTURA ARCHIVIO
-Tipo: {archive_type.upper()}
-File totali: {analysis['total_files']:,}
-Directory: {len(analysis['directories']):,}
-
-CARATTERISTICHE FORMATO:
-Compressione: {info.get('compression', 'N/A')}
-Crittografia: {info.get('encryption', 'N/A')}
-Metadata: {info.get('metadata', 'N/A')}
-Dimensione max: {info.get('max_size', 'N/A')}
-
-STRUTTURA DIRECTORY:
-Profondità massima: {max(analysis['depth_levels'].keys()) if analysis['depth_levels'] else 0}"""
-            
-            for depth in sorted(analysis['depth_levels'].keys()):
-                count = analysis['depth_levels'][depth]
-                result += f"\nLivello {depth}: {count} file"
-            
-            result += f"""
-
-TIPI DI FILE:"""
-            for ext, count in sorted(analysis['file_types'].items(), key=lambda x: x[1], reverse=True)[:10]:
-                percentage = count / analysis['total_files'] * 100
-                result += f"\n{ext:20} {count:5d} file ({percentage:5.1f}%)"
+            for ext, info in sorted(analysis['file_types'].items(), key=lambda x: x[1]['count'], reverse=True)[:10]:
+                count = info['count']
+                size_mb = info['size'] / 1024 / 1024
+                result += f"\n{ext:15} {count:4d} file ({size_mb:6.1f} MB)"
             
             if len(analysis['file_types']) > 10:
                 result += f"\n... e altri {len(analysis['file_types']) - 10} tipi"
             
-            # Directory principali
-            if analysis['directories']:
-                top_dirs = {}
-                for dir_path in analysis['directories']:
-                    top_level = dir_path.split('/')[0]
-                    top_dirs[top_level] = top_dirs.get(top_level, 0) + 1
-                
-                result += f"""
+            result += f"""
 
-DIRECTORY PRINCIPALI:"""
-                for dir_name, count in sorted(top_dirs.items(), key=lambda x: x[1], reverse=True)[:5]:
-                    result += f"\n{dir_name:20} {count:3d} sottodirectory"
+📁 STRUTTURA DIRECTORY:
+Profondità massima: {analysis['max_depth']} livelli
+Directory vuote: {analysis['empty_dirs']}"""
             
-            # Duplicati
-            if real_duplicates:
+            if analysis['top_directories']:
+                result += f"\nDirectory principali:"
+                for dir_name, count in analysis['top_directories'][:5]:
+                    result += f"\n  {dir_name}: {count} file"
+            
+            # Aggiungi analisi sicurezza se ci sono problemi
+            if security_analysis['risks']:
                 result += f"""
 
-POSSIBILI DUPLICATI ({len(real_duplicates)}):"""
-                for filename, paths in list(real_duplicates.items())[:5]:
-                    result += f"\n{filename}: {len(paths)} occorrenze"
+⚠️  ANALISI SICUREZZA:"""
+                for risk in security_analysis['risks'][:3]:
+                    result += f"\n- {risk}"
+                if len(security_analysis['risks']) > 3:
+                    result += f"\n... e altri {len(security_analysis['risks']) - 3} problemi"
+            
+            result += f"""
+
+🔧 COMANDO EQUIVALENTE:
+# Comando base
+zip -r -{compression_level} {archive_name} {' '.join(f'"{f}"' for f in files[:3])}{'...' if len(files) > 3 else ''}
+
+# Con esclusioni tipiche
+zip -r -{compression_level} {archive_name} . -x "*.tmp" "*.log" ".DS_Store" "Thumbs.db"
+
+# Con progress e test
+zip -r -{compression_level} {archive_name} . && zip -T {archive_name}
+
+💡 SUGGERIMENTI OTTIMIZZAZIONE:
+{chr(10).join(f'• {tip}' for tip in size_estimation['optimization_tips'])}"""
+            
+            return result
+            
+        except Exception as e:
+            logging.error(f"Errore in create_zip_archive: {e}")
+            return f"❌ ERRORE INTERNO: {str(e)}"
+
+    @mcp.tool()
+    def analyze_archive_structure(archive_type: str, file_list: str) -> str:
+        """
+        Analizza la struttura di un archivio con controlli avanzati.
+        
+        Args:
+            archive_type: Tipo archivio (zip, tar, tar.gz, tar.bz2, tar.xz, 7z, rar)
+            file_list: Lista file nell'archivio in formato JSON
+        """
+        try:
+            # Parse e valida file list
+            try:
+                files = json.loads(file_list)
+                if not isinstance(files, list):
+                    return "❌ ERRORE: file_list deve essere un array JSON"
+            except json.JSONDecodeError as e:
+                return f"❌ ERRORE: JSON non valido - {str(e)}"
+            
+            if not files:
+                return "❌ ERRORE: Lista file vuota"
+            
+            # Valida tipo archivio
+            supported_types = ['zip', 'tar', 'tar.gz', 'tar.bz2', 'tar.xz', '7z', 'rar', 'tar.lz4', 'tar.zst']
+            if archive_type.lower() not in supported_types:
+                return f"❌ ERRORE: Tipo '{archive_type}' non supportato. Disponibili: {', '.join(supported_types)}"
+            
+            # Analisi completa struttura
+            analysis = _analyze_file_structure(files)
+            
+            # Analisi duplicati avanzata
+            duplicates_analysis = _analyze_duplicates(files)
+            
+            # Analisi percorsi problematici
+            path_analysis = _analyze_path_issues(files)
+            
+            # Caratteristiche dettagliate per tipo archivio
+            format_details = _get_archive_format_details(archive_type.lower())
+            
+            result = f"""📊 ANALISI STRUTTURA ARCHIVIO
+┌─────────────────────────────────────────────────────────
+│ Tipo: {archive_type.upper()}
+│ File totali: {analysis['total_files']:,}
+│ Directory: {len(analysis['directories']):,}
+│ Dimensione totale: {analysis['total_size']/1024/1024:.1f} MB
+│ Analizzato: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+└─────────────────────────────────────────────────────────
+
+📦 CARATTERISTICHE FORMATO:
+Compressione: {format_details['compression']}
+Crittografia: {format_details['encryption']}
+Metadata: {format_details['metadata']}
+Dimensione max file: {format_details['max_file_size']}
+Supporto Unicode: {format_details['unicode_support']}
+Streaming: {format_details['streaming_support']}
+
+📁 STRUTTURA DIRECTORY:
+Profondità massima: {analysis['max_depth']} livelli
+Directory vuote: {analysis['empty_dirs']}
+Percorsi lunghi: {path_analysis['long_paths']} (>100 caratteri)
+Caratteri speciali: {path_analysis['special_chars']} file"""
+            
+            # Distribuzione per profondità
+            if analysis['depth_distribution']:
+                result += f"\n\nDistribuzione per livello:"
+                for depth in sorted(analysis['depth_distribution'].keys()):
+                    count = analysis['depth_distribution'][depth]
+                    result += f"\n  Livello {depth}: {count:,} file"
+            
+            result += f"""
+
+📄 TIPI DI FILE (Top 15):"""
+            for ext, info in sorted(analysis['file_types'].items(), key=lambda x: x[1]['count'], reverse=True)[:15]:
+                count = info['count']
+                size_mb = info['size'] / 1024 / 1024
+                percentage = count / analysis['total_files'] * 100
+                result += f"\n{ext:20} {count:6,} file ({percentage:5.1f}%) - {size_mb:8.1f} MB"
+            
+            # Directory principali con statistiche
+            if analysis['top_directories']:
+                result += f"""
+
+📂 DIRECTORY PRINCIPALI:"""
+                for dir_name, count in analysis['top_directories'][:10]:
+                    result += f"\n{dir_name:30} {count:5,} file"
+            
+            # Analisi duplicati dettagliata
+            if duplicates_analysis['duplicates']:
+                result += f"""
+
+🔄 DUPLICATI RILEVATI ({len(duplicates_analysis['duplicates'])}):
+Spazio potenzialmente recuperabile: {duplicates_analysis['waste_size']/1024/1024:.1f} MB"""
+                
+                for filename, paths in list(duplicates_analysis['duplicates'].items())[:5]:
+                    result += f"\n{filename} ({len(paths)} copie):"
                     for path in paths[:3]:
-                        result += f"\n  - {path}"
+                        result += f"\n  • {path}"
                     if len(paths) > 3:
-                        result += f"\n  ... e altre {len(paths) - 3}"
+                        result += f"\n  • ... e altre {len(paths) - 3} copie"
                 
-                if len(real_duplicates) > 5:
-                    result += f"\n... e altri {len(real_duplicates) - 5} file duplicati"
+                if len(duplicates_analysis['duplicates']) > 5:
+                    result += f"\n... e altri {len(duplicates_analysis['duplicates']) - 5} file duplicati"
             
-            # Raccomandazioni
+            # Problemi nei percorsi
+            if path_analysis['issues']:
+                result += f"""
+
+⚠️  PROBLEMI NEI PERCORSI:"""
+                for issue in path_analysis['issues'][:5]:
+                    result += f"\n• {issue}"
+                if len(path_analysis['issues']) > 5:
+                    result += f"\n• ... e altri {len(path_analysis['issues']) - 5} problemi"
+            
+            # Raccomandazioni intelligenti
+            recommendations = _generate_archive_recommendations(analysis, duplicates_analysis, path_analysis, archive_type)
+            
             result += f"""
 
 💡 RACCOMANDAZIONI:"""
+            for rec in recommendations[:8]:
+                result += f"\n• {rec}"
             
-            recommendations = []
-            if analysis['total_files'] > 10000:
-                recommendations.append("Archivio molto grande: considera di dividere in più parti")
-            
-            if len(real_duplicates) > 10:
-                recommendations.append("Molti duplicati: verifica file ridondanti prima dell'archiviazione")
-            
-            if max(analysis['depth_levels'].keys()) > 8:
-                recommendations.append("Struttura molto profonda: considera di riorganizzare le directory")
-            
-            text_files = analysis['file_types'].get('.txt', 0) + analysis['file_types'].get('.log', 0)
-            if text_files > analysis['total_files'] * 0.7:
-                recommendations.append("Molti file di testo: formato con compressione alta consigliato (tar.bz2)")
-            
-            media_files = sum(analysis['file_types'].get(ext, 0) for ext in ['.jpg', '.png', '.mp4', '.mp3'])
-            if media_files > analysis['total_files'] * 0.5:
-                recommendations.append("Molti file media: compressione aggiuntiva poco efficace")
-            
-            if not recommendations:
-                recommendations.append("Struttura archivio normale, nessuna ottimizzazione particolare necessaria")
-            
-            result += '\n'.join(f"\n- {rec}" for rec in recommendations)
+            # Comandi utili per il tipo di archivio
+            useful_commands = _get_useful_commands(archive_type, analysis)
+            result += f"""
+
+🔧 COMANDI UTILI:"""
+            for cmd_desc, cmd in useful_commands.items():
+                result += f"\n{cmd_desc}:\n  {cmd}"
             
             return result
             
         except Exception as e:
-            return f"ERRORE: {str(e)}"
+            logging.error(f"Errore in analyze_archive_structure: {e}")
+            return f"❌ ERRORE INTERNO: {str(e)}"
 
     @mcp.tool()
-    def compare_archive_formats(file_types: str, total_size_mb: int = 100) -> str:
+    def estimate_archive_performance(source_size_mb: float, archive_type: str, compression_level: int = 6, 
+                                   cpu_cores: int = 4, storage_type: str = "ssd") -> str:
         """
-        Confronta diversi formati di archivio per efficienza.
+        Stima le prestazioni di creazione/estrazione di un archivio.
         
         Args:
-            file_types: Tipi di file predominanti (text, media, mixed, code, binary)
-            total_size_mb: Dimensione totale stimata in MB
+            source_size_mb: Dimensione sorgente in MB
+            archive_type: Tipo archivio (zip, tar.gz, tar.bz2, tar.xz, 7z)
+            compression_level: Livello compressione (0-9)
+            cpu_cores: Numero core CPU disponibili
+            storage_type: Tipo storage (hdd, ssd, nvme, network)
         """
         try:
-            # Definisce caratteristiche dei formati
-            formats = {
-                'ZIP': {
-                    'compression': {'text': 0.3, 'media': 0.95, 'mixed': 0.6, 'code': 0.4, 'binary': 0.7},
-                    'speed': {'compress': 'Media', 'decompress': 'Veloce'},
-                    'features': ['Compressione selettiva', 'Crittografia AES', 'Aggiornamento file'],
-                    'compatibility': 'Universale',
-                    'use_cases': ['Distribuzione software', 'Backup personali', 'Archivi web']
-                },
-                'TAR': {
-                    'compression': {'text': 1.0, 'media': 1.0, 'mixed': 1.0, 'code': 1.0, 'binary': 1.0},
-                    'speed': {'compress': 'Velocissima', 'decompress': 'Velocissima'},
-                    'features': ['Preserva permissions UNIX', 'Streaming', 'Concatenazione'],
-                    'compatibility': 'UNIX/Linux primariamente',
-                    'use_cases': ['Backup sistema', 'Distribuzione codice', 'Container Docker']
-                },
-                'TAR.GZ': {
-                    'compression': {'text': 0.35, 'media': 0.97, 'mixed': 0.65, 'code': 0.45, 'binary': 0.75},
-                    'speed': {'compress': 'Media', 'decompress': 'Media'},
-                    'features': ['Buona compressione', 'Streaming', 'Permissions UNIX'],
-                    'compatibility': 'UNIX/Linux, Windows con tool',
-                    'use_cases': ['Distribuzione software Linux', 'Backup di testo', 'Codice sorgente']
-                },
-                'TAR.BZ2': {
-                    'compression': {'text': 0.25, 'media': 0.96, 'mixed': 0.55, 'code': 0.35, 'binary': 0.65},
-                    'speed': {'compress': 'Lenta', 'decompress': 'Lenta'},
-                    'features': ['Ottima compressione', 'Recupero errori', 'Permissions UNIX'],
-                    'compatibility': 'UNIX/Linux, Windows con tool',
-                    'use_cases': ['Archivi a lungo termine', 'Backup con spazio limitato']
-                },
-                'TAR.XZ': {
-                    'compression': {'text': 0.2, 'media': 0.94, 'mixed': 0.5, 'code': 0.3, 'binary': 0.6},
-                    'speed': {'compress': 'Molto lenta', 'decompress': 'Media'},
-                    'features': ['Compressione eccellente', 'Multithreading', 'Integrità'],
-                    'compatibility': 'Moderno UNIX/Linux',
-                    'use_cases': ['Distribuzione software', 'Archivi critici', 'Kernel Linux']
-                },
-                '7Z': {
-                    'compression': {'text': 0.15, 'media': 0.92, 'mixed': 0.45, 'code': 0.25, 'binary': 0.55},
-                    'speed': {'compress': 'Lenta', 'decompress': 'Media'},
-                    'features': ['Compressione superiore', 'Crittografia AES', 'Volumi multipli'],
-                    'compatibility': 'Windows primariamente, tool disponibili',
-                    'use_cases': ['Massima compressione', 'Archivi protetti', 'Backup critici']
-                }
-            }
+            if source_size_mb <= 0:
+                return "❌ ERRORE: Dimensione deve essere positiva"
             
-            file_types = file_types.lower()
-            if file_types not in ['text', 'media', 'mixed', 'code', 'binary']:
-                file_types = 'mixed'
-            
-            result = f"""📊 CONFRONTO FORMATI ARCHIVIO
-Tipo contenuto: {file_types.title()}
-Dimensione originale: {total_size_mb} MB
-
-ANALISI COMPRESSIONE:"""
-            
-            # Calcola dimensioni compresse
-            format_results = []
-            for format_name, props in formats.items():
-                compressed_ratio = props['compression'][file_types]
-                compressed_size = total_size_mb * compressed_ratio
-                saved_space = total_size_mb - compressed_size
-                saved_percent = (1 - compressed_ratio) * 100
+            if not 1 <= cpu_cores <= 128:
+                cpu_cores = 4
                 
-                format_results.append({
-                    'name': format_name,
-                    'size': compressed_size,
-                    'saved': saved_space,
-                    'percent': saved_percent,
-                    'props': props
-                })
+            if storage_type not in ['hdd', 'ssd', 'nvme', 'network']:
+                storage_type = 'ssd'
             
-            # Ordina per dimensione compressa
-            format_results.sort(key=lambda x: x['size'])
-            
-            for i, fmt in enumerate(format_results, 1):
-                result += f"""
-{i}. {fmt['name']:8} {fmt['size']:6.1f} MB ({fmt['percent']:4.1f}% riduzione)
-   Velocità: Compr.{fmt['props']['speed']['compress']:10} | Decompr.{fmt['props']['speed']['decompress']}
-   Compatibilità: {fmt['props']['compatibility']}"""
-            
-            result += f"""
-
-CARATTERISTICHE DETTAGLIATE:"""
-            
-            for fmt in format_results:
-                result += f"""
-
-{fmt['name']}:
-  Dimensione: {fmt['size']:.1f} MB (risparmio: {fmt['saved']:.1f} MB)
-  Velocità compressione: {fmt['props']['speed']['compress']}
-  Velocità decompressione: {fmt['props']['speed']['decompress']}
-  Funzionalità: {', '.join(fmt['props']['features'])}
-  Casi d'uso: {', '.join(fmt['props']['use_cases'])}"""
-            
-            # Raccomandazioni
-            result += f"""
-
-🎯 RACCOMANDAZIONI:
-
-Per {file_types}:"""
-            
-            best_compression = format_results[0]
-            fastest = min(format_results, key=lambda x: 0 if x['props']['speed']['compress'] == 'Velocissima' else 1 if x['props']['speed']['compress'] == 'Veloce' else 2)
-            most_compatible = next((f for f in format_results if 'Universale' in f['props']['compatibility']), format_results[0])
-            
-            result += f"""
-Massima compressione: {best_compression['name']} ({best_compression['percent']:.1f}% riduzione)
-Massima velocità: {fastest['name']} ({fastest['props']['speed']['compress']} compressione)
-Massima compatibilità: {most_compatible['name']} ({most_compatible['props']['compatibility']})"""
-            
-            # Suggerimenti specifici per tipo
-            suggestions = {
-                'text': "Per file di testo: TAR.XZ o 7Z per massima compressione, TAR.GZ per bilanciamento",
-                'media': "Per file media: ZIP o TAR per velocità (compressione poco efficace su media già compressi)",
-                'code': "Per codice sorgente: TAR.BZ2 o TAR.XZ, ZIP per distribuzioni cross-platform",
-                'binary': "Per binari: 7Z per massima compressione, ZIP per compatibilità",
-                'mixed': "Per contenuti misti: ZIP per versatilità, TAR.GZ per sistemi UNIX"
+            # Fattori di prestazione per tipo storage
+            storage_factors = {
+                'hdd': {'read': 100, 'write': 80, 'seek': 0.1},      # MB/s
+                'ssd': {'read': 500, 'write': 400, 'seek': 1.0},     # MB/s
+                'nvme': {'read': 3000, 'write': 2500, 'seek': 1.0},  # MB/s
+                'network': {'read': 50, 'write': 30, 'seek': 0.01}    # MB/s (1Gbps network)
             }
             
-            result += f"""
-
-💡 SUGGERIMENTO SPECIFICO:
-{suggestions[file_types]}
-
-⚡ CONSIDERAZIONI AGGIUNTIVE:
-- Per archivi >1GB: considera formati con supporto streaming (TAR.*)
-- Per archivi sicuri: ZIP con AES o 7Z con crittografia
-- Per backup automatici: TAR.GZ per velocità e compressione bilanciata
-- Per distribuzione: ZIP per compatibilità universale"""
-            
-            return result
-            
-        except Exception as e:
-            return f"ERRORE: {str(e)}"
-
-    @mcp.tool()
-    def generate_archive_script(archive_type: str, source_dir: str, archive_name: str, options: str = "") -> str:
-        """
-        Genera script per creare archivi con comandi di sistema.
-        
-        Args:
-            archive_type: Tipo archivio (zip, tar, tar.gz, tar.bz2, tar.xz, 7z)
-            source_dir: Directory sorgente
-            archive_name: Nome archivio di destinazione
-            options: Opzioni aggiuntive (exclude, compression_level, etc.)
-        """
-        try:
-            # Parse opzioni
-            opts = {}
-            if options:
-                for opt in options.split(','):
-                    if '=' in opt:
-                        key, value = opt.split('=', 1)
-                        opts[key.strip()] = value.strip()
-            
-            exclude_patterns = opts.get('exclude', '').split(';') if opts.get('exclude') else []
-            compression_level = opts.get('compression_level', '6')
-            password = opts.get('password', '')
-            
-            # Genera comandi
-            commands = {
+            # Caratteristiche algoritmi compressione
+            compression_algos = {
                 'zip': {
-                    'command': f"zip -r -{compression_level} {archive_name} {source_dir}",
-                    'with_exclude': f"zip -r -{compression_level} {archive_name} {source_dir} {' '.join('-x ' + pattern for pattern in exclude_patterns)}",
-                    'with_password': f"zip -r -{compression_level} -P {password} {archive_name} {source_dir}",
-                    'description': "Archivio ZIP con compressione Deflate"
+                    'cpu_intensive': 0.3, 'parallel': False, 'memory_mb': 50,
+                    'compression_ratios': [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.45, 0.4, 0.35, 0.3]
                 },
                 'tar': {
-                    'command': f"tar -cf {archive_name} {source_dir}",
-                    'with_exclude': f"tar --exclude-from=exclude.txt -cf {archive_name} {source_dir}",
-                    'with_password': f"tar -cf - {source_dir} | gpg -c > {archive_name}.gpg",
-                    'description': "Archivio TAR senza compressione"
+                    'cpu_intensive': 0.1, 'parallel': True, 'memory_mb': 20,
+                    'compression_ratios': [1.0] * 10  # No compression
                 },
                 'tar.gz': {
-                    'command': f"tar -czf {archive_name} {source_dir}",
-                    'with_exclude': f"tar --exclude-from=exclude.txt -czf {archive_name} {source_dir}",
-                    'with_password': f"tar -czf - {source_dir} | gpg -c > {archive_name}.gpg",
-                    'description': "Archivio TAR con compressione Gzip"
+                    'cpu_intensive': 0.4, 'parallel': False, 'memory_mb': 100,
+                    'compression_ratios': [1.0, 0.85, 0.75, 0.65, 0.55, 0.45, 0.4, 0.35, 0.3, 0.25]
                 },
                 'tar.bz2': {
-                    'command': f"tar -cjf {archive_name} {source_dir}",
-                    'with_exclude': f"tar --exclude-from=exclude.txt -cjf {archive_name} {source_dir}",
-                    'with_password': f"tar -cjf - {source_dir} | gpg -c > {archive_name}.gpg",
-                    'description': "Archivio TAR con compressione Bzip2"
+                    'cpu_intensive': 0.8, 'parallel': True, 'memory_mb': 200,
+                    'compression_ratios': [1.0, 0.8, 0.7, 0.6, 0.5, 0.4, 0.35, 0.3, 0.25, 0.2]
                 },
                 'tar.xz': {
-                    'command': f"tar -cJf {archive_name} {source_dir}",
-                    'with_exclude': f"tar --exclude-from=exclude.txt -cJf {archive_name} {source_dir}",
-                    'with_password': f"tar -cJf - {source_dir} | gpg -c > {archive_name}.gpg",
-                    'description': "Archivio TAR con compressione XZ"
+                    'cpu_intensive': 0.9, 'parallel': True, 'memory_mb': 400,
+                    'compression_ratios': [1.0, 0.75, 0.65, 0.55, 0.45, 0.35, 0.3, 0.25, 0.2, 0.15]
                 },
                 '7z': {
-                    'command': f"7z a -mx={compression_level} {archive_name} {source_dir}",
-                    'with_exclude': f"7z a -mx={compression_level} {archive_name} {source_dir} {' '.join('-xr!' + pattern for pattern in exclude_patterns)}",
-                    'with_password': f"7z a -mx={compression_level} -p{password} {archive_name} {source_dir}",
-                    'description': "Archivio 7Z con compressione LZMA"
+                    'cpu_intensive': 0.95, 'parallel': True, 'memory_mb': 600,
+                    'compression_ratios': [1.0, 0.7, 0.6, 0.5, 0.4, 0.3, 0.25, 0.2, 0.15, 0.1]
                 }
             }
             
-            if archive_type not in commands:
-                available = ', '.join(commands.keys())
-                return f"ERRORE: Tipo '{archive_type}' non supportato. Disponibili: {available}"
+            if archive_type not in compression_algos:
+                available = ', '.join(compression_algos.keys())
+                return f"❌ ERRORE: Tipo '{archive_type}' non supportato. Disponibili: {available}"
             
-            cmd_info = commands[archive_type]
+            algo = compression_algos[archive_type]
+            storage = storage_factors[storage_type]
             
-            # Script bash completo
-            bash_script = f"""#!/bin/bash
-# Script di archiviazione automatica
-# Generato: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-
-set -e  # Termina in caso di errore
-
-# Variabili
-SOURCE_DIR="{source_dir}"
-ARCHIVE_NAME="{archive_name}"
-ARCHIVE_TYPE="{archive_type}"
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-
-echo "🚀 Avvio creazione archivio..."
-echo "Tipo: $ARCHIVE_TYPE"
-echo "Sorgente: $SOURCE_DIR"
-echo "Destinazione: $ARCHIVE_NAME"
-echo "Timestamp: $TIMESTAMP"
-
-# Verifica prerequisiti
-if [ ! -d "$SOURCE_DIR" ]; then
-    echo "❌ ERRORE: Directory sorgente non trovata: $SOURCE_DIR"
-    exit 1
-fi
-
-# Controlla spazio disco
-AVAILABLE_SPACE=$(df . | tail -1 | awk '{{print $4}}')
-echo "📊 Spazio disponibile: ${{AVAILABLE_SPACE}}K"
-
-# Crea backup del nome archivio se esiste
-if [ -f "$ARCHIVE_NAME" ]; then
-    echo "⚠️  Archivio esistente trovato, creo backup..."
-    mv "$ARCHIVE_NAME" "${{ARCHIVE_NAME}}.backup.$TIMESTAMP"
-fi
-
-echo "📦 Creazione archivio in corso..."
-START_TIME=$(date +%s)
-
-# Comando principale
-{cmd_info['command']}
-
-END_TIME=$(date +%s)
-DURATION=$((END_TIME - START_TIME))
-
-if [ $? -eq 0 ]; then
-    ARCHIVE_SIZE=$(ls -lh "$ARCHIVE_NAME" | awk '{{print $5}}')
-    echo "✅ Archivio creato con successo!"
-    echo "📊 Dimensione: $ARCHIVE_SIZE"
-    echo "⏱️  Durata: ${{DURATION}}s"
-else
-    echo "❌ Errore durante la creazione dell'archivio"
-    exit 1
-fi"""
+            # Calcola tempo di compressione
+            compression_ratio = algo['compression_ratios'][min(compression_level, 9)]
+            compressed_size_mb = source_size_mb * compression_ratio
             
-            # Script PowerShell per Windows
-            powershell_script = f"""# Script PowerShell per archiviazione
-# Generato: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-
-$ErrorActionPreference = "Stop"
-
-# Variabili
-$SourceDir = "{source_dir}"
-$ArchiveName = "{archive_name}"
-$ArchiveType = "{archive_type}"
-$Timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
-
-Write-Host "🚀 Avvio creazione archivio..." -ForegroundColor Green
-Write-Host "Tipo: $ArchiveType"
-Write-Host "Sorgente: $SourceDir"
-Write-Host "Destinazione: $ArchiveName"
-
-# Verifica prerequisiti
-if (-not (Test-Path $SourceDir)) {{
-    Write-Host "❌ ERRORE: Directory sorgente non trovata: $SourceDir" -ForegroundColor Red
-    exit 1
-}}
-
-# Backup archivio esistente
-if (Test-Path $ArchiveName) {{
-    Write-Host "⚠️  Archivio esistente trovato, creo backup..."
-    Move-Item $ArchiveName "${{ArchiveName}}.backup.$Timestamp"
-}}
-
-Write-Host "📦 Creazione archivio in corso..."
-$StartTime = Get-Date
-
-try {{"""
+            # Tempo CPU per compressione
+            cpu_factor = algo['cpu_intensive'] * (compression_level / 9.0)
+            base_cpu_time = source_size_mb * cpu_factor / 100  # secondi per MB
             
-            if archive_type == 'zip':
-                powershell_script += f"""
-    Compress-Archive -Path $SourceDir -DestinationPath $ArchiveName -CompressionLevel Optimal"""
+            # Parallelizzazione
+            if algo['parallel'] and cpu_cores > 1:
+                parallel_factor = min(cpu_cores, 8) * 0.7  # Non scala linearmente
+                cpu_time = base_cpu_time / parallel_factor
             else:
-                powershell_script += f"""
-    # Per {archive_type}, usa tool esterni come 7-Zip
-    & 7z a -mx={compression_level} $ArchiveName $SourceDir"""
+                cpu_time = base_cpu_time
             
-            powershell_script += f"""
-    
-    $EndTime = Get-Date
-    $Duration = ($EndTime - $StartTime).TotalSeconds
-    $ArchiveSize = (Get-Item $ArchiveName).Length
-    
-    Write-Host "✅ Archivio creato con successo!" -ForegroundColor Green
-    Write-Host "📊 Dimensione: $($ArchiveSize / 1MB) MB"
-    Write-Host "⏱️  Durata: ${{Duration}}s"
-}} catch {{
-    Write-Host "❌ Errore durante la creazione dell'archivio: $_" -ForegroundColor Red
-    exit 1
-}}"""
+            # Tempo I/O
+            read_time = source_size_mb / storage['read']
+            write_time = compressed_size_mb / storage['write']
+            io_time = read_time + write_time
             
-            result = f"""📜 SCRIPT ARCHIVIAZIONE GENERATO
-Tipo archivio: {archive_type.upper()}
-Sorgente: {source_dir}
-Destinazione: {archive_name}
-Descrizione: {cmd_info['description']}
-
-COMANDO BASE:
-{cmd_info['command']}"""
+            # Tempo totale (il maggiore tra CPU e I/O)
+            total_time = max(cpu_time, io_time)
             
-            if exclude_patterns:
-                result += f"""
-
-COMANDO CON ESCLUSIONI:
-{cmd_info['with_exclude']}
-
-FILE ESCLUSIONI (exclude.txt):"""
-                for pattern in exclude_patterns:
-                    result += f"\n{pattern}"
+            # Stima estrazione (generalmente più veloce)
+            extraction_time = total_time * 0.3  # Estrazione ~30% del tempo di compressione
             
-            if password:
-                result += f"""
+            # Memoria richiesta
+            memory_required = algo['memory_mb'] + (source_size_mb * 0.1)  # 10% della dimensione sorgente
+            
+            # Throughput
+            compression_throughput = source_size_mb / total_time if total_time > 0 else 0
+            extraction_throughput = source_size_mb / extraction_time if extraction_time > 0 else 0
+            
+            def format_time(seconds):
+                if seconds < 60:
+                    return f"{seconds:.1f}s"
+                elif seconds < 3600:
+                    return f"{seconds/60:.1f}m"
+                else:
+                    return f"{seconds/3600:.1f}h"
+            
+            result = f"""⚡ STIMA PRESTAZIONI ARCHIVIO
+┌─────────────────────────────────────────────────────────
+│ Tipo: {archive_type.upper()}
+│ Dimensione sorgente: {source_size_mb:,.1f} MB
+│ Livello compressione: {compression_level}/9
+│ CPU cores: {cpu_cores}
+│ Storage: {storage_type.upper()}
+│ Stimato: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+└─────────────────────────────────────────────────────────
 
-COMANDO CON PASSWORD:
-{cmd_info['with_password']}"""
+📊 RISULTATI COMPRESSIONE:
+Dimensione compressa: {compressed_size_mb:,.1f} MB
+Riduzione dimensione: {((source_size_mb - compressed_size_mb) / source_size_mb * 100):.1f}%
+Tempo stimato: {format_time(total_time)}
+Throughput: {compression_throughput:.1f} MB/s
+Memoria richiesta: {memory_required:.0f} MB
+
+📈 BREAKDOWN TEMPI COMPRESSIONE:
+Elaborazione CPU: {format_time(cpu_time)} ({'Limitante' if cpu_time >= io_time else 'OK'})
+I/O Storage: {format_time(io_time)} ({'Limitante' if io_time > cpu_time else 'OK'})
+  • Lettura: {format_time(read_time)}
+  • Scrittura: {format_time(write_time)}
+
+📤 ESTRAZIONE:
+Tempo stimato: {format_time(extraction_time)}
+Throughput: {extraction_throughput:.1f} MB/s"""
+            
+            # Confronti con altri formati
+            comparison_results = []
+            for other_type, other_algo in compression_algos.items():
+                if other_type != archive_type:
+                    other_ratio = other_algo['compression_ratios'][compression_level]
+                    other_cpu_factor = other_algo['cpu_intensive'] * (compression_level / 9.0)
+                    other_base_time = source_size_mb * other_cpu_factor / 100
+                    
+                    if other_algo['parallel'] and cpu_cores > 1:
+                        other_cpu_time = other_base_time / (min(cpu_cores, 8) * 0.7)
+                    else:
+                        other_cpu_time = other_base_time
+                    
+                    other_compressed = source_size_mb * other_ratio
+                    other_write_time = other_compressed / storage['write']
+                    other_total_time = max(other_cpu_time, read_time + other_write_time)
+                    
+                    comparison_results.append({
+                        'type': other_type,
+                        'time': other_total_time,
+                        'size': other_compressed,
+                        'ratio': other_ratio
+                    })
+            
+            comparison_results.sort(key=lambda x: x['time'])
             
             result += f"""
 
-SCRIPT BASH COMPLETO:
-{bash_script}
+🆚 CONFRONTO CON ALTRI FORMATI:"""
+            for i, comp in enumerate(comparison_results[:4], 1):
+                time_diff = comp['time'] - total_time
+                size_diff = comp['size'] - compressed_size_mb
+                result += f"""
+{i}. {comp['type'].upper()}: {format_time(comp['time'])} ({'+' if time_diff > 0 else ''}{format_time(abs(time_diff))})
+   Dimensione: {comp['size']:.1f} MB ({'+' if size_diff > 0 else ''}{size_diff:.1f} MB)"""
+            
+            # Raccomandazioni
+            recommendations = []
+            
+            if cpu_time > io_time * 2:
+                recommendations.append("CPU è il collo di bottiglia - considera più core o livello compressione minore")
+            elif io_time > cpu_time * 2:
+                recommendations.append(f"Storage è il collo di bottleneck - considera upgrade a storage più veloce")
+            
+            if memory_required > 8000:
+                recommendations.append("Utilizzo memoria alto - monitor RAM durante l'operazione")
+            
+            if total_time > 3600:
+                recommendations.append("Operazione lunga - considera divisione in archivi più piccoli")
+            
+            if compression_ratio > 0.9:
+                recommendations.append("Compressione poco efficace - file già compressi o binari")
+            
+            if not recommendations:
+                recommendations.append("Configurazione bilanciata per il carico di lavoro")
+            
+            result += f"""
 
-SCRIPT POWERSHELL:
-{powershell_script}
+💡 RACCOMANDAZIONI:"""
+            for rec in recommendations:
+                result += f"\n• {rec}"
+            
+            # Comandi ottimizzati
+            optimized_commands = _get_optimized_commands(archive_type, compression_level, cpu_cores)
+            result += f"""
 
-💡 ISTRUZIONI USO:
-1. Salva lo script in un file (.sh per Linux/Mac, .ps1 per Windows)
-2. Rendi eseguibile: chmod +x script.sh (Linux/Mac)
-3. Esegui: ./script.sh o PowerShell -ExecutionPolicy Bypass -File script.ps1
-4. Verifica l'archivio creato
-5. Testa l'estrazione prima dell'uso in produzione"""
+🔧 COMANDI OTTIMIZZATI:
+{optimized_commands}
+
+📝 NOTE:
+• Tempi basati su hardware di riferimento
+• Prestazioni reali possono variare del ±30%
+• Test su campione piccolo prima di operazioni massive
+• Monitor risorse sistema durante l'esecuzione"""
             
             return result
             
         except Exception as e:
-            return f"ERRORE: {str(e)}"
+            logging.error(f"Errore in estimate_archive_performance: {e}")
+            return f"❌ ERRORE INTERNO: {str(e)}"
+
+def _analyze_file_structure(files: List[str]) -> Dict[str, Any]:
+    """Analizza la struttura dei file forniti."""
+    analysis = {
+        'total_files': len(files),
+        'total_size': 0,
+        'directories': set(),
+        'file_types': {},
+        'max_depth': 0,
+        'empty_dirs': 0,
+        'depth_distribution': {},
+        'top_directories': []
+    }
+    
+    # Simula dimensioni file basate su estensione e nome
+    size_estimates = {
+        '.txt': (1024, 50000), '.log': (500, 100000), '.json': (512, 10000),
+        '.py': (1000, 20000), '.js': (800, 15000), '.html': (2000, 50000),
+        '.jpg': (100000, 5000000), '.png': (50000, 2000000), '.gif': (20000, 500000),
+        '.mp4': (10000000, 500000000), '.mp3': (3000000, 10000000),
+        '.pdf': (100000, 10000000), '.doc': (50000, 5000000),
+        '.zip': (1000000, 100000000), '.exe': (500000, 50000000),
+        '': (1000, 10000)  # File senza estensione
+    }
+    
+    dir_file_count = {}
+    
+    for file_path in files:
+        # Profondità
+        depth = len(file_path.split('/')) - 1
+        analysis['max_depth'] = max(analysis['max_depth'], depth)
+        analysis['depth_distribution'][depth] = analysis['depth_distribution'].get(depth, 0) + 1
+        
+        # Directory
+        dir_path = os.path.dirname(file_path)
+        if dir_path:
+            analysis['directories'].add(dir_path)
+            top_dir = dir_path.split('/')[0]
+            dir_file_count[top_dir] = dir_file_count.get(top_dir, 0) + 1
+        
+        # Tipo file e dimensione stimata
+        ext = os.path.splitext(file_path)[1].lower()
+        if not ext:
+            ext = '[nessuna]'
+        
+        min_size, max_size = size_estimates.get(ext, size_estimates[''])
+        # Stima dimensione basata su lunghezza nome file
+        estimated_size = min_size + (len(os.path.basename(file_path)) * 100)
+        estimated_size = min(estimated_size, max_size)
+        
+        if ext not in analysis['file_types']:
+            analysis['file_types'][ext] = {'count': 0, 'size': 0}
+        
+        analysis['file_types'][ext]['count'] += 1
+        analysis['file_types'][ext]['size'] += estimated_size
+        analysis['total_size'] += estimated_size
+    
+    # Top directory per numero di file
+    analysis['top_directories'] = sorted(dir_file_count.items(), key=lambda x: x[1], reverse=True)
+    
+    return analysis
+
+def _analyze_duplicates(files: List[str]) -> Dict[str, Any]:
+    """Analizza i file duplicati basandosi sui nomi."""
+    duplicates = {}
+    total_waste = 0
+    
+    for file_path in files:
+        filename = os.path.basename(file_path)
+        if filename in duplicates:
+            duplicates[filename].append(file_path)
+        else:
+            duplicates[filename] = [file_path]
+    
+    # Filtra solo i duplicati reali
+    real_duplicates = {name: paths for name, paths in duplicates.items() if len(paths) > 1}
+    
+    # Stima spazio sprecato
+    for filename, paths in real_duplicates.items():
+        # Stima dimensione file
+        ext = os.path.splitext(filename)[1].lower()
+        if ext in ['.jpg', '.png', '.mp4']:
+            avg_size = 1000000  # 1MB per media
+        elif ext in ['.txt', '.log']:
+            avg_size = 10000    # 10KB per testo
+        else:
+            avg_size = 50000    # 50KB default
+        
+        total_waste += avg_size * (len(paths) - 1)  # Spazio per copie extra
+    
+    return {
+        'duplicates': real_duplicates,
+        'waste_size': total_waste,
+        'duplicate_count': len(real_duplicates)
+    }
+
+def _analyze_path_issues(files: List[str]) -> Dict[str, Any]:
+    """Analizza problemi nei percorsi dei file."""
+    issues = []
+    long_paths = 0
+    special_chars = 0
+    
+    for file_path in files:
+        # Percorsi lunghi
+        if len(file_path) > 100:
+            long_paths += 1
+            if len(file_path) > 200:
+                issues.append(f"Percorso molto lungo: {file_path[:50]}...")
+        
+        # Caratteri speciali problematici
+        problematic_chars = ['<', '>', ':', '"', '|', '?', '*']
+        if any(char in file_path for char in problematic_chars):
+            special_chars += 1
+            issues.append(f"Caratteri speciali in: {os.path.basename(file_path)}")
+        
+        # Nomi con spazi multipli o caratteri unicode
+        if '  ' in file_path:
+            issues.append(f"Spazi multipli in: {os.path.basename(file_path)}")
+        
+        # File che iniziano con punto (nascosti)
+        if os.path.basename(file_path).startswith('.') and len(os.path.basename(file_path)) > 1:
+            issues.append(f"File nascosto: {os.path.basename(file_path)}")
+    
+    return {
+        'issues': issues[:10],  # Limita a 10 problemi
+        'long_paths': long_paths,
+        'special_chars': special_chars
+    }
+
+def _estimate_compression(files: List[str], compression_level: int, archive_type: str) -> Dict[str, Any]:
+    """Stima la compressione per i file forniti."""
+    # Analizza tipi di file per stimare compressione
+    analysis = _analyze_file_structure(files)
+    total_size = analysis['total_size']
+    
+    # Fattori di compressione per tipo file
+    compression_factors = {
+        '.txt': 0.3, '.log': 0.25, '.json': 0.4, '.xml': 0.35, '.html': 0.4,
+        '.py': 0.35, '.js': 0.4, '.css': 0.3, '.sql': 0.3,
+        '.jpg': 0.98, '.png': 0.95, '.gif': 0.97, '.bmp': 0.1,
+        '.mp4': 0.99, '.mp3': 0.98, '.avi': 0.95,
+        '.pdf': 0.9, '.doc': 0.8, '.docx': 0.7,
+        '.zip': 0.98, '.rar': 0.98, '.7z': 0.98,
+        '.exe': 0.85, '.dll': 0.8,
+        '[nessuna]': 0.6
+    }
+    
+    # Calcola dimensione compressa
+    compressed_size = 0
+    for ext, info in analysis['file_types'].items():
+        factor = compression_factors.get(ext, 0.7)
+        
+        # Ajusta per livello compressione
+        level_adjustment = 1.0 - (compression_level * 0.05)
+        adjusted_factor = factor * level_adjustment
+        
+        compressed_size += info['size'] * adjusted_factor
+    
+    compression_ratio = ((total_size - compressed_size) / total_size * 100) if total_size > 0 else 0
+    
+    # Determina efficienza
+    if compression_ratio > 70:
+        efficiency = "Eccellente"
+    elif compression_ratio > 50:
+        efficiency = "Buona"
+    elif compression_ratio > 30:
+        efficiency = "Media"
+    elif compression_ratio > 10:
+        efficiency = "Bassa"
+    else:
+        efficiency = "Scarsa"
+    
+    # Suggerimenti ottimizzazione
+    optimization_tips = []
+    
+    text_ratio = sum(info['size'] for ext, info in analysis['file_types'].items() 
+                    if ext in ['.txt', '.log', '.json', '.py', '.js']) / total_size
+    
+    if text_ratio > 0.7:
+        optimization_tips.append("Molti file di testo: considera tar.xz o 7z per massima compressione")
+    
+    media_ratio = sum(info['size'] for ext, info in analysis['file_types'].items() 
+                     if ext in ['.jpg', '.png', '.mp4', '.mp3']) / total_size
+    
+    if media_ratio > 0.5:
+        optimization_tips.append("Molti file media: compressione aggiuntiva poco efficace, usa ZIP store o TAR")
+    
+    if compression_level < 5 and text_ratio > 0.3:
+        optimization_tips.append("Livello compressione basso per file di testo: considera di aumentarlo")
+    
+    if len(files) > 10000:
+        optimization_tips.append("Molti file: considera compressione solida (7z) per migliori risultati")
+    
+    if not optimization_tips:
+        optimization_tips.append("Configurazione appropriata per il tipo di contenuto")
+    
+    return {
+        'compressed_size': int(compressed_size),
+        'compression_ratio': compression_ratio,
+        'efficiency': efficiency,
+        'optimization_tips': optimization_tips
+    }
+
+def _estimate_processing_time(size_bytes: int, archive_type: str, compression_level: int) -> str:
+    """Stima il tempo di processing."""
+    # Velocità base in MB/s per diversi formati
+    base_speeds = {
+        'zip': 50, 'tar': 200, 'tar.gz': 30, 'tar.bz2': 15, 'tar.xz': 10, '7z': 8
+    }
+    
+    speed = base_speeds.get(archive_type, 50)
+    
+    # Ajusta per livello compressione
+    speed_factor = 1.0 - (compression_level * 0.08)
+    adjusted_speed = speed * speed_factor
+    
+    size_mb = size_bytes / 1024 / 1024
+    time_seconds = size_mb / adjusted_speed
+    
+    if time_seconds < 60:
+        return f"{time_seconds:.0f} secondi"
+    elif time_seconds < 3600:
+        return f"{time_seconds/60:.1f} minuti"
+    else:
+        return f"{time_seconds/3600:.1f} ore"
+
+def _analyze_security_risks(files: List[str]) -> Dict[str, Any]:
+    """Analizza rischi di sicurezza nei file."""
+    risks = []
+    
+    # Cerca file potenzialmente pericolosi
+    dangerous_extensions = ['.exe', '.bat', '.cmd', '.scr', '.vbs', '.js', '.jar']
+    sensitive_names = ['password', 'secret', 'key', 'token', 'credential']
+    
+    for file_path in files:
+        filename = os.path.basename(file_path).lower()
+        ext = os.path.splitext(filename)[1].lower()
+        
+        if ext in dangerous_extensions:
+            risks.append(f"File eseguibile: {os.path.basename(file_path)}")
+        
+        if any(sensitive in filename for sensitive in sensitive_names):
+            risks.append(f"Nome file sensibile: {os.path.basename(file_path)}")
+        
+        # Percorsi che tentano directory traversal
+        if '..' in file_path or file_path.startswith('/'):
+            risks.append(f"Percorso sospetto: {file_path}")
+    
+    return {'risks': risks[:5]}  # Limita a 5 rischi
+
+def _get_archive_format_details(archive_type: str) -> Dict[str, str]:
+    """Restituisce dettagli per il formato archivio."""
+    formats = {
+        'zip': {
+            'compression': 'Deflate, Store, Bzip2',
+            'encryption': 'Traditional, AES-128/192/256',
+            'metadata': 'Timestamp, attributi DOS/Unix',
+            'max_file_size': '4GB (16EB con ZIP64)',
+            'unicode_support': 'Sì (UTF-8)',
+            'streaming_support': 'Limitato'
+        },
+        'tar': {
+            'compression': 'Nessuna (container)',
+            'encryption': 'No (usa GPG esternamente)',
+            'metadata': 'POSIX (owner, group, permissions)',
+            'max_file_size': '8GB (estensioni GNU)',
+            'unicode_support': 'Sì',
+            'streaming_support': 'Eccellente'
+        },
+        'tar.gz': {
+            'compression': 'Gzip (Deflate)',
+            'encryption': 'No (usa GPG esternamente)',
+            'metadata': 'POSIX completo',
+            'max_file_size': '8GB',
+            'unicode_support': 'Sì',
+            'streaming_support': 'Buono'
+        },
+        'tar.bz2': {
+            'compression': 'Bzip2 (Burrows-Wheeler)',
+            'encryption': 'No (usa GPG esternamente)',
+            'metadata': 'POSIX completo',
+            'max_file_size': '8GB',
+            'unicode_support': 'Sì',
+            'streaming_support': 'Limitato'
+        },
+        'tar.xz': {
+            'compression': 'LZMA2',
+            'encryption': 'No (usa GPG esternamente)',
+            'metadata': 'POSIX completo',
+            'max_file_size': '8GB',
+            'unicode_support': 'Sì',
+            'streaming_support': 'Limitato'
+        },
+        '7z': {
+            'compression': 'LZMA, LZMA2, PPMd, BZip2',
+            'encryption': 'AES-256',
+            'metadata': 'Esteso (NTFS, Unix)',
+            'max_file_size': '16EB',
+            'unicode_support': 'Sì (UTF-16)',
+            'streaming_support': 'No'
+        },
+        'rar': {
+            'compression': 'RAR, RAR5',
+            'encryption': 'AES-128/256',
+            'metadata': 'Esteso',
+            'max_file_size': '8EB',
+            'unicode_support': 'Sì',
+            'streaming_support': 'Limitato'
+        }
+    }
+    
+    return formats.get(archive_type, {
+        'compression': 'Sconosciuto',
+        'encryption': 'Sconosciuto',
+        'metadata': 'Sconosciuto',
+        'max_file_size': 'Sconosciuto',
+        'unicode_support': 'Sconosciuto',
+        'streaming_support': 'Sconosciuto'
+    })
+
+def _generate_archive_recommendations(analysis: Dict, duplicates: Dict, path_analysis: Dict, archive_type: str) -> List[str]:
+    """Genera raccomandazioni intelligenti."""
+    recommendations = []
+    
+    # Basato su dimensioni
+    if analysis['total_files'] > 50000:
+        recommendations.append("Archivio molto grande: considera divisione in volumi o formato con compressione solida")
+    
+    # Basato su duplicati
+    if duplicates['duplicate_count'] > 20:
+        recommendations.append(f"Molti duplicati ({duplicates['duplicate_count']}): rimuovi file ridondanti per risparmiare spazio")
+    
+    # Basato su profondità
+    if analysis['max_depth'] > 10:
+        recommendations.append("Struttura molto profonda: considera riorganizzazione per compatibilità")
+    
+    # Basato su tipi file
+    text_files = sum(info['count'] for ext, info in analysis['file_types'].items() 
+                    if ext in ['.txt', '.log', '.json', '.py'])
+    if text_files > analysis['total_files'] * 0.8:
+        recommendations.append("Prevalentemente file di testo: usa tar.xz o 7z per massima compressione")
+    
+    # Basato su problemi percorsi
+    if path_analysis['special_chars'] > 10:
+        recommendations.append("Molti caratteri speciali: verifica compatibilità cross-platform")
+    
+    # Raccomandazioni specifiche per formato
+    if archive_type == 'zip' and analysis['total_size'] > 4000000000:  # 4GB
+        recommendations.append("Dimensione >4GB: considera ZIP64 o altri formati")
+    
+    if not recommendations:
+        recommendations.append("Struttura archivio ottimale per il formato scelto")
+    
+    return recommendations
+
+def _get_useful_commands(archive_type: str, analysis: Dict) -> Dict[str, str]:
+    """Restituisce comandi utili per il tipo di archivio."""
+    commands = {}
+    
+    if archive_type == 'zip':
+        commands['Crea con esclusioni'] = 'zip -r archive.zip . -x "*.tmp" "*.log"'
+        commands['Testa integrità'] = 'zip -T archive.zip'
+        commands['Lista contenuto'] = 'unzip -l archive.zip'
+        commands['Estrai in directory'] = 'unzip archive.zip -d destination/'
+    
+    elif archive_type.startswith('tar'):
+        commands['Crea con progress'] = f'tar -czf archive.{archive_type.split(".", 1)[1] if "." in archive_type else "tar"} . --checkpoint=1000'
+        commands['Lista contenuto'] = f'tar -tzf archive.{archive_type.split(".", 1)[1] if "." in archive_type else "tar"}'
+        commands['Estrai in directory'] = f'tar -xzf archive.{archive_type.split(".", 1)[1] if "." in archive_type else "tar"} -C destination/'
+        commands['Verifica integrità'] = f'tar -tzf archive.{archive_type.split(".", 1)[1] if "." in archive_type else "tar"} > /dev/null'
+    
+    elif archive_type == '7z':
+        commands['Crea con password'] = '7z a -p archive.7z .'
+        commands['Testa integrità'] = '7z t archive.7z'
+        commands['Lista dettagliata'] = '7z l archive.7z'
+        commands['Estrai con percorsi'] = '7z x archive.7z -odestination/'
+    
+    return commands
+
+def _get_optimized_commands(archive_type: str, compression_level: int, cpu_cores: int) -> str:
+    """Genera comandi ottimizzati per le prestazioni."""
+    commands = []
+    
+    if archive_type == 'zip':
+        commands.append(f'zip -r -{compression_level} archive.zip . -x "*.tmp" "*.log"')
+        if cpu_cores > 1:
+            commands.append('# ZIP non supporta parallelizzazione nativa')
+    
+    elif archive_type == 'tar.gz':
+        if cpu_cores > 1:
+            commands.append(f'tar -I "gzip -{compression_level}" -cf archive.tar.gz .')
+        else:
+            commands.append(f'tar -czf archive.tar.gz .')
+    
+    elif archive_type == 'tar.bz2':
+        if cpu_cores > 1:
+            commands.append(f'tar -I "pbzip2 -{compression_level} -p{cpu_cores}" -cf archive.tar.bz2 .')
+        else:
+            commands.append(f'tar -cjf archive.tar.bz2 .')
+    
+    elif archive_type == 'tar.xz':
+        if cpu_cores > 1:
+            commands.append(f'tar -I "xz -{compression_level} -T{cpu_cores}" -cf archive.tar.xz .')
+        else:
+            commands.append(f'tar -cJf archive.tar.xz .')
+    
+    elif archive_type == '7z':
+        commands.append(f'7z a -mx={compression_level} -mmt{cpu_cores} archive.7z .')
+    
+    return '\n'.join(commands)
