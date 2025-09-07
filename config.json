@@ -4,6 +4,10 @@
     "calculator",
     "crypto_tools",
     "system_info",
-    "async_task_queue"
+    "async_task_queue",
+    "encoding_tools",
+    "datetime_tools",
+    "uuid_tools",
+    "validator_tools"
   ]
 }
