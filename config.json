@@ -13,6 +13,7 @@
     "system_info",
     "network_tools",
     "security_tools",
+    "network_security_tools",
     "performance_tools",
     "data_analysis",
     "image_processing",

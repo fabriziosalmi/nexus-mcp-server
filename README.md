@@ -102,6 +102,14 @@
 - `check_common_ports(host)` - Controllo porte comuni per sicurezza
 - `ssl_certificate_check(domain, port)` - Verifica certificati SSL/TLS
 
+### 🛡️ Network Security Tools (`network_security_tools.py`)
+**Strumenti avanzati di sicurezza di rete**
+- `ip_threat_intelligence(ip_address)` - Analisi threat intelligence per indirizzi IP
+- `scan_security_headers(url, follow_redirects)` - Scansione header di sicurezza HTTP
+- `discover_subdomains(domain, wordlist_size)` - Scoperta sottodomini per security assessment
+- `grab_service_banner(host, port, timeout)` - Estrazione banner servizi per fingerprinting
+- `analyze_certificate_chain(domain, port)` - Analisi approfondita catena certificati SSL
+
 ### ⚡ Performance Tools (`performance_tools.py`)
 **Monitoraggio e benchmark performance**
 - `benchmark_function_performance(code, iterations)` - Benchmark codice Python
@@ -221,6 +229,7 @@ nexus-mcp-server/
     ├── system_info.py          # 💻 Informazioni sistema
     ├── network_tools.py        # 🌐 Strumenti diagnostici rete
     ├── security_tools.py       # 🔒 Strumenti sicurezza
+    ├── network_security_tools.py # 🛡️ Strumenti sicurezza di rete
     ├── performance_tools.py    # ⚡ Monitoraggio performance
     ├── data_analysis.py        # 📊 Analisi dati
     ├── image_processing.py     # 🖼️ Elaborazione immagini
@@ -341,6 +350,13 @@ python client.py generate_secure_password '{"length": 16, "include_symbols": tru
 python client.py password_strength_check '{"password": "MyPassword123!"}'
 python client.py generate_api_key '{"length": 32, "format_type": "hex"}'
 
+# Network Security Tools
+python client.py ip_threat_intelligence '{"ip_address": "8.8.8.8"}'
+python client.py scan_security_headers '{"url": "https://example.com"}'
+python client.py discover_subdomains '{"domain": "example.com", "wordlist_size": "small"}'
+python client.py grab_service_banner '{"host": "example.com", "port": 80}'
+python client.py analyze_certificate_chain '{"domain": "example.com", "port": 443"}'
+
 # Performance Tools
 python client.py benchmark_function_performance '{"code": "sum(range(1000))", "iterations": 1000}'
 python client.py monitor_system_performance '{"duration_seconds": 5}'
@@ -395,6 +411,7 @@ Modifica `config.json` per controllare quali tool sono attivi:
     "uuid_tools",
     "network_tools",
     "security_tools",
+    "network_security_tools",
     "performance_tools",
     "data_analysis",
     "image_processing",
