@@ -3,6 +3,7 @@
   "enabled_tools": [
     "calculator",
     "crypto_tools",
-    "system_info"
+    "system_info",
+    "async_task_queue"
   ]
 }

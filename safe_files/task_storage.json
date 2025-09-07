@@ -1,0 +1,53 @@
+{
+  "tasks": [
+    {
+      "task_id": "1ed87d63-2ff1-4703-ba5b-fac73895424f",
+      "name": "Test Sleep Task",
+      "description": "A test task that sleeps for 5 seconds",
+      "status": "failed",
+      "created_at": "2025-09-07T17:54:11.215433+00:00",
+      "started_at": "2025-09-07T17:54:11.217704+00:00",
+      "completed_at": "2025-09-07T17:54:32.207107+00:00",
+      "progress": 0.0,
+      "result": null,
+      "error": "Task interrotto durante riavvio server",
+      "metadata": {
+        "args": "(5,)",
+        "kwargs": "{}"
+      }
+    },
+    {
+      "task_id": "0123c057-b729-4659-b38e-d55c76d2541d",
+      "name": "CPU Test",
+      "description": "CPU intensive task",
+      "status": "failed",
+      "created_at": "2025-09-07T17:54:32.225501+00:00",
+      "started_at": "2025-09-07T17:54:32.227818+00:00",
+      "completed_at": "2025-09-07T17:55:11.656172+00:00",
+      "progress": 0.0,
+      "result": null,
+      "error": "Task interrotto durante riavvio server",
+      "metadata": {
+        "args": "(3,)",
+        "kwargs": "{}"
+      }
+    },
+    {
+      "task_id": "e75ffd65-c951-4370-8af9-c8f6f434b92c",
+      "name": "Final Demo Task",
+      "description": "Demonstration of async task queue",
+      "status": "completed",
+      "created_at": "2025-09-07T17:58:31.442053+00:00",
+      "started_at": "2025-09-07T17:58:31.444357+00:00",
+      "completed_at": "2025-09-07T17:58:33.445208+00:00",
+      "progress": 100.0,
+      "result": "Task personalizzato completato con dati: This is the final demo!",
+      "error": null,
+      "metadata": {
+        "args": "('This is the final demo!',)",
+        "kwargs": "{}"
+      }
+    }
+  ],
+  "saved_at": "2025-09-07T17:58:33.445508+00:00"
+}
