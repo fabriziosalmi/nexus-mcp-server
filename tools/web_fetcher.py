@@ -8,7 +8,7 @@ HEADERS = {"User-Agent": "NexusMCPServer/1.0"}
 
 def register_tools(mcp):
     """Registra i tool per il recupero di contenuti web con l'istanza del server MCP."""
-    logging.info("=� Registrazione tool-set: Web Fetcher")
+    logging.info("📝 Registrazione tool-set: Web Fetcher")
 
     @mcp.tool()
     async def fetch_url_content(url: str) -> str:
@@ -37,4 +37,4 @@ def register_tools(mcp):
             return f"ERRORE HTTP: Il server ha risposto con lo status {e.response.status_code} per l'URL '{url}'."
         except Exception as e:
             logging.error(f"[WebFetcher] Errore imprevisto durante il fetch di '{url}': {e}")
-            return f"ERRORE: Si � verificato un problema tecnico imprevisto durante il fetch dell'URL."
+            return f"ERRORE: Si è verificato un problema tecnico imprevisto durante il fetch dell'URL."

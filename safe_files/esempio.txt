@@ -1,1 +1,1 @@
-Questo � un file di esempio che pu� essere letto in sicurezza dal server Nexus.
+Questo è un file di esempio che può essere letto in sicurezza dal server Nexus.

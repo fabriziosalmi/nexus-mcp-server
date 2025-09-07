@@ -4,7 +4,7 @@ import logging
 
 def register_tools(mcp):
     """Registra i tool matematici con l'istanza del server MCP."""
-    logging.info("=� Registrazione tool-set: Calcolatrice")
+    logging.info("📝 Registrazione tool-set: Calcolatrice")
 
     @mcp.tool()
     def add(a: float, b: float) -> float:
