@@ -1,3 +1,7 @@
 .venv/
 tools/__pycache__/
 __pycache__/
+
+# Test files (can be removed in production)
+test_*.py
+manual_*.py

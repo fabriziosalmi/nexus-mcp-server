@@ -44,6 +44,7 @@
     "api_testing_tools",
     "template_tools",
     "markdown_tools",
-    "archive_tools"
+    "archive_tools",
+    "workflows"
   ]
 }
