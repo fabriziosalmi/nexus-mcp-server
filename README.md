@@ -4,13 +4,15 @@
 
 ## 📊 Panoramica Tool e Funzioni
 
-🛠️ **Tool Disponibili**: **34**  
-⚙️ **Funzioni Totali**: **183**
+🛠️ **Tool Disponibili**: **44**  
+⚙️ **Funzioni Totali**: **223**
 
 ## 📋 Tabella Completa Tool
 
 | Tool | File | Funzioni | Descrizione |
 |------|------|----------|-------------|
+| API Testing Tools | `api_testing_tools.py` | 4 | Testing e documentazione API REST |
+| Archive Tools | `archive_tools.py` | 4 | Gestione archivi ZIP, TAR, 7Z |
 | Audio Processing | `audio_processing.py` | 6 | Elaborazione e analisi di file audio |
 | Backup Tools | `backup_tools.py` | 5 | Gestione backup e archivi |
 | Calculator | `calculator.py` | 2 | Operazioni matematiche di base |
@@ -18,18 +20,22 @@
 | Code Analysis Tools | `code_analysis_tools.py` | 4 | Analisi qualità e metriche del codice |
 | Code Execution Tools | `code_execution_tools.py` | 6 | Ambienti sicuri per esecuzione codice |
 | Code Generation Tools | `code_generation_tools.py` | 5 | Generazione template e strutture codice |
+| Color Tools | `color_tools.py` | 4 | Conversione e analisi colori |
 | Crypto Tools | `crypto_tools.py` | 3 | Funzioni crittografiche e hashing |
 | Data Analysis | `data_analysis.py` | 5 | Elaborazione e analisi statistica dati |
 | Database Tools | `database_tools.py` | 5 | Gestione database e query |
 | Datetime Tools | `datetime_tools.py` | 4 | Manipolazione date e orari |
 | Docker Tools | `docker_tools.py` | 6 | Gestione container Docker |
+| Email Tools | `email_tools.py` | 4 | Validazione email e template |
 | Encoding Tools | `encoding_tools.py` | 6 | Codifica e decodifica dati |
 | Environment Tools | `environment_tools.py` | 5 | Gestione variabili ambiente |
 | File Converter | `file_converter.py` | 8 | Utilità conversione formati file |
 | Filesystem Reader | `filesystem_reader.py` | 1 | Accesso sicuro al file system |
 | Git Tools | `git_tools.py` | 5 | Gestione repository Git |
 | Image Processing | `image_processing.py` | 6 | Manipolazione e analisi immagini |
+| JSON/YAML Tools | `json_yaml_tools.py` | 5 | Manipolazione JSON e YAML |
 | Log Analysis Tools | `log_analysis_tools.py` | 5 | Parsing e analisi file log |
+| Markdown Tools | `markdown_tools.py` | 4 | Elaborazione documenti Markdown |
 | Network Security Tools | `network_security_tools.py` | 5 | Scansione sicurezza di rete |
 | Network Tools | `network_tools.py` | 7 | Diagnostica e utilità di rete |
 | PDF Tools | `pdf_tools.py` | 6 | Elaborazione documenti PDF |
@@ -40,10 +46,14 @@
 | Security Tools | `security_tools.py` | 7 | Utilità sicurezza e crittografia |
 | String Tools | `string_tools.py` | 5 | Funzioni manipolazione stringhe |
 | System Info | `system_info.py` | 6 | Informazioni e monitoraggio sistema |
+| Template Tools | `template_tools.py` | 3 | Generazione template codice/config |
+| Text Analysis Tools | `text_analysis_tools.py` | 4 | Analisi sentimenti e linguistica |
 | Unit Converter | `unit_converter.py` | 6 | Utilità conversione unità misura |
+| URL Tools | `url_tools.py` | 4 | Manipolazione e validazione URL |
 | UUID Tools | `uuid_tools.py` | 6 | Generazione UUID e ID |
 | Validator Tools | `validator_tools.py` | 5 | Funzioni validazione dati |
 | Video Processing | `video_processing.py` | 5 | Elaborazione file video |
+| Weather Tools | `weather_tools.py` | 3 | Informazioni meteorologiche |
 | Web Fetcher | `web_fetcher.py` | 1 | Recupero contenuti web |
 
 ## 🎯 Filosofia di Progettazione
@@ -260,6 +270,76 @@
 - `multi_cloud_resource_tracker(resources)` - Tracciamento risorse multi-cloud
 - `cloud_config_validator(config_text, config_type)` - Validazione file configurazione cloud
 
+### 🌦️ Weather Tools (`weather_tools.py`)
+**Strumenti meteorologici e analisi clima**
+- `get_weather_info(city, country_code, units)` - Informazioni meteo per città
+- `parse_weather_data(weather_json)` - Analisi dati meteorologici JSON
+- `weather_alert_formatter(temperature, humidity, wind_speed)` - Generazione avvisi meteo
+
+### 🔗 URL Tools (`url_tools.py`)
+**Manipolazione e validazione URL**
+- `validate_url(url)` - Validazione e analisi URL completa
+- `url_shortener_simulator(url, custom_alias)` - Simulatore accorciamento URL
+- `extract_domain_info(url)` - Estrazione informazioni dettagliate dominio
+- `build_query_url(base_url, params)` - Costruzione URL con parametri query
+
+### 📝 Text Analysis Tools (`text_analysis_tools.py`)
+**Analisi linguistica e sentiment**
+- `analyze_text_sentiment(text)` - Analisi sentiment con dizionario multilingue
+- `word_frequency_analysis(text, top_n)` - Analisi frequenza parole con stop words
+- `readability_score(text)` - Calcolo indici di leggibilità (Flesch)
+- `detect_language_simple(text)` - Rilevamento lingua con pattern matching
+
+### 📧 Email Tools (`email_tools.py`)
+**Gestione email e template**
+- `validate_email_advanced(email)` - Validazione email con controlli RFC
+- `generate_email_template(template_type, sender_name, recipient_name, subject)` - Template email professionali
+- `parse_email_header(email_text)` - Analisi header email con controlli sicurezza
+- `generate_email_signature(name, title, company, phone, email, website)` - Firme email HTML/testo
+
+### 🎨 Color Tools (`color_tools.py`)
+**Conversione e analisi colori**
+- `convert_color_format(color, target_format)` - Conversione tra HEX, RGB, HSL, HSV
+- `generate_color_palette(base_color, palette_type)` - Palette complementari, triadiche, analoghe
+- `analyze_color_contrast(color1, color2)` - Analisi contrasto WCAG per accessibilità
+- `color_mixer(color1, color2, ratio)` - Miscelazione colori con gradazioni
+
+### 📄 JSON/YAML Tools (`json_yaml_tools.py`)
+**Manipolazione avanzata JSON e YAML**
+- `validate_json_advanced(json_string)` - Validazione JSON con analisi strutturale
+- `convert_json_yaml(data, source_format, target_format)` - Conversione bidirezionale JSON/YAML
+- `json_diff_comparison(json1, json2)` - Confronto JSON con differenze dettagliate
+- `json_path_extractor(json_string, json_path)` - Estrazione valori con path notation
+- `json_minify_beautify(json_string, operation)` - Minificazione/beautificazione JSON
+
+### 🚀 API Testing Tools (`api_testing_tools.py`)
+**Testing e documentazione API REST**
+- `build_http_request(method, url, headers, body, auth_type)` - Costruzione richieste HTTP complete
+- `validate_api_response(response_body, expected_status, expected_schema)` - Validazione risposte API
+- `generate_api_test_suite(base_url, endpoints, auth_method)` - Suite test automatica con curl/Python
+- `parse_api_documentation(api_spec, spec_format)` - Analisi documentazione OpenAPI/Swagger/Postman
+
+### 📋 Template Tools (`template_tools.py`)
+**Generazione template codice e configurazioni**
+- `generate_dockerfile_template(base_image, language, port, additional_packages)` - Template Dockerfile per varie tecnologie
+- `generate_config_template(config_type, app_name, environment)` - Template configurazione (nginx, docker-compose, k8s, env)
+- `generate_code_template(template_type, class_name, language, features)` - Template codice (classi, API, test)
+
+### 📝 Markdown Tools (`markdown_tools.py`)
+**Elaborazione documenti Markdown**
+- `markdown_to_html(markdown_text)` - Conversione Markdown to HTML
+- `generate_markdown_table(headers, data, alignment)` - Generazione tabelle Markdown
+- `analyze_markdown_structure(markdown_text)` - Analisi struttura documento con statistiche
+- `generate_markdown_toc(markdown_text, max_level)` - Generazione indice automatico
+- `format_markdown_document(title, author, content, include_metadata)` - Formattazione documenti completi
+
+### 📦 Archive Tools (`archive_tools.py`)
+**Gestione archivi avanzata**
+- `create_zip_archive(file_list, archive_name, compression_level)` - Simulazione archivi ZIP con analisi
+- `analyze_archive_structure(archive_type, file_list)` - Analisi struttura archivi con raccomandazioni
+- `compare_archive_formats(file_types, total_size_mb)` - Confronto efficienza formati archivio
+- `generate_archive_script(archive_type, source_dir, archive_name, options)` - Script bash/PowerShell per archiviazione
+
 ## 🏗️ Struttura del Progetto
 
 ```
@@ -297,7 +377,17 @@ nexus-mcp-server/
     ├── regex_tools.py          # 🔍 Strumenti regex
     ├── file_converter.py       # 🔄 Conversioni formato file
     ├── pdf_tools.py            # 📄 Strumenti PDF
-    └── cloud_tools.py          # ☁️ Strumenti cloud platform
+    ├── cloud_tools.py          # ☁️ Strumenti cloud platform
+    ├── weather_tools.py        # 🌦️ Strumenti meteorologici
+    ├── url_tools.py            # 🔗 Manipolazione URL
+    ├── text_analysis_tools.py  # 📝 Analisi testo e sentiment
+    ├── email_tools.py          # 📧 Gestione email e template
+    ├── color_tools.py          # 🎨 Conversione e analisi colori
+    ├── json_yaml_tools.py      # 📄 Manipolazione JSON/YAML
+    ├── api_testing_tools.py    # 🚀 Testing API REST
+    ├── template_tools.py       # 📋 Generazione template
+    ├── markdown_tools.py       # 📝 Elaborazione Markdown
+    └── archive_tools.py        # 📦 Gestione archivi
 ```
 
 ## 🚀 Quick Start
