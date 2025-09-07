@@ -34,6 +34,16 @@
     "backup_tools",
     "log_analysis_tools",
     "code_execution_tools",
-    "cloud_tools"
+    "cloud_tools",
+    "weather_tools",
+    "url_tools",
+    "text_analysis_tools",
+    "email_tools",
+    "color_tools",
+    "json_yaml_tools",
+    "api_testing_tools",
+    "template_tools",
+    "markdown_tools",
+    "archive_tools"
   ]
 }
