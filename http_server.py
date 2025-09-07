@@ -1,134 +1,192 @@
 # -*- coding: utf-8 -*-
-# http_server.py - HTTP wrapper per Nexus MCP Server
+# http_server.py - Enhanced HTTP API for Nexus MCP Server
+"""
+Enhanced HTTP wrapper that dynamically exposes ALL Nexus MCP tools via REST API.
+This allows language-agnostic access to all Nexus functionality.
+"""
+
 import json
 import logging
 import asyncio
 import sys
-import importlib
-from fastapi import FastAPI, HTTPException
+import traceback
+from contextlib import asynccontextmanager
+from typing import Dict, Any, List, Optional
+from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.responses import JSONResponse, Response
-from pydantic import BaseModel
-from typing import Dict, Any
+from fastapi.openapi.utils import get_openapi
+from pydantic import BaseModel, Field
 import uvicorn
+
 from multi_server import load_configuration, dynamically_register_tools
 from mcp.server.fastmcp import FastMCP
 from monitoring import get_monitoring
 from monitoring_decorators import monitor_tool_execution
 
-# Configurazione logging
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s] [%(levelname)-8s] --- %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 
-# Modelli Pydantic per le richieste
+# Global variables
+mcp_server = None
+available_tools = {}
+tools_list = []
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown events."""
+    global mcp_server, available_tools, tools_list
+    
+    logging.info("🚀 Starting Enhanced Nexus MCP HTTP Server...")
+    
+    try:
+        # Load configuration
+        config = load_configuration()
+        
+        # Create FastMCP instance
+        mcp_server = FastMCP("NexusServer-Enhanced")
+        
+        # Load tools dynamically
+        dynamically_register_tools(mcp_server, config)
+        
+        # Discover all available tools
+        tools = await mcp_server.list_tools()
+        
+        # Build tool registry with metadata
+        available_tools = {}
+        tools_list = []
+        
+        for tool in tools:
+            tool_info = ToolInfo(
+                name=tool.name,
+                description=tool.description or "No description available",
+                input_schema=tool.input_schema if hasattr(tool, 'input_schema') else {}
+            )
+            available_tools[tool.name] = tool_info
+            tools_list.append(tool_info)
+        
+        logging.info(f"✅ Enhanced HTTP Server ready with {len(available_tools)} tools:")
+        for tool_name in sorted(available_tools.keys()):
+            logging.info(f"   • {tool_name}")
+        
+        yield
+        
+    except Exception as e:
+        logging.error(f"❌ Error during initialization: {e}")
+        logging.error(traceback.format_exc())
+        sys.exit(1)
+
+# Pydantic models for API requests/responses
 class ToolRequest(BaseModel):
+    arguments: Dict[str, Any] = Field(default_factory=dict, description="Arguments to pass to the tool")
+
+class ToolResponse(BaseModel):
     tool_name: str
-    arguments: Dict[str, Any] = {}
+    arguments: Dict[str, Any]
+    result: Any
+    status: str
+    execution_time: Optional[float] = None
+
+class ToolInfo(BaseModel):
+    name: str
+    description: str
+    input_schema: Dict[str, Any]
+
+class ToolListResponse(BaseModel):
+    tools: List[ToolInfo]
+    count: int
+    server_info: Dict[str, str]
 
 class HealthResponse(BaseModel):
     status: str
     message: str
-    available_tools: list
+    tools_count: int
+    server_info: Dict[str, str]
 
-# Inizializza FastAPI
+class ErrorResponse(BaseModel):
+    error: str
+    detail: str
+    tool_name: Optional[str] = None
+
+# Initialize FastAPI with comprehensive metadata
 app = FastAPI(
-    title="Nexus MCP Server HTTP API",
-    description="HTTP wrapper per il server MCP Nexus con tutti i tool disponibili",
-    version="2.0.0"
+    title="Nexus MCP Server - Enhanced REST API",
+    description="""
+    Enhanced HTTP wrapper for Nexus MCP Server that dynamically exposes ALL available tools.
+    
+    This API allows language-agnostic access to Nexus functionality including:
+    - Mathematical calculations
+    - Cryptographic operations
+    - System information
+    - Encoding/decoding
+    - File operations
+    - Network utilities
+    - And many more tools...
+    
+    All tools are auto-discovered and exposed without manual configuration.
+    """,
+    version="3.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    contact={
+        "name": "Nexus MCP Server",
+        "url": "https://github.com/fabriziosalmi/nexus-mcp-server",
+    },
+    license_info={
+        "name": "MIT License",
+        "url": "https://opensource.org/licenses/MIT",
+    },
+    lifespan=lifespan
 )
 
-# Variabile globale per il server MCP
-mcp_server = None
-available_tools = []
-tool_registry = {}
-
-def get_tool_list_from_config(config):
-    """Ottieni la lista dei tool disponibili dal config e dai moduli."""
-    tools = {}
-    enabled_modules = config.get("enabled_tools", [])
-    
-    # Mapping hardcoded dei tool disponibili per modulo
-    tool_mapping = {
-        "calculator": ["add", "multiply"],
-        "filesystem_reader": ["read_safe_file"],
-        "web_fetcher": ["fetch_url_content"], 
-        "crypto_tools": ["generate_hash", "generate_hmac", "generate_random_token"],
-        "encoding_tools": ["base64_encode", "base64_decode", "url_encode", "url_decode", "html_escape", "json_format"],
-        "datetime_tools": ["current_timestamp", "unix_to_date", "date_to_unix", "date_math"],
-        "uuid_tools": ["generate_uuid4", "generate_uuid1", "generate_multiple_uuids", "generate_short_id", "generate_nanoid", "uuid_info"],
-        "string_tools": ["string_case_convert", "string_stats", "string_clean", "string_wrap", "string_find_replace"],
-        "validator_tools": ["validate_email", "validate_url", "validate_ip_address", "validate_phone", "validate_credit_card"],
-        "system_info": ["system_overview", "memory_usage", "cpu_info", "disk_usage", "network_info", "running_processes"],
-        "network_tools": ["ping_host", "dns_lookup", "port_scan", "traceroute", "whois_lookup", "check_website_status", "get_public_ip"],
-        "security_tools": ["generate_secure_password", "password_strength_check", "generate_api_key", "hash_file_content", "jwt_decode_header", "check_common_ports", "ssl_certificate_check"],
-        "performance_tools": ["benchmark_function_performance", "monitor_system_performance", "analyze_memory_usage", "disk_performance_test", "network_latency_test", "cpu_stress_test"],
-        "data_analysis": ["analyze_csv_data", "analyze_json_structure", "statistical_analysis", "text_analysis", "correlation_analysis"],
-        "image_processing": ["analyze_image_metadata", "resize_image", "convert_image_format", "apply_image_filters", "create_thumbnail", "extract_dominant_colors"],
-        "audio_processing": ["analyze_audio_metadata", "generate_sine_wave", "analyze_audio_spectrum", "adjust_audio_volume", "convert_audio_format", "extract_audio_features"],
-        "video_processing": ["analyze_video_metadata", "create_video_thumbnail_placeholder", "analyze_video_structure", "estimate_video_properties", "create_video_info_summary"]
-    }
-    
-    for module_name in enabled_modules:
-        if module_name in tool_mapping:
-            for tool_name in tool_mapping[module_name]:
-                tools[tool_name] = module_name
-    
-    return tools
-
-@app.on_event("startup")
-async def startup_event():
-    """Inizializza il server MCP all'avvio."""
-    global mcp_server, available_tools, tool_registry
-    
-    logging.info("🚀 Inizializzazione HTTP wrapper per Nexus MCP...")
-    
-    try:
-        # Carica configurazione
-        config = load_configuration()
-        
-        # Crea istanza FastMCP
-        mcp_server = FastMCP("NexusServer-HTTP")
-        
-        # Carica tool dinamicamente
-        dynamically_register_tools(mcp_server, config)
-        
-        # Ottieni lista tool disponibili dall'oggetto FastMCP
-        # FastMCP espone i tool in un modo diverso, usiamo inspect o una lista manuale
-        tool_registry = get_tool_list_from_config(config)
-        available_tools = list(tool_registry.keys())
-        
-        logging.info(f"✅ Server HTTP pronto con {len(available_tools)} tool: {', '.join(available_tools)}")
-        
-    except Exception as e:
-        logging.error(f"❌ Errore durante inizializzazione: {e}")
-        sys.exit(1)
+async def get_mcp_server():
+    """Dependency to get the initialized MCP server."""
+    if not mcp_server:
+        raise HTTPException(status_code=500, detail="MCP Server not initialized")
+    return mcp_server
 
 @app.get("/", response_model=HealthResponse)
 async def health_check():
-    """Health check endpoint."""
+    """Health check endpoint with server status."""
     return HealthResponse(
         status="healthy",
-        message="Nexus MCP Server HTTP API is running",
-        available_tools=available_tools
+        message="Nexus MCP Server Enhanced API is running",
+        tools_count=len(available_tools),
+        server_info={
+            "name": "NexusServer-Enhanced",
+            "version": "3.0.0",
+            "type": "HTTP-MCP Bridge"
+        }
     )
 
-@app.get("/tools")
-async def list_tools():
-    """Lista tutti i tool disponibili."""
-    return {
-        "available_tools": available_tools,
-        "count": len(available_tools),
-        "server_info": {
-            "name": "NexusServer-HTTP",
-            "version": "2.0.0"
+@app.get("/tools", response_model=ToolListResponse)
+async def list_all_tools():
+    """List all available tools with their metadata."""
+    return ToolListResponse(
+        tools=tools_list,
+        count=len(tools_list),
+        server_info={
+            "name": "NexusServer-Enhanced",
+            "version": "3.0.0"
         }
-    }
+    )
+
+@app.get("/tools/{tool_name}", response_model=ToolInfo)
+async def get_tool_info(tool_name: str):
+    """Get detailed information about a specific tool."""
+    if tool_name not in available_tools:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Tool '{tool_name}' not found. Available tools: {list(available_tools.keys())}"
+        )
+    return available_tools[tool_name]
 
 @app.get("/metrics")
 async def prometheus_metrics():
-    """Prometheus metrics endpoint for monitoring and observability."""
+    """Prometheus metrics endpoint for monitoring."""
     monitoring = get_monitoring()
     metrics_data = monitoring.get_metrics()
     return Response(
@@ -136,177 +194,147 @@ async def prometheus_metrics():
         media_type=monitoring.get_content_type()
     )
 
-@app.post("/execute")
-async def execute_tool(request: ToolRequest):
-    """Esegue un tool specificato."""
-    global mcp_server, tool_registry
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    """Custom HTTP exception handler."""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=ErrorResponse(
+            error=f"HTTP {exc.status_code}",
+            detail=exc.detail
+        ).dict()
+    )
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """General exception handler for unexpected errors."""
+    logging.error(f"Unexpected error: {exc}")
+    logging.error(traceback.format_exc())
     
-    # Start monitoring
+    return JSONResponse(
+        status_code=500,
+        content=ErrorResponse(
+            error="Internal Server Error",
+            detail="An unexpected error occurred. Please check the server logs."
+        ).dict()
+    )
+
+def custom_openapi():
+    """Generate custom OpenAPI schema with tool-specific endpoints."""
+    if app.openapi_schema:
+        return app.openapi_schema
+    
+    openapi_schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
+    
+    # Add tool-specific documentation
+    if available_tools:
+        openapi_schema["components"]["schemas"]["AvailableTools"] = {
+            "type": "object",
+            "properties": {
+                tool_name: {
+                    "type": "object",
+                    "description": tool_info.description,
+                    "properties": tool_info.input_schema.get("properties", {})
+                }
+                for tool_name, tool_info in available_tools.items()
+            }
+        }
+    
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
+
+# Legacy endpoint for backward compatibility
+@app.post("/execute")
+async def execute_tool_legacy(request: Dict[str, Any]):
+    """Legacy execute endpoint for backward compatibility."""
+    tool_name = request.get("tool_name")
+    arguments = request.get("arguments", {})
+    
+    if not tool_name:
+        raise HTTPException(status_code=400, detail="tool_name is required")
+    
+    # Convert to new format and call the new endpoint
+    tool_request = ToolRequest(arguments=arguments)
+    mcp = await get_mcp_server()
+    return await execute_tool(tool_name, tool_request, mcp)
+
+@app.post("/tools/{tool_name}/execute", response_model=ToolResponse)
+async def execute_tool(
+    tool_name: str,
+    request: ToolRequest,
+    mcp: FastMCP = Depends(get_mcp_server)
+):
+    """Execute a specific tool with provided arguments."""
     import time
     start_time = time.time()
     monitoring = get_monitoring()
     
-    if not mcp_server:
-        raise HTTPException(status_code=500, detail="Server MCP non inizializzato")
-    
-    if request.tool_name not in available_tools:
+    if tool_name not in available_tools:
         raise HTTPException(
-            status_code=404, 
-            detail=f"Tool '{request.tool_name}' non trovato. Tool disponibili: {', '.join(available_tools)}"
+            status_code=404,
+            detail=f"Tool '{tool_name}' not found. Available tools: {list(available_tools.keys())}"
         )
     
     try:
-        # Approccio semplificato: chiamiamo il tool direttamente dai moduli
-        # Ricreiamo le funzioni localmente
-        if request.tool_name == "add":
-            result = request.arguments["a"] + request.arguments["b"]
-        elif request.tool_name == "multiply":
-            result = request.arguments["a"] * request.arguments["b"]
-        elif request.tool_name == "generate_uuid4":
-            import uuid
-            result = str(uuid.uuid4())
-        elif request.tool_name == "current_timestamp":
-            from datetime import datetime
-            result = {
-                "iso": datetime.utcnow().isoformat() + "Z",
-                "unix": int(datetime.utcnow().timestamp()),
-                "human_readable": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
-            }
-        elif request.tool_name == "base64_encode":
-            import base64
-            result = base64.b64encode(request.arguments["text"].encode()).decode()
-        elif request.tool_name == "system_overview":
-            import psutil, platform
-            result = {
-                "platform": platform.system(),
-                "python_version": platform.python_version(),
-                "cpu_count": psutil.cpu_count(),
-                "memory_total_gb": round(psutil.virtual_memory().total / (1024**3), 2),
-                "hostname": platform.node()
-            }
-        elif request.tool_name == "generate_secure_password":
-            import secrets, string
-            length = request.arguments.get("length", 16)
-            include_symbols = request.arguments.get("include_symbols", True)
-            
-            charset = string.ascii_letters + string.digits
-            if include_symbols:
-                charset += "!@#$%^&*()_+-=[]{}|;:,.<>?"
-            
-            password = ''.join(secrets.choice(charset) for _ in range(length))
-            result = {
-                "password": password,
-                "length": len(password),
-                "charset_size": len(charset)
-            }
-        elif request.tool_name == "get_public_ip":
-            import requests
-            try:
-                response = requests.get('https://api.ipify.org?format=json', timeout=5)
-                if response.status_code == 200:
-                    data = response.json()
-                    result = {
-                        "success": True,
-                        "public_ip": data["ip"],
-                        "service": "ipify.org"
-                    }
-                else:
-                    result = {"success": False, "error": "Servizio non disponibile"}
-            except:
-                result = {"success": False, "error": "Errore connessione"}
-        elif request.tool_name == "dns_lookup":
-            import socket
-            hostname = request.arguments.get("hostname", "")
-            try:
-                ip = socket.gethostbyname(hostname)
-                result = {
-                    "hostname": hostname,
-                    "success": True,
-                    "results": [ip],
-                    "record_type": "A"
-                }
-            except socket.gaierror as e:
-                result = {
-                    "hostname": hostname,
-                    "success": False,
-                    "error": str(e)
-                }
-        elif request.tool_name == "check_website_status":
-            import requests
-            url = request.arguments.get("url", "")
-            timeout = request.arguments.get("timeout", 10)
-            
-            if not url.startswith(('http://', 'https://')):
-                url = 'https://' + url
-            
-            try:
-                response = requests.get(url, timeout=timeout, allow_redirects=True)
-                result = {
-                    "url": url,
-                    "status_code": response.status_code,
-                    "success": response.status_code < 400,
-                    "response_time": response.elapsed.total_seconds(),
-                    "content_length": len(response.content)
-                }
-            except Exception as e:
-                result = {
-                    "url": url,
-                    "success": False,
-                    "error": str(e)
-                }
+        # Execute the tool using the MCP server
+        result = await mcp.call_tool(tool_name, request.arguments)
+        
+        # Handle the result format - FastMCP returns (content_blocks, result)
+        if isinstance(result, tuple) and len(result) == 2:
+            content_blocks, actual_result = result
+            # Use the actual result if available, otherwise use content blocks
+            formatted_result = actual_result if actual_result is not None else [
+                block.text if hasattr(block, 'text') else str(block) 
+                for block in content_blocks
+            ]
         else:
-            # Per tool più complessi, cerca nel registro dei moduli
-            module_name = tool_registry.get(request.tool_name)
-            if module_name:
-                # Importa e ricostruisci la logica del tool
-                module_path = f"tools.{module_name}"
-                tool_module = importlib.import_module(module_path)
-                
-                # Per ora restituiamo un messaggio
-                result = f"Tool '{request.tool_name}' dal modulo '{module_name}' - implementazione in corso"
-            else:
-                raise HTTPException(status_code=404, detail=f"Tool '{request.tool_name}' non supportato")
+            formatted_result = result
         
-        # Record successful execution
-        duration = time.time() - start_time
-        monitoring.record_tool_call(request.tool_name, "success", duration)
+        execution_time = time.time() - start_time
+        monitoring.record_tool_call(tool_name, "success", execution_time)
         
-        return {
-            "tool_name": request.tool_name,
-            "arguments": request.arguments,
-            "result": result,
-            "status": "success"
-        }
-        
-    except TypeError as e:
-        # Record error
-        duration = time.time() - start_time
-        monitoring.record_tool_call(request.tool_name, "error", duration)
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Argomenti non validi per il tool '{request.tool_name}': {str(e)}"
+        return ToolResponse(
+            tool_name=tool_name,
+            arguments=request.arguments,
+            result=formatted_result,
+            status="success",
+            execution_time=execution_time
         )
+        
     except Exception as e:
-        # Record error
-        duration = time.time() - start_time
-        monitoring.record_tool_call(request.tool_name, "error", duration)
-        logging.error(f"Errore durante esecuzione tool '{request.tool_name}': {e}")
+        execution_time = time.time() - start_time
+        monitoring.record_tool_call(tool_name, "error", execution_time)
+        
+        error_detail = str(e)
+        logging.error(f"Error executing tool '{tool_name}': {error_detail}")
+        
         raise HTTPException(
-            status_code=500, 
-            detail=f"Errore durante esecuzione: {str(e)}"
+            status_code=500,
+            detail=f"Error executing tool '{tool_name}': {error_detail}"
         )
 
-@app.get("/execute/{tool_name}")
-async def execute_tool_get(tool_name: str):
-    """Esegue un tool senza argomenti via GET."""
-    request = ToolRequest(tool_name=tool_name)
-    return await execute_tool(request)
+@app.get("/tools/{tool_name}/execute")
+async def execute_tool_get(
+    tool_name: str,
+    mcp: FastMCP = Depends(get_mcp_server)
+):
+    """Execute a tool without arguments via GET request."""
+    request = ToolRequest(arguments={})
+    return await execute_tool(tool_name, request, mcp)
 
 if __name__ == "__main__":
-    # Avvia server HTTP
+    # Start the enhanced HTTP server
     uvicorn.run(
         "http_server:app",
-        host="0.0.0.0", 
-        port=9999, 
-        log_level="info"
+        host="0.0.0.0",
+        port=9999,
+        log_level="info",
+        reload=False
     )
