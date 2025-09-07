@@ -145,6 +145,56 @@
 - `estimate_video_properties(video_base64)` - Stima proprietà da euristica
 - `create_video_info_summary(video_base64)` - Riassunto completo informazioni
 
+### 🔄 Unit Converter Tools (`unit_converter.py`)
+**Conversioni unità di misura**
+- `convert_length(value, from_unit, to_unit)` - Conversioni lunghezza (mm, cm, m, km, in, ft, yd, mi)
+- `convert_weight(value, from_unit, to_unit)` - Conversioni peso (mg, g, kg, t, oz, lb, st)
+- `convert_temperature(value, from_unit, to_unit)` - Conversioni temperatura (C, F, K, R)
+- `convert_volume(value, from_unit, to_unit)` - Conversioni volume (ml, l, gal, qt, pt, cup, floz)
+- `convert_area(value, from_unit, to_unit)` - Conversioni area (mm2, cm2, m2, km2, in2, ft2, yd2, ac, ha)
+- `list_available_units()` - Elenca tutte le unità disponibili per categoria
+
+### 📱 QR Code Tools (`qr_code_tools.py`)
+**Generazione e analisi QR code**
+- `generate_qr_code(text, size, border, error_correction)` - Genera QR code da testo
+- `generate_qr_code_url(url, size)` - Genera QR code per URL
+- `generate_qr_code_wifi(ssid, password, security, hidden)` - QR code configurazione WiFi
+- `generate_qr_code_contact(name, phone, email, organization)` - QR code contatto vCard
+- `generate_qr_code_sms(phone, message)` - QR code per SMS
+- `analyze_qr_content(content)` - Analizza tipo e contenuto QR code
+- `qr_code_formats_info()` - Informazioni formati QR supportati
+
+### 🔍 Regex Tools (`regex_tools.py`)
+**Strumenti espressioni regolari**
+- `regex_test(pattern, text, flags)` - Testa pattern regex su testo
+- `regex_match_details(pattern, text, flags)` - Dettagli corrispondenze con posizioni
+- `regex_replace(pattern, text, replacement, flags, count)` - Sostituisce con regex
+- `regex_split(pattern, text, flags, maxsplit)` - Divide testo con regex
+- `regex_validate_pattern(pattern)` - Valida e analizza pattern regex
+- `regex_common_patterns()` - Libreria pattern regex comuni
+- `regex_extract_emails(text)` - Estrae indirizzi email da testo
+- `regex_extract_urls(text)` - Estrae URL da testo
+
+### 🔄 File Converter Tools (`file_converter.py`)
+**Conversioni formato file**
+- `csv_to_json(csv_content, delimiter, has_header)` - Converte CSV in JSON
+- `json_to_csv(json_content, delimiter, include_header)` - Converte JSON in CSV
+- `json_to_xml(json_content, root_name)` - Converte JSON in XML
+- `xml_to_json(xml_content)` - Converte XML in JSON
+- `txt_to_json_lines(text_content, line_key)` - Converte testo in JSON righe
+- `json_lines_to_txt(json_content, line_field)` - Converte JSON in testo
+- `detect_file_format(content)` - Rileva automaticamente formato file
+- `conversion_help()` - Guida completa conversioni disponibili
+
+### 📄 PDF Tools (`pdf_tools.py`)
+**Strumenti elaborazione PDF**
+- `analyze_pdf_metadata(pdf_base64)` - Analizza metadata e struttura PDF
+- `create_simple_pdf_info(title, author, subject, pages)` - Genera informazioni PDF
+- `pdf_text_extraction_guide()` - Guida estrazione testo da PDF
+- `validate_pdf_structure(pdf_base64)` - Valida struttura PDF
+- `pdf_security_check(pdf_base64)` - Controlla impostazioni sicurezza PDF
+- `pdf_tools_info()` - Documentazione completa strumenti PDF
+
 ## 🏗️ Struttura del Progetto
 
 ```
@@ -175,7 +225,12 @@ nexus-mcp-server/
     ├── data_analysis.py        # 📊 Analisi dati
     ├── image_processing.py     # 🖼️ Elaborazione immagini
     ├── audio_processing.py     # 🎵 Elaborazione audio
-    └── video_processing.py     # 🎬 Elaborazione video
+    ├── video_processing.py     # 🎬 Elaborazione video
+    ├── unit_converter.py       # 🔄 Conversioni unità misura
+    ├── qr_code_tools.py        # 📱 Generazione QR code
+    ├── regex_tools.py          # 🔍 Strumenti regex
+    ├── file_converter.py       # 🔄 Conversioni formato file
+    └── pdf_tools.py            # 📄 Strumenti PDF
 ```
 
 ## 🚀 Quick Start
@@ -294,6 +349,34 @@ python client.py analyze_memory_usage '{}'
 # Data Analysis Tools
 python client.py statistical_analysis '{"numbers": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}'
 python client.py text_analysis '{"text": "This is a sample text for analysis."}'
+
+# Unit Converter Tools
+python client.py convert_length '{"value": 100, "from_unit": "cm", "to_unit": "m"}'
+python client.py convert_temperature '{"value": 100, "from_unit": "C", "to_unit": "F"}'
+python client.py convert_weight '{"value": 1000, "from_unit": "g", "to_unit": "kg"}'
+python client.py list_available_units '{}'
+
+# QR Code Tools
+python client.py generate_qr_code '{"text": "Hello World", "size": 200}'
+python client.py generate_qr_code_url '{"url": "https://github.com", "size": 250}'
+python client.py generate_qr_code_wifi '{"ssid": "MyWiFi", "password": "password123", "security": "WPA"}'
+python client.py analyze_qr_content '{"content": "https://www.example.com"}'
+
+# Regex Tools
+python client.py regex_test '{"pattern": "[0-9]+", "text": "Ho 25 anni e 30 euro"}'
+python client.py regex_replace '{"pattern": "[0-9]+", "text": "Ho 25 anni", "replacement": "XXX"}'
+python client.py regex_extract_emails '{"text": "Contatta mario@example.com o lucia@test.it"}'
+python client.py regex_common_patterns '{}'
+
+# File Converter Tools
+python client.py csv_to_json '{"csv_content": "name,age\\nMario,30\\nLucia,25", "delimiter": ","}'
+python client.py json_to_csv '{"json_content": "[{\\"name\\": \\"Mario\\", \\"age\\": 30}]"}'
+python client.py detect_file_format '{"content": "{\\"test\\": \\"json\\"}"}'
+python client.py conversion_help '{}'
+
+# PDF Tools
+python client.py pdf_text_extraction_guide '{}'
+python client.py pdf_tools_info '{}'
 ```
 
 ## ⚙️ Configurazione
@@ -316,7 +399,12 @@ Modifica `config.json` per controllare quali tool sono attivi:
     "data_analysis",
     "image_processing",
     "audio_processing",
-    "video_processing"
+    "video_processing",
+    "unit_converter",
+    "qr_code_tools",
+    "regex_tools",
+    "file_converter",
+    "pdf_tools"
   ]
 }
 ```
