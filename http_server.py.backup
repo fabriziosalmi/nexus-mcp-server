@@ -125,16 +125,6 @@ async def list_tools():
         }
     }
 
-@app.get("/metrics")
-async def prometheus_metrics():
-    """Prometheus metrics endpoint for monitoring and observability."""
-    monitoring = get_monitoring()
-    metrics_data = monitoring.get_metrics()
-    return Response(
-        content=metrics_data,
-        media_type=monitoring.get_content_type()
-    )
-
 @app.post("/execute")
 async def execute_tool(request: ToolRequest):
     """Esegue un tool specificato."""
@@ -150,49 +140,54 @@ async def execute_tool(request: ToolRequest):
         )
     
     try:
-        # Approccio semplificato: chiamiamo il tool direttamente dai moduli
-        # Ricreiamo le funzioni localmente
-        if request.tool_name == "add":
-            result = request.arguments["a"] + request.arguments["b"]
-        elif request.tool_name == "multiply":
-            result = request.arguments["a"] * request.arguments["b"]
-        elif request.tool_name == "generate_uuid4":
-            import uuid
-            result = str(uuid.uuid4())
-        elif request.tool_name == "current_timestamp":
-            from datetime import datetime
-            result = {
-                "iso": datetime.utcnow().isoformat() + "Z",
-                "unix": int(datetime.utcnow().timestamp()),
-                "human_readable": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
-            }
-        elif request.tool_name == "base64_encode":
-            import base64
-            result = base64.b64encode(request.arguments["text"].encode()).decode()
-        elif request.tool_name == "system_overview":
-            import psutil, platform
-            result = {
-                "platform": platform.system(),
-                "python_version": platform.python_version(),
-                "cpu_count": psutil.cpu_count(),
-                "memory_total_gb": round(psutil.virtual_memory().total / (1024**3), 2),
-                "hostname": platform.node()
-            }
-        elif request.tool_name == "generate_secure_password":
-            import secrets, string
-            length = request.arguments.get("length", 16)
-            include_symbols = request.arguments.get("include_symbols", True)
-            
-            charset = string.ascii_letters + string.digits
-            if include_symbols:
-                charset += "!@#$%^&*()_+-=[]{}|;:,.<>?"
-            
-            password = ''.join(secrets.choice(charset) for _ in range(length))
-            result = {
-                "password": password,
-                "length": len(password),
-                "charset_size": len(charset)
-            }
+        # Get monitoring instance
+        monitoring = get_monitoring()
+        
+        # Track tool execution with monitoring
+        with monitoring.track_tool_execution(request.tool_name) as execution_context:
+            # Approccio semplificato: chiamiamo il tool direttamente dai moduli
+            # Ricreiamo le funzioni localmente
+            if request.tool_name == "add":
+                result = request.arguments["a"] + request.arguments["b"]
+            elif request.tool_name == "multiply":
+                result = request.arguments["a"] * request.arguments["b"]
+            elif request.tool_name == "generate_uuid4":
+                import uuid
+                result = str(uuid.uuid4())
+            elif request.tool_name == "current_timestamp":
+                from datetime import datetime
+                result = {
+                    "iso": datetime.utcnow().isoformat() + "Z",
+                    "unix": int(datetime.utcnow().timestamp()),
+                    "human_readable": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+                }
+            elif request.tool_name == "base64_encode":
+                import base64
+                result = base64.b64encode(request.arguments["text"].encode()).decode()
+            elif request.tool_name == "system_overview":
+                import psutil, platform
+                result = {
+                    "platform": platform.system(),
+                    "python_version": platform.python_version(),
+                    "cpu_count": psutil.cpu_count(),
+                    "memory_total_gb": round(psutil.virtual_memory().total / (1024**3), 2),
+                    "hostname": platform.node()
+                }
+            elif request.tool_name == "generate_secure_password":
+                import secrets, string
+                length = request.arguments.get("length", 16)
+                include_symbols = request.arguments.get("include_symbols", True)
+                
+                charset = string.ascii_letters + string.digits
+                if include_symbols:
+                    charset += "!@#$%^&*()_+-=[]{}|;:,.<>?"
+                
+                password = ''.join(secrets.choice(charset) for _ in range(length))
+                result = {
+                    "password": password,
+                    "length": len(password),
+                    "charset_size": len(charset)
+                }
         elif request.tool_name == "get_public_ip":
             import requests
             try:
@@ -279,6 +274,16 @@ async def execute_tool(request: ToolRequest):
             status_code=500, 
             detail=f"Errore durante esecuzione: {str(e)}"
         )
+
+@app.get("/metrics")
+async def metrics():
+    """Prometheus metrics endpoint."""
+    monitoring = get_monitoring()
+    metrics_data = monitoring.get_metrics()
+    return Response(
+        content=metrics_data,
+        media_type=monitoring.get_content_type()
+    )
 
 @app.get("/execute/{tool_name}")
 async def execute_tool_get(tool_name: str):
