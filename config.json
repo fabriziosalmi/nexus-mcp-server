@@ -1,6 +1,8 @@
 {
-  "comment": "Test configuration",
+  "comment": "Pannello di controllo per il server MCP Nexus. Aggiungi o rimuovi i nomi dei file (senza .py) dalla cartella \"tools\" per abilitarli o disabilitarli.",
   "enabled_tools": [
+    "calculator",
+    "crypto_tools",
     "system_info"
   ]
 }
