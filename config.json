@@ -33,6 +33,7 @@
     "environment_tools",
     "backup_tools",
     "log_analysis_tools",
-    "code_execution_tools"
+    "code_execution_tools",
+    "cloud_tools"
   ]
 }
