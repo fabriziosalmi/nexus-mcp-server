@@ -5,6 +5,7 @@ import logging
 import sys
 import importlib
 from mcp.server.fastmcp import FastMCP
+from monitoring import get_monitoring
 
 # Configurazione avanzata del logging per una diagnostica chiara
 logging.basicConfig(
@@ -58,6 +59,9 @@ def main():
     logging.info("Avvio del Server MCP Nexus in corso...")
     logging.info("==============================================")
     
+    # Initialize monitoring and track session
+    monitoring = get_monitoring()
+    
     config = load_configuration()
     
     server_instance = FastMCP("NexusServer")
@@ -71,8 +75,10 @@ def main():
     logging.info("----------------------------------------------")
     logging.info("In ascolto di connessioni client su stdio...")
     
-    # Avvia il ciclo di vita del server, che ascoltera' i messaggi dal client
-    server_instance.run(transport='stdio')
+    # Track the session lifecycle
+    with monitoring.track_session():
+        # Avvia il ciclo di vita del server, che ascoltera' i messaggi dal client
+        server_instance.run(transport='stdio')
 
 if __name__ == "__main__":
     main()
