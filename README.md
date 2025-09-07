@@ -203,6 +203,19 @@
 - `pdf_security_check(pdf_base64)` - Controlla impostazioni sicurezza PDF
 - `pdf_tools_info()` - Documentazione completa strumenti PDF
 
+### ☁️ Cloud Platform Tools (`cloud_tools.py`)
+**Strumenti per servizi cloud e multi-cloud**
+- `aws_service_status(service, region)` - Verifica stato servizi AWS
+- `azure_service_status(service, region)` - Verifica stato servizi Azure
+- `gcp_service_status(service, region)` - Verifica stato servizi Google Cloud
+- `cloudflare_dns_lookup(domain, record_type)` - Query DNS tramite Cloudflare
+- `digitalocean_status_check()` - Verifica stato servizi DigitalOcean
+- `cloud_cost_calculator(service_type, usage_hours, instance_type)` - Calcolo costi cloud
+- `cloud_health_checker(endpoints)` - Controllo salute endpoint cloud
+- `cloud_security_scanner(config_text, cloud_provider)` - Scansione sicurezza configurazioni
+- `multi_cloud_resource_tracker(resources)` - Tracciamento risorse multi-cloud
+- `cloud_config_validator(config_text, config_type)` - Validazione file configurazione cloud
+
 ## 🏗️ Struttura del Progetto
 
 ```
@@ -239,7 +252,8 @@ nexus-mcp-server/
     ├── qr_code_tools.py        # 📱 Generazione QR code
     ├── regex_tools.py          # 🔍 Strumenti regex
     ├── file_converter.py       # 🔄 Conversioni formato file
-    └── pdf_tools.py            # 📄 Strumenti PDF
+    ├── pdf_tools.py            # 📄 Strumenti PDF
+    └── cloud_tools.py          # ☁️ Strumenti cloud platform
 ```
 
 ## 🚀 Quick Start
@@ -393,6 +407,18 @@ python client.py conversion_help '{}'
 # PDF Tools
 python client.py pdf_text_extraction_guide '{}'
 python client.py pdf_tools_info '{}'
+
+# Cloud Platform Tools
+python client.py aws_service_status '{"service": "all", "region": "us-east-1"}'
+python client.py azure_service_status '{"service": "compute", "region": "East US"}'
+python client.py gcp_service_status '{"service": "all", "region": "us-central1"}'
+python client.py cloudflare_dns_lookup '{"domain": "example.com", "record_type": "A"}'
+python client.py digitalocean_status_check '{}'
+python client.py cloud_cost_calculator '{"service_type": "compute", "usage_hours": 730, "instance_type": "medium"}'
+python client.py cloud_health_checker '{"endpoints": ["https://api.example.com", "https://status.example.com"]}'
+python client.py cloud_security_scanner '{"config_text": "{\\"Action\\": \\"*\\", \\"Resource\\": \\"*\\"}", "cloud_provider": "aws"}'
+python client.py multi_cloud_resource_tracker '{"resources": [{"provider": "aws", "type": "ec2", "name": "web-server", "region": "us-east-1"}]}'
+python client.py cloud_config_validator '{"config_text": "{\\"AWSTemplateFormatVersion\\": \\"2010-09-09\\"}", "config_type": "json"}'
 ```
 
 ## ⚙️ Configurazione
@@ -421,7 +447,8 @@ Modifica `config.json` per controllare quali tool sono attivi:
     "qr_code_tools",
     "regex_tools",
     "file_converter",
-    "pdf_tools"
+    "pdf_tools",
+    "cloud_tools"
   ]
 }
 ```
