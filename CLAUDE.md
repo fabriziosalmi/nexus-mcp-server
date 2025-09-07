@@ -80,6 +80,78 @@ The Nexus MCP server provides the following tool categories:
 ### 🌐 Web Content Fetching
 - `fetch_url_content(url)` - Fetch content from URLs
 
+### 🔍 Code Analysis & Quality
+- `analyze_python_syntax(code)` - Analyze Python syntax and metrics
+- `check_code_style(code, language)` - Check code style and provide suggestions
+- `detect_code_patterns(code)` - Detect patterns and anti-patterns in code
+- `estimate_code_complexity(code)` - Estimate code complexity using various metrics
+
+### 🐳 Docker Management
+- `check_docker_status()` - Check Docker installation and daemon status
+- `list_docker_containers(status)` - List Docker containers with filtering
+- `list_docker_images()` - List available Docker images
+- `validate_dockerfile(dockerfile_content)` - Validate and analyze Dockerfile
+- `generate_docker_compose(services)` - Generate docker-compose.yml files
+- `docker_security_scan(image_name)` - Basic security scan of Docker images
+
+### 📋 Git Repository Tools
+- `analyze_git_repository(repo_path)` - Analyze Git repository statistics
+- `git_diff_analysis(file_path, staged)` - Analyze Git diffs and changes
+- `git_commit_history(limit, author)` - Analyze commit history
+- `git_branch_analysis()` - Analyze Git branches and sync status
+- `generate_gitignore(language, additional_patterns)` - Generate .gitignore files
+
+### ⚙️ Process Management
+- `list_processes_by_criteria(criteria, limit)` - List and filter system processes
+- `monitor_process(pid, duration)` - Monitor specific process performance
+- `execute_with_limits(command, timeout, memory_limit_mb)` - Execute commands with resource limits
+- `analyze_system_resources()` - Analyze system resource usage
+- `kill_process_safe(pid, force)` - Safely terminate processes
+- `create_sandbox_environment()` - Create isolated execution environments
+
+### 🚀 Code Generation
+- `generate_python_class(class_name, attributes, methods)` - Generate Python classes
+- `generate_api_endpoints(resource_name, operations, framework)` - Generate REST API endpoints
+- `generate_dockerfile_template(base_image, language, port)` - Generate Dockerfile templates
+- `generate_test_template(test_type, class_name, methods, framework)` - Generate test code
+- `generate_config_file(config_type, application_name, environment)` - Generate configuration files
+
+### 🗄️ Database Tools
+- `create_sqlite_database(database_name, tables)` - Create SQLite databases with schema
+- `validate_sql_query(query, database_type)` - Validate and analyze SQL queries
+- `generate_database_schema(schema_name, entities, relationships)` - Generate database schemas
+- `execute_safe_query(database_path, query, max_rows)` - Execute safe SELECT queries
+- `analyze_database_structure(database_path)` - Analyze database structure and health
+
+### 🌍 Environment Management
+- `manage_environment_variables(action, variables, variable_name)` - Manage environment variables
+- `create_environment_file(env_type, variables, file_path)` - Create environment configuration files
+- `analyze_system_environment()` - Analyze system environment and configuration
+- `backup_restore_environment(action, backup_path, variables)` - Backup/restore environment settings
+- `validate_configuration_file(file_path, config_type)` - Validate configuration files
+
+### 💾 Backup & Archive Tools
+- `create_archive(source_path, archive_type, include_patterns, exclude_patterns)` - Create file archives
+- `extract_archive(archive_path, destination_path, verify_integrity)` - Extract archives safely
+- `create_backup_manifest(backup_path, source_paths, metadata)` - Create backup manifests
+- `verify_backup_integrity(manifest_path, backup_base_path)` - Verify backup integrity
+- `compress_files(file_paths, compression_level, algorithm)` - Compress individual files
+
+### 📊 Log Analysis
+- `parse_log_file(file_path, log_format, max_lines)` - Parse and analyze log files
+- `analyze_log_patterns(log_data, pattern_type)` - Analyze specific patterns in logs
+- `generate_log_report(log_data, report_type)` - Generate comprehensive log reports
+- `filter_log_entries(log_data, filters)` - Filter log entries by criteria
+- `export_log_analysis(analysis_data, export_format, file_path)` - Export analysis results
+
+### 🚀 Code Execution (Sandboxed)
+- `execute_python_code(code, timeout, memory_limit_mb)` - Execute Python code safely
+- `validate_python_syntax(code, strict_mode)` - Validate Python syntax without execution
+- `execute_shell_command(command, working_directory, timeout)` - Execute shell commands safely
+- `create_python_sandbox(sandbox_id, allowed_modules)` - Create isolated Python environments
+- `execute_code_in_sandbox(sandbox_id, code, language)` - Execute code in existing sandbox
+- `analyze_code_performance(code, language, iterations)` - Analyze code performance metrics
+
 ## Security Features
 
 - **Sandbox File Access**: File operations restricted to `safe_files/` directory
