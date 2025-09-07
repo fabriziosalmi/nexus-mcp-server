@@ -152,6 +152,14 @@ The Nexus MCP server provides the following tool categories:
 - `execute_code_in_sandbox(sandbox_id, code, language)` - Execute code in existing sandbox
 - `analyze_code_performance(code, language, iterations)` - Analyze code performance metrics
 
+### 🔄 Workflow Orchestration
+- `analyze_repository(url, analysis_depth)` - **META-TOOL**: Complete repository analysis workflow
+  - Chains multiple tools: clone → complexity analysis → security scan → structure analysis → archive → cleanup
+  - Analysis depths: "quick", "standard", "deep"
+  - Reduces LLM conversation rounds from 6+ individual tool calls to 1
+  - Provides comprehensive reporting with workflow tracking and error handling
+  - Automatic resource cleanup and temporary directory management
+
 ## Security Features
 
 - **Sandbox File Access**: File operations restricted to `safe_files/` directory
@@ -160,6 +168,46 @@ The Nexus MCP server provides the following tool categories:
 - **Secure Token Generation**: Cryptographically secure random generation
 - **Timeout Protection**: Network requests have timeouts
 - **Resource Limits**: Container resource limits when using Docker
+
+## Workflow Orchestration (NEW)
+
+The new workflow system enables **advanced tool chaining** and **meta-tool orchestration**:
+
+### Key Benefits
+- **Reduced Complexity**: Single tool call replaces multiple individual operations
+- **Rich Results**: Comprehensive analysis with aggregated reporting
+- **Error Resilience**: Graceful failure handling with detailed error reporting
+- **Resource Management**: Automatic cleanup prevents disk space issues
+- **Flexible Analysis**: Configurable depth levels for different use cases
+
+### Example Workflow
+```python
+# Instead of 6+ separate tool calls:
+# 1. clone_repository(url)
+# 2. analyze_code_complexity(path)
+# 3. detect_secrets(path)
+# 4. analyze_structure(path)  
+# 5. create_archive(path)
+# 6. cleanup_directory(path)
+
+# Now just one meta-tool call:
+analyze_repository("https://github.com/user/repo.git", "standard")
+```
+
+### Workflow Output Structure
+```json
+{
+  "workflow_id": "repo_analysis_20250907_094500",
+  "repository_url": "https://github.com/example/repo.git",
+  "final_status": "completed",
+  "steps_completed": ["repository_clone", "code_complexity", "secret_detection", "structure_analysis", "cleanup"],
+  "summary": {
+    "code_analysis": {"files_analyzed": 25, "total_lines": 1500, "languages_detected": 3},
+    "security_analysis": {"secrets_found": 0, "risk_level": "LOW"}
+  },
+  "duration_seconds": 2.45
+}
+```
 
 ## Docker Integration
 
