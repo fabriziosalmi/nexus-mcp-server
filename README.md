@@ -65,6 +65,41 @@
 - **📚 Auto-documentazione**: Codice completamente documentato per facilità di manutenzione
 - **🔄 Workflow Orchestration**: Meta-tool per catene di operazioni complesse con un'unica chiamata
 - **🚀 Dynamic Tool Creation**: Generazione runtime di tool personalizzati per esigenze specifiche
+- **🌐 Web UI Management**: Interfaccia web per gestione dinamica e monitoring in tempo reale
+
+## 🖥️ Interfaccia Web di Configurazione
+
+**Nexus MCP Server** include un'**interfaccia web moderna** per la gestione dinamica della configurazione senza necessità di riavvio del server.
+
+### ✨ Funzionalità Principali
+
+- **🔧 Dashboard dei Tool**: Visualizza tutti i tool disponibili con checkbox per abilitarli/disabilitarli
+- **📊 Metriche in Tempo Reale**: Monitora tool abilitati, sessioni attive e prestazioni
+- **📋 Log Streaming**: Visualizzazione dei log del server in tempo reale via Server-Sent Events
+- **⚡ Hot Reload**: Applica modifiche senza downtime del server
+- **🎨 Design Responsivo**: Interfaccia moderna che funziona su desktop e mobile
+
+### 🚀 Avvio dell'Interfaccia Web
+
+```bash
+# Avvia il server UI sulla porta 8888
+python ui_server.py
+
+# Accedi alla dashboard web
+# http://localhost:8888
+```
+
+### 📸 Screenshots
+
+![Dashboard di Configurazione](https://github.com/user-attachments/assets/474943df-d52e-46af-abc1-505f52800b48)
+*Dashboard principale con tutti i tool disponibili*
+
+![Configurazione Applicata](https://github.com/user-attachments/assets/cfcda072-80be-4130-a7e9-1ec09dfbb117)
+*Esempio di configurazione con solo 3 tool abilitati (calculator, crypto_tools, system_info)*
+
+### 🔗 Documentazione Completa
+
+Per informazioni dettagliate sull'interfaccia web, consultare: **[UI_CONFIGURATION.md](UI_CONFIGURATION.md)**
 
 ## 📦 Tool Disponibili
 
