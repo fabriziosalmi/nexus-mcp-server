@@ -2,6 +2,50 @@
 
 **Nexus** è un server MCP (Model Context Protocol) avanzato, modulare e configurabile che funge da hub centrale per integrare una vasta gamma di strumenti personalizzati, rendendoli disponibili a un Large Language Model (LLM).
 
+## 📊 Panoramica Tool e Funzioni
+
+🛠️ **Tool Disponibili**: **34**  
+⚙️ **Funzioni Totali**: **183**
+
+## 📋 Tabella Completa Tool
+
+| Tool | File | Funzioni | Descrizione |
+|------|------|----------|-------------|
+| Audio Processing | `audio_processing.py` | 6 | Elaborazione e analisi di file audio |
+| Backup Tools | `backup_tools.py` | 5 | Gestione backup e archivi |
+| Calculator | `calculator.py` | 2 | Operazioni matematiche di base |
+| Cloud Tools | `cloud_tools.py` | 10 | Servizi e API per piattaforme cloud |
+| Code Analysis Tools | `code_analysis_tools.py` | 4 | Analisi qualità e metriche del codice |
+| Code Execution Tools | `code_execution_tools.py` | 6 | Ambienti sicuri per esecuzione codice |
+| Code Generation Tools | `code_generation_tools.py` | 5 | Generazione template e strutture codice |
+| Crypto Tools | `crypto_tools.py` | 3 | Funzioni crittografiche e hashing |
+| Data Analysis | `data_analysis.py` | 5 | Elaborazione e analisi statistica dati |
+| Database Tools | `database_tools.py` | 5 | Gestione database e query |
+| Datetime Tools | `datetime_tools.py` | 4 | Manipolazione date e orari |
+| Docker Tools | `docker_tools.py` | 6 | Gestione container Docker |
+| Encoding Tools | `encoding_tools.py` | 6 | Codifica e decodifica dati |
+| Environment Tools | `environment_tools.py` | 5 | Gestione variabili ambiente |
+| File Converter | `file_converter.py` | 8 | Utilità conversione formati file |
+| Filesystem Reader | `filesystem_reader.py` | 1 | Accesso sicuro al file system |
+| Git Tools | `git_tools.py` | 5 | Gestione repository Git |
+| Image Processing | `image_processing.py` | 6 | Manipolazione e analisi immagini |
+| Log Analysis Tools | `log_analysis_tools.py` | 5 | Parsing e analisi file log |
+| Network Security Tools | `network_security_tools.py` | 5 | Scansione sicurezza di rete |
+| Network Tools | `network_tools.py` | 7 | Diagnostica e utilità di rete |
+| PDF Tools | `pdf_tools.py` | 6 | Elaborazione documenti PDF |
+| Performance Tools | `performance_tools.py` | 6 | Monitoraggio performance sistema |
+| Process Management Tools | `process_management_tools.py` | 6 | Controllo e monitoraggio processi |
+| QR Code Tools | `qr_code_tools.py` | 7 | Generazione e analisi QR code |
+| Regex Tools | `regex_tools.py` | 8 | Utilità espressioni regolari |
+| Security Tools | `security_tools.py` | 7 | Utilità sicurezza e crittografia |
+| String Tools | `string_tools.py` | 5 | Funzioni manipolazione stringhe |
+| System Info | `system_info.py` | 6 | Informazioni e monitoraggio sistema |
+| Unit Converter | `unit_converter.py` | 6 | Utilità conversione unità misura |
+| UUID Tools | `uuid_tools.py` | 6 | Generazione UUID e ID |
+| Validator Tools | `validator_tools.py` | 5 | Funzioni validazione dati |
+| Video Processing | `video_processing.py` | 5 | Elaborazione file video |
+| Web Fetcher | `web_fetcher.py` | 1 | Recupero contenuti web |
+
 ## 🎯 Filosofia di Progettazione
 
 - **🎭 Orchestrazione Centrale, Logica Distribuita**: Il server principale non contiene la logica di nessun tool, ma solo la responsabilità di caricarli e servirli
