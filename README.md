@@ -4,8 +4,8 @@
 
 ## 📊 Panoramica Tool e Funzioni
 
-🛠️ **Tool Disponibili**: **49**  
-⚙️ **Funzioni Totali**: **249**
+🛠️ **Tool Disponibili**: **45**  
+⚙️ **Funzioni Totali**: **225+**
 
 ## 📋 Tabella Completa Tool
 
@@ -63,6 +63,8 @@
 - **⚙️ Configurazione-Driven**: Attivazione/disattivazione dei tool tramite file `config.json` senza ricompilazione
 - **🔒 Sicurezza First-Class**: Ogni tool implementa rigorosi controlli di sicurezza
 - **📚 Auto-documentazione**: Codice completamente documentato per facilità di manutenzione
+- **🔄 Workflow Orchestration**: Meta-tool per catene di operazioni complesse con un'unica chiamata
+- **🚀 Dynamic Tool Creation**: Generazione runtime di tool personalizzati per esigenze specifiche
 
 ## 📦 Tool Disponibili
 
