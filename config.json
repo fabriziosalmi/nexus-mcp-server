@@ -10,6 +10,13 @@
     "uuid_tools",
     "string_tools",
     "validator_tools",
-    "system_info"
+    "system_info",
+    "network_tools",
+    "security_tools",
+    "performance_tools",
+    "data_analysis",
+    "image_processing",
+    "audio_processing",
+    "video_processing"
   ]
 }
