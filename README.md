@@ -82,6 +82,69 @@
 - `network_info()` - Informazioni interfacce di rete
 - `running_processes(limit)` - Top processi per utilizzo CPU
 
+### 🌐 Network Tools (`network_tools.py`)
+**Strumenti diagnostici di rete**
+- `ping_host(host, count)` - Ping verso host specificato
+- `dns_lookup(hostname, record_type)` - Lookup DNS (A, AAAA, MX, NS, TXT)
+- `port_scan(host, ports)` - Scansione porte specifiche
+- `traceroute(host, max_hops)` - Traceroute verso destinazione
+- `whois_lookup(domain)` - Informazioni whois dominio
+- `check_website_status(url, timeout)` - Status e performance sito web
+- `get_public_ip()` - IP pubblico corrente
+
+### 🔒 Security Tools (`security_tools.py`)
+**Strumenti sicurezza e crittografia**
+- `generate_secure_password(length, include_symbols, exclude_ambiguous)` - Password sicure
+- `password_strength_check(password)` - Analisi robustezza password
+- `generate_api_key(length, format_type)` - Chiavi API sicure
+- `hash_file_content(content, algorithms)` - Hash per verifica integrità
+- `jwt_decode_header(jwt_token)` - Decodifica header JWT (senza verifica)
+- `check_common_ports(host)` - Controllo porte comuni per sicurezza
+- `ssl_certificate_check(domain, port)` - Verifica certificati SSL/TLS
+
+### ⚡ Performance Tools (`performance_tools.py`)
+**Monitoraggio e benchmark performance**
+- `benchmark_function_performance(code, iterations)` - Benchmark codice Python
+- `monitor_system_performance(duration_seconds)` - Monitoraggio sistema real-time
+- `analyze_memory_usage()` - Analisi dettagliata memoria
+- `disk_performance_test(test_size_mb)` - Test velocità disco
+- `network_latency_test(hosts)` - Test latenza rete
+- `cpu_stress_test(duration_seconds)` - Stress test CPU
+
+### 📊 Data Analysis Tools (`data_analysis.py`)
+**Analisi e elaborazione dati**
+- `analyze_csv_data(csv_content, delimiter)` - Analisi statistiche CSV
+- `analyze_json_structure(json_content)` - Analisi struttura JSON
+- `statistical_analysis(numbers)` - Statistiche descrittive complete
+- `text_analysis(text)` - Analisi linguistica e sentiment
+- `correlation_analysis(dataset1, dataset2)` - Correlazione tra dataset
+
+### 🖼️ Image Processing Tools (`image_processing.py`)
+**Elaborazione e analisi immagini**
+- `analyze_image_metadata(image_base64)` - Metadata ed EXIF
+- `resize_image(image_base64, width, height, maintain_aspect)` - Ridimensionamento
+- `convert_image_format(image_base64, target_format)` - Conversione formato
+- `apply_image_filters(image_base64, filters)` - Filtri (blur, sharpen, sepia, etc.)
+- `create_thumbnail(image_base64, size, quality)` - Generazione thumbnail
+- `extract_dominant_colors(image_base64, num_colors)` - Palette colori dominanti
+
+### 🎵 Audio Processing Tools (`audio_processing.py`)
+**Elaborazione e analisi audio**
+- `analyze_audio_metadata(audio_base64)` - Metadata audio WAV
+- `generate_sine_wave(frequency, duration, sample_rate, amplitude)` - Generazione onde sinusoidali
+- `analyze_audio_spectrum(audio_base64, fft_size)` - Analisi spettro di frequenza
+- `adjust_audio_volume(audio_base64, volume_factor)` - Regolazione volume
+- `convert_audio_format(audio_base64, target_format, quality)` - Conversione formato
+- `extract_audio_features(audio_base64)` - Estrazione caratteristiche audio
+
+### 🎬 Video Processing Tools (`video_processing.py`)
+**Elaborazione e analisi video**
+- `analyze_video_metadata(video_base64)` - Metadata e formato video
+- `create_video_thumbnail_placeholder(width, height, color, text)` - Placeholder thumbnail
+- `analyze_video_structure(video_base64)` - Struttura MP4 (atom/box analysis)
+- `estimate_video_properties(video_base64)` - Stima proprietà da euristica
+- `create_video_info_summary(video_base64)` - Riassunto completo informazioni
+
 ## 🏗️ Struttura del Progetto
 
 ```
@@ -105,7 +168,14 @@ nexus-mcp-server/
     ├── uuid_tools.py           # 🆔 Generazione UUID/ID
     ├── string_tools.py         # 📝 Manipolazione stringhe
     ├── validator_tools.py      # ✅ Validazione dati
-    └── system_info.py          # 💻 Informazioni sistema
+    ├── system_info.py          # 💻 Informazioni sistema
+    ├── network_tools.py        # 🌐 Strumenti diagnostici rete
+    ├── security_tools.py       # 🔒 Strumenti sicurezza
+    ├── performance_tools.py    # ⚡ Monitoraggio performance
+    ├── data_analysis.py        # 📊 Analisi dati
+    ├── image_processing.py     # 🖼️ Elaborazione immagini
+    ├── audio_processing.py     # 🎵 Elaborazione audio
+    └── video_processing.py     # 🎬 Elaborazione video
 ```
 
 ## 🚀 Quick Start
@@ -204,6 +274,26 @@ python client.py read_safe_file '{"filename": "esempio.txt"}'
 
 # Web Fetcher  
 python client.py fetch_url_content '{"url": "https://httpbin.org/json"}'
+
+# Network Tools
+python client.py ping_host '{"host": "8.8.8.8", "count": 4}'
+python client.py dns_lookup '{"hostname": "example.com", "record_type": "A"}'
+python client.py check_website_status '{"url": "https://www.example.com"}'
+python client.py get_public_ip '{}'
+
+# Security Tools
+python client.py generate_secure_password '{"length": 16, "include_symbols": true}'
+python client.py password_strength_check '{"password": "MyPassword123!"}'
+python client.py generate_api_key '{"length": 32, "format_type": "hex"}'
+
+# Performance Tools
+python client.py benchmark_function_performance '{"code": "sum(range(1000))", "iterations": 1000}'
+python client.py monitor_system_performance '{"duration_seconds": 5}'
+python client.py analyze_memory_usage '{}'
+
+# Data Analysis Tools
+python client.py statistical_analysis '{"numbers": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}'
+python client.py text_analysis '{"text": "This is a sample text for analysis."}'
 ```
 
 ## ⚙️ Configurazione
@@ -219,7 +309,14 @@ Modifica `config.json` per controllare quali tool sono attivi:
     "calculator",
     "crypto_tools",
     "string_tools",
-    "uuid_tools"
+    "uuid_tools",
+    "network_tools",
+    "security_tools",
+    "performance_tools",
+    "data_analysis",
+    "image_processing",
+    "audio_processing",
+    "video_processing"
   ]
 }
 ```
@@ -351,7 +448,7 @@ logging.basicConfig(level=logging.DEBUG, ...)
 ## 🔄 Changelog
 
 ### v2.0.0 (Corrente)
-- ➕ Aggiunti 7 nuovi tool (Crypto, Encoding, DateTime, UUID, String, Validator, System)
+- ➕ Aggiunti 15 nuovi tool (Crypto, Encoding, DateTime, UUID, String, Validator, System, Network, Security, Performance, Data Analysis, Image Processing, Audio Processing, Video Processing)
 - 🔧 Migliorata configurazione tool
 - 📚 Documentazione completa
 - 🧪 Test estesi
