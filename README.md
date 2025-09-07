@@ -5,7 +5,7 @@
 ## 📊 Panoramica Tool e Funzioni
 
 🛠️ **Tool Disponibili**: **44**  
-⚙️ **Funzioni Totali**: **223**
+⚙️ **Funzioni Totali**: **224**
 
 ## 📋 Tabella Completa Tool
 
@@ -18,7 +18,7 @@
 | Calculator | `calculator.py` | 2 | Operazioni matematiche di base |
 | Cloud Tools | `cloud_tools.py` | 10 | Servizi e API per piattaforme cloud |
 | Code Analysis Tools | `code_analysis_tools.py` | 4 | Analisi qualità e metriche del codice |
-| Code Execution Tools | `code_execution_tools.py` | 6 | Ambienti sicuri per esecuzione codice |
+| Code Execution Tools | `code_execution_tools.py` | 7 | Ambienti sicuri per esecuzione codice + **Dynamic Tools** |
 | Code Generation Tools | `code_generation_tools.py` | 5 | Generazione template e strutture codice |
 | Color Tools | `color_tools.py` | 4 | Conversione e analisi colori |
 | Crypto Tools | `crypto_tools.py` | 3 | Funzioni crittografiche e hashing |
@@ -389,6 +389,52 @@ nexus-mcp-server/
     ├── markdown_tools.py       # 📝 Elaborazione Markdown
     └── archive_tools.py        # 📦 Gestione archivi
 ```
+
+## 🎯 Dynamic One-Time Tools (Advanced Feature)
+
+**Nexus** includes the revolutionary **Dynamic One-Time Tools** feature - the most advanced capability that allows LLMs to create custom tools on-the-fly for specific tasks that don't have existing solutions.
+
+### 🚀 `create_and_run_tool` Function
+
+This breakthrough feature enables LLMs to write Python code for specific tasks and execute it in a completely isolated, secure environment:
+
+```python
+create_and_run_tool(python_code: str, timeout: int = 60, memory_limit_mb: int = 128)
+```
+
+### 🔒 Security Features
+- **Docker Isolation**: Complete environment isolation using Docker containers
+- **Code Security Validation**: Blocks dangerous operations before execution
+- **Resource Limits**: Memory (32-512MB), CPU (0.5 cores), Time (10-300s)
+- **Network Isolation**: Zero network access during execution
+- **Non-root Execution**: Unprivileged user execution
+- **Read-only Filesystem**: Limited filesystem access
+
+### 🎯 Use Cases
+- **Data Format Conversion**: Convert proprietary or legacy formats
+- **Mathematical Computations**: Complex calculations not covered by existing tools
+- **Custom Text Processing**: Specific parsing and analysis requirements
+- **Algorithm Implementation**: One-off algorithms for unique problems
+- **Long-tail Problems**: Any computational task not covered by existing tools
+
+### 💡 Example Usage
+
+```python
+# Convert custom timestamp format
+code = """
+from datetime import datetime
+custom_timestamp = "20250907T143022Z"
+dt = datetime.strptime(custom_timestamp, "%Y%m%dT%H%M%SZ")
+print(f"ISO: {dt.isoformat()}")
+print(f"Readable: {dt.strftime('%B %d, %Y at %I:%M %p')}")
+"""
+
+result = create_and_run_tool(code, timeout=30, memory_limit_mb=64)
+```
+
+**This represents the pinnacle of agentic capabilities** - true on-demand tool creation for any computational task within security constraints.
+
+📖 **[Complete Documentation: DYNAMIC_TOOLS.md](DYNAMIC_TOOLS.md)**
 
 ## 🚀 Quick Start
 
