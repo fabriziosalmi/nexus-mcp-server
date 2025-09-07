@@ -465,6 +465,250 @@ python client.py multi_cloud_resource_tracker '{"resources": [{"provider": "aws"
 python client.py cloud_config_validator '{"config_text": "{\\"AWSTemplateFormatVersion\\": \\"2010-09-09\\"}", "config_type": "json"}'
 ```
 
+## 🔌 Integrazione VSCode con Docker/Docker Compose
+
+### Prerequisiti
+
+- **VSCode** con estensione **Continue** o **Claude Code** installata
+- **Docker** installato e funzionante
+- **Docker Compose** (opzionale, per deployment orchestrato)
+
+### 📋 Setup VSCode - Versione Docker
+
+#### 1. Build dell'immagine Docker
+
+```bash
+# Assicurati di essere nella directory del progetto
+cd nexus-mcp-server
+
+# Build dell'immagine
+docker build -t nexus-mcp-server:latest .
+
+# Verifica che l'immagine sia stata creata
+docker images | grep nexus-mcp-server
+```
+
+#### 2. Configurazione VSCode
+
+Crea o modifica il file di configurazione MCP in VSCode (solitamente in `%APPDATA%\Code\User\globalStorage\rooveterinaryinc.roo-cline\settings\cline_mcp_settings.json` su Windows o `~/.vscode/settings.json`):
+
+```json
+{
+  "mcpServers": {
+    "nexus-docker": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "--network=host",
+        "-v", "./safe_files:/app/safe_files:rw",
+        "-v", "./config.json:/app/config.json:ro",
+        "nexus-mcp-server:latest"
+      ],
+      "env": {
+        "MCP_SERVER_NAME": "NexusServer-Docker"
+      }
+    }
+  }
+}
+```
+
+#### 3. Test della configurazione
+
+```bash
+# Test rapido del container
+docker run --rm -i \
+  -v "$(pwd)/safe_files:/app/safe_files:rw" \
+  -v "$(pwd)/config.json:/app/config.json:ro" \
+  nexus-mcp-server:latest \
+  python client.py system_overview '{}'
+```
+
+### 🐳 Setup VSCode - Versione Docker Compose
+
+#### 1. Avvio del servizio con Docker Compose
+
+```bash
+# Avvia il server in background
+docker-compose up -d nexus-mcp
+
+# Verifica che il container sia in esecuzione
+docker-compose ps
+
+# Visualizza i log (opzionale)
+docker-compose logs -f nexus-mcp
+```
+
+#### 2. Configurazione VSCode per Docker Compose
+
+```json
+{
+  "mcpServers": {
+    "nexus-compose": {
+      "command": "docker-compose",
+      "args": ["exec", "-T", "nexus-mcp", "python", "multi_server.py"],
+      "cwd": ".",
+      "env": {
+        "MCP_SERVER_NAME": "NexusServer-Compose"
+      }
+    }
+  }
+}
+```
+
+#### 3. Test con Docker Compose
+
+```bash
+# Test attraverso docker-compose
+docker-compose exec nexus-mcp python client.py add '{"a": 42, "b": 8}'
+
+# Test di più funzioni
+docker-compose exec nexus-mcp python client.py system_overview '{}'
+docker-compose exec nexus-mcp python client.py generate_uuid4 '{}'
+```
+
+### 📂 Configurazioni Pre-configurate
+
+Il progetto include file di configurazione pronti all'uso nella directory `mcp-configs/`:
+
+```bash
+# Copia la configurazione VSCode nel tuo ambiente
+cp mcp-configs/vscode-mcp.json ~/.vscode/mcp-servers.json
+
+# Oppure per Continue/Claude Code
+cp mcp-configs/claude-code-config.json %APPDATA%\Code\User\globalStorage\rooveterinaryinc.roo-cline\settings\
+```
+
+### 🔧 Configurazione Avanzata
+
+#### Variabili d'ambiente personalizzate
+
+```yaml
+# docker-compose.override.yml
+services:
+  nexus-mcp:
+    environment:
+      - LOG_LEVEL=DEBUG
+      - MCP_SERVER_NAME=NexusServer-Dev
+      - CUSTOM_CONFIG_PATH=/app/config-dev.json
+    volumes:
+      - ./config-dev.json:/app/config-dev.json:ro
+```
+
+#### Configurazione di rete personalizzata
+
+```yaml
+# Per esporre il server su una porta specifica
+services:
+  nexus-mcp:
+    ports:
+      - "8080:9999"
+    environment:
+      - MCP_HTTP_PORT=9999
+```
+
+### 🧪 Testing e Verifica
+
+#### 1. Test di connettività
+
+```bash
+# Test Docker diretto
+docker run --rm nexus-mcp-server:latest python -c "print('✅ Container funzionante')"
+
+# Test Docker Compose
+docker-compose exec nexus-mcp python -c "print('✅ Compose funzionante')"
+```
+
+#### 2. Test funzionalità MCP
+
+```bash
+# Test tool matematici
+docker-compose exec nexus-mcp python client.py add '{"a": 10, "b": 5}'
+
+# Test tool di sicurezza
+docker-compose exec nexus-mcp python client.py generate_secure_password '{"length": 16}'
+
+# Test tool di sistema
+docker-compose exec nexus-mcp python client.py memory_usage '{}'
+```
+
+#### 3. Verifica integrazione VSCode
+
+1. Riavvia VSCode dopo aver configurato il server MCP
+2. Apri la palette comandi (`Ctrl+Shift+P`)
+3. Cerca "MCP" o "Continue" per verificare che il server sia riconosciuto
+4. Testa una richiesta semplice come "Calcola 5 + 3 usando Nexus"
+
+### 🚨 Troubleshooting
+
+#### Problema: Container non si avvia
+
+```bash
+# Verifica i log
+docker-compose logs nexus-mcp
+
+# Verifica che le dipendenze siano installate
+docker run --rm nexus-mcp-server:latest pip list
+```
+
+#### Problema: VSCode non riconosce il server
+
+```bash
+# Verifica la sintassi del file di configurazione
+jq . < ~/.vscode/mcp-servers.json
+
+# Verifica che Docker sia raggiungibile
+docker --version
+docker-compose --version
+```
+
+#### Problema: Errori di permessi sui volumi
+
+```bash
+# Verifica permessi directory safe_files
+ls -la safe_files/
+
+# Correggi permessi se necessario
+chmod 755 safe_files/
+```
+
+#### Problema: Timeout di connessione
+
+```bash
+# Aumenta timeout nel docker-compose.yml
+services:
+  nexus-mcp:
+    healthcheck:
+      timeout: 30s
+      interval: 60s
+```
+
+### 📊 Monitoraggio e Performance
+
+#### Utilizzo risorse
+
+```bash
+# Monitora utilizzo risorse
+docker stats nexus-mcp-server
+
+# Verifica health check
+docker inspect nexus-mcp-server | grep -A 10 -B 5 Health
+```
+
+#### Log analysis
+
+```bash
+# Log in tempo reale
+docker-compose logs -f nexus-mcp
+
+# Log con timestamp
+docker-compose logs -t nexus-mcp
+
+# Ultimi 100 log
+docker-compose logs --tail=100 nexus-mcp
+```
+
 ## ⚙️ Configurazione
 
 ### Abilitare/Disabilitare Tool
