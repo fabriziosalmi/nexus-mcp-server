@@ -5,58 +5,58 @@
 ## 📊 Panoramica Tool e Funzioni
 
 🛠️ **Tool Disponibili**: **46**  
-⚙️ **Funzioni Totali**: **232+**
+⚙️ **Funzioni Totali**: **437+**
 
 ## 📋 Tabella Completa Tool
 
 | Tool | File | Funzioni | Descrizione |
 |------|------|----------|-------------|
-| API Testing Tools | `api_testing_tools.py` | 4 | Testing e documentazione API REST |
-| Archive Tools | `archive_tools.py` | 4 | Gestione archivi ZIP, TAR, 7Z |
-| **Async Task Queue** | `async_task_queue.py` | 7 | **Gestione coda asincrona per task a lunga esecuzione** |
-| Audio Processing | `audio_processing.py` | 6 | Elaborazione e analisi di file audio |
-| Backup Tools | `backup_tools.py` | 5 | Gestione backup e archivi avanzata |
-| Calculator | `calculator.py` | 2 | Operazioni matematiche di base |
-| Cloud Tools | `cloud_tools.py` | 10 | Servizi e API per piattaforme cloud |
-| Code Analysis Tools | `code_analysis_tools.py` | 4 | Analisi qualità e metriche del codice |
-| Code Execution Tools | `code_execution_tools.py` | 7 | Ambienti sicuri per esecuzione codice + **Dynamic Tools** |
-| Code Generation Tools | `code_generation_tools.py` | 5 | Generazione template e strutture codice |
-| Color Tools | `color_tools.py` | 4 | Conversione e analisi colori |
-| Crypto Tools | `crypto_tools.py` | 3 | Funzioni crittografiche e hashing |
-| Data Analysis | `data_analysis.py` | 5 | Elaborazione e analisi statistica dati |
-| Database Tools | `database_tools.py` | 5 | Gestione database e query |
-| Datetime Tools | `datetime_tools.py` | 4 | Manipolazione date e orari |
-| Docker Tools | `docker_tools.py` | 6 | Gestione container Docker |
-| Email Tools | `email_tools.py` | 4 | Validazione email e template |
-| Encoding Tools | `encoding_tools.py` | 6 | Codifica e decodifica dati |
-| Environment Tools | `environment_tools.py` | 5 | Gestione variabili ambiente |
-| File Converter | `file_converter.py` | 8 | Utilità conversione formati file |
-| Filesystem Reader | `filesystem_reader.py` | 1 | Accesso sicuro al file system |
-| Git Tools | `git_tools.py` | 5 | Gestione repository Git |
-| Image Processing | `image_processing.py` | 6 | Manipolazione e analisi immagini |
-| JSON/YAML Tools | `json_yaml_tools.py` | 5 | Manipolazione JSON e YAML |
-| Log Analysis Tools | `log_analysis_tools.py` | 5 | Parsing e analisi file log |
-| Markdown Tools | `markdown_tools.py` | 4 | Elaborazione documenti Markdown |
-| Network Security Tools | `network_security_tools.py` | 5 | Scansione sicurezza di rete |
-| Network Tools | `network_tools.py` | 7 | Diagnostica e utilità di rete |
-| PDF Tools | `pdf_tools.py` | 6 | Elaborazione documenti PDF |
-| Performance Tools | `performance_tools.py` | 6 | Monitoraggio performance sistema |
-| Process Management Tools | `process_management_tools.py` | 6 | Controllo e monitoraggio processi |
-| QR Code Tools | `qr_code_tools.py` | 7 | Generazione e analisi QR code |
-| Regex Tools | `regex_tools.py` | 8 | Utilità espressioni regolari |
-| Security Tools | `security_tools.py` | 7 | Utilità sicurezza e crittografia |
-| String Tools | `string_tools.py` | 5 | Funzioni manipolazione stringhe |
-| System Info | `system_info.py` | 6 | Informazioni e monitoraggio sistema |
-| Template Tools | `template_tools.py` | 3 | Generazione template codice/config |
-| Text Analysis Tools | `text_analysis_tools.py` | 4 | Analisi sentimenti e linguistica |
-| Unit Converter | `unit_converter.py` | 6 | Utilità conversione unità misura |
-| URL Tools | `url_tools.py` | 4 | Manipolazione e validazione URL |
-| UUID Tools | `uuid_tools.py` | 6 | Generazione UUID e ID |
-| Validator Tools | `validator_tools.py` | 5 | Funzioni validazione dati |
-| Video Processing | `video_processing.py` | 5 | Elaborazione file video |
-| Weather Tools | `weather_tools.py` | 3 | Informazioni meteorologiche |
-| Web Fetcher | `web_fetcher.py` | 1 | Recupero contenuti web |
-| **Workflow Orchestration** | `workflows.py` | 1 | **Meta-tool per orchestrazione workflow complessi** |
+| **Encoding Tools** | `encoding_tools.py` | **19** | **Codifica e decodifica dati (Base64, URL, HTML, Hex)** |
+| **Calculator** | `calculator.py` | **16** | **Operazioni matematiche avanzate e calcolazioni** |
+| **Cloud Tools** | `cloud_tools.py` | **16** | **Servizi e API per piattaforme cloud (AWS, Azure, GCP)** |
+| **Network Tools** | `network_tools.py` | **15** | **Diagnostica e utilità di rete** |
+| **Code Execution Tools** | `code_execution_tools.py` | **14** | **Ambienti sicuri per esecuzione codice + Dynamic Tools** |
+| **File Converter** | `file_converter.py` | **14** | **Conversione tra formati file diversi** |
+| **Docker Tools** | `docker_tools.py` | **13** | **Gestione container Docker** |
+| **Network Security Tools** | `network_security_tools.py` | **13** | **Scansione sicurezza di rete** |
+| **Regex Tools** | `regex_tools.py` | **13** | **Utilità espressioni regolari** |
+| **Security Tools** | `security_tools.py` | **13** | **Utilità sicurezza e crittografia** |
+| **Code Generation Tools** | `code_generation_tools.py` | **12** | **Generazione template e strutture codice** |
+| **Datetime Tools** | `datetime_tools.py` | **12** | **Manipolazione date e orari** |
+| **Image Processing** | `image_processing.py` | **12** | **Manipolazione e analisi immagini** |
+| **JSON/YAML Tools** | `json_yaml_tools.py` | **12** | **Manipolazione JSON e YAML** |
+| **Log Analysis Tools** | `log_analysis_tools.py` | **12** | **Parsing e analisi file log** |
+| **Markdown Tools** | `markdown_tools.py` | **12** | **Elaborazione documenti Markdown** |
+| **Color Tools** | `color_tools.py` | **11** | **Conversione e analisi colori** |
+| **Crypto Tools** | `crypto_tools.py` | **11** | **Funzioni crittografiche e hashing** |
+| **Data Analysis** | `data_analysis.py` | **11** | **Elaborazione e analisi statistica dati** |
+| **Database Tools** | `database_tools.py` | **11** | **Gestione database e query** |
+| **Environment Tools** | `environment_tools.py` | **11** | **Gestione variabili ambiente** |
+| **Git Tools** | `git_tools.py` | **11** | **Gestione repository Git** |
+| **Process Management Tools** | `process_management_tools.py` | **11** | **Controllo e monitoraggio processi** |
+| **String Tools** | `string_tools.py` | **11** | **Funzioni manipolazione stringhe** |
+| **System Info** | `system_info.py` | **11** | **Informazioni e monitoraggio sistema** |
+| **Backup Tools** | `backup_tools.py` | **10** | **Gestione backup e archivi avanzata** |
+| **Email Tools** | `email_tools.py` | **10** | **Validazione email e template** |
+| **Performance Tools** | `performance_tools.py` | **10** | **Monitoraggio performance sistema** |
+| **Audio Processing** | `audio_processing.py` | **9** | **Elaborazione e analisi di file audio** |
+| **Code Analysis Tools** | `code_analysis_tools.py` | **9** | **Analisi qualità e metriche del codice** |
+| **PDF Tools** | `pdf_tools.py` | **9** | **Elaborazione documenti PDF** |
+| **Filesystem Reader** | `filesystem_reader.py` | **7** | **Accesso sicuro al file system** |
+| **QR Code Tools** | `qr_code_tools.py` | **7** | **Generazione e analisi QR code** |
+| **Unit Converter** | `unit_converter.py` | **6** | **Utilità conversione unità misura** |
+| **UUID Tools** | `uuid_tools.py` | **6** | **Generazione UUID e ID** |
+| **Validator Tools** | `validator_tools.py` | **5** | **Funzioni validazione dati** |
+| **Video Processing** | `video_processing.py` | **5** | **Elaborazione file video** |
+| **API Testing Tools** | `api_testing_tools.py` | **4** | **Testing e documentazione API REST** |
+| **Async Task Queue** | `async_task_queue.py` | **4** | **Gestione coda asincrona per task a lunga esecuzione** |
+| **Text Analysis Tools** | `text_analysis_tools.py` | **4** | **Analisi sentimenti e linguistica** |
+| **URL Tools** | `url_tools.py` | **4** | **Manipolazione e validazione URL** |
+| **Archive Tools** | `archive_tools.py` | **3** | **Gestione archivi ZIP, TAR, 7Z** |
+| **Template Tools** | `template_tools.py` | **3** | **Generazione template codice/config** |
+| **Weather Tools** | `weather_tools.py` | **3** | **Informazioni meteorologiche** |
+| **Web Fetcher** | `web_fetcher.py` | **1** | **Recupero contenuti web** |
+| **Workflow Orchestration** | `workflows.py` | **1** | **Meta-tool per orchestrazione workflow complessi** |
 
 ## 🎯 Filosofia di Progettazione
 
