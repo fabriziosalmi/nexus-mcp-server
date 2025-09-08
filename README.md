@@ -464,60 +464,60 @@ result = create_and_run_tool(code, timeout=30, memory_limit_mb=64)
 
 ## 🚀 Quick Start
 
-### Deployment Automatico (Raccomandato)
+### Automatic Deployment (Recommended)
 
 ```bash
-# Clona il progetto
+# Clone the project
 git clone <repository-url> nexus-mcp-server
 cd nexus-mcp-server
 
-# Deployment completo con script automatico
+# Complete deployment with automatic script
 ./scripts/deploy.sh full
 
-# Oppure deployment specifico:
-./scripts/deploy.sh local    # Solo ambiente locale
-./scripts/deploy.sh docker   # Solo Docker
+# Or specific deployment:
+./scripts/deploy.sh local    # Local environment only
+./scripts/deploy.sh docker   # Docker only
 ./scripts/deploy.sh compose  # Docker Compose
 ```
 
-### 1. Setup Ambiente Locale
+### 1. Local Environment Setup
 
 ```bash
-# Crea ambiente virtuale
+# Create virtual environment
 python -m venv .venv
 
-# Attiva ambiente virtuale
+# Activate virtual environment
 source .venv/bin/activate  # Linux/macOS
 # .venv\Scripts\activate   # Windows
 
-# Installa dipendenze
+# Install dependencies
 pip install -r requirements.txt
 ```
 
 ### 2. Docker Setup
 
 ```bash
-# Build immagine Docker
+# Build Docker image
 docker build -t nexus-mcp-server:latest .
 
-# Avvia con Docker Compose
+# Start with Docker Compose
 docker-compose up -d nexus-mcp
 
 # Test container
 docker run --rm -i nexus-mcp-server:latest python -c "print('OK')"
 ```
 
-### 3. Utilizzo
+### 3. Usage
 
 ```bash
-# Locale
-python client.py <nome_tool> '<argomenti_json>'
+# Local
+python client.py <tool_name> '<json_arguments>'
 
 # Docker
 docker run --rm -i -v "./safe_files:/app/safe_files:rw" nexus-mcp-server:latest python client.py <tool> '<args>'
 ```
 
-### 3. Esempi di Utilizzo
+### 3. Usage Examples
 
 ```bash
 # Calculator
@@ -554,7 +554,7 @@ python client.py memory_usage '{}'
 python client.py running_processes '{"limit": 5}'
 
 # Filesystem Reader
-python client.py read_safe_file '{"filename": "esempio.txt"}'
+python client.py read_safe_file '{"filename": "example.txt"}'
 
 # Web Fetcher  
 python client.py fetch_url_content '{"url": "https://httpbin.org/json"}'
@@ -626,7 +626,7 @@ python client.py cloud_security_scanner '{"config_text": "{\\"Action\\": \\"*\\"
 python client.py multi_cloud_resource_tracker '{"resources": [{"provider": "aws", "type": "ec2", "name": "web-server", "region": "us-east-1"}]}'
 python client.py cloud_config_validator '{"config_text": "{\\"AWSTemplateFormatVersion\\": \\"2010-09-09\\"}", "config_type": "json"}'
 
-# Environment Tools (NUOVO)
+# Environment Tools (NEW)
 python client.py manage_environment_variables '{"action": "list"}'
 python client.py manage_environment_variables '{"action": "get", "variable_name": "PATH"}'
 python client.py manage_environment_variables '{"action": "set", "variables": {"CUSTOM_VAR": "value123"}}'
@@ -635,34 +635,34 @@ python client.py analyze_system_environment '{}'
 python client.py backup_restore_environment '{"action": "backup", "variables": ["PATH", "HOME", "USER"]}'
 python client.py validate_configuration_file '{"file_path": "/path/to/config.json", "config_type": "json"}'
 
-# Backup Tools (NUOVO)  
+# Backup Tools (NEW)  
 python client.py create_archive '{"source_path": "/path/to/backup", "archive_type": "zip", "exclude_patterns": ["*.tmp", "*.log"]}'
 python client.py extract_archive '{"archive_path": "/path/to/archive.zip", "verify_integrity": true}'
 python client.py create_backup_manifest '{"backup_path": "/backup/dir", "source_paths": ["/home/user/docs"]}'
 python client.py verify_backup_integrity '{"manifest_path": "/backup/manifest.json"}'
 python client.py compress_files '{"file_paths": ["/file1.txt", "/file2.txt"], "algorithm": "gzip", "compression_level": 6}'
 
-# Async Task Queue (NUOVO - GESTIONE TASK ASINCRONI)
-python client.py queue_long_running_task '{"name": "Long Sleep Task", "description": "Task che dorme per 30 secondi", "task_type": "sleep", "duration": 30}'
-python client.py queue_long_running_task '{"name": "CPU Intensive", "description": "Task CPU-intensive", "task_type": "cpu_intensive", "duration": 15}'
-python client.py queue_long_running_task '{"name": "IO Operations", "description": "Task con operazioni I/O", "task_type": "io_intensive", "duration": 10}'
-python client.py queue_long_running_task '{"name": "Custom Task", "description": "Task personalizzato", "task_type": "custom", "custom_data": "dati personalizzati"}'
-python client.py get_task_status '{"task_id": "uuid-del-task"}'
+# Async Task Queue (NEW - ASYNCHRONOUS TASK MANAGEMENT)
+python client.py queue_long_running_task '{"name": "Long Sleep Task", "description": "Task that sleeps for 30 seconds", "task_type": "sleep", "duration": 30}'
+python client.py queue_long_running_task '{"name": "CPU Intensive", "description": "CPU-intensive task", "task_type": "cpu_intensive", "duration": 15}'
+python client.py queue_long_running_task '{"name": "IO Operations", "description": "Task with I/O operations", "task_type": "io_intensive", "duration": 10}'
+python client.py queue_long_running_task '{"name": "Custom Task", "description": "Custom task", "task_type": "custom", "custom_data": "custom data"}'
+python client.py get_task_status '{"task_id": "task-uuid"}'
 python client.py list_all_tasks '{"status_filter": "running", "limit": 10}'
 python client.py list_all_tasks '{"status_filter": "completed", "limit": 5}'
-python client.py cancel_task '{"task_id": "uuid-del-task"}'
-python client.py remove_task '{"task_id": "uuid-del-task"}'
+python client.py cancel_task '{"task_id": "task-uuid"}'
+python client.py remove_task '{"task_id": "task-uuid"}'
 python client.py get_queue_info '{}'
 python client.py cleanup_completed_tasks '{"max_age_hours": 12}'
 
-# Log Analysis Tools (NUOVO)
+# Log Analysis Tools (NEW)
 python client.py parse_log_file '{"file_path": "/var/log/access.log", "log_format": "auto", "max_lines": 1000}'
 python client.py analyze_log_patterns '{"log_data": [...], "pattern_type": "errors"}'
 python client.py generate_log_report '{"log_data": [...], "report_type": "summary"}'
 python client.py filter_log_entries '{"log_data": [...], "filters": {"level": "ERROR", "message_contains": "timeout"}}'
 python client.py export_log_analysis '{"analysis_data": {...}, "export_format": "html"}'
 
-# Workflow Orchestration (NUOVO - META-TOOL)
+# Workflow Orchestration (NEW - META-TOOL)
 python client.py analyze_repository '{"url": "https://github.com/user/repo.git", "analysis_depth": "standard"}'
 python client.py analyze_repository '{"url": "https://github.com/user/repo.git", "analysis_depth": "deep"}'
 
@@ -695,34 +695,34 @@ python client.py create_and_run_tool '{"python_code": "import datetime\\nprint(d
 python client.py validate_python_syntax '{"code": "def hello(): return \\"world\\"", "strict_mode": true}'
 ## 🚀 Code Generation Tools
 
-Suite completa per generazione automatica di codice, scaffolding progetti, design patterns e documentazione con supporto multi-linguaggio e framework.
+Complete suite for automatic code generation, project scaffolding, design patterns, and documentation with multi-language and framework support.
 
-### Funzionalità Principali
+### Main Features
 
-- **Class & API Generation**: Generazione classi, endpoint REST, modelli
-- **Database Schema**: Schema SQL, migrazioni, modelli ORM
-- **Project Scaffolding**: Strutture complete progetto con framework
-- **Design Patterns**: Implementazioni pattern GoF e architetturali
-- **Frontend Components**: Componenti React, Vue, Angular, Svelte
+- **Class & API Generation**: Generate classes, REST endpoints, models
+- **Database Schema**: SQL schemas, migrations, ORM models
+- **Project Scaffolding**: Complete project structures with frameworks
+- **Design Patterns**: GoF and architectural pattern implementations
+- **Frontend Components**: React, Vue, Angular, Svelte components
 - **API Documentation**: OpenAPI, Postman, Markdown
 - **CI/CD Pipelines**: GitHub Actions, GitLab CI, Jenkins
-- **Code Modernization**: Refactoring e conversione legacy
-- **Docker & Config**: Dockerfile, configurazioni multi-ambiente
+- **Code Modernization**: Refactoring and legacy conversion
+- **Docker & Config**: Dockerfile, multi-environment configurations
 
-### Tool Disponibili
+### Available Tools
 
-#### Generazione Base
+#### Base Generation
 
 ##### `generate_python_class`
-Genera classi Python complete con metodi e documentazione.
+Generates complete Python classes with methods and documentation.
 
-**Parametri:**
-- `class_name` (str): Nome della classe (PascalCase)
-- `attributes` (List[str]): Lista attributi della classe
-- `methods` (List[str]): Lista metodi da generare
-- `parent_class` (str): Classe genitore (opzionale)
+**Parameters:**
+- `class_name` (str): Class name (PascalCase)
+- `attributes` (List[str]): List of class attributes
+- `methods` (List[str]): List of methods to generate
+- `parent_class` (str): Parent class (optional)
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_python_class",
@@ -736,14 +736,14 @@ Genera classi Python complete con metodi e documentazione.
 ```
 
 ##### `generate_api_endpoints`
-Genera endpoint REST completi per risorsa.
+Generates complete REST endpoints for resource.
 
-**Parametri:**
-- `resource_name` (str): Nome risorsa (es. "user", "product")
-- `operations` (List[str]): Operazioni HTTP (GET, POST, PUT, DELETE)
-- `framework` (str): Framework web (`flask`, `fastapi`, `django`)
+**Parameters:**
+- `resource_name` (str): Resource name (e.g., "user", "product")
+- `operations` (List[str]): HTTP operations (GET, POST, PUT, DELETE)
+- `framework` (str): Web framework (`flask`, `fastapi`, `django`)
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_api_endpoints",
@@ -758,15 +758,15 @@ Genera endpoint REST completi per risorsa.
 #### Database & Schema
 
 ##### `generate_database_schema`
-Genera schema database con migrazioni e modelli ORM.
+Generates database schema with migrations and ORM models.
 
-**Parametri:**
-- `table_name` (str): Nome tabella
-- `fields` (List[Dict]): Campi con tipo, vincoli, indici
+**Parameters:**
+- `table_name` (str): Table name
+- `fields` (List[Dict]): Fields with type, constraints, indices
 - `database_type` (str): DBMS (`postgresql`, `mysql`, `sqlite`, `mongodb`)
-- `include_migrations` (bool): Include script migrazione
+- `include_migrations` (bool): Include migration script
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_database_schema",
@@ -788,31 +788,31 @@ Genera schema database con migrazioni e modelli ORM.
 #### Project Scaffolding
 
 ##### `generate_project_scaffold`
-Genera struttura completa progetto con framework.
+Generates complete project structure with framework.
 
-**Parametri:**
-- `project_name` (str): Nome progetto
-- `project_type` (str): Tipo (`web`, `api`, `cli`, `desktop`, `microservice`)
-- `framework` (str): Framework specifico
-- `features` (List[str]): Feature da includere
+**Parameters:**
+- `project_name` (str): Project name
+- `project_type` (str): Type (`web`, `api`, `cli`, `desktop`, `microservice`)
+- `framework` (str): Specific framework
+- `features` (List[str]): Features to include
 
-**Tipi di Progetto Supportati:**
+**Supported Project Types:**
 - **Web**: `react`, `vue`, `angular`, `svelte`
 - **API**: `fastapi`, `flask`, `express`, `spring`
 - **CLI**: `click`, `argparse`, `typer`
-- **Microservizio**: `fastapi`, `spring-boot`, `express`
+- **Microservice**: `fastapi`, `spring-boot`, `express`
 
-**Feature Disponibili:**
-- `auth`: Sistema autenticazione
-- `database`: Setup database
-- `tests`: Struttura test
-- `docker`: Containerizzazione
+**Available Features:**
+- `auth`: Authentication system
+- `database`: Database setup
+- `tests`: Test structure
+- `docker`: Containerization
 - `github_actions`: CI/CD
 - `typescript`: TypeScript support
 - `redux`: State management
 - `tailwind`: CSS framework
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_project_scaffold",
@@ -828,14 +828,14 @@ Genera struttura completa progetto con framework.
 #### Design Patterns
 
 ##### `generate_design_pattern`
-Implementa design pattern comuni con documentazione.
+Implements common design patterns with documentation.
 
-**Pattern Supportati:**
+**Supported Patterns:**
 - **Creational**: Singleton, Factory, Builder, Prototype
 - **Structural**: Adapter, Decorator, Facade, Proxy
 - **Behavioral**: Observer, Strategy, Command, State
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_design_pattern",
@@ -853,7 +853,7 @@ Implementa design pattern comuni con documentazione.
 ##### `generate_frontend_component`
 Genera componenti frontend con styling e test.
 
-**Framework Supportati:**
+**Framework Supported:**
 - **React**: Functional, Class, Hooks
 - **Vue**: Composition API, Options API
 - **Angular**: Component, Service, Module
@@ -866,7 +866,7 @@ Genera componenti frontend con styling e test.
 - `tailwind`: Tailwind CSS
 - `module.css`: CSS Modules
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_frontend_component",
@@ -889,13 +889,13 @@ Genera componenti frontend con styling e test.
 ##### `generate_api_documentation`
 Genera documentazione API completa con esempi.
 
-**Formati Supportati:**
+**Supported Formats:**
 - **OpenAPI**: Specifica OpenAPI 3.0
 - **Postman**: Collection Postman
 - **Markdown**: Documentazione Markdown
 - **Insomnia**: Collection Insomnia
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_api_documentation",
@@ -939,7 +939,7 @@ Genera pipeline CI/CD per diverse piattaforme.
 - `heroku`: Heroku deployment
 - `vercel`: Vercel deployment
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_cicd_pipeline",
@@ -956,7 +956,7 @@ Genera pipeline CI/CD per diverse piattaforme.
 ##### `generate_dockerfile_template`
 Genera Dockerfile ottimizzati per linguaggio.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_dockerfile_template",
@@ -973,12 +973,12 @@ Genera Dockerfile ottimizzati per linguaggio.
 ##### `generate_test_template`
 Genera template test unitari e integrazione.
 
-**Framework Supportati:**
+**Framework Supported:**
 - **Python**: unittest, pytest
 - **JavaScript**: Jest, Mocha, Cypress
 - **Java**: JUnit, TestNG
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_test_template",
@@ -1001,7 +1001,7 @@ Modernizza e refactorizza codice legacy.
 - `convert`: Conversione linguaggio
 - `optimize`: Ottimizzazione performance
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "modernize_legacy_code",
@@ -1019,13 +1019,13 @@ Modernizza e refactorizza codice legacy.
 ##### `generate_config_file`
 Genera file configurazione multi-ambiente.
 
-**Formati Supportati:**
+**Supported Formats:**
 - `json`: Configurazione JSON
 - `yaml`: File YAML
 - `ini`: File INI/CFG
 - `env`: Environment variables
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_config_file",
@@ -1158,38 +1158,38 @@ Il sistema supporta template personalizzati per:
 
 # 🎨 Color Tools
 
-Suite completa per gestione professionale dei colori con teoria del colore, accessibilità, psicologia e strumenti di design.
+Complete suite for professional color management with color theory, accessibility, psychology, and design tools.
 
-### Funzionalità Principali
+### Main Features
 
-- **Conversioni Formato**: Hex, RGB, HSL, HSV con precisione professionale
-- **Palette Generation**: Schemi armonici basati su teoria del colore
-- **Accessibilità**: Analisi contrasto WCAG e simulazione daltonismo
-- **Gradient Creator**: Generazione gradienti con easing personalizzabile
-- **Psicologia Colore**: Analisi significato e impatto emotivo
-- **Color Matching**: Ricerca colori nominati in database professionali
-- **Temperature Analysis**: Classificazione colori caldi/freddi
-- **Export Tools**: Esportazione per software di design
+- **Format Conversions**: Hex, RGB, HSL, HSV with professional precision
+- **Palette Generation**: Harmonic schemes based on color theory
+- **Accessibility**: WCAG contrast analysis and colorblindness simulation
+- **Gradient Creator**: Gradient generation with customizable easing
+- **Color Psychology**: Analysis of meaning and emotional impact
+- **Color Matching**: Named color search in professional databases
+- **Temperature Analysis**: Warm/cool color classification
+- **Export Tools**: Export for design software
 
-### Tool Disponibili
+### Available Tools
 
-#### Conversioni e Analisi Base
+#### Basic Conversions and Analysis
 
 ##### `convert_color_format`
-Converte colori tra formati con informazioni complete.
+Converts colors between formats with complete information.
 
-**Parametri:**
+**Parameters:**
 - `color` (str): Colore sorgente (hex, rgb, nome)
 - `target_format` (str): Formato destinazione
 
-**Formati Supportati:**
+**Supported Formats:**
 - **HEX**: `#FF0000`, `#ff0000`
 - **RGB**: `rgb(255,0,0)`, `255,0,0`
 - **HSL**: Hue, Saturation, Lightness
 - **HSV**: Hue, Saturation, Value
 - **Nomi**: red, green, blue, etc.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "convert_color_format",
@@ -1203,7 +1203,7 @@ Converte colori tra formati con informazioni complete.
 ##### `analyze_color_contrast`
 Analisi contrasto WCAG per accessibilità.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "analyze_color_contrast",
@@ -1242,7 +1242,7 @@ Schemi colore professionali avanzati.
 - **Tetradica**: 4 colori in quadrato/rettangolo
 - **Split Complementary**: Base + 2 colori adiacenti al complementare
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_color_scheme",
@@ -1259,7 +1259,7 @@ Schemi colore professionali avanzati.
 ##### `generate_gradient`
 Generazione gradienti con curve di easing.
 
-**Parametri:**
+**Parameters:**
 - `start_color` (str): Colore iniziale
 - `end_color` (str): Colore finale  
 - `steps` (int): Numero step (3-20)
@@ -1271,7 +1271,7 @@ Generazione gradienti con curve di easing.
 - `ease-out`: Decelerazione graduale
 - `ease-in-out`: Accelerazione poi decelerazione
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "generate_gradient",
@@ -1292,7 +1292,7 @@ Generazione gradienti con curve di easing.
 ##### `color_mixer`
 Miscelazione precisa di due colori.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "color_mixer",
@@ -1315,7 +1315,7 @@ Simulazione visione daltonismo per test accessibilità.
 - **Tritanopia**: Cecità al blu (~0.003% popolazione)
 - **Achromatopsia**: Visione monocromatica (rara)
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "simulate_color_blindness",
@@ -1336,7 +1336,7 @@ Simulazione visione daltonismo per test accessibilità.
 ##### `analyze_color_psychology`
 Analisi psicologica e significato culturale dei colori.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "analyze_color_psychology",
@@ -1366,13 +1366,13 @@ Classificazione temperatura cromatica.
 ##### `find_closest_named_color`
 Trova colore nominato più simile.
 
-**Database Supportati:**
+**Database Supported:**
 - **CSS**: Colori web standard
 - **Pantone**: Sistema colori professionale
 - **RAL**: Standard europeo industriale
 - **X11**: Colori sistema Unix/Linux
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "find_closest_named_color",
@@ -1396,7 +1396,7 @@ Esportazione palette per software di design.
 - **GPL**: GIMP Palette
 - **XML**: Formato XML generico
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "export_color_palette",
@@ -1548,7 +1548,7 @@ Esportazione palette per software di design.
 
 Strumenti avanzati per sicurezza informatica, audit e protezione:
 
-### Funzionalità Principali
+### Main Features
 
 - **Password Security**: Generazione e analisi forza password
 - **Crittografia**: Encryption/decryption con algoritmi sicuri
@@ -1559,7 +1559,7 @@ Strumenti avanzati per sicurezza informatica, audit e protezione:
 - **Security Headers**: Analisi header di sicurezza HTTP
 - **Security Reporting**: Generazione report sicurezza dettagliati
 
-### Tool Disponibili
+### Available Tools
 
 #### `generate_secure_password(length?: int, include_symbols?: bool, exclude_ambiguous?: bool)`
 Generazione password sicure:
@@ -1763,30 +1763,30 @@ const report = await generate_security_report(scanData);
 
 # 📜 Text Analysis Tools
 
-Strumenti avanzati per analisi del testo, estrazione informazioni e linguistica computazionale.
+Advanced tools for text analysis, information extraction, and computational linguistics.
 
-## Funzionalità Principali
+## Main Features
 
-- **Analisi Sentimentale**: Valutazione sentimenti (positivo, negativo, neutro)
-- **Estrazione Entità**: Riconoscimento entità nominate (persone, organizzazioni, luoghi)
-- **Riconoscimento Linguistico**: Identificazione lingua del testo
-- **Tokenizzazione**: Suddivisione testo in parole, frasi, paragrafi
-- **Lemmatizzazione**: Riduzione parole alla radice (lemma)
-- **Analisi Frequenza**: Conteggio e analisi parole più frequenti
-- **N-grams**: Estrazione e analisi n-grams (sequenze di n parole)
-- **Stop Words**: Rimozione parole comuni e poco informative
+- **Sentiment Analysis**: Sentiment evaluation (positive, negative, neutral)
+- **Entity Extraction**: Named entity recognition (people, organizations, places)
+- **Language Recognition**: Text language identification
+- **Tokenization**: Text division into words, sentences, paragraphs
+- **Lemmatization**: Word reduction to root form (lemma)
+- **Frequency Analysis**: Counting and analysis of most frequent words
+- **N-grams**: Extraction and analysis of n-grams (sequences of n words)
+- **Stop Words**: Removal of common and uninformative words
 
-## Tool Disponibili
+## Available Tools
 
 ### `sentiment_analysis(text: string)`
-Analisi del sentimento di un testo.
+Sentiment analysis of a text.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "sentiment_analysis",
   "arguments": {
-    "text": "Il prodotto è fantastico e ha superato le mie aspettative!"
+    "text": "The product is fantastic and exceeded my expectations!"
   }
 }
 ```
@@ -1796,7 +1796,7 @@ Analisi del sentimento di un testo.
 ### `entity_extraction(text: string)`
 Estrazione delle entità nominate da un testo.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "entity_extraction",
@@ -1811,7 +1811,7 @@ Estrazione delle entità nominate da un testo.
 ### `language_detection(text: string)`
 Riconoscimento della lingua di un testo.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "language_detection",
@@ -1826,7 +1826,7 @@ Riconoscimento della lingua di un testo.
 ### `text_tokenization(text: string, mode: string)`
 Tokenizzazione del testo in parole o frasi.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "text_tokenization",
@@ -1842,7 +1842,7 @@ Tokenizzazione del testo in parole o frasi.
 ### `lemmatization(text: string)`
 Lemmatizzazione del testo.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "lemmatization",
@@ -1857,7 +1857,7 @@ Lemmatizzazione del testo.
 ### `frequency_analysis(text: string)`
 Analisi della frequenza delle parole nel testo.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "frequency_analysis",
@@ -1872,7 +1872,7 @@ Analisi della frequenza delle parole nel testo.
 ### `ngrams_extraction(text: string, n: int)`
 Estrazione di n-grams dal testo.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "ngrams_extraction",
@@ -1888,7 +1888,7 @@ Estrazione di n-grams dal testo.
 ### `stopwords_removal(text: string)`
 Rimozione delle stop words dal testo.
 
-**Esempio:**
+**Example:**
 ```json
 {
   "name": "stopwords_removal",
@@ -2008,7 +2008,7 @@ console.log(`Testo senza stop words: ${noStopwords.join(" ")}`);
 
 Strumenti avanzati per manipolazione, analisi e trasformazione di stringhe:
 
-### Funzionalità Principali
+### Main Features
 
 - **Case Conversion**: Trasformazione maiuscole/minuscole con formati avanzati
 - **Text Analysis**: Analisi dettagliata con metriche leggibilità e linguistiche
@@ -2019,7 +2019,7 @@ Strumenti avanzati per manipolazione, analisi e trasformazione di stringhe:
 - **Batch Processing**: Operazioni multiple simultanee su stringhe
 - **Text Cleaning**: Normalizzazione e pulizia testo avanzata
 
-### Tool Disponibili
+### Available Tools
 
 #### `string_case_convert(text: string, case_type: string)`
 Conversioni case multiple:
@@ -2035,7 +2035,7 @@ Statistiche base testo:
 
 #### `string_clean(text: string, operation: string)`
 Pulizia e normalizzazione:
-- Operazioni: trim, normalize_spaces, remove_special, letters_only, numbers_only
+- Operations: trim, normalize_spaces, remove_special, letters_only, numbers_only
 - Rimozione caratteri indesiderati
 - Normalizzazione spaziatura
 
