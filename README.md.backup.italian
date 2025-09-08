@@ -1,135 +1,135 @@
 # 🚀 Nexus MCP Server
 
-**Nexus** is an advanced, modular, and configurable MCP (Model Context Protocol) server that acts as a central hub for integrating a wide range of custom tools, making them available to a Large Language Model (LLM).
+**Nexus** è un server MCP (Model Context Protocol) avanzato, modulare e configurabile che funge da hub centrale per integrare una vasta gamma di strumenti personalizzati, rendendoli disponibili a un Large Language Model (LLM).
 
-## 📊 Tools and Functions Overview
+## 📊 Panoramica Tool e Funzioni
 
-🛠️ **Available Tools**: **46**  
-⚙️ **Total Functions**: **437+**
+🛠️ **Tool Disponibili**: **46**  
+⚙️ **Funzioni Totali**: **437+**
 
-## 📋 Complete Tools Table
+## 📋 Tabella Completa Tool
 
-| Tool | File | Functions | Description |
+| Tool | File | Funzioni | Descrizione |
 |------|------|----------|-------------|
-| **Encoding Tools** | `encoding_tools.py` | **19** | **Data encoding and decoding (Base64, URL, HTML, Hex)** |
-| **Calculator** | `calculator.py` | **16** | **Advanced mathematical operations and calculations** |
-| **Cloud Tools** | `cloud_tools.py` | **16** | **Services and APIs for cloud platforms (AWS, Azure, GCP)** |
-| **Network Tools** | `network_tools.py` | **15** | **Network diagnostics and utilities** |
-| **Code Execution Tools** | `code_execution_tools.py` | **14** | **Secure environments for code execution + Dynamic Tools** |
-| **File Converter** | `file_converter.py` | **14** | **Conversion between different file formats** |
-| **Docker Tools** | `docker_tools.py` | **13** | **Docker container management** |
-| **Network Security Tools** | `network_security_tools.py` | **13** | **Network security scanning** |
-| **Regex Tools** | `regex_tools.py` | **13** | **Regular expression utilities** |
-| **Security Tools** | `security_tools.py` | **13** | **Security and cryptography utilities** |
-| **Code Generation Tools** | `code_generation_tools.py` | **12** | **Code template and structure generation** |
-| **Datetime Tools** | `datetime_tools.py` | **12** | **Date and time manipulation** |
-| **Image Processing** | `image_processing.py` | **12** | **Image manipulation and analysis** |
-| **JSON/YAML Tools** | `json_yaml_tools.py` | **12** | **JSON and YAML manipulation** |
-| **Log Analysis Tools** | `log_analysis_tools.py` | **12** | **Log file parsing and analysis** |
-| **Markdown Tools** | `markdown_tools.py` | **12** | **Markdown document processing** |
-| **Color Tools** | `color_tools.py` | **11** | **Color conversion and analysis** |
-| **Crypto Tools** | `crypto_tools.py` | **11** | **Cryptographic functions and hashing** |
-| **Data Analysis** | `data_analysis.py` | **11** | **Data processing and statistical analysis** |
-| **Database Tools** | `database_tools.py` | **11** | **Database management and queries** |
-| **Environment Tools** | `environment_tools.py` | **11** | **Environment variable management** |
-| **Git Tools** | `git_tools.py` | **11** | **Git repository management** |
-| **Process Management Tools** | `process_management_tools.py` | **11** | **Process control and monitoring** |
-| **String Tools** | `string_tools.py` | **11** | **String manipulation functions** |
-| **System Info** | `system_info.py` | **11** | **System information and monitoring** |
-| **Backup Tools** | `backup_tools.py` | **10** | **Advanced backup and archive management** |
-| **Email Tools** | `email_tools.py` | **10** | **Email validation and templates** |
-| **Performance Tools** | `performance_tools.py` | **10** | **System performance monitoring** |
-| **Audio Processing** | `audio_processing.py` | **9** | **Audio file processing and analysis** |
-| **Code Analysis Tools** | `code_analysis_tools.py` | **9** | **Code quality analysis and metrics** |
-| **PDF Tools** | `pdf_tools.py` | **9** | **PDF document processing** |
-| **Filesystem Reader** | `filesystem_reader.py` | **7** | **Secure file system access** |
-| **QR Code Tools** | `qr_code_tools.py` | **7** | **QR code generation and analysis** |
-| **Unit Converter** | `unit_converter.py` | **6** | **Unit conversion utilities** |
-| **UUID Tools** | `uuid_tools.py` | **6** | **UUID and ID generation** |
-| **Validator Tools** | `validator_tools.py` | **5** | **Data validation functions** |
-| **Video Processing** | `video_processing.py` | **5** | **Video file processing** |
-| **API Testing Tools** | `api_testing_tools.py` | **4** | **REST API testing and documentation** |
-| **Async Task Queue** | `async_task_queue.py` | **4** | **Asynchronous queue management for long-running tasks** |
-| **Text Analysis Tools** | `text_analysis_tools.py` | **4** | **Sentiment analysis and linguistics** |
-| **URL Tools** | `url_tools.py` | **4** | **URL manipulation and validation** |
-| **Archive Tools** | `archive_tools.py` | **3** | **ZIP, TAR, 7Z archive management** |
-| **Template Tools** | `template_tools.py` | **3** | **Code/config template generation** |
-| **Weather Tools** | `weather_tools.py` | **3** | **Weather information** |
-| **Web Fetcher** | `web_fetcher.py` | **1** | **Web content retrieval** |
-| **Workflow Orchestration** | `workflows.py` | **1** | **Meta-tool for complex workflow orchestration** |
+| **Encoding Tools** | `encoding_tools.py` | **19** | **Codifica e decodifica dati (Base64, URL, HTML, Hex)** |
+| **Calculator** | `calculator.py` | **16** | **Operazioni matematiche avanzate e calcolazioni** |
+| **Cloud Tools** | `cloud_tools.py` | **16** | **Servizi e API per piattaforme cloud (AWS, Azure, GCP)** |
+| **Network Tools** | `network_tools.py` | **15** | **Diagnostica e utilità di rete** |
+| **Code Execution Tools** | `code_execution_tools.py` | **14** | **Ambienti sicuri per esecuzione codice + Dynamic Tools** |
+| **File Converter** | `file_converter.py` | **14** | **Conversione tra formati file diversi** |
+| **Docker Tools** | `docker_tools.py` | **13** | **Gestione container Docker** |
+| **Network Security Tools** | `network_security_tools.py` | **13** | **Scansione sicurezza di rete** |
+| **Regex Tools** | `regex_tools.py` | **13** | **Utilità espressioni regolari** |
+| **Security Tools** | `security_tools.py` | **13** | **Utilità sicurezza e crittografia** |
+| **Code Generation Tools** | `code_generation_tools.py` | **12** | **Generazione template e strutture codice** |
+| **Datetime Tools** | `datetime_tools.py` | **12** | **Manipolazione date e orari** |
+| **Image Processing** | `image_processing.py` | **12** | **Manipolazione e analisi immagini** |
+| **JSON/YAML Tools** | `json_yaml_tools.py` | **12** | **Manipolazione JSON e YAML** |
+| **Log Analysis Tools** | `log_analysis_tools.py` | **12** | **Parsing e analisi file log** |
+| **Markdown Tools** | `markdown_tools.py` | **12** | **Elaborazione documenti Markdown** |
+| **Color Tools** | `color_tools.py` | **11** | **Conversione e analisi colori** |
+| **Crypto Tools** | `crypto_tools.py` | **11** | **Funzioni crittografiche e hashing** |
+| **Data Analysis** | `data_analysis.py` | **11** | **Elaborazione e analisi statistica dati** |
+| **Database Tools** | `database_tools.py` | **11** | **Gestione database e query** |
+| **Environment Tools** | `environment_tools.py` | **11** | **Gestione variabili ambiente** |
+| **Git Tools** | `git_tools.py` | **11** | **Gestione repository Git** |
+| **Process Management Tools** | `process_management_tools.py` | **11** | **Controllo e monitoraggio processi** |
+| **String Tools** | `string_tools.py` | **11** | **Funzioni manipolazione stringhe** |
+| **System Info** | `system_info.py` | **11** | **Informazioni e monitoraggio sistema** |
+| **Backup Tools** | `backup_tools.py` | **10** | **Gestione backup e archivi avanzata** |
+| **Email Tools** | `email_tools.py` | **10** | **Validazione email e template** |
+| **Performance Tools** | `performance_tools.py` | **10** | **Monitoraggio performance sistema** |
+| **Audio Processing** | `audio_processing.py` | **9** | **Elaborazione e analisi di file audio** |
+| **Code Analysis Tools** | `code_analysis_tools.py` | **9** | **Analisi qualità e metriche del codice** |
+| **PDF Tools** | `pdf_tools.py` | **9** | **Elaborazione documenti PDF** |
+| **Filesystem Reader** | `filesystem_reader.py` | **7** | **Accesso sicuro al file system** |
+| **QR Code Tools** | `qr_code_tools.py` | **7** | **Generazione e analisi QR code** |
+| **Unit Converter** | `unit_converter.py` | **6** | **Utilità conversione unità misura** |
+| **UUID Tools** | `uuid_tools.py` | **6** | **Generazione UUID e ID** |
+| **Validator Tools** | `validator_tools.py` | **5** | **Funzioni validazione dati** |
+| **Video Processing** | `video_processing.py` | **5** | **Elaborazione file video** |
+| **API Testing Tools** | `api_testing_tools.py` | **4** | **Testing e documentazione API REST** |
+| **Async Task Queue** | `async_task_queue.py` | **4** | **Gestione coda asincrona per task a lunga esecuzione** |
+| **Text Analysis Tools** | `text_analysis_tools.py` | **4** | **Analisi sentimenti e linguistica** |
+| **URL Tools** | `url_tools.py` | **4** | **Manipolazione e validazione URL** |
+| **Archive Tools** | `archive_tools.py` | **3** | **Gestione archivi ZIP, TAR, 7Z** |
+| **Template Tools** | `template_tools.py` | **3** | **Generazione template codice/config** |
+| **Weather Tools** | `weather_tools.py` | **3** | **Informazioni meteorologiche** |
+| **Web Fetcher** | `web_fetcher.py` | **1** | **Recupero contenuti web** |
+| **Workflow Orchestration** | `workflows.py` | **1** | **Meta-tool per orchestrazione workflow complessi** |
 
-## 🎯 Design Philosophy
+## 🎯 Filosofia di Progettazione
 
-- **🎭 Central Orchestration, Distributed Logic**: The main server contains no tool logic, only the responsibility to load and serve them
-- **⚙️ Configuration-Driven**: Enable/disable tools via `config.json` file without recompilation
-- **🔒 Security First-Class**: Every tool implements rigorous security controls
-- **📚 Self-documentation**: Fully documented code for easy maintenance
-- **🔄 Workflow Orchestration**: Meta-tools for complex operation chains with a single call
-- **🚀 Dynamic Tool Creation**: Runtime generation of custom tools for specific needs
-- **🌐 Web UI Management**: Web interface for dynamic management and real-time monitoring
+- **🎭 Orchestrazione Centrale, Logica Distribuita**: Il server principale non contiene la logica di nessun tool, ma solo la responsabilità di caricarli e servirli
+- **⚙️ Configurazione-Driven**: Attivazione/disattivazione dei tool tramite file `config.json` senza ricompilazione
+- **🔒 Sicurezza First-Class**: Ogni tool implementa rigorosi controlli di sicurezza
+- **📚 Auto-documentazione**: Codice completamente documentato per facilità di manutenzione
+- **🔄 Workflow Orchestration**: Meta-tool per catene di operazioni complesse con un'unica chiamata
+- **🚀 Dynamic Tool Creation**: Generazione runtime di tool personalizzati per esigenze specifiche
+- **🌐 Web UI Management**: Interfaccia web per gestione dinamica e monitoring in tempo reale
 
-## 🖥️ Web Configuration Interface
+## 🖥️ Interfaccia Web di Configurazione
 
-**Nexus MCP Server** includes a **modern web interface** for dynamic configuration management without needing to restart the server.
+**Nexus MCP Server** include un'**interfaccia web moderna** per la gestione dinamica della configurazione senza necessità di riavvio del server.
 
-### ✨ Main Features
+### ✨ Funzionalità Principali
 
-- **🔧 Tools Dashboard**: View all available tools with checkboxes to enable/disable them
-- **📊 Real-time Metrics**: Monitor enabled tools, active sessions, and performance
-- **📋 Log Streaming**: Real-time server log display via Server-Sent Events
-- **⚡ Hot Reload**: Apply changes without server downtime
-- **🎨 Responsive Design**: Modern interface that works on desktop and mobile
+- **🔧 Dashboard dei Tool**: Visualizza tutti i tool disponibili con checkbox per abilitarli/disabilitarli
+- **📊 Metriche in Tempo Reale**: Monitora tool abilitati, sessioni attive e prestazioni
+- **📋 Log Streaming**: Visualizzazione dei log del server in tempo reale via Server-Sent Events
+- **⚡ Hot Reload**: Applica modifiche senza downtime del server
+- **🎨 Design Responsivo**: Interfaccia moderna che funziona su desktop e mobile
 
-### 🚀 Starting the Web Interface
+### 🚀 Avvio dell'Interfaccia Web
 
 ```bash
-# Start the UI server on port 8888
+# Avvia il server UI sulla porta 8888
 python ui_server.py
 
-# Access the web dashboard
+# Accedi alla dashboard web
 # http://localhost:8888
 ```
 
 ### 📸 Screenshots
 
-![Configuration Dashboard](https://github.com/user-attachments/assets/474943df-d52e-46af-abc1-505f52800b48)
-*Main dashboard with all available tools*
+![Dashboard di Configurazione](https://github.com/user-attachments/assets/474943df-d52e-46af-abc1-505f52800b48)
+*Dashboard principale con tutti i tool disponibili*
 
-![Applied Configuration](https://github.com/user-attachments/assets/cfcda072-80be-4130-a7e9-1ec09dfbb117)
-*Example configuration with only 3 tools enabled (calculator, crypto_tools, system_info)*
+![Configurazione Applicata](https://github.com/user-attachments/assets/cfcda072-80be-4130-a7e9-1ec09dfbb117)
+*Esempio di configurazione con solo 3 tool abilitati (calculator, crypto_tools, system_info)*
 
-### 🔗 Complete Documentation
+### 🔗 Documentazione Completa
 
-For detailed information about the web interface, see: **[UI_CONFIGURATION.md](UI_CONFIGURATION.md)**
+Per informazioni dettagliate sull'interfaccia web, consultare: **[UI_CONFIGURATION.md](UI_CONFIGURATION.md)**
 
-## 📦 Available Tools
+## 📦 Tool Disponibili
 
 ### 🧮 Calculator (`calculator.py`)
-**Basic mathematical operations**
-- `add(a, b)` - Addition
-- `multiply(a, b)` - Multiplication
+**Operazioni matematiche di base**
+- `add(a, b)` - Addizione
+- `multiply(a, b)` - Moltiplicazione
 
-## 📝 Advanced Calculator
+## 📝 Calcolatrice Avanzata
 
-Complete mathematical calculation system with advanced functions, number theory, statistics, and secure expression evaluation.
+Sistema di calcolo matematico completo con funzioni avanzate, teoria dei numeri, statistiche e valutazione sicura di espressioni.
 
-### Main Features
+### Funzionalità Principali
 
-- **Basic Operations**: Fundamental arithmetic with security controls
-- **Advanced Functions**: Trigonometry, logarithms, roots, powers
-- **Number Theory**: GCD, LCM, factorization, prime numbers
-- **Statistics**: Mean, median, standard deviation, variance
-- **Unit Conversions**: Length, weight, temperature, volume, time
-- **Financial Calculations**: Simple and compound interest
-- **Expression Evaluation**: Secure parser for complex expressions
-- **Mathematical Constants**: Access to important constants
+- **Operazioni Base**: Aritmetica fondamentale con controlli di sicurezza
+- **Funzioni Avanzate**: Trigonometria, logaritmi, radici, potenze
+- **Teoria dei Numeri**: GCD, LCM, fattorizzazione, numeri primi
+- **Statistiche**: Media, mediana, deviazione standard, varianza
+- **Conversioni Unità**: Lunghezza, peso, temperatura, volume, tempo
+- **Calcoli Finanziari**: Interessi semplici e composti
+- **Valutazione Espressioni**: Parser sicuro per espressioni complesse
+- **Costanti Matematiche**: Accesso a costanti importanti
 
-### Available Tools
+### Tool Disponibili
 
-#### Basic Operations
+#### Operazioni Base
 
 ##### `add(a, b)` & `multiply(a, b)`
-Fundamental arithmetic operations (existing).
+Operazioni aritmetiche fondamentali (esistenti).
 
 ##### `subtract(a, b)`
 ```json
@@ -140,7 +140,7 @@ Fundamental arithmetic operations (existing).
 ```
 
 ##### `divide(a, b)`
-Division with security controls and detailed information.
+Divisione con controlli di sicurezza e informazioni dettagliate.
 ```json
 {
   "name": "divide",
@@ -149,10 +149,10 @@ Division with security controls and detailed information.
 ```
 **Output**: `{"result": 3.75, "remainder": 3, "is_integer": false}`
 
-#### Advanced Operations
+#### Operazioni Avanzate
 
 ##### `power(base, exponent)`
-Power calculation with overflow protection.
+Calcolo potenze con protezione overflow.
 ```json
 {
   "name": "power",
@@ -169,7 +169,7 @@ Power calculation with overflow protection.
 ```
 
 ##### `nth_root(number, n)`
-N-th root with support for odd roots of negative numbers.
+Radice n-esima con supporto per radici dispari di numeri negativi.
 ```json
 {
   "name": "nth_root",
@@ -185,7 +185,7 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-#### Trigonometric Functions
+#### Funzioni Trigonometriche
 
 ##### `trigonometric_functions(angle, unit, functions)`
 ```json
@@ -199,10 +199,10 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Supported units**: `radians`, `degrees`
-**Functions**: `sin`, `cos`, `tan`, `cot`, `sec`, `csc`
+**Unità supportate**: `radians`, `degrees`
+**Funzioni**: `sin`, `cos`, `tan`, `cot`, `sec`, `csc`
 
-#### Logarithms
+#### Logaritmi
 
 ##### `logarithms(number, base)`
 ```json
@@ -211,9 +211,9 @@ N-th root with support for odd roots of negative numbers.
   "arguments": {"number": 100, "base": 10}
 }
 ```
-**Output**: Logarithms in natural, base 10, base 2, and specified base.
+**Output**: Logaritmi in base naturale, 10, 2 e base specificata.
 
-#### Statistics
+#### Statistiche
 
 ##### `statistics_functions(numbers, operation)`
 ```json
@@ -226,16 +226,16 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Available operations**:
-- `mean`: Arithmetic mean
-- `median`: Median
-- `mode`: Mode
-- `stdev`: Standard deviation
-- `variance`: Variance
+**Operazioni disponibili**:
+- `mean`: Media aritmetica
+- `median`: Mediana
+- `mode`: Moda
+- `stdev`: Deviazione standard
+- `variance`: Varianza
 - `range`: Range (max - min)
-- `all`: All statistics
+- `all`: Tutte le statistiche
 
-#### Number Theory
+#### Teoria dei Numeri
 
 ##### `number_theory(a, b, operation)`
 ```json
@@ -245,13 +245,13 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Operations**:
-- `gcd`: Greatest Common Divisor
-- `lcm`: Least Common Multiple
-- `prime_factors`: Prime factorization
-- `is_prime`: Primality test
+**Operazioni**:
+- `gcd`: Massimo Comune Divisore
+- `lcm`: Minimo Comune Multiplo
+- `prime_factors`: Fattorizzazione in primi
+- `is_prime`: Test di primalità
 
-#### Unit Conversions
+#### Conversioni Unità
 
 ##### `unit_converter(value, from_unit, to_unit, unit_type)`
 ```json
@@ -266,7 +266,7 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Supported unit types**:
+**Tipi di unità supportati**:
 
 **Length**: `meter`, `kilometer`, `centimeter`, `millimeter`, `inch`, `foot`, `yard`, `mile`
 
@@ -278,7 +278,7 @@ N-th root with support for odd roots of negative numbers.
 
 **Time**: `second`, `minute`, `hour`, `day`, `week`, `year`
 
-#### Financial Calculations
+#### Calcoli Finanziari
 
 ##### `financial_calculator(principal, rate, time, calculation_type, compound_frequency)`
 ```json
@@ -294,12 +294,12 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Calculation types**:
-- `simple_interest`: Simple interest
-- `compound_interest`: Compound interest
-- `present_value`: Present value
+**Tipi di calcolo**:
+- `simple_interest`: Interesse semplice
+- `compound_interest`: Interesse composto
+- `present_value`: Valore attuale
 
-#### Expression Evaluation
+#### Valutazione Espressioni
 
 ##### `expression_evaluator(expression, variables)`
 ```json
@@ -312,19 +312,19 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Available functions**:
-- Arithmetic: `+`, `-`, `*`, `/`, `**`, `%`
-- Mathematical: `sin`, `cos`, `tan`, `log`, `sqrt`, `exp`, `abs`
-- Constants: `pi`, `e`
-- Custom: User-defined variables
+**Funzioni disponibili**:
+- Aritmetiche: `+`, `-`, `*`, `/`, `**`, `%`
+- Matematiche: `sin`, `cos`, `tan`, `log`, `sqrt`, `exp`, `abs`
+- Costanti: `pi`, `e`
+- Custom: Variabili definite dall'utente
 
-**Security features**:
-- Isolated execution environment
-- Whitelist of allowed functions
-- Rigorous input validation
-- Prevention of injection attacks
+**Caratteristiche di sicurezza**:
+- Ambiente di esecuzione isolato
+- Whitelist di funzioni permesse
+- Validazione input rigorosa
+- Prevenzione injection attacks
 
-#### Mathematical Constants
+#### Costanti Matematiche
 
 ##### `mathematical_constants()`
 ```json
@@ -334,18 +334,18 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Included constants**:
+**Costanti incluse**:
 - π (pi): 3.14159...
-- e (euler): 2.71828...
-- φ (golden ratio): 1.61803...
+- e (eulero): 2.71828...
+- φ (sezione aurea): 1.61803...
 - √2, √3
-- γ (Euler-Mascheroni): 0.57721...
+- γ (Eulero-Mascheroni): 0.57721...
 
-### Advanced Usage Examples
+### Esempi di Utilizzo Avanzato
 
-#### Complex Multi-step Calculation
+#### Calcolo Complesso Multi-step
 ```json
-// 1. Calculate circle area
+// 1. Calcola area cerchio
 {
   "name": "expression_evaluator",
   "arguments": {
@@ -354,7 +354,7 @@ N-th root with support for odd roots of negative numbers.
   }
 }
 
-// 2. Statistics on dataset
+// 2. Statistiche su dataset
 {
   "name": "statistics_functions",
   "arguments": {
@@ -363,7 +363,7 @@ N-th root with support for odd roots of negative numbers.
   }
 }
 
-// 3. Convert result
+// 3. Conversione risultato
 {
   "name": "unit_converter",
   "arguments": {
@@ -375,9 +375,9 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-#### Financial Analysis
+#### Analisi Finanziaria
 ```json
-// Compare simple vs compound interest
+// Confronto interesse semplice vs composto
 {
   "name": "financial_calculator",
   "arguments": {
@@ -390,7 +390,7 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-#### Geometry Problems
+#### Problemi di Geometria
 ```json
 {
   "name": "expression_evaluator",
@@ -401,20 +401,20 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-### Security Controls
+### Controlli di Sicurezza
 
-- **Overflow Protection**: Limits on operations that could cause overflow
-- **Division by Zero**: Automatic handling of division by zero
-- **Input Validation**: Rigorous validation of all inputs
-- **Safe Evaluation**: Isolated environment for expression evaluation
-- **Error Handling**: Complete error handling with informative messages
+- **Overflow Protection**: Limiti su operazioni che potrebbero causare overflow
+- **Division by Zero**: Gestione automatica divisioni per zero
+- **Input Validation**: Validazione rigorosa di tutti gli input
+- **Safe Evaluation**: Ambiente isolato per valutazione espressioni
+- **Error Handling**: Gestione completa degli errori con messaggi informativi
 
-### Precision and Limits
+### Precisione e Limiti
 
-- **Decimal Precision**: 50 significant digits for high-precision calculations
-- **Factorial**: Limited to n ≤ 170 to avoid overflow
-- **Powers**: Automatic controls to avoid overly large results
-- **Expressions**: Maximum length and allowed characters controlled
+- **Precisione Decimale**: 50 cifre significative per calcoli di alta precisione
+- **Fattoriale**: Limitato a n ≤ 170 per evitare overflow
+- **Potenze**: Controlli automatici per evitare risultati troppo grandi
+- **Espressioni**: Lunghezza massima e caratteri permessi controllati
 
 ## 🚀 Dynamic One-Time Tools (Advanced Feature)
 
@@ -464,60 +464,60 @@ result = create_and_run_tool(code, timeout=30, memory_limit_mb=64)
 
 ## 🚀 Quick Start
 
-### Automatic Deployment (Recommended)
+### Deployment Automatico (Raccomandato)
 
 ```bash
-# Clone the project
+# Clona il progetto
 git clone <repository-url> nexus-mcp-server
 cd nexus-mcp-server
 
-# Complete deployment with automatic script
+# Deployment completo con script automatico
 ./scripts/deploy.sh full
 
-# Or specific deployment:
-./scripts/deploy.sh local    # Local environment only
-./scripts/deploy.sh docker   # Docker only
+# Oppure deployment specifico:
+./scripts/deploy.sh local    # Solo ambiente locale
+./scripts/deploy.sh docker   # Solo Docker
 ./scripts/deploy.sh compose  # Docker Compose
 ```
 
-### 1. Local Environment Setup
+### 1. Setup Ambiente Locale
 
 ```bash
-# Create virtual environment
+# Crea ambiente virtuale
 python -m venv .venv
 
-# Activate virtual environment
+# Attiva ambiente virtuale
 source .venv/bin/activate  # Linux/macOS
 # .venv\Scripts\activate   # Windows
 
-# Install dependencies
+# Installa dipendenze
 pip install -r requirements.txt
 ```
 
 ### 2. Docker Setup
 
 ```bash
-# Build Docker image
+# Build immagine Docker
 docker build -t nexus-mcp-server:latest .
 
-# Start with Docker Compose
+# Avvia con Docker Compose
 docker-compose up -d nexus-mcp
 
 # Test container
 docker run --rm -i nexus-mcp-server:latest python -c "print('OK')"
 ```
 
-### 3. Usage
+### 3. Utilizzo
 
 ```bash
-# Local
-python client.py <tool_name> '<json_arguments>'
+# Locale
+python client.py <nome_tool> '<argomenti_json>'
 
 # Docker
 docker run --rm -i -v "./safe_files:/app/safe_files:rw" nexus-mcp-server:latest python client.py <tool> '<args>'
 ```
 
-### 3. Usage Examples
+### 3. Esempi di Utilizzo
 
 ```bash
 # Calculator
@@ -554,7 +554,7 @@ python client.py memory_usage '{}'
 python client.py running_processes '{"limit": 5}'
 
 # Filesystem Reader
-python client.py read_safe_file '{"filename": "example.txt"}'
+python client.py read_safe_file '{"filename": "esempio.txt"}'
 
 # Web Fetcher  
 python client.py fetch_url_content '{"url": "https://httpbin.org/json"}'
@@ -626,7 +626,7 @@ python client.py cloud_security_scanner '{"config_text": "{\\"Action\\": \\"*\\"
 python client.py multi_cloud_resource_tracker '{"resources": [{"provider": "aws", "type": "ec2", "name": "web-server", "region": "us-east-1"}]}'
 python client.py cloud_config_validator '{"config_text": "{\\"AWSTemplateFormatVersion\\": \\"2010-09-09\\"}", "config_type": "json"}'
 
-# Environment Tools (NEW)
+# Environment Tools (NUOVO)
 python client.py manage_environment_variables '{"action": "list"}'
 python client.py manage_environment_variables '{"action": "get", "variable_name": "PATH"}'
 python client.py manage_environment_variables '{"action": "set", "variables": {"CUSTOM_VAR": "value123"}}'
@@ -635,34 +635,34 @@ python client.py analyze_system_environment '{}'
 python client.py backup_restore_environment '{"action": "backup", "variables": ["PATH", "HOME", "USER"]}'
 python client.py validate_configuration_file '{"file_path": "/path/to/config.json", "config_type": "json"}'
 
-# Backup Tools (NEW)  
+# Backup Tools (NUOVO)  
 python client.py create_archive '{"source_path": "/path/to/backup", "archive_type": "zip", "exclude_patterns": ["*.tmp", "*.log"]}'
 python client.py extract_archive '{"archive_path": "/path/to/archive.zip", "verify_integrity": true}'
 python client.py create_backup_manifest '{"backup_path": "/backup/dir", "source_paths": ["/home/user/docs"]}'
 python client.py verify_backup_integrity '{"manifest_path": "/backup/manifest.json"}'
 python client.py compress_files '{"file_paths": ["/file1.txt", "/file2.txt"], "algorithm": "gzip", "compression_level": 6}'
 
-# Async Task Queue (NEW - ASYNCHRONOUS TASK MANAGEMENT)
-python client.py queue_long_running_task '{"name": "Long Sleep Task", "description": "Task that sleeps for 30 seconds", "task_type": "sleep", "duration": 30}'
-python client.py queue_long_running_task '{"name": "CPU Intensive", "description": "CPU-intensive task", "task_type": "cpu_intensive", "duration": 15}'
-python client.py queue_long_running_task '{"name": "IO Operations", "description": "Task with I/O operations", "task_type": "io_intensive", "duration": 10}'
-python client.py queue_long_running_task '{"name": "Custom Task", "description": "Custom task", "task_type": "custom", "custom_data": "custom data"}'
-python client.py get_task_status '{"task_id": "task-uuid"}'
+# Async Task Queue (NUOVO - GESTIONE TASK ASINCRONI)
+python client.py queue_long_running_task '{"name": "Long Sleep Task", "description": "Task che dorme per 30 secondi", "task_type": "sleep", "duration": 30}'
+python client.py queue_long_running_task '{"name": "CPU Intensive", "description": "Task CPU-intensive", "task_type": "cpu_intensive", "duration": 15}'
+python client.py queue_long_running_task '{"name": "IO Operations", "description": "Task con operazioni I/O", "task_type": "io_intensive", "duration": 10}'
+python client.py queue_long_running_task '{"name": "Custom Task", "description": "Task personalizzato", "task_type": "custom", "custom_data": "dati personalizzati"}'
+python client.py get_task_status '{"task_id": "uuid-del-task"}'
 python client.py list_all_tasks '{"status_filter": "running", "limit": 10}'
 python client.py list_all_tasks '{"status_filter": "completed", "limit": 5}'
-python client.py cancel_task '{"task_id": "task-uuid"}'
-python client.py remove_task '{"task_id": "task-uuid"}'
+python client.py cancel_task '{"task_id": "uuid-del-task"}'
+python client.py remove_task '{"task_id": "uuid-del-task"}'
 python client.py get_queue_info '{}'
 python client.py cleanup_completed_tasks '{"max_age_hours": 12}'
 
-# Log Analysis Tools (NEW)
+# Log Analysis Tools (NUOVO)
 python client.py parse_log_file '{"file_path": "/var/log/access.log", "log_format": "auto", "max_lines": 1000}'
 python client.py analyze_log_patterns '{"log_data": [...], "pattern_type": "errors"}'
 python client.py generate_log_report '{"log_data": [...], "report_type": "summary"}'
 python client.py filter_log_entries '{"log_data": [...], "filters": {"level": "ERROR", "message_contains": "timeout"}}'
 python client.py export_log_analysis '{"analysis_data": {...}, "export_format": "html"}'
 
-# Workflow Orchestration (NEW - META-TOOL)
+# Workflow Orchestration (NUOVO - META-TOOL)
 python client.py analyze_repository '{"url": "https://github.com/user/repo.git", "analysis_depth": "standard"}'
 python client.py analyze_repository '{"url": "https://github.com/user/repo.git", "analysis_depth": "deep"}'
 
@@ -695,34 +695,34 @@ python client.py create_and_run_tool '{"python_code": "import datetime\\nprint(d
 python client.py validate_python_syntax '{"code": "def hello(): return \\"world\\"", "strict_mode": true}'
 ## 🚀 Code Generation Tools
 
-Complete suite for automatic code generation, project scaffolding, design patterns, and documentation with multi-language and framework support.
+Suite completa per generazione automatica di codice, scaffolding progetti, design patterns e documentazione con supporto multi-linguaggio e framework.
 
-### Main Features
+### Funzionalità Principali
 
-- **Class & API Generation**: Generate classes, REST endpoints, models
-- **Database Schema**: SQL schemas, migrations, ORM models
-- **Project Scaffolding**: Complete project structures with frameworks
-- **Design Patterns**: GoF and architectural pattern implementations
-- **Frontend Components**: React, Vue, Angular, Svelte components
+- **Class & API Generation**: Generazione classi, endpoint REST, modelli
+- **Database Schema**: Schema SQL, migrazioni, modelli ORM
+- **Project Scaffolding**: Strutture complete progetto con framework
+- **Design Patterns**: Implementazioni pattern GoF e architetturali
+- **Frontend Components**: Componenti React, Vue, Angular, Svelte
 - **API Documentation**: OpenAPI, Postman, Markdown
 - **CI/CD Pipelines**: GitHub Actions, GitLab CI, Jenkins
-- **Code Modernization**: Refactoring and legacy conversion
-- **Docker & Config**: Dockerfile, multi-environment configurations
+- **Code Modernization**: Refactoring e conversione legacy
+- **Docker & Config**: Dockerfile, configurazioni multi-ambiente
 
-### Available Tools
+### Tool Disponibili
 
-#### Base Generation
+#### Generazione Base
 
 ##### `generate_python_class`
-Generates complete Python classes with methods and documentation.
+Genera classi Python complete con metodi e documentazione.
 
-**Parameters:**
-- `class_name` (str): Class name (PascalCase)
-- `attributes` (List[str]): List of class attributes
-- `methods` (List[str]): List of methods to generate
-- `parent_class` (str): Parent class (optional)
+**Parametri:**
+- `class_name` (str): Nome della classe (PascalCase)
+- `attributes` (List[str]): Lista attributi della classe
+- `methods` (List[str]): Lista metodi da generare
+- `parent_class` (str): Classe genitore (opzionale)
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_python_class",
@@ -736,14 +736,14 @@ Generates complete Python classes with methods and documentation.
 ```
 
 ##### `generate_api_endpoints`
-Generates complete REST endpoints for resource.
+Genera endpoint REST completi per risorsa.
 
-**Parameters:**
-- `resource_name` (str): Resource name (e.g., "user", "product")
-- `operations` (List[str]): HTTP operations (GET, POST, PUT, DELETE)
-- `framework` (str): Web framework (`flask`, `fastapi`, `django`)
+**Parametri:**
+- `resource_name` (str): Nome risorsa (es. "user", "product")
+- `operations` (List[str]): Operazioni HTTP (GET, POST, PUT, DELETE)
+- `framework` (str): Framework web (`flask`, `fastapi`, `django`)
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_api_endpoints",
@@ -758,15 +758,15 @@ Generates complete REST endpoints for resource.
 #### Database & Schema
 
 ##### `generate_database_schema`
-Generates database schema with migrations and ORM models.
+Genera schema database con migrazioni e modelli ORM.
 
-**Parameters:**
-- `table_name` (str): Table name
-- `fields` (List[Dict]): Fields with type, constraints, indices
+**Parametri:**
+- `table_name` (str): Nome tabella
+- `fields` (List[Dict]): Campi con tipo, vincoli, indici
 - `database_type` (str): DBMS (`postgresql`, `mysql`, `sqlite`, `mongodb`)
-- `include_migrations` (bool): Include migration script
+- `include_migrations` (bool): Include script migrazione
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_database_schema",
@@ -788,31 +788,31 @@ Generates database schema with migrations and ORM models.
 #### Project Scaffolding
 
 ##### `generate_project_scaffold`
-Generates complete project structure with framework.
+Genera struttura completa progetto con framework.
 
-**Parameters:**
-- `project_name` (str): Project name
-- `project_type` (str): Type (`web`, `api`, `cli`, `desktop`, `microservice`)
-- `framework` (str): Specific framework
-- `features` (List[str]): Features to include
+**Parametri:**
+- `project_name` (str): Nome progetto
+- `project_type` (str): Tipo (`web`, `api`, `cli`, `desktop`, `microservice`)
+- `framework` (str): Framework specifico
+- `features` (List[str]): Feature da includere
 
-**Supported Project Types:**
+**Tipi di Progetto Supportati:**
 - **Web**: `react`, `vue`, `angular`, `svelte`
 - **API**: `fastapi`, `flask`, `express`, `spring`
 - **CLI**: `click`, `argparse`, `typer`
-- **Microservice**: `fastapi`, `spring-boot`, `express`
+- **Microservizio**: `fastapi`, `spring-boot`, `express`
 
-**Available Features:**
-- `auth`: Authentication system
-- `database`: Database setup
-- `tests`: Test structure
-- `docker`: Containerization
+**Feature Disponibili:**
+- `auth`: Sistema autenticazione
+- `database`: Setup database
+- `tests`: Struttura test
+- `docker`: Containerizzazione
 - `github_actions`: CI/CD
 - `typescript`: TypeScript support
 - `redux`: State management
 - `tailwind`: CSS framework
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_project_scaffold",
@@ -828,14 +828,14 @@ Generates complete project structure with framework.
 #### Design Patterns
 
 ##### `generate_design_pattern`
-Implements common design patterns with documentation.
+Implementa design pattern comuni con documentazione.
 
-**Supported Patterns:**
+**Pattern Supportati:**
 - **Creational**: Singleton, Factory, Builder, Prototype
 - **Structural**: Adapter, Decorator, Facade, Proxy
 - **Behavioral**: Observer, Strategy, Command, State
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_design_pattern",
@@ -851,13 +851,13 @@ Implements common design patterns with documentation.
 #### Frontend Components
 
 ##### `generate_frontend_component`
-Generates frontend components with styling and tests.
+Genera componenti frontend con styling e test.
 
-**Framework Supported:**
+**Framework Supportati:**
 - **React**: Functional, Class, Hooks
 - **Vue**: Composition API, Options API
 - **Angular**: Component, Service, Module
-- **Svelte**: Components with stores
+- **Svelte**: Component con stores
 
 **Styling Options:**
 - `css`: CSS vanilla
@@ -866,7 +866,7 @@ Generates frontend components with styling and tests.
 - `tailwind`: Tailwind CSS
 - `module.css`: CSS Modules
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_frontend_component",
@@ -887,15 +887,15 @@ Generates frontend components with styling and tests.
 #### Documentation
 
 ##### `generate_api_documentation`
-Generates complete API documentation with examples.
+Genera documentazione API completa con esempi.
 
-**Supported Formats:**
+**Formati Supportati:**
 - **OpenAPI**: Specifica OpenAPI 3.0
 - **Postman**: Collection Postman
 - **Markdown**: Documentazione Markdown
 - **Insomnia**: Collection Insomnia
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_api_documentation",
@@ -939,7 +939,7 @@ Genera pipeline CI/CD per diverse piattaforme.
 - `heroku`: Heroku deployment
 - `vercel`: Vercel deployment
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_cicd_pipeline",
@@ -956,7 +956,7 @@ Genera pipeline CI/CD per diverse piattaforme.
 ##### `generate_dockerfile_template`
 Genera Dockerfile ottimizzati per linguaggio.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_dockerfile_template",
@@ -973,12 +973,12 @@ Genera Dockerfile ottimizzati per linguaggio.
 ##### `generate_test_template`
 Genera template test unitari e integrazione.
 
-**Framework Supported:**
+**Framework Supportati:**
 - **Python**: unittest, pytest
 - **JavaScript**: Jest, Mocha, Cypress
 - **Java**: JUnit, TestNG
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_test_template",
@@ -1001,7 +1001,7 @@ Modernizza e refactorizza codice legacy.
 - `convert`: Conversione linguaggio
 - `optimize`: Ottimizzazione performance
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "modernize_legacy_code",
@@ -1019,13 +1019,13 @@ Modernizza e refactorizza codice legacy.
 ##### `generate_config_file`
 Genera file configurazione multi-ambiente.
 
-**Supported Formats:**
+**Formati Supportati:**
 - `json`: Configurazione JSON
 - `yaml`: File YAML
 - `ini`: File INI/CFG
 - `env`: Environment variables
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_config_file",
@@ -1089,7 +1089,7 @@ Genera file configurazione multi-ambiente.
 }
 ```
 
-#### Microservices with Documentation
+#### Microservizi con Documentazione
 ```json
 // 1. Genera microservizio
 {
@@ -1141,7 +1141,7 @@ Genera file configurazione multi-ambiente.
 
 1. **Naming Conventions**: Usa PascalCase per classi, snake_case per funzioni
 2. **Project Structure**: Segui convenzioni framework per organizzazione
-3. **Documentation**: Always generate documentation with examples
+3. **Documentation**: Genera sempre documentazione con esempi
 4. **Testing**: Include test per ogni componente generato
 5. **Security**: Usa pattern sicuri e validation input
 6. **Performance**: Ottimizza query database e componenti
@@ -1158,38 +1158,38 @@ Il sistema supporta template personalizzati per:
 
 # 🎨 Color Tools
 
-Complete suite for professional color management with color theory, accessibility, psychology, and design tools.
+Suite completa per gestione professionale dei colori con teoria del colore, accessibilità, psicologia e strumenti di design.
 
-### Main Features
+### Funzionalità Principali
 
-- **Format Conversions**: Hex, RGB, HSL, HSV with professional precision
-- **Palette Generation**: Harmonic schemes based on color theory
-- **Accessibility**: WCAG contrast analysis and colorblindness simulation
-- **Gradient Creator**: Gradient generation with customizable easing
-- **Color Psychology**: Analysis of meaning and emotional impact
-- **Color Matching**: Named color search in professional databases
-- **Temperature Analysis**: Warm/cool color classification
-- **Export Tools**: Export for design software
+- **Conversioni Formato**: Hex, RGB, HSL, HSV con precisione professionale
+- **Palette Generation**: Schemi armonici basati su teoria del colore
+- **Accessibilità**: Analisi contrasto WCAG e simulazione daltonismo
+- **Gradient Creator**: Generazione gradienti con easing personalizzabile
+- **Psicologia Colore**: Analisi significato e impatto emotivo
+- **Color Matching**: Ricerca colori nominati in database professionali
+- **Temperature Analysis**: Classificazione colori caldi/freddi
+- **Export Tools**: Esportazione per software di design
 
-### Available Tools
+### Tool Disponibili
 
-#### Basic Conversions and Analysis
+#### Conversioni e Analisi Base
 
 ##### `convert_color_format`
-Converts colors between formats with complete information.
+Converte colori tra formati con informazioni complete.
 
-**Parameters:**
+**Parametri:**
 - `color` (str): Colore sorgente (hex, rgb, nome)
 - `target_format` (str): Formato destinazione
 
-**Supported Formats:**
+**Formati Supportati:**
 - **HEX**: `#FF0000`, `#ff0000`
 - **RGB**: `rgb(255,0,0)`, `255,0,0`
 - **HSL**: Hue, Saturation, Lightness
 - **HSV**: Hue, Saturation, Value
 - **Nomi**: red, green, blue, etc.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "convert_color_format",
@@ -1201,9 +1201,9 @@ Converts colors between formats with complete information.
 ```
 
 ##### `analyze_color_contrast`
-Analysis contrasto WCAG per accessibilità.
+Analisi contrasto WCAG per accessibilità.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "analyze_color_contrast",
@@ -1220,29 +1220,29 @@ Analysis contrasto WCAG per accessibilità.
 - **AAA Normal**: Contrasto ≥ 7.0:1
 - **AAA Large**: Contrasto ≥ 4.5:1
 
-#### Palettes and Color Schemes
+#### Palette e Schemi Colore
 
 ##### `generate_color_palette`
-Generates harmonious palettes according to color theory.
+Genera palette armoniose secondo teoria del colore.
 
-**Palette Types:**
-- `complementary`: Opposite colors on the wheel
-- `triadic`: 3 equidistant colors (120°)
-- `analogous`: Adjacent colors
-- `monochromatic`: Variations of same color
+**Tipi di Palette:**
+- `complementary`: Colori opposti sulla ruota
+- `triadic`: 3 colori equidistanti (120°)
+- `analogous`: Colori adiacenti
+- `monochromatic`: Variazioni stesso colore
 
 ##### `generate_color_scheme`
-Advanced professional color schemes.
+Schemi colore professionali avanzati.
 
-**Available Schemes:**
-- **Monochromatic**: Brightness/saturation variations
-- **Analogous**: Adjacent colors (±30°)
-- **Complementary**: Opposite color + variations
-- **Triadic**: 3 colors at 120° distance
-- **Tetradic**: 4 colors in square/rectangle
-- **Split Complementary**: Base + 2 colors adjacent to complementary
+**Schemi Disponibili:**
+- **Monochromatica**: Variazioni luminosità/saturazione
+- **Analogous**: Colori adiacenti (±30°)
+- **Complementary**: Colore opposto + variazioni
+- **Triadic**: 3 colori a 120° di distanza
+- **Tetradica**: 4 colori in quadrato/rettangolo
+- **Split Complementary**: Base + 2 colori adiacenti al complementare
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_color_scheme",
@@ -1254,24 +1254,24 @@ Advanced professional color schemes.
 }
 ```
 
-#### Gradients and Interpolation
+#### Gradienti e Interpolazione
 
 ##### `generate_gradient`
-Gradient generation with easing curves.
+Generazione gradienti con curve di easing.
 
-**Parameters:**
-- `start_color` (str): Initial color
-- `end_color` (str): Final color  
-- `steps` (int): Number of steps (3-20)
-- `gradient_type` (str): Easing type
+**Parametri:**
+- `start_color` (str): Colore iniziale
+- `end_color` (str): Colore finale  
+- `steps` (int): Numero step (3-20)
+- `gradient_type` (str): Tipo easing
 
-**Easing Types:**
-- `linear`: Linear transition
-- `ease-in`: Gradual acceleration
-- `ease-out`: Gradual deceleration
-- `ease-in-out`: Acceleration then deceleration
+**Tipi di Easing:**
+- `linear`: Transizione lineare
+- `ease-in`: Accelerazione graduale
+- `ease-out`: Decelerazione graduale
+- `ease-in-out`: Accelerazione poi decelerazione
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "generate_gradient",
@@ -1287,12 +1287,12 @@ Gradient generation with easing curves.
 **Output include:**
 - Step intermedi con posizione
 - CSS `linear-gradient()` e `radial-gradient()`
-- Analysis armonia cromatica
+- Analisi armonia cromatica
 
 ##### `color_mixer`
 Miscelazione precisa di due colori.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "color_mixer",
@@ -1315,7 +1315,7 @@ Simulazione visione daltonismo per test accessibilità.
 - **Tritanopia**: Cecità al blu (~0.003% popolazione)
 - **Achromatopsia**: Visione monocromatica (rara)
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "simulate_color_blindness",
@@ -1334,9 +1334,9 @@ Simulazione visione daltonismo per test accessibilità.
 #### Psicologia e Significato
 
 ##### `analyze_color_psychology`
-Analysis psicologica e significato culturale dei colori.
+Analisi psicologica e significato culturale dei colori.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "analyze_color_psychology",
@@ -1346,11 +1346,11 @@ Analysis psicologica e significato culturale dei colori.
 }
 ```
 
-**Analysis include:**
+**Analisi include:**
 - **Emozioni Associate**: Sentimenti evocati
 - **Tratti Caratteristici**: Personalità e attributi
 - **Casi d'Uso**: Settori e applicazioni ideali
-- **Analysis Combinazione**: Effetto dei colori insieme
+- **Analisi Combinazione**: Effetto dei colori insieme
 - **Mood Generale**: Atmosfera complessiva
 
 ##### `analyze_color_temperature`
@@ -1366,13 +1366,13 @@ Classificazione temperatura cromatica.
 ##### `find_closest_named_color`
 Trova colore nominato più simile.
 
-**Database Supported:**
+**Database Supportati:**
 - **CSS**: Colori web standard
 - **Pantone**: Sistema colori professionale
 - **RAL**: Standard europeo industriale
 - **X11**: Colori sistema Unix/Linux
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "find_closest_named_color",
@@ -1396,7 +1396,7 @@ Esportazione palette per software di design.
 - **GPL**: GIMP Palette
 - **XML**: Formato XML generico
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "export_color_palette",
@@ -1451,7 +1451,7 @@ Esportazione palette per software di design.
 }
 ```
 
-#### Analysis Brand Identity
+#### Analisi Brand Identity
 ```json
 // 1. Analizza psicologia colori brand
 {
@@ -1548,42 +1548,42 @@ Esportazione palette per software di design.
 
 Strumenti avanzati per sicurezza informatica, audit e protezione:
 
-### Main Features
+### Funzionalità Principali
 
-- **Password Security**: Generation e analisi forza password
+- **Password Security**: Generazione e analisi forza password
 - **Crittografia**: Encryption/decryption con algoritmi sicuri
 - **Token Generation**: Creazione token sicuri per vari usi
 - **Vulnerability Scanning**: Scanner vulnerabilità automatizzato
 - **Security Audit**: Audit completo di sicurezza sistemi/web
 - **SSL/TLS Analysis**: Controllo certificati e configurazione
-- **Security Headers**: Analysis header di sicurezza HTTP
-- **Security Reporting**: Generation report sicurezza dettagliati
+- **Security Headers**: Analisi header di sicurezza HTTP
+- **Security Reporting**: Generazione report sicurezza dettagliati
 
-### Available Tools
+### Tool Disponibili
 
 #### `generate_secure_password(length?: int, include_symbols?: bool, exclude_ambiguous?: bool)`
-Generation password sicure:
+Generazione password sicure:
 - Lunghezza configurabile (8-128 caratteri)
 - Inclusione/esclusione simboli e caratteri ambigui
 - Calcolo entropia e forza password
 - Classificazione automatica sicurezza
 
 #### `password_strength_check(password: string)`
-Analysis dettagliata forza password:
+Analisi dettagliata forza password:
 - Controllo caratteri (maiuscole, minuscole, numeri, simboli)
 - Rilevamento pattern comuni e sequenze
 - Punteggio forza con suggerimenti miglioramento
 - Classificazione da "Molto Debole" a "Molto Forte"
 
 #### `generate_api_key(length?: int, format_type?: string)`
-Generation chiavi API sicure:
+Generazione chiavi API sicure:
 - Formati: hex, base64, alphanumeric
 - Calcolo entropia bit
 - Lunghezza personalizzabile
 - Standard industry best practices
 
 #### `generate_secure_tokens(token_type: string, count?: int, options?: string)`
-Generation token specializzati:
+Generazione token specializzati:
 - Tipi: session, csrf, api, uuid, otp
 - Opzioni personalizzazione per tipo
 - Raccomandazioni sicurezza specifiche
@@ -1608,19 +1608,19 @@ Scanner vulnerabilità avanzato:
 #### `encrypt_decrypt_data(data: string, operation: string, key?: string, algorithm?: string)`
 Crittografia/decrittografia sicura:
 - Algoritmi: Fernet (AES), Base64 encoding
-- Generation chiavi automatica
+- Generazione chiavi automatica
 - Operazioni encrypt/decrypt
 - Note sicurezza e best practices
 
 #### `security_headers_analyzer(url: string)`
-Analysis header sicurezza HTTP:
+Analisi header sicurezza HTTP:
 - Check HSTS, CSP, X-Frame-Options, etc.
 - Scoring sicurezza e grading (A-F)
 - Identificazione header mancanti
 - Raccomandazioni implementazione
 
 #### `generate_security_report(data: string)`
-Generation report sicurezza completi:
+Generazione report sicurezza completi:
 - Aggregazione risultati multiple scan
 - Executive summary con metriche chiave
 - Risk assessment dettagliato
@@ -1637,7 +1637,7 @@ Hashing contenuti per integrità:
 #### `jwt_decode_header(jwt_token: string)`
 Decodifica JWT token (senza verifica):
 - Estrazione header e payload
-- Analysis struttura token
+- Analisi struttura token
 - Warning sicurezza appropriati
 - Debug e troubleshooting
 
@@ -1651,7 +1651,7 @@ Scanning porte comuni:
 #### `ssl_certificate_check(domain: string, port?: int)`
 Controllo certificati SSL/TLS:
 - Validità e scadenza certificati
-- Analysis issuer e subject
+- Analisi issuer e subject
 - Warning pre-scadenza
 - Serial number e dettagli tecnici
 
@@ -1666,11 +1666,11 @@ console.log(`Risk Level: ${audit.audit_result.risk_level}`);
 const vulnScan = await vulnerability_scanner("192.168.1.1", "deep");
 console.log(`Vulnerabilities: ${vulnScan.vulnerability_report.total_vulnerabilities}`);
 
-// Generation password sicura
+// Generazione password sicura
 const password = await generate_secure_password(16, true, true);
 console.log(`Password: ${password.password} (${password.strength})`);
 
-// Analysis header sicurezza
+// Analisi header sicurezza
 const headers = await security_headers_analyzer("https://example.com");
 console.log(`Security Grade: ${headers.analysis.security_grade}`);
 
@@ -1678,7 +1678,7 @@ console.log(`Security Grade: ${headers.analysis.security_grade}`);
 const encrypted = await encrypt_decrypt_data("sensitive data", "encrypt", null, "fernet");
 const decrypted = await encrypt_decrypt_data(encrypted.encrypted_data, "decrypt", encrypted.key, "fernet");
 
-// Generation token sicuri
+// Generazione token sicuri
 const tokens = await generate_secure_tokens("api", 5, JSON.stringify({prefix: "myapp"}));
 
 // Report sicurezza completo
@@ -1763,30 +1763,30 @@ const report = await generate_security_report(scanData);
 
 # 📜 Text Analysis Tools
 
-Advanced tools for text analysis, information extraction, and computational linguistics.
+Strumenti avanzati per analisi del testo, estrazione informazioni e linguistica computazionale.
 
-## Main Features
+## Funzionalità Principali
 
-- **Sentiment Analysis**: Sentiment evaluation (positive, negative, neutral)
-- **Entity Extraction**: Named entity recognition (people, organizations, places)
-- **Language Recognition**: Text language identification
-- **Tokenization**: Text division into words, sentences, paragraphs
-- **Lemmatization**: Word reduction to root form (lemma)
-- **Frequency Analysis**: Counting and analysis of most frequent words
-- **N-grams**: Extraction and analysis of n-grams (sequences of n words)
-- **Stop Words**: Removal of common and uninformative words
+- **Analisi Sentimentale**: Valutazione sentimenti (positivo, negativo, neutro)
+- **Estrazione Entità**: Riconoscimento entità nominate (persone, organizzazioni, luoghi)
+- **Riconoscimento Linguistico**: Identificazione lingua del testo
+- **Tokenizzazione**: Suddivisione testo in parole, frasi, paragrafi
+- **Lemmatizzazione**: Riduzione parole alla radice (lemma)
+- **Analisi Frequenza**: Conteggio e analisi parole più frequenti
+- **N-grams**: Estrazione e analisi n-grams (sequenze di n parole)
+- **Stop Words**: Rimozione parole comuni e poco informative
 
-## Available Tools
+## Tool Disponibili
 
 ### `sentiment_analysis(text: string)`
-Sentiment analysis of a text.
+Analisi del sentimento di un testo.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "sentiment_analysis",
   "arguments": {
-    "text": "The product is fantastic and exceeded my expectations!"
+    "text": "Il prodotto è fantastico e ha superato le mie aspettative!"
   }
 }
 ```
@@ -1796,7 +1796,7 @@ Sentiment analysis of a text.
 ### `entity_extraction(text: string)`
 Estrazione delle entità nominate da un testo.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "entity_extraction",
@@ -1811,7 +1811,7 @@ Estrazione delle entità nominate da un testo.
 ### `language_detection(text: string)`
 Riconoscimento della lingua di un testo.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "language_detection",
@@ -1826,7 +1826,7 @@ Riconoscimento della lingua di un testo.
 ### `text_tokenization(text: string, mode: string)`
 Tokenizzazione del testo in parole o frasi.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "text_tokenization",
@@ -1842,7 +1842,7 @@ Tokenizzazione del testo in parole o frasi.
 ### `lemmatization(text: string)`
 Lemmatizzazione del testo.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "lemmatization",
@@ -1855,9 +1855,9 @@ Lemmatizzazione del testo.
 **Output**: `["correre", "correre", "correre"]`
 
 ### `frequency_analysis(text: string)`
-Analysis della frequenza delle parole nel testo.
+Analisi della frequenza delle parole nel testo.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "frequency_analysis",
@@ -1872,7 +1872,7 @@ Analysis della frequenza delle parole nel testo.
 ### `ngrams_extraction(text: string, n: int)`
 Estrazione di n-grams dal testo.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "ngrams_extraction",
@@ -1888,7 +1888,7 @@ Estrazione di n-grams dal testo.
 ### `stopwords_removal(text: string)`
 Rimozione delle stop words dal testo.
 
-**Example:**
+**Esempio:**
 ```json
 {
   "name": "stopwords_removal",
@@ -1903,7 +1903,7 @@ Rimozione delle stop words dal testo.
 ### Esempi di Utilizzo
 
 ```javascript
-// Analysis del sentimento
+// Analisi del sentimento
 const sentiment = await sentiment_analysis("Questo è il miglior servizio che abbia mai usato!");
 console.log(`Sentiment: ${sentiment.sentiment}, Score: ${sentiment.score}`);
 
@@ -1923,7 +1923,7 @@ console.log(`Token: ${tokens.join(", ")}`);
 const lemmas = await lemmatization("correndo corse correrò");
 console.log(`Lemmi: ${lemmas.join(", ")}`);
 
-// Analysis della frequenza
+// Analisi della frequenza
 const freq = await frequency_analysis("ciao ciao come va va va");
 console.log(`Frequenza parole: ${JSON.stringify(freq.words)}`);
 
@@ -1965,7 +1965,7 @@ console.log(`Testo senza stop words: ${noStopwords.join(" ")}`);
 
 **Frequency Analysis:**
 - Conteggio parole e caratteri
-- Analysis distribuzione frequenze
+- Analisi distribuzione frequenze
 - Report dettagliato su richiesta
 
 **N-grams Extraction:**
@@ -1997,136 +1997,136 @@ console.log(`Testo senza stop words: ${noStopwords.join(" ")}`);
 #### Elaborazione del Linguaggio Naturale (NLP)
 - Tokenizzazione, stemming, lemmatizzazione
 - Riconoscimento entità, analisi sentimentale
-- Automatic translation, text generation
+- Traduzione automatica, generazione testo
 
-#### Statistics and Probability
-- Models based on frequencies and probability
-- Statistical text analysis
-- Markov models for sequences
+#### Statistiche e Probabilità
+- Modelli basati su frequenze e probabilità
+- Analisi statistica dei testi
+- Modelli di Markov per sequenze
 
 ## 📝 String Tools
 
-Advanced tools for string manipulation, analysis, and transformation:
+Strumenti avanzati per manipolazione, analisi e trasformazione di stringhe:
 
-### Main Features
+### Funzionalità Principali
 
-- **Case Conversion**: Upper/lowercase transformation with advanced formats
-- **Text Analysis**: Detailed analysis with readability and linguistic metrics
-- **Encoding/Decoding**: Base64, URL, HTML, Hex encoding support
-- **Format Operations**: Advanced indentation, alignment, padding
-- **Validation**: Email, URL, phone, credit card, JSON validation
-- **String Comparison**: Similarity algorithms, diff, Levenshtein distance
-- **Batch Processing**: Multiple simultaneous operations on strings
-- **Text Cleaning**: Advanced text normalization and cleaning
+- **Case Conversion**: Trasformazione maiuscole/minuscole con formati avanzati
+- **Text Analysis**: Analisi dettagliata con metriche leggibilità e linguistiche
+- **Encoding/Decoding**: Supporto Base64, URL, HTML, Hex encoding
+- **Format Operations**: Indentazione, allineamento, padding avanzati
+- **Validation**: Validazione email, URL, telefoni, carte credito, JSON
+- **String Comparison**: Algoritmi similarità, diff, Levenshtein distance
+- **Batch Processing**: Operazioni multiple simultanee su stringhe
+- **Text Cleaning**: Normalizzazione e pulizia testo avanzata
 
-### Available Tools
+### Tool Disponibili
 
 #### `string_case_convert(text: string, case_type: string)`
-Multiple case conversions:
-- Types: upper, lower, title, sentence, camel, snake, kebab
-- Special character and space management
-- Formatted output with labels
+Conversioni case multiple:
+- Tipi: upper, lower, title, sentence, camel, snake, kebab
+- Gestione caratteri speciali e spazi
+- Output formattato con etichette
 
 #### `string_stats(text: string)`
-Basic text statistics:
-- Character, word, sentence, line count
-- Letter, number, space, special character analysis
-- Essential structural metrics
+Statistiche base testo:
+- Conteggio caratteri, parole, frasi, linee
+- Analisi lettere, numeri, spazi, caratteri speciali
+- Metriche strutturali essenziali
 
 #### `string_clean(text: string, operation: string)`
-Cleaning and normalization:
-- Operations: trim, normalize_spaces, remove_special, letters_only, numbers_only
-- Unwanted character removal
-- Spacing normalization
+Pulizia e normalizzazione:
+- Operazioni: trim, normalize_spaces, remove_special, letters_only, numbers_only
+- Rimozione caratteri indesiderati
+- Normalizzazione spaziatura
 
 #### `string_wrap(text: string, width?: int, break_long_words?: bool)`
-Advanced text wrapping:
-- Configurable width (10-200)
-- Long word breaking control
-- Formatting preservation
+Text wrapping avanzato:
+- Larghezza configurabile (10-200)
+- Controllo rottura parole lunghe
+- Preservazione formattazione
 
 #### `string_find_replace(text: string, find: string, replace: string, case_sensitive?: bool)`
-Search and replace:
+Ricerca e sostituzione:
 - Case sensitive/insensitive
-- Occurrence counting
-- Detailed modification report
+- Conteggio occorrenze
+- Report dettagliato modifiche
 
 #### `string_advanced_analysis(text: string)`
-In-depth text analysis:
-- Detailed character and word statistics
-- Character and most common word frequency
-- Readability metrics (Flesch Reading Ease)
-- Linguistic analysis with Unicode script detection
-- Reading time estimation
-- Encoding and Unicode information
+Analisi approfondita testo:
+- Statistiche caratteri e parole dettagliate
+- Frequenza caratteri e parole più comuni
+- Metriche leggibilità (Flesch Reading Ease)
+- Analisi linguistica con rilevamento script Unicode
+- Stima tempo lettura
+- Informazioni encoding e Unicode
 
 #### `string_encoding_operations(text: string, operation: string, encoding?: string)`
-Complete encoding/decoding:
-- Base64: encode/decode with customizable encoding
-- URL: encode/decode for web security
-- HTML: escape/unescape HTML entities
-- Hex: bidirectional hexadecimal conversion
-- Multiple encoding support (UTF-8, ASCII, etc.)
+Encoding/Decoding completo:
+- Base64: encode/decode con encoding personalizzabile
+- URL: encode/decode per sicurezza web
+- HTML: escape/unescape entità HTML
+- Hex: conversione esadecimale bidirezionale
+- Supporto encoding multipli (UTF-8, ASCII, etc.)
 
 #### `string_format_operations(text: string, operation: string, options?: string)`
-Advanced formatting:
-- **Indent/Dedent**: Indentation control with customizable characters
-- **Alignment**: Center, ljust, rjust with custom fill
-- **Padding**: Configurable side padding
-- **Truncate**: Truncation with customizable suffix
-- **Zero Fill**: Zero filling for numbers
-- JSON options for fine control
+Formattazione avanzata:
+- **Indent/Dedent**: Controllo indentazione con caratteri personalizzabili
+- **Alignment**: Center, ljust, rjust con riempimento custom
+- **Padding**: Padding laterale configurabile
+- **Truncate**: Troncamento con suffisso personalizzabile
+- **Zero Fill**: Riempimento zeri per numeri
+- Opzioni JSON per controllo fine
 
 #### `string_validation(text: string, validation_type: string, options?: string)`
-Specialized format validation:
-- **Email**: RFC-compliant patterns
-- **URL**: HTTP/HTTPS with parameters
-- **Phone**: International formats (E.164, Italy, USA)
-- **Credit Card**: Luhn algorithm validation
-- **UUID**: Versions 1-5 with version analysis
-- **IP Address**: IPv4/IPv6 with version detection
-- **JSON**: Parsing with structure analysis
-- Detailed error and metadata reporting
+Validazione formati specializzata:
+- **Email**: Pattern RFC-compliant
+- **URL**: HTTP/HTTPS con parametri
+- **Phone**: Formati internazionali (E.164, Italia, USA)
+- **Credit Card**: Algoritmo Luhn per validazione
+- **UUID**: Versioni 1-5 con analisi versione
+- **IP Address**: IPv4/IPv6 con rilevamento versione
+- **JSON**: Parsing con analisi struttura
+- Report dettagliato errori e metadati
 
 #### `string_comparison(text1: string, text2: string, comparison_type?: string)`
-Advanced string comparison:
-- **Similarity**: Similarity ratio with SequenceMatcher
-- **Levenshtein**: Edit distance with normalization
-- **Diff**: Unified diff with modification count
-- **Common Substrings**: Common substrings with minimum length
-- Similarity percentages and detailed metrics
+Confronto stringhe avanzato:
+- **Similarity**: Ratio similarità con SequenceMatcher
+- **Levenshtein**: Distanza edit con normalizzazione
+- **Diff**: Unified diff con conteggio modifiche
+- **Common Substrings**: Sottostringhe comuni con lunghezza minima
+- Percentuali similarità e metriche dettagliate
 
 #### `string_batch_operations(operations_json: string)`
-Multiple batch processing:
-- Up to 100 simultaneous operations
-- Support: case_convert, clean, stats, encoding, validation
-- Aggregate success/failure statistics
-- Detailed execution report
+Processing batch multiplo:
+- Fino a 100 operazioni simultanee
+- Supporto: case_convert, clean, stats, encoding, validation
+- Statistiche successo/fallimento aggregate
+- Report esecuzione dettagliato
 
-### Usage Examples
+### Esempi di Utilizzo
 
 ```javascript
-// Complete text analysis
-const analysis = await string_advanced_analysis("The cat walked on the roof.");
-console.log(`Readability: ${analysis.analysis.readability.level}`);
-console.log(`Reading time: ${analysis.analysis.readability.estimated_reading_time_minutes} min`);
+// Analisi completa testo
+const analysis = await string_advanced_analysis("Il gatto camminava sul tetto.");
+console.log(`Leggibilità: ${analysis.analysis.readability.level}`);
+console.log(`Tempo lettura: ${analysis.analysis.readability.estimated_reading_time_minutes} min`);
 
-// Multiple encoding
+// Encoding multiplo
 const base64 = await string_encoding_operations("Hello World!", "base64_encode");
 const url = await string_encoding_operations("hello world!", "url_encode");
 
-// Data validation
+// Validazione dati
 const email = await string_validation("user@example.com", "email");
 const phone = await string_validation("+39 123 456 7890", "phone");
 const json = await string_validation('{"name": "test"}', "json");
 
-// Advanced formatting
+// Formattazione avanzata
 const centered = await string_format_operations("Title", "center", 
   JSON.stringify({width: 20, fill_char: "="}));
 const indented = await string_format_operations("Code\nBlock", "indent",
   JSON.stringify({size: 4, char: " "}));
 
-// String comparison
+// Confronto stringhe
 const similarity = await string_comparison("hello world", "hallo world", "similarity");
 const diff = await string_comparison("version 1", "version 2", "diff");
 
@@ -2139,29 +2139,29 @@ const batchOps = JSON.stringify([
 const batchResult = await string_batch_operations(batchOps);
 ```
 
-### Metrics and Analysis
+### Metriche e Analisi
 
 **Readability Scoring:**
-- Algorithm based on Flesch Reading Ease
-- Sentence length and syllable consideration
-- Levels: Very Easy → Very Difficult
-- Reading time estimation (200 WPM)
+- Algoritmo basato su Flesch Reading Ease
+- Considerazione lunghezza frasi e sillabe
+- Livelli: Molto Facile → Molto Difficile
+- Stima tempo lettura (200 WPM)
 
 **Language Detection:**
-- Unicode script analysis
-- Common word detection (Italian, English, Spanish)
-- Unicode character categorization
-- ASCII and encoding compatibility
+- Analisi script Unicode
+- Rilevamento parole comuni (italiano, inglese, spagnolo)
+- Categorizzazione caratteri Unicode
+- Compatibilità ASCII e encoding
 
 **String Similarity:**
 - SequenceMatcher ratio (0-1)
-- Levenshtein distance with normalization
+- Levenshtein distance con normalizzazione
 - Common substring analysis
-- Unified diff format
+- Diff unified format
 
 **Validation Accuracy:**
-- Email: RFC-compliant patterns
-- Credit Card: Luhn checksum algorithm
-- Phone: Multiple international patterns
-- UUID: Version and format validation
+- Email: Pattern RFC-compliant
+- Credit Card: Algoritmo Luhn checksum
+- Phone: Pattern internazionali multipli
+- UUID: Validazione versione e formato
 - IP: IPv4/IPv6 pattern matching
