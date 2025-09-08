@@ -851,13 +851,13 @@ Implements common design patterns with documentation.
 #### Frontend Components
 
 ##### `generate_frontend_component`
-Genera componenti frontend con styling e test.
+Generates frontend components with styling and tests.
 
 **Framework Supported:**
 - **React**: Functional, Class, Hooks
 - **Vue**: Composition API, Options API
 - **Angular**: Component, Service, Module
-- **Svelte**: Component con stores
+- **Svelte**: Components with stores
 
 **Styling Options:**
 - `css`: CSS vanilla
@@ -887,7 +887,7 @@ Genera componenti frontend con styling e test.
 #### Documentation
 
 ##### `generate_api_documentation`
-Genera documentazione API completa con esempi.
+Generates complete API documentation with examples.
 
 **Supported Formats:**
 - **OpenAPI**: Specifica OpenAPI 3.0
@@ -1089,7 +1089,7 @@ Genera file configurazione multi-ambiente.
 }
 ```
 
-#### Microservizi con Documentazione
+#### Microservices with Documentation
 ```json
 // 1. Genera microservizio
 {
@@ -1141,7 +1141,7 @@ Genera file configurazione multi-ambiente.
 
 1. **Naming Conventions**: Usa PascalCase per classi, snake_case per funzioni
 2. **Project Structure**: Segui convenzioni framework per organizzazione
-3. **Documentation**: Genera sempre documentazione con esempi
+3. **Documentation**: Always generate documentation with examples
 4. **Testing**: Include test per ogni componente generato
 5. **Security**: Usa pattern sicuri e validation input
 6. **Performance**: Ottimizza query database e componenti
@@ -1201,7 +1201,7 @@ Converts colors between formats with complete information.
 ```
 
 ##### `analyze_color_contrast`
-Analisi contrasto WCAG per accessibilità.
+Analysis contrasto WCAG per accessibilità.
 
 **Example:**
 ```json
@@ -1220,27 +1220,27 @@ Analisi contrasto WCAG per accessibilità.
 - **AAA Normal**: Contrasto ≥ 7.0:1
 - **AAA Large**: Contrasto ≥ 4.5:1
 
-#### Palette e Schemi Colore
+#### Palettes and Color Schemes
 
 ##### `generate_color_palette`
-Genera palette armoniose secondo teoria del colore.
+Generates harmonious palettes according to color theory.
 
-**Tipi di Palette:**
-- `complementary`: Colori opposti sulla ruota
-- `triadic`: 3 colori equidistanti (120°)
-- `analogous`: Colori adiacenti
-- `monochromatic`: Variazioni stesso colore
+**Palette Types:**
+- `complementary`: Opposite colors on the wheel
+- `triadic`: 3 equidistant colors (120°)
+- `analogous`: Adjacent colors
+- `monochromatic`: Variations of same color
 
 ##### `generate_color_scheme`
-Schemi colore professionali avanzati.
+Advanced professional color schemes.
 
-**Schemi Disponibili:**
-- **Monochromatica**: Variazioni luminosità/saturazione
-- **Analogous**: Colori adiacenti (±30°)
-- **Complementary**: Colore opposto + variazioni
-- **Triadic**: 3 colori a 120° di distanza
-- **Tetradica**: 4 colori in quadrato/rettangolo
-- **Split Complementary**: Base + 2 colori adiacenti al complementare
+**Available Schemes:**
+- **Monochromatic**: Brightness/saturation variations
+- **Analogous**: Adjacent colors (±30°)
+- **Complementary**: Opposite color + variations
+- **Triadic**: 3 colors at 120° distance
+- **Tetradic**: 4 colors in square/rectangle
+- **Split Complementary**: Base + 2 colors adjacent to complementary
 
 **Example:**
 ```json
@@ -1254,22 +1254,22 @@ Schemi colore professionali avanzati.
 }
 ```
 
-#### Gradienti e Interpolazione
+#### Gradients and Interpolation
 
 ##### `generate_gradient`
-Generazione gradienti con curve di easing.
+Gradient generation with easing curves.
 
 **Parameters:**
-- `start_color` (str): Colore iniziale
-- `end_color` (str): Colore finale  
-- `steps` (int): Numero step (3-20)
-- `gradient_type` (str): Tipo easing
+- `start_color` (str): Initial color
+- `end_color` (str): Final color  
+- `steps` (int): Number of steps (3-20)
+- `gradient_type` (str): Easing type
 
-**Tipi di Easing:**
-- `linear`: Transizione lineare
-- `ease-in`: Accelerazione graduale
-- `ease-out`: Decelerazione graduale
-- `ease-in-out`: Accelerazione poi decelerazione
+**Easing Types:**
+- `linear`: Linear transition
+- `ease-in`: Gradual acceleration
+- `ease-out`: Gradual deceleration
+- `ease-in-out`: Acceleration then deceleration
 
 **Example:**
 ```json
@@ -1287,7 +1287,7 @@ Generazione gradienti con curve di easing.
 **Output include:**
 - Step intermedi con posizione
 - CSS `linear-gradient()` e `radial-gradient()`
-- Analisi armonia cromatica
+- Analysis armonia cromatica
 
 ##### `color_mixer`
 Miscelazione precisa di due colori.
@@ -1334,7 +1334,7 @@ Simulazione visione daltonismo per test accessibilità.
 #### Psicologia e Significato
 
 ##### `analyze_color_psychology`
-Analisi psicologica e significato culturale dei colori.
+Analysis psicologica e significato culturale dei colori.
 
 **Example:**
 ```json
@@ -1346,11 +1346,11 @@ Analisi psicologica e significato culturale dei colori.
 }
 ```
 
-**Analisi include:**
+**Analysis include:**
 - **Emozioni Associate**: Sentimenti evocati
 - **Tratti Caratteristici**: Personalità e attributi
 - **Casi d'Uso**: Settori e applicazioni ideali
-- **Analisi Combinazione**: Effetto dei colori insieme
+- **Analysis Combinazione**: Effetto dei colori insieme
 - **Mood Generale**: Atmosfera complessiva
 
 ##### `analyze_color_temperature`
@@ -1451,7 +1451,7 @@ Esportazione palette per software di design.
 }
 ```
 
-#### Analisi Brand Identity
+#### Analysis Brand Identity
 ```json
 // 1. Analizza psicologia colori brand
 {
@@ -1550,40 +1550,40 @@ Strumenti avanzati per sicurezza informatica, audit e protezione:
 
 ### Main Features
 
-- **Password Security**: Generazione e analisi forza password
+- **Password Security**: Generation e analisi forza password
 - **Crittografia**: Encryption/decryption con algoritmi sicuri
 - **Token Generation**: Creazione token sicuri per vari usi
 - **Vulnerability Scanning**: Scanner vulnerabilità automatizzato
 - **Security Audit**: Audit completo di sicurezza sistemi/web
 - **SSL/TLS Analysis**: Controllo certificati e configurazione
-- **Security Headers**: Analisi header di sicurezza HTTP
-- **Security Reporting**: Generazione report sicurezza dettagliati
+- **Security Headers**: Analysis header di sicurezza HTTP
+- **Security Reporting**: Generation report sicurezza dettagliati
 
 ### Available Tools
 
 #### `generate_secure_password(length?: int, include_symbols?: bool, exclude_ambiguous?: bool)`
-Generazione password sicure:
+Generation password sicure:
 - Lunghezza configurabile (8-128 caratteri)
 - Inclusione/esclusione simboli e caratteri ambigui
 - Calcolo entropia e forza password
 - Classificazione automatica sicurezza
 
 #### `password_strength_check(password: string)`
-Analisi dettagliata forza password:
+Analysis dettagliata forza password:
 - Controllo caratteri (maiuscole, minuscole, numeri, simboli)
 - Rilevamento pattern comuni e sequenze
 - Punteggio forza con suggerimenti miglioramento
 - Classificazione da "Molto Debole" a "Molto Forte"
 
 #### `generate_api_key(length?: int, format_type?: string)`
-Generazione chiavi API sicure:
+Generation chiavi API sicure:
 - Formati: hex, base64, alphanumeric
 - Calcolo entropia bit
 - Lunghezza personalizzabile
 - Standard industry best practices
 
 #### `generate_secure_tokens(token_type: string, count?: int, options?: string)`
-Generazione token specializzati:
+Generation token specializzati:
 - Tipi: session, csrf, api, uuid, otp
 - Opzioni personalizzazione per tipo
 - Raccomandazioni sicurezza specifiche
@@ -1608,19 +1608,19 @@ Scanner vulnerabilità avanzato:
 #### `encrypt_decrypt_data(data: string, operation: string, key?: string, algorithm?: string)`
 Crittografia/decrittografia sicura:
 - Algoritmi: Fernet (AES), Base64 encoding
-- Generazione chiavi automatica
+- Generation chiavi automatica
 - Operazioni encrypt/decrypt
 - Note sicurezza e best practices
 
 #### `security_headers_analyzer(url: string)`
-Analisi header sicurezza HTTP:
+Analysis header sicurezza HTTP:
 - Check HSTS, CSP, X-Frame-Options, etc.
 - Scoring sicurezza e grading (A-F)
 - Identificazione header mancanti
 - Raccomandazioni implementazione
 
 #### `generate_security_report(data: string)`
-Generazione report sicurezza completi:
+Generation report sicurezza completi:
 - Aggregazione risultati multiple scan
 - Executive summary con metriche chiave
 - Risk assessment dettagliato
@@ -1637,7 +1637,7 @@ Hashing contenuti per integrità:
 #### `jwt_decode_header(jwt_token: string)`
 Decodifica JWT token (senza verifica):
 - Estrazione header e payload
-- Analisi struttura token
+- Analysis struttura token
 - Warning sicurezza appropriati
 - Debug e troubleshooting
 
@@ -1651,7 +1651,7 @@ Scanning porte comuni:
 #### `ssl_certificate_check(domain: string, port?: int)`
 Controllo certificati SSL/TLS:
 - Validità e scadenza certificati
-- Analisi issuer e subject
+- Analysis issuer e subject
 - Warning pre-scadenza
 - Serial number e dettagli tecnici
 
@@ -1666,11 +1666,11 @@ console.log(`Risk Level: ${audit.audit_result.risk_level}`);
 const vulnScan = await vulnerability_scanner("192.168.1.1", "deep");
 console.log(`Vulnerabilities: ${vulnScan.vulnerability_report.total_vulnerabilities}`);
 
-// Generazione password sicura
+// Generation password sicura
 const password = await generate_secure_password(16, true, true);
 console.log(`Password: ${password.password} (${password.strength})`);
 
-// Analisi header sicurezza
+// Analysis header sicurezza
 const headers = await security_headers_analyzer("https://example.com");
 console.log(`Security Grade: ${headers.analysis.security_grade}`);
 
@@ -1678,7 +1678,7 @@ console.log(`Security Grade: ${headers.analysis.security_grade}`);
 const encrypted = await encrypt_decrypt_data("sensitive data", "encrypt", null, "fernet");
 const decrypted = await encrypt_decrypt_data(encrypted.encrypted_data, "decrypt", encrypted.key, "fernet");
 
-// Generazione token sicuri
+// Generation token sicuri
 const tokens = await generate_secure_tokens("api", 5, JSON.stringify({prefix: "myapp"}));
 
 // Report sicurezza completo
@@ -1855,7 +1855,7 @@ Lemmatizzazione del testo.
 **Output**: `["correre", "correre", "correre"]`
 
 ### `frequency_analysis(text: string)`
-Analisi della frequenza delle parole nel testo.
+Analysis della frequenza delle parole nel testo.
 
 **Example:**
 ```json
@@ -1903,7 +1903,7 @@ Rimozione delle stop words dal testo.
 ### Esempi di Utilizzo
 
 ```javascript
-// Analisi del sentimento
+// Analysis del sentimento
 const sentiment = await sentiment_analysis("Questo è il miglior servizio che abbia mai usato!");
 console.log(`Sentiment: ${sentiment.sentiment}, Score: ${sentiment.score}`);
 
@@ -1923,7 +1923,7 @@ console.log(`Token: ${tokens.join(", ")}`);
 const lemmas = await lemmatization("correndo corse correrò");
 console.log(`Lemmi: ${lemmas.join(", ")}`);
 
-// Analisi della frequenza
+// Analysis della frequenza
 const freq = await frequency_analysis("ciao ciao come va va va");
 console.log(`Frequenza parole: ${JSON.stringify(freq.words)}`);
 
@@ -1965,7 +1965,7 @@ console.log(`Testo senza stop words: ${noStopwords.join(" ")}`);
 
 **Frequency Analysis:**
 - Conteggio parole e caratteri
-- Analisi distribuzione frequenze
+- Analysis distribuzione frequenze
 - Report dettagliato su richiesta
 
 **N-grams Extraction:**
@@ -1997,136 +1997,136 @@ console.log(`Testo senza stop words: ${noStopwords.join(" ")}`);
 #### Elaborazione del Linguaggio Naturale (NLP)
 - Tokenizzazione, stemming, lemmatizzazione
 - Riconoscimento entità, analisi sentimentale
-- Traduzione automatica, generazione testo
+- Automatic translation, text generation
 
-#### Statistiche e Probabilità
-- Modelli basati su frequenze e probabilità
-- Analisi statistica dei testi
-- Modelli di Markov per sequenze
+#### Statistics and Probability
+- Models based on frequencies and probability
+- Statistical text analysis
+- Markov models for sequences
 
 ## 📝 String Tools
 
-Strumenti avanzati per manipolazione, analisi e trasformazione di stringhe:
+Advanced tools for string manipulation, analysis, and transformation:
 
 ### Main Features
 
-- **Case Conversion**: Trasformazione maiuscole/minuscole con formati avanzati
-- **Text Analysis**: Analisi dettagliata con metriche leggibilità e linguistiche
-- **Encoding/Decoding**: Supporto Base64, URL, HTML, Hex encoding
-- **Format Operations**: Indentazione, allineamento, padding avanzati
-- **Validation**: Validazione email, URL, telefoni, carte credito, JSON
-- **String Comparison**: Algoritmi similarità, diff, Levenshtein distance
-- **Batch Processing**: Operazioni multiple simultanee su stringhe
-- **Text Cleaning**: Normalizzazione e pulizia testo avanzata
+- **Case Conversion**: Upper/lowercase transformation with advanced formats
+- **Text Analysis**: Detailed analysis with readability and linguistic metrics
+- **Encoding/Decoding**: Base64, URL, HTML, Hex encoding support
+- **Format Operations**: Advanced indentation, alignment, padding
+- **Validation**: Email, URL, phone, credit card, JSON validation
+- **String Comparison**: Similarity algorithms, diff, Levenshtein distance
+- **Batch Processing**: Multiple simultaneous operations on strings
+- **Text Cleaning**: Advanced text normalization and cleaning
 
 ### Available Tools
 
 #### `string_case_convert(text: string, case_type: string)`
-Conversioni case multiple:
-- Tipi: upper, lower, title, sentence, camel, snake, kebab
-- Gestione caratteri speciali e spazi
-- Output formattato con etichette
+Multiple case conversions:
+- Types: upper, lower, title, sentence, camel, snake, kebab
+- Special character and space management
+- Formatted output with labels
 
 #### `string_stats(text: string)`
-Statistiche base testo:
-- Conteggio caratteri, parole, frasi, linee
-- Analisi lettere, numeri, spazi, caratteri speciali
-- Metriche strutturali essenziali
+Basic text statistics:
+- Character, word, sentence, line count
+- Letter, number, space, special character analysis
+- Essential structural metrics
 
 #### `string_clean(text: string, operation: string)`
-Pulizia e normalizzazione:
+Cleaning and normalization:
 - Operations: trim, normalize_spaces, remove_special, letters_only, numbers_only
-- Rimozione caratteri indesiderati
-- Normalizzazione spaziatura
+- Unwanted character removal
+- Spacing normalization
 
 #### `string_wrap(text: string, width?: int, break_long_words?: bool)`
-Text wrapping avanzato:
-- Larghezza configurabile (10-200)
-- Controllo rottura parole lunghe
-- Preservazione formattazione
+Advanced text wrapping:
+- Configurable width (10-200)
+- Long word breaking control
+- Formatting preservation
 
 #### `string_find_replace(text: string, find: string, replace: string, case_sensitive?: bool)`
-Ricerca e sostituzione:
+Search and replace:
 - Case sensitive/insensitive
-- Conteggio occorrenze
-- Report dettagliato modifiche
+- Occurrence counting
+- Detailed modification report
 
 #### `string_advanced_analysis(text: string)`
-Analisi approfondita testo:
-- Statistiche caratteri e parole dettagliate
-- Frequenza caratteri e parole più comuni
-- Metriche leggibilità (Flesch Reading Ease)
-- Analisi linguistica con rilevamento script Unicode
-- Stima tempo lettura
-- Informazioni encoding e Unicode
+In-depth text analysis:
+- Detailed character and word statistics
+- Character and most common word frequency
+- Readability metrics (Flesch Reading Ease)
+- Linguistic analysis with Unicode script detection
+- Reading time estimation
+- Encoding and Unicode information
 
 #### `string_encoding_operations(text: string, operation: string, encoding?: string)`
-Encoding/Decoding completo:
-- Base64: encode/decode con encoding personalizzabile
-- URL: encode/decode per sicurezza web
-- HTML: escape/unescape entità HTML
-- Hex: conversione esadecimale bidirezionale
-- Supporto encoding multipli (UTF-8, ASCII, etc.)
+Complete encoding/decoding:
+- Base64: encode/decode with customizable encoding
+- URL: encode/decode for web security
+- HTML: escape/unescape HTML entities
+- Hex: bidirectional hexadecimal conversion
+- Multiple encoding support (UTF-8, ASCII, etc.)
 
 #### `string_format_operations(text: string, operation: string, options?: string)`
-Formattazione avanzata:
-- **Indent/Dedent**: Controllo indentazione con caratteri personalizzabili
-- **Alignment**: Center, ljust, rjust con riempimento custom
-- **Padding**: Padding laterale configurabile
-- **Truncate**: Troncamento con suffisso personalizzabile
-- **Zero Fill**: Riempimento zeri per numeri
-- Opzioni JSON per controllo fine
+Advanced formatting:
+- **Indent/Dedent**: Indentation control with customizable characters
+- **Alignment**: Center, ljust, rjust with custom fill
+- **Padding**: Configurable side padding
+- **Truncate**: Truncation with customizable suffix
+- **Zero Fill**: Zero filling for numbers
+- JSON options for fine control
 
 #### `string_validation(text: string, validation_type: string, options?: string)`
-Validazione formati specializzata:
-- **Email**: Pattern RFC-compliant
-- **URL**: HTTP/HTTPS con parametri
-- **Phone**: Formati internazionali (E.164, Italia, USA)
-- **Credit Card**: Algoritmo Luhn per validazione
-- **UUID**: Versioni 1-5 con analisi versione
-- **IP Address**: IPv4/IPv6 con rilevamento versione
-- **JSON**: Parsing con analisi struttura
-- Report dettagliato errori e metadati
+Specialized format validation:
+- **Email**: RFC-compliant patterns
+- **URL**: HTTP/HTTPS with parameters
+- **Phone**: International formats (E.164, Italy, USA)
+- **Credit Card**: Luhn algorithm validation
+- **UUID**: Versions 1-5 with version analysis
+- **IP Address**: IPv4/IPv6 with version detection
+- **JSON**: Parsing with structure analysis
+- Detailed error and metadata reporting
 
 #### `string_comparison(text1: string, text2: string, comparison_type?: string)`
-Confronto stringhe avanzato:
-- **Similarity**: Ratio similarità con SequenceMatcher
-- **Levenshtein**: Distanza edit con normalizzazione
-- **Diff**: Unified diff con conteggio modifiche
-- **Common Substrings**: Sottostringhe comuni con lunghezza minima
-- Percentuali similarità e metriche dettagliate
+Advanced string comparison:
+- **Similarity**: Similarity ratio with SequenceMatcher
+- **Levenshtein**: Edit distance with normalization
+- **Diff**: Unified diff with modification count
+- **Common Substrings**: Common substrings with minimum length
+- Similarity percentages and detailed metrics
 
 #### `string_batch_operations(operations_json: string)`
-Processing batch multiplo:
-- Fino a 100 operazioni simultanee
-- Supporto: case_convert, clean, stats, encoding, validation
-- Statistiche successo/fallimento aggregate
-- Report esecuzione dettagliato
+Multiple batch processing:
+- Up to 100 simultaneous operations
+- Support: case_convert, clean, stats, encoding, validation
+- Aggregate success/failure statistics
+- Detailed execution report
 
-### Esempi di Utilizzo
+### Usage Examples
 
 ```javascript
-// Analisi completa testo
-const analysis = await string_advanced_analysis("Il gatto camminava sul tetto.");
-console.log(`Leggibilità: ${analysis.analysis.readability.level}`);
-console.log(`Tempo lettura: ${analysis.analysis.readability.estimated_reading_time_minutes} min`);
+// Complete text analysis
+const analysis = await string_advanced_analysis("The cat walked on the roof.");
+console.log(`Readability: ${analysis.analysis.readability.level}`);
+console.log(`Reading time: ${analysis.analysis.readability.estimated_reading_time_minutes} min`);
 
-// Encoding multiplo
+// Multiple encoding
 const base64 = await string_encoding_operations("Hello World!", "base64_encode");
 const url = await string_encoding_operations("hello world!", "url_encode");
 
-// Validazione dati
+// Data validation
 const email = await string_validation("user@example.com", "email");
 const phone = await string_validation("+39 123 456 7890", "phone");
 const json = await string_validation('{"name": "test"}', "json");
 
-// Formattazione avanzata
+// Advanced formatting
 const centered = await string_format_operations("Title", "center", 
   JSON.stringify({width: 20, fill_char: "="}));
 const indented = await string_format_operations("Code\nBlock", "indent",
   JSON.stringify({size: 4, char: " "}));
 
-// Confronto stringhe
+// String comparison
 const similarity = await string_comparison("hello world", "hallo world", "similarity");
 const diff = await string_comparison("version 1", "version 2", "diff");
 
@@ -2139,29 +2139,29 @@ const batchOps = JSON.stringify([
 const batchResult = await string_batch_operations(batchOps);
 ```
 
-### Metriche e Analisi
+### Metrics and Analysis
 
 **Readability Scoring:**
-- Algoritmo basato su Flesch Reading Ease
-- Considerazione lunghezza frasi e sillabe
-- Livelli: Molto Facile → Molto Difficile
-- Stima tempo lettura (200 WPM)
+- Algorithm based on Flesch Reading Ease
+- Sentence length and syllable consideration
+- Levels: Very Easy → Very Difficult
+- Reading time estimation (200 WPM)
 
 **Language Detection:**
-- Analisi script Unicode
-- Rilevamento parole comuni (italiano, inglese, spagnolo)
-- Categorizzazione caratteri Unicode
-- Compatibilità ASCII e encoding
+- Unicode script analysis
+- Common word detection (Italian, English, Spanish)
+- Unicode character categorization
+- ASCII and encoding compatibility
 
 **String Similarity:**
 - SequenceMatcher ratio (0-1)
-- Levenshtein distance con normalizzazione
+- Levenshtein distance with normalization
 - Common substring analysis
-- Diff unified format
+- Unified diff format
 
 **Validation Accuracy:**
-- Email: Pattern RFC-compliant
-- Credit Card: Algoritmo Luhn checksum
-- Phone: Pattern internazionali multipli
-- UUID: Validazione versione e formato
+- Email: RFC-compliant patterns
+- Credit Card: Luhn checksum algorithm
+- Phone: Multiple international patterns
+- UUID: Version and format validation
 - IP: IPv4/IPv6 pattern matching
