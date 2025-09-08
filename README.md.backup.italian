@@ -1,135 +1,135 @@
 # 🚀 Nexus MCP Server
 
-**Nexus** is an advanced, modular, and configurable MCP (Model Context Protocol) server that acts as a central hub for integrating a wide range of custom tools, making them available to a Large Language Model (LLM).
+**Nexus** è un server MCP (Model Context Protocol) avanzato, modulare e configurabile che funge da hub centrale per integrare una vasta gamma di strumenti personalizzati, rendendoli disponibili a un Large Language Model (LLM).
 
-## 📊 Tools and Functions Overview
+## 📊 Panoramica Tool e Funzioni
 
-🛠️ **Available Tools**: **46**  
-⚙️ **Total Functions**: **437+**
+🛠️ **Tool Disponibili**: **46**  
+⚙️ **Funzioni Totali**: **437+**
 
-## 📋 Complete Tools Table
+## 📋 Tabella Completa Tool
 
-| Tool | File | Functions | Description |
+| Tool | File | Funzioni | Descrizione |
 |------|------|----------|-------------|
-| **Encoding Tools** | `encoding_tools.py` | **19** | **Data encoding and decoding (Base64, URL, HTML, Hex)** |
-| **Calculator** | `calculator.py` | **16** | **Advanced mathematical operations and calculations** |
-| **Cloud Tools** | `cloud_tools.py` | **16** | **Services and APIs for cloud platforms (AWS, Azure, GCP)** |
-| **Network Tools** | `network_tools.py` | **15** | **Network diagnostics and utilities** |
-| **Code Execution Tools** | `code_execution_tools.py` | **14** | **Secure environments for code execution + Dynamic Tools** |
-| **File Converter** | `file_converter.py` | **14** | **Conversion between different file formats** |
-| **Docker Tools** | `docker_tools.py` | **13** | **Docker container management** |
-| **Network Security Tools** | `network_security_tools.py` | **13** | **Network security scanning** |
-| **Regex Tools** | `regex_tools.py` | **13** | **Regular expression utilities** |
-| **Security Tools** | `security_tools.py` | **13** | **Security and cryptography utilities** |
-| **Code Generation Tools** | `code_generation_tools.py` | **12** | **Code template and structure generation** |
-| **Datetime Tools** | `datetime_tools.py` | **12** | **Date and time manipulation** |
-| **Image Processing** | `image_processing.py` | **12** | **Image manipulation and analysis** |
-| **JSON/YAML Tools** | `json_yaml_tools.py` | **12** | **JSON and YAML manipulation** |
-| **Log Analysis Tools** | `log_analysis_tools.py` | **12** | **Log file parsing and analysis** |
-| **Markdown Tools** | `markdown_tools.py` | **12** | **Markdown document processing** |
-| **Color Tools** | `color_tools.py` | **11** | **Color conversion and analysis** |
-| **Crypto Tools** | `crypto_tools.py` | **11** | **Cryptographic functions and hashing** |
-| **Data Analysis** | `data_analysis.py` | **11** | **Data processing and statistical analysis** |
-| **Database Tools** | `database_tools.py` | **11** | **Database management and queries** |
-| **Environment Tools** | `environment_tools.py` | **11** | **Environment variable management** |
-| **Git Tools** | `git_tools.py` | **11** | **Git repository management** |
-| **Process Management Tools** | `process_management_tools.py` | **11** | **Process control and monitoring** |
-| **String Tools** | `string_tools.py` | **11** | **String manipulation functions** |
-| **System Info** | `system_info.py` | **11** | **System information and monitoring** |
-| **Backup Tools** | `backup_tools.py` | **10** | **Advanced backup and archive management** |
-| **Email Tools** | `email_tools.py` | **10** | **Email validation and templates** |
-| **Performance Tools** | `performance_tools.py` | **10** | **System performance monitoring** |
-| **Audio Processing** | `audio_processing.py` | **9** | **Audio file processing and analysis** |
-| **Code Analysis Tools** | `code_analysis_tools.py` | **9** | **Code quality analysis and metrics** |
-| **PDF Tools** | `pdf_tools.py` | **9** | **PDF document processing** |
-| **Filesystem Reader** | `filesystem_reader.py` | **7** | **Secure file system access** |
-| **QR Code Tools** | `qr_code_tools.py` | **7** | **QR code generation and analysis** |
-| **Unit Converter** | `unit_converter.py` | **6** | **Unit conversion utilities** |
-| **UUID Tools** | `uuid_tools.py` | **6** | **UUID and ID generation** |
-| **Validator Tools** | `validator_tools.py` | **5** | **Data validation functions** |
-| **Video Processing** | `video_processing.py` | **5** | **Video file processing** |
-| **API Testing Tools** | `api_testing_tools.py` | **4** | **REST API testing and documentation** |
-| **Async Task Queue** | `async_task_queue.py` | **4** | **Asynchronous queue management for long-running tasks** |
-| **Text Analysis Tools** | `text_analysis_tools.py` | **4** | **Sentiment analysis and linguistics** |
-| **URL Tools** | `url_tools.py` | **4** | **URL manipulation and validation** |
-| **Archive Tools** | `archive_tools.py` | **3** | **ZIP, TAR, 7Z archive management** |
-| **Template Tools** | `template_tools.py` | **3** | **Code/config template generation** |
-| **Weather Tools** | `weather_tools.py` | **3** | **Weather information** |
-| **Web Fetcher** | `web_fetcher.py` | **1** | **Web content retrieval** |
-| **Workflow Orchestration** | `workflows.py` | **1** | **Meta-tool for complex workflow orchestration** |
+| **Encoding Tools** | `encoding_tools.py` | **19** | **Codifica e decodifica dati (Base64, URL, HTML, Hex)** |
+| **Calculator** | `calculator.py` | **16** | **Operazioni matematiche avanzate e calcolazioni** |
+| **Cloud Tools** | `cloud_tools.py` | **16** | **Servizi e API per piattaforme cloud (AWS, Azure, GCP)** |
+| **Network Tools** | `network_tools.py` | **15** | **Diagnostica e utilità di rete** |
+| **Code Execution Tools** | `code_execution_tools.py` | **14** | **Ambienti sicuri per esecuzione codice + Dynamic Tools** |
+| **File Converter** | `file_converter.py` | **14** | **Conversione tra formati file diversi** |
+| **Docker Tools** | `docker_tools.py` | **13** | **Gestione container Docker** |
+| **Network Security Tools** | `network_security_tools.py` | **13** | **Scansione sicurezza di rete** |
+| **Regex Tools** | `regex_tools.py` | **13** | **Utilità espressioni regolari** |
+| **Security Tools** | `security_tools.py` | **13** | **Utilità sicurezza e crittografia** |
+| **Code Generation Tools** | `code_generation_tools.py` | **12** | **Generazione template e strutture codice** |
+| **Datetime Tools** | `datetime_tools.py` | **12** | **Manipolazione date e orari** |
+| **Image Processing** | `image_processing.py` | **12** | **Manipolazione e analisi immagini** |
+| **JSON/YAML Tools** | `json_yaml_tools.py` | **12** | **Manipolazione JSON e YAML** |
+| **Log Analysis Tools** | `log_analysis_tools.py` | **12** | **Parsing e analisi file log** |
+| **Markdown Tools** | `markdown_tools.py` | **12** | **Elaborazione documenti Markdown** |
+| **Color Tools** | `color_tools.py` | **11** | **Conversione e analisi colori** |
+| **Crypto Tools** | `crypto_tools.py` | **11** | **Funzioni crittografiche e hashing** |
+| **Data Analysis** | `data_analysis.py` | **11** | **Elaborazione e analisi statistica dati** |
+| **Database Tools** | `database_tools.py` | **11** | **Gestione database e query** |
+| **Environment Tools** | `environment_tools.py` | **11** | **Gestione variabili ambiente** |
+| **Git Tools** | `git_tools.py` | **11** | **Gestione repository Git** |
+| **Process Management Tools** | `process_management_tools.py` | **11** | **Controllo e monitoraggio processi** |
+| **String Tools** | `string_tools.py` | **11** | **Funzioni manipolazione stringhe** |
+| **System Info** | `system_info.py` | **11** | **Informazioni e monitoraggio sistema** |
+| **Backup Tools** | `backup_tools.py` | **10** | **Gestione backup e archivi avanzata** |
+| **Email Tools** | `email_tools.py` | **10** | **Validazione email e template** |
+| **Performance Tools** | `performance_tools.py` | **10** | **Monitoraggio performance sistema** |
+| **Audio Processing** | `audio_processing.py` | **9** | **Elaborazione e analisi di file audio** |
+| **Code Analysis Tools** | `code_analysis_tools.py` | **9** | **Analisi qualità e metriche del codice** |
+| **PDF Tools** | `pdf_tools.py` | **9** | **Elaborazione documenti PDF** |
+| **Filesystem Reader** | `filesystem_reader.py` | **7** | **Accesso sicuro al file system** |
+| **QR Code Tools** | `qr_code_tools.py` | **7** | **Generazione e analisi QR code** |
+| **Unit Converter** | `unit_converter.py` | **6** | **Utilità conversione unità misura** |
+| **UUID Tools** | `uuid_tools.py` | **6** | **Generazione UUID e ID** |
+| **Validator Tools** | `validator_tools.py` | **5** | **Funzioni validazione dati** |
+| **Video Processing** | `video_processing.py` | **5** | **Elaborazione file video** |
+| **API Testing Tools** | `api_testing_tools.py` | **4** | **Testing e documentazione API REST** |
+| **Async Task Queue** | `async_task_queue.py` | **4** | **Gestione coda asincrona per task a lunga esecuzione** |
+| **Text Analysis Tools** | `text_analysis_tools.py` | **4** | **Analisi sentimenti e linguistica** |
+| **URL Tools** | `url_tools.py` | **4** | **Manipolazione e validazione URL** |
+| **Archive Tools** | `archive_tools.py` | **3** | **Gestione archivi ZIP, TAR, 7Z** |
+| **Template Tools** | `template_tools.py` | **3** | **Generazione template codice/config** |
+| **Weather Tools** | `weather_tools.py` | **3** | **Informazioni meteorologiche** |
+| **Web Fetcher** | `web_fetcher.py` | **1** | **Recupero contenuti web** |
+| **Workflow Orchestration** | `workflows.py` | **1** | **Meta-tool per orchestrazione workflow complessi** |
 
-## 🎯 Design Philosophy
+## 🎯 Filosofia di Progettazione
 
-- **🎭 Central Orchestration, Distributed Logic**: The main server contains no tool logic, only the responsibility to load and serve them
-- **⚙️ Configuration-Driven**: Enable/disable tools via `config.json` file without recompilation
-- **🔒 Security First-Class**: Every tool implements rigorous security controls
-- **📚 Self-documentation**: Fully documented code for easy maintenance
-- **🔄 Workflow Orchestration**: Meta-tools for complex operation chains with a single call
-- **🚀 Dynamic Tool Creation**: Runtime generation of custom tools for specific needs
-- **🌐 Web UI Management**: Web interface for dynamic management and real-time monitoring
+- **🎭 Orchestrazione Centrale, Logica Distribuita**: Il server principale non contiene la logica di nessun tool, ma solo la responsabilità di caricarli e servirli
+- **⚙️ Configurazione-Driven**: Attivazione/disattivazione dei tool tramite file `config.json` senza ricompilazione
+- **🔒 Sicurezza First-Class**: Ogni tool implementa rigorosi controlli di sicurezza
+- **📚 Auto-documentazione**: Codice completamente documentato per facilità di manutenzione
+- **🔄 Workflow Orchestration**: Meta-tool per catene di operazioni complesse con un'unica chiamata
+- **🚀 Dynamic Tool Creation**: Generazione runtime di tool personalizzati per esigenze specifiche
+- **🌐 Web UI Management**: Interfaccia web per gestione dinamica e monitoring in tempo reale
 
-## 🖥️ Web Configuration Interface
+## 🖥️ Interfaccia Web di Configurazione
 
-**Nexus MCP Server** includes a **modern web interface** for dynamic configuration management without needing to restart the server.
+**Nexus MCP Server** include un'**interfaccia web moderna** per la gestione dinamica della configurazione senza necessità di riavvio del server.
 
-### ✨ Main Features
+### ✨ Funzionalità Principali
 
-- **🔧 Tools Dashboard**: View all available tools with checkboxes to enable/disable them
-- **📊 Real-time Metrics**: Monitor enabled tools, active sessions, and performance
-- **📋 Log Streaming**: Real-time server log display via Server-Sent Events
-- **⚡ Hot Reload**: Apply changes without server downtime
-- **🎨 Responsive Design**: Modern interface that works on desktop and mobile
+- **🔧 Dashboard dei Tool**: Visualizza tutti i tool disponibili con checkbox per abilitarli/disabilitarli
+- **📊 Metriche in Tempo Reale**: Monitora tool abilitati, sessioni attive e prestazioni
+- **📋 Log Streaming**: Visualizzazione dei log del server in tempo reale via Server-Sent Events
+- **⚡ Hot Reload**: Applica modifiche senza downtime del server
+- **🎨 Design Responsivo**: Interfaccia moderna che funziona su desktop e mobile
 
-### 🚀 Starting the Web Interface
+### 🚀 Avvio dell'Interfaccia Web
 
 ```bash
-# Start the UI server on port 8888
+# Avvia il server UI sulla porta 8888
 python ui_server.py
 
-# Access the web dashboard
+# Accedi alla dashboard web
 # http://localhost:8888
 ```
 
 ### 📸 Screenshots
 
-![Configuration Dashboard](https://github.com/user-attachments/assets/474943df-d52e-46af-abc1-505f52800b48)
-*Main dashboard with all available tools*
+![Dashboard di Configurazione](https://github.com/user-attachments/assets/474943df-d52e-46af-abc1-505f52800b48)
+*Dashboard principale con tutti i tool disponibili*
 
-![Applied Configuration](https://github.com/user-attachments/assets/cfcda072-80be-4130-a7e9-1ec09dfbb117)
-*Example configuration with only 3 tools enabled (calculator, crypto_tools, system_info)*
+![Configurazione Applicata](https://github.com/user-attachments/assets/cfcda072-80be-4130-a7e9-1ec09dfbb117)
+*Esempio di configurazione con solo 3 tool abilitati (calculator, crypto_tools, system_info)*
 
-### 🔗 Complete Documentation
+### 🔗 Documentazione Completa
 
-For detailed information about the web interface, see: **[UI_CONFIGURATION.md](UI_CONFIGURATION.md)**
+Per informazioni dettagliate sull'interfaccia web, consultare: **[UI_CONFIGURATION.md](UI_CONFIGURATION.md)**
 
-## 📦 Available Tools
+## 📦 Tool Disponibili
 
 ### 🧮 Calculator (`calculator.py`)
-**Basic mathematical operations**
-- `add(a, b)` - Addition
-- `multiply(a, b)` - Multiplication
+**Operazioni matematiche di base**
+- `add(a, b)` - Addizione
+- `multiply(a, b)` - Moltiplicazione
 
-## 📝 Advanced Calculator
+## 📝 Calcolatrice Avanzata
 
-Complete mathematical calculation system with advanced functions, number theory, statistics, and secure expression evaluation.
+Sistema di calcolo matematico completo con funzioni avanzate, teoria dei numeri, statistiche e valutazione sicura di espressioni.
 
-### Main Features
+### Funzionalità Principali
 
-- **Basic Operations**: Fundamental arithmetic with security controls
-- **Advanced Functions**: Trigonometry, logarithms, roots, powers
-- **Number Theory**: GCD, LCM, factorization, prime numbers
-- **Statistics**: Mean, median, standard deviation, variance
-- **Unit Conversions**: Length, weight, temperature, volume, time
-- **Financial Calculations**: Simple and compound interest
-- **Expression Evaluation**: Secure parser for complex expressions
-- **Mathematical Constants**: Access to important constants
+- **Operazioni Base**: Aritmetica fondamentale con controlli di sicurezza
+- **Funzioni Avanzate**: Trigonometria, logaritmi, radici, potenze
+- **Teoria dei Numeri**: GCD, LCM, fattorizzazione, numeri primi
+- **Statistiche**: Media, mediana, deviazione standard, varianza
+- **Conversioni Unità**: Lunghezza, peso, temperatura, volume, tempo
+- **Calcoli Finanziari**: Interessi semplici e composti
+- **Valutazione Espressioni**: Parser sicuro per espressioni complesse
+- **Costanti Matematiche**: Accesso a costanti importanti
 
-### Available Tools
+### Tool Disponibili
 
-#### Basic Operations
+#### Operazioni Base
 
 ##### `add(a, b)` & `multiply(a, b)`
-Fundamental arithmetic operations (existing).
+Operazioni aritmetiche fondamentali (esistenti).
 
 ##### `subtract(a, b)`
 ```json
@@ -140,7 +140,7 @@ Fundamental arithmetic operations (existing).
 ```
 
 ##### `divide(a, b)`
-Division with security controls and detailed information.
+Divisione con controlli di sicurezza e informazioni dettagliate.
 ```json
 {
   "name": "divide",
@@ -149,10 +149,10 @@ Division with security controls and detailed information.
 ```
 **Output**: `{"result": 3.75, "remainder": 3, "is_integer": false}`
 
-#### Advanced Operations
+#### Operazioni Avanzate
 
 ##### `power(base, exponent)`
-Power calculation with overflow protection.
+Calcolo potenze con protezione overflow.
 ```json
 {
   "name": "power",
@@ -169,7 +169,7 @@ Power calculation with overflow protection.
 ```
 
 ##### `nth_root(number, n)`
-N-th root with support for odd roots of negative numbers.
+Radice n-esima con supporto per radici dispari di numeri negativi.
 ```json
 {
   "name": "nth_root",
@@ -185,7 +185,7 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-#### Trigonometric Functions
+#### Funzioni Trigonometriche
 
 ##### `trigonometric_functions(angle, unit, functions)`
 ```json
@@ -199,10 +199,10 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Supported units**: `radians`, `degrees`
-**Functions**: `sin`, `cos`, `tan`, `cot`, `sec`, `csc`
+**Unità supportate**: `radians`, `degrees`
+**Funzioni**: `sin`, `cos`, `tan`, `cot`, `sec`, `csc`
 
-#### Logarithms
+#### Logaritmi
 
 ##### `logarithms(number, base)`
 ```json
@@ -211,9 +211,9 @@ N-th root with support for odd roots of negative numbers.
   "arguments": {"number": 100, "base": 10}
 }
 ```
-**Output**: Logarithms in natural, base 10, base 2, and specified base.
+**Output**: Logaritmi in base naturale, 10, 2 e base specificata.
 
-#### Statistics
+#### Statistiche
 
 ##### `statistics_functions(numbers, operation)`
 ```json
@@ -226,16 +226,16 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Available operations**:
-- `mean`: Arithmetic mean
-- `median`: Median
-- `mode`: Mode
-- `stdev`: Standard deviation
-- `variance`: Variance
+**Operazioni disponibili**:
+- `mean`: Media aritmetica
+- `median`: Mediana
+- `mode`: Moda
+- `stdev`: Deviazione standard
+- `variance`: Varianza
 - `range`: Range (max - min)
-- `all`: All statistics
+- `all`: Tutte le statistiche
 
-#### Number Theory
+#### Teoria dei Numeri
 
 ##### `number_theory(a, b, operation)`
 ```json
@@ -245,13 +245,13 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Operations**:
-- `gcd`: Greatest Common Divisor
-- `lcm`: Least Common Multiple
-- `prime_factors`: Prime factorization
-- `is_prime`: Primality test
+**Operazioni**:
+- `gcd`: Massimo Comune Divisore
+- `lcm`: Minimo Comune Multiplo
+- `prime_factors`: Fattorizzazione in primi
+- `is_prime`: Test di primalità
 
-#### Unit Conversions
+#### Conversioni Unità
 
 ##### `unit_converter(value, from_unit, to_unit, unit_type)`
 ```json
@@ -266,7 +266,7 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Supported unit types**:
+**Tipi di unità supportati**:
 
 **Length**: `meter`, `kilometer`, `centimeter`, `millimeter`, `inch`, `foot`, `yard`, `mile`
 
@@ -278,7 +278,7 @@ N-th root with support for odd roots of negative numbers.
 
 **Time**: `second`, `minute`, `hour`, `day`, `week`, `year`
 
-#### Financial Calculations
+#### Calcoli Finanziari
 
 ##### `financial_calculator(principal, rate, time, calculation_type, compound_frequency)`
 ```json
@@ -294,12 +294,12 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Calculation types**:
-- `simple_interest`: Simple interest
-- `compound_interest`: Compound interest
-- `present_value`: Present value
+**Tipi di calcolo**:
+- `simple_interest`: Interesse semplice
+- `compound_interest`: Interesse composto
+- `present_value`: Valore attuale
 
-#### Expression Evaluation
+#### Valutazione Espressioni
 
 ##### `expression_evaluator(expression, variables)`
 ```json
@@ -312,19 +312,19 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Available functions**:
-- Arithmetic: `+`, `-`, `*`, `/`, `**`, `%`
-- Mathematical: `sin`, `cos`, `tan`, `log`, `sqrt`, `exp`, `abs`
-- Constants: `pi`, `e`
-- Custom: User-defined variables
+**Funzioni disponibili**:
+- Aritmetiche: `+`, `-`, `*`, `/`, `**`, `%`
+- Matematiche: `sin`, `cos`, `tan`, `log`, `sqrt`, `exp`, `abs`
+- Costanti: `pi`, `e`
+- Custom: Variabili definite dall'utente
 
-**Security features**:
-- Isolated execution environment
-- Whitelist of allowed functions
-- Rigorous input validation
-- Prevention of injection attacks
+**Caratteristiche di sicurezza**:
+- Ambiente di esecuzione isolato
+- Whitelist di funzioni permesse
+- Validazione input rigorosa
+- Prevenzione injection attacks
 
-#### Mathematical Constants
+#### Costanti Matematiche
 
 ##### `mathematical_constants()`
 ```json
@@ -334,18 +334,18 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-**Included constants**:
+**Costanti incluse**:
 - π (pi): 3.14159...
-- e (euler): 2.71828...
-- φ (golden ratio): 1.61803...
+- e (eulero): 2.71828...
+- φ (sezione aurea): 1.61803...
 - √2, √3
-- γ (Euler-Mascheroni): 0.57721...
+- γ (Eulero-Mascheroni): 0.57721...
 
-### Advanced Usage Examples
+### Esempi di Utilizzo Avanzato
 
-#### Complex Multi-step Calculation
+#### Calcolo Complesso Multi-step
 ```json
-// 1. Calculate circle area
+// 1. Calcola area cerchio
 {
   "name": "expression_evaluator",
   "arguments": {
@@ -354,7 +354,7 @@ N-th root with support for odd roots of negative numbers.
   }
 }
 
-// 2. Statistics on dataset
+// 2. Statistiche su dataset
 {
   "name": "statistics_functions",
   "arguments": {
@@ -363,7 +363,7 @@ N-th root with support for odd roots of negative numbers.
   }
 }
 
-// 3. Convert result
+// 3. Conversione risultato
 {
   "name": "unit_converter",
   "arguments": {
@@ -375,9 +375,9 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-#### Financial Analysis
+#### Analisi Finanziaria
 ```json
-// Compare simple vs compound interest
+// Confronto interesse semplice vs composto
 {
   "name": "financial_calculator",
   "arguments": {
@@ -390,7 +390,7 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-#### Geometry Problems
+#### Problemi di Geometria
 ```json
 {
   "name": "expression_evaluator",
@@ -401,20 +401,20 @@ N-th root with support for odd roots of negative numbers.
 }
 ```
 
-### Security Controls
+### Controlli di Sicurezza
 
-- **Overflow Protection**: Limits on operations that could cause overflow
-- **Division by Zero**: Automatic handling of division by zero
-- **Input Validation**: Rigorous validation of all inputs
-- **Safe Evaluation**: Isolated environment for expression evaluation
-- **Error Handling**: Complete error handling with informative messages
+- **Overflow Protection**: Limiti su operazioni che potrebbero causare overflow
+- **Division by Zero**: Gestione automatica divisioni per zero
+- **Input Validation**: Validazione rigorosa di tutti gli input
+- **Safe Evaluation**: Ambiente isolato per valutazione espressioni
+- **Error Handling**: Gestione completa degli errori con messaggi informativi
 
-### Precision and Limits
+### Precisione e Limiti
 
-- **Decimal Precision**: 50 significant digits for high-precision calculations
-- **Factorial**: Limited to n ≤ 170 to avoid overflow
-- **Powers**: Automatic controls to avoid overly large results
-- **Expressions**: Maximum length and allowed characters controlled
+- **Precisione Decimale**: 50 cifre significative per calcoli di alta precisione
+- **Fattoriale**: Limitato a n ≤ 170 per evitare overflow
+- **Potenze**: Controlli automatici per evitare risultati troppo grandi
+- **Espressioni**: Lunghezza massima e caratteri permessi controllati
 
 ## 🚀 Dynamic One-Time Tools (Advanced Feature)
 
