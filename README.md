@@ -281,20 +281,15 @@ curl http://localhost:9999/tools/generate_uuid4/execute
 
 ### 📋 Main Documentation
 - **[TOOLS.md](TOOLS.md)** - Complete tools reference with 500+ functions, usage examples, and technical details
-- **[Docker Deployment](DEPLOYMENT.md)** - Production deployment guides and best practices
-- **[Web Interface](UI_CONFIGURATION.md)** - Advanced web dashboard configuration and features
 
-### 🔧 Setup Guides
-- **[Claude Desktop Setup](CLAUDE_SETUP.md)** - Step-by-step Claude Desktop integration
-- **[VS Code Troubleshooting](VSCODE_TROUBLESHOOTING.md)** - Common VS Code integration issues and solutions
-
-### 🚀 Advanced Features
+### 🔧 Advanced Features Documentation
 - **[Dynamic Tools](DYNAMIC_TOOLS.md)** - Runtime tool creation with `create_and_run_tool`
 - **[Enhanced API](ENHANCED_API.md)** - REST API access for any programming language
-- **[Prometheus Monitoring](PROMETHEUS_MONITORING.md)** - Production monitoring and metrics
+- **[Web Interface](UI_CONFIGURATION.md)** - Advanced web dashboard configuration and API endpoints
 
-### 🔧 Development
-- **[WARP.md](WARP.md)** - Development environment setup and build commands
+### 🚀 Deployment & Operations
+- **[Docker Deployment](DEPLOYMENT.md)** - Production deployment guides, Docker configurations, and best practices
+- **[Prometheus Monitoring](PROMETHEUS_MONITORING.md)** - Production monitoring, metrics, and observability setup
 
 ## 🎯 Core Design Principles
 
