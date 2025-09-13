@@ -2,10 +2,23 @@
 
 **Nexus** is an advanced, modular, and configurable MCP (Model Context Protocol) server that acts as a central hub for integrating a wide range of custom tools, making them available to a Large Language Model (LLM).
 
+## 📖 Quick Navigation
+
+- [📊 Tools Overview](#-tools-and-functions-overview)
+- [📋 Complete Tools Table](#-complete-tools-table)
+- [🎯 Design Philosophy](#-design-philosophy)
+- [🖥️ Web Interface](#️-web-configuration-interface)
+- [🚀 Getting Started](#-getting-started)
+- [📝 Detailed Tool Documentation](#-detailed-tool-documentation)
+- [🐳 Docker Support](#-docker-support)
+- [📚 Additional Resources](#-additional-resources)
+
 ## 📊 Tools and Functions Overview
 
-🛠️ **Available Tools**: **46**  
+🛠️ **Available Tools**: **46**
 ⚙️ **Total Functions**: **437+**
+
+> 📋 **For detailed tool documentation with examples and parameters, see [TOOLS.md](TOOLS.md)**
 
 ## 📋 Complete Tools Table
 
@@ -101,6 +114,54 @@ python ui_server.py
 ### 🔗 Complete Documentation
 
 For detailed information about the web interface, see: **[UI_CONFIGURATION.md](UI_CONFIGURATION.md)**
+
+## 🚀 Getting Started
+
+### 📋 Prerequisites
+
+- Python 3.8+
+- Docker (optional, for containerized deployment)
+
+### ⚡ Quick Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/fabriziosalmi/nexus-mcp-server.git
+   cd nexus-mcp-server
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Start the MCP server**
+   ```bash
+   python multi_server.py
+   ```
+
+4. **Start the web interface (optional)**
+   ```bash
+   python ui_server.py
+   # Access at http://localhost:8888
+   ```
+
+### 🐳 Docker Quick Start
+
+```bash
+# Build and run with Docker Compose
+docker-compose up nexus-mcp
+
+# Or build manually
+docker build -t nexus-mcp-server .
+docker run --rm -i nexus-mcp-server
+```
+
+### 🔧 Configuration
+
+- Edit `config.json` to enable/disable specific tools
+- Use the web interface for dynamic configuration without restarts
+- See [Claude Code Configuration](CLAUDE.md) for MCP client setup
 
 ## 📦 Available Tools
 
@@ -2165,3 +2226,53 @@ const batchResult = await string_batch_operations(batchOps);
 - Phone: Multiple international patterns
 - UUID: Version and format validation
 - IP: IPv4/IPv6 pattern matching
+
+## 🐳 Docker Support
+
+Nexus MCP Server includes comprehensive Docker support for easy deployment and isolation:
+
+```bash
+# Quick start with Docker Compose
+docker-compose up nexus-mcp
+
+# Custom configuration
+docker run --rm -i -v "./safe_files:/app/safe_files:rw" nexus-mcp-server:latest
+```
+
+For detailed Docker configuration, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
+## 📚 Additional Resources
+
+### 📖 Documentation
+- [📋 Complete Tools Reference](TOOLS.md) - Detailed documentation for all 437+ functions
+- [🖥️ Web Interface Guide](UI_CONFIGURATION.md) - Web dashboard configuration
+- [🐳 Deployment Guide](DEPLOYMENT.md) - Docker and production deployment
+- [🔧 Claude Code Setup](CLAUDE.md) - MCP client configuration
+- [🚀 Dynamic Tools](DYNAMIC_TOOLS.md) - Runtime tool creation
+- [📊 Monitoring](PROMETHEUS_MONITORING.md) - Performance monitoring setup
+
+### 🎯 Key Features
+- **120+ Tools** across 17 categories
+- **Web Configuration Interface** with real-time monitoring
+- **Workflow Orchestration** for complex operations
+- **Docker Integration** for secure, isolated execution
+- **Dynamic Tool Creation** at runtime
+- **Hot Configuration Reload** without server restart
+
+### 🔒 Security Features
+- Sandboxed file operations in `safe_files/` directory
+- Input validation and sanitization
+- Resource limits and timeout protection
+- Secure token generation
+- Path traversal prevention
+
+### 🤝 Contributing
+
+Contributions are welcome! Please see our contributing guidelines and feel free to submit issues and pull requests.
+
+### 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+**Nexus MCP Server** - Empowering LLMs with advanced tool orchestration and secure execution environments.

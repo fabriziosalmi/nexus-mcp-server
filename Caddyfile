@@ -1,0 +1,51 @@
+# Caddyfile - Automatic HTTPS reverse proxy for Nexus MCP Server
+# This configuration provides HTTPS termination and proxies requests to localhost:3001
+
+# HTTPS for localhost (standard port 443)
+localhost {
+    # Reverse proxy to the MCP server
+    reverse_proxy localhost:3001
+    
+    # Enable request/response logging
+    log {
+        output file /tmp/caddy-nexus-mcp.log
+    }
+    
+    # Optional: Add CORS headers if needed
+    header {
+        # CORS headers for web clients
+        Access-Control-Allow-Origin *
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization"
+        
+        # Security headers
+        X-Frame-Options DENY
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+    }
+    
+    # Handle preflight CORS requests
+    @options method OPTIONS
+    respond @options 204
+}
+
+# Alternative: If you want a specific HTTPS port (uncomment if needed)
+# localhost:8443 {
+#     reverse_proxy localhost:3001
+#     
+#     log {
+#         output file /tmp/caddy-nexus-mcp.log
+#     }
+#     
+#     header {
+#         Access-Control-Allow-Origin *
+#         Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+#         Access-Control-Allow-Headers "Content-Type, Authorization"
+#         X-Frame-Options DENY
+#         X-Content-Type-Options nosniff
+#         Referrer-Policy strict-origin-when-cross-origin
+#     }
+#     
+#     @options method OPTIONS
+#     respond @options 204
+# }

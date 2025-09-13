@@ -1,0 +1,26 @@
+# Alternative Docker Compose for MCP stdio mode
+services:
+  nexus-mcp-stdio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nexus-mcp-server:latest
+    container_name: nexus-mcp-stdio
+    
+    # No ports needed for stdio
+    volumes:
+      - ./safe_files:/app/safe_files:rw
+      - ./config.json:/app/config.json:ro
+      - ./logs:/app/logs:rw
+    
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MCP_SERVER_NAME=NexusServer
+      - LOG_LEVEL=INFO
+    
+    # Run stdio version instead of HTTP
+    command: ["python", "multi_server.py"]
+    
+    # For stdio mode, we don't need restart policy
+    # stdin_open: true
+    # tty: false

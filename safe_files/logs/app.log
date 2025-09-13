@@ -1,0 +1,5 @@
+2024-01-01 10:00:00 INFO Application started
+2024-01-01 10:01:00 DEBUG Processing request
+2024-01-01 10:02:00 WARN Memory usage high
+2024-01-01 10:03:00 ERROR Connection failed
+2024-01-01 10:04:00 INFO Application stopped
