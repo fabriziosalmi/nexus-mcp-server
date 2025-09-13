@@ -104,12 +104,12 @@ python ui_server.py
 ```
 
 ### 📸 Screenshots
+![claude-desktop](https://raw.githubusercontent.com/fabriziosalmi/nexus-mcp-server/refs/heads/main/nexus-mcp-server-claude-code-desktop.png)
 
-![Configuration Dashboard](https://github.com/user-attachments/assets/474943df-d52e-46af-abc1-505f52800b48)
-*Main dashboard with all available tools*
+![uuid1](https://raw.githubusercontent.com/fabriziosalmi/nexus-mcp-server/refs/heads/main/generate_uuid_1.png)
 
-![Applied Configuration](https://github.com/user-attachments/assets/cfcda072-80be-4130-a7e9-1ec09dfbb117)
-*Example configuration with only 3 tools enabled (calculator, crypto_tools, system_info)*
+![uuid2](https://raw.githubusercontent.com/fabriziosalmi/nexus-mcp-server/refs/heads/main/generate_uuid_2.png)
+
 
 ### 🔗 Complete Documentation
 
