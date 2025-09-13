@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "nexus-mcp-server": {
+      "command": "/Users/fab/GitHub/nexus/nexus-mcp-server/.venv/bin/python",
+      "args": ["/Users/fab/GitHub/nexus/nexus-mcp-server/multi_server.py"],
+      "cwd": "/Users/fab/GitHub/nexus/nexus-mcp-server",
+      "env": {
+        "PYTHONPATH": "/Users/fab/GitHub/nexus/nexus-mcp-server",
+        "MCP_SERVER_NAME": "NexusServer",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}
