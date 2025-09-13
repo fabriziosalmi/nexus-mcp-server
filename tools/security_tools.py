@@ -20,61 +20,373 @@ def register_tools(mcp):
     logging.info("🔒 Registrazione tool-set: Security Tools")
 
     @mcp.tool()
-    def generate_secure_password(length: int = 16, include_symbols: bool = True, exclude_ambiguous: bool = True) -> Dict[str, Any]:
+    def generate_secure_password(
+        length: int = 16, 
+        include_symbols: bool = True, 
+        exclude_ambiguous: bool = True,
+        password_type: str = "random",
+        min_digits: int = 1,
+        min_uppercase: int = 1,
+        min_lowercase: int = 1,
+        min_symbols: int = 1,
+        custom_symbols: Optional[str] = None,
+        avoid_patterns: bool = True
+    ) -> Dict[str, Any]:
         """
-        Genera una password sicura.
+        Genera una password sicura con opzioni avanzate di personalizzazione.
         
         Args:
-            length: Lunghezza della password (default: 16)
+            length: Lunghezza della password (default: 16, min: 4, max: 128)
             include_symbols: Include simboli speciali (default: True)
-            exclude_ambiguous: Esclude caratteri ambigui come 0, O, l, 1 (default: True)
+            exclude_ambiguous: Esclude caratteri ambigui come 0, O, l, 1, | (default: True)
+            password_type: Tipo di password (random, passphrase, pin, hex) (default: random)
+            min_digits: Numero minimo di cifre (default: 1)
+            min_uppercase: Numero minimo di lettere maiuscole (default: 1)
+            min_lowercase: Numero minimo di lettere minuscole (default: 1)
+            min_symbols: Numero minimo di simboli (default: 1, se include_symbols=True)
+            custom_symbols: Simboli personalizzati da usare invece di quelli predefiniti
+            avoid_patterns: Evita pattern comuni e sequenze (default: True)
         """
         try:
-            # Caratteri base
+            # Validazione parametri
+            if length < 4:
+                return {"success": False, "error": "La lunghezza minima è 4 caratteri"}
+            if length > 128:
+                return {"success": False, "error": "La lunghezza massima è 128 caratteri"}
+            
+            valid_types = ["random", "passphrase", "pin", "hex"]
+            if password_type not in valid_types:
+                return {"success": False, "error": f"Tipo password non valido. Usa: {', '.join(valid_types)}"}
+            
+            # Gestione tipi speciali di password
+            if password_type == "pin":
+                return _generate_pin(length)
+            elif password_type == "hex":
+                return _generate_hex_password(length)
+            elif password_type == "passphrase":
+                return _generate_passphrase(length)
+            
+            # Generazione password random avanzata
+            # Definizione character sets
             lowercase = string.ascii_lowercase
             uppercase = string.ascii_uppercase
             digits = string.digits
-            symbols = "!@#$%^&*()_+-=[]{}|;:,.<>?"
+            
+            # Simboli predefiniti o personalizzati
+            if custom_symbols:
+                symbols = custom_symbols
+            else:
+                symbols = "!@#$%^&*()_+-=[]{}|;:,.<>?~`"
             
             # Rimuovi caratteri ambigui se richiesto
             if exclude_ambiguous:
-                lowercase = lowercase.replace('l', '').replace('o', '')
-                uppercase = uppercase.replace('I', '').replace('O', '')
-                digits = digits.replace('0', '').replace('1', '')
-                symbols = symbols.replace('|', '').replace('l', '')
+                # Caratteri ambigui comuni: 0/O, 1/l/I, |/l, ecc.
+                ambiguous_chars = "0O1lI|`~"
+                lowercase = ''.join(c for c in lowercase if c not in ambiguous_chars)
+                uppercase = ''.join(c for c in uppercase if c not in ambiguous_chars)
+                digits = ''.join(c for c in digits if c not in ambiguous_chars)
+                symbols = ''.join(c for c in symbols if c not in ambiguous_chars)
             
-            # Costruisci il set di caratteri
-            charset = lowercase + uppercase + digits
-            if include_symbols:
-                charset += symbols
+            # Costruisci character sets attivi
+            active_charsets = []
+            charset_names = []
             
-            # Genera password
-            password = ''.join(secrets.choice(charset) for _ in range(length))
+            if min_lowercase > 0:
+                active_charsets.append(lowercase)
+                charset_names.append("lowercase")
+            if min_uppercase > 0:
+                active_charsets.append(uppercase)
+                charset_names.append("uppercase")
+            if min_digits > 0:
+                active_charsets.append(digits)
+                charset_names.append("digits")
+            if include_symbols and min_symbols > 0:
+                active_charsets.append(symbols)
+                charset_names.append("symbols")
             
-            # Calcola forza password
-            entropy = length * (len(charset) ** (1/length))
-            strength = "Debole"
-            if entropy > 50:
-                strength = "Media"
-            if entropy > 70:
-                strength = "Forte"
-            if entropy > 100:
-                strength = "Molto Forte"
+            # Verifica che i requisiti minimi siano soddisfacibili
+            total_min_chars = min_lowercase + min_uppercase + min_digits + (min_symbols if include_symbols else 0)
+            if total_min_chars > length:
+                return {
+                    "success": False, 
+                    "error": f"I requisiti minimi ({total_min_chars}) superano la lunghezza richiesta ({length})"
+                }
+            
+            # Genera password garantendo i requisiti minimi
+            password_chars = []
+            
+            # Aggiungi caratteri obbligatori
+            if min_lowercase > 0:
+                password_chars.extend(secrets.choice(lowercase) for _ in range(min_lowercase))
+            if min_uppercase > 0:
+                password_chars.extend(secrets.choice(uppercase) for _ in range(min_uppercase))
+            if min_digits > 0:
+                password_chars.extend(secrets.choice(digits) for _ in range(min_digits))
+            if include_symbols and min_symbols > 0:
+                password_chars.extend(secrets.choice(symbols) for _ in range(min_symbols))
+            
+            # Completa con caratteri casuali dal set completo
+            all_chars = lowercase + uppercase + digits + (symbols if include_symbols else "")
+            remaining_length = length - len(password_chars)
+            
+            for _ in range(remaining_length):
+                password_chars.append(secrets.choice(all_chars))
+            
+            # Mescola la password per evitare pattern prevedibili
+            secrets.SystemRandom().shuffle(password_chars)
+            password = ''.join(password_chars)
+            
+            # Verifica ed evita pattern comuni se richiesto
+            if avoid_patterns:
+                max_attempts = 10
+                attempts = 0
+                while _has_common_patterns(password) and attempts < max_attempts:
+                    secrets.SystemRandom().shuffle(password_chars)
+                    password = ''.join(password_chars)
+                    attempts += 1
+            
+            # Calcola entropia corretta
+            entropy_bits = length * (len(all_chars).bit_length() - 1)
+            entropy_traditional = length * (len(all_chars) ** (1/length))  # Formula originale
+            
+            # Valutazione forza migliorata
+            strength_score = _calculate_password_strength_score(password, length, len(all_chars))
+            strength_levels = {
+                0: "Molto Debole",
+                1: "Debole", 
+                2: "Mediocre",
+                3: "Media",
+                4: "Buona",
+                5: "Forte",
+                6: "Molto Forte",
+                7: "Eccellente"
+            }
+            strength = strength_levels.get(min(strength_score, 7), "Molto Debole")
+            
+            # Analisi composizione password
+            composition = _analyze_password_composition(password)
+            
+            # Tempo stimato per crack (semplificato)
+            crack_time = _estimate_crack_time(entropy_bits)
             
             return {
+                "success": True,
                 "password": password,
                 "length": length,
-                "charset_size": len(charset),
-                "entropy": round(entropy, 2),
+                "charset_size": len(all_chars),
+                "entropy_bits": round(entropy_bits, 2),
+                "entropy_traditional": round(entropy_traditional, 2),
                 "strength": strength,
-                "includes_symbols": include_symbols,
-                "excludes_ambiguous": exclude_ambiguous
+                "strength_score": strength_score,
+                "composition": composition,
+                "estimated_crack_time": crack_time,
+                "requirements_met": {
+                    "min_length": length >= 8,
+                    "has_lowercase": composition["lowercase"] >= min_lowercase,
+                    "has_uppercase": composition["uppercase"] >= min_uppercase,
+                    "has_digits": composition["digits"] >= min_digits,
+                    "has_symbols": composition["symbols"] >= min_symbols if include_symbols else True
+                },
+                "generation_info": {
+                    "includes_symbols": include_symbols,
+                    "excludes_ambiguous": exclude_ambiguous,
+                    "password_type": password_type,
+                    "active_charsets": charset_names,
+                    "patterns_avoided": avoid_patterns
+                }
             }
+            
         except Exception as e:
             return {
                 "success": False,
-                "error": str(e)
+                "error": f"Errore nella generazione password: {str(e)}"
             }
+
+def _generate_pin(length: int) -> Dict[str, Any]:
+    """Genera un PIN numerico sicuro."""
+    if length < 4:
+        return {"success": False, "error": "PIN deve essere almeno 4 cifre"}
+    
+    # Evita PIN comuni come 0000, 1234, ecc.
+    pin = ''.join(secrets.choice(string.digits) for _ in range(length))
+    
+    # Verifica pattern comuni
+    common_pins = ["0000", "1111", "2222", "3333", "4444", "5555", "6666", "7777", "8888", "9999"]
+    sequential = ["0123", "1234", "2345", "3456", "4567", "5678", "6789", "9876", "8765", "7654", "6543", "5432", "4321", "3210"]
+    
+    max_attempts = 20
+    attempts = 0
+    while (pin in common_pins or pin in sequential or pin[:4] in sequential) and attempts < max_attempts:
+        pin = ''.join(secrets.choice(string.digits) for _ in range(length))
+        attempts += 1
+    
+    return {
+        "success": True,
+        "password": pin,
+        "length": length,
+        "password_type": "pin",
+        "strength": "Media" if length >= 6 else "Debole",
+        "security_note": "Evita PIN comuni e sequenziali"
+    }
+
+def _generate_hex_password(length: int) -> Dict[str, Any]:
+    """Genera una password esadecimale sicura."""
+    hex_chars = "0123456789ABCDEF"
+    password = ''.join(secrets.choice(hex_chars) for _ in range(length))
+    
+    entropy_bits = length * 4  # 4 bit per carattere hex
+    
+    return {
+        "success": True,
+        "password": password,
+        "length": length,
+        "password_type": "hex",
+        "charset_size": 16,
+        "entropy_bits": entropy_bits,
+        "strength": "Forte" if entropy_bits >= 128 else "Media" if entropy_bits >= 64 else "Debole"
+    }
+
+def _generate_passphrase(word_count: int) -> Dict[str, Any]:
+    """Genera una passphrase usando parole comuni."""
+    # Lista di parole comuni italiane per passphrase
+    common_words = [
+        "casa", "mare", "sole", "luna", "terra", "fuoco", "acqua", "aria", "vento", "nube",
+        "fiore", "albero", "monte", "valle", "fiume", "strada", "ponte", "porto", "isola", "campo",
+        "libro", "penna", "carta", "tavolo", "sedia", "finestra", "porta", "chiave", "tempo", "vita",
+        "amore", "pace", "gioia", "speranza", "sogno", "stella", "cielo", "mondo", "natura", "musica",
+        "colore", "rosso", "blue", "verde", "giallo", "nero", "bianco", "grigio", "rosa", "viola"
+    ]
+    
+    if word_count < 3:
+        word_count = 3
+    if word_count > 10:
+        word_count = 10
+    
+    # Seleziona parole casuali
+    selected_words = []
+    for _ in range(word_count):
+        word = secrets.choice(common_words)
+        # Capitalizza casualmente
+        if secrets.randbelow(2):
+            word = word.capitalize()
+        selected_words.append(word)
+    
+    # Aggiungi separatori e numeri casuali
+    separators = ["-", "_", ".", "+", "="]
+    passphrase_parts = []
+    
+    for i, word in enumerate(selected_words):
+        passphrase_parts.append(word)
+        if i < len(selected_words) - 1:  # Non aggiungere separatore dopo l'ultima parola
+            if secrets.randbelow(3):  # 33% di possibilità di aggiungere numero
+                passphrase_parts.append(str(secrets.randbelow(100)))
+            passphrase_parts.append(secrets.choice(separators))
+    
+    # Aggiungi numero finale
+    if secrets.randbelow(2):
+        passphrase_parts.append(str(secrets.randbelow(1000)))
+    
+    passphrase = ''.join(passphrase_parts)
+    
+    return {
+        "success": True,
+        "password": passphrase,
+        "length": len(passphrase),
+        "word_count": word_count,
+        "password_type": "passphrase",
+        "strength": "Forte" if word_count >= 5 else "Media",
+        "security_note": "Le passphrase sono facili da ricordare ma difficili da indovinare"
+    }
+
+def _has_common_patterns(password: str) -> bool:
+    """Verifica se la password contiene pattern comuni."""
+    # Pattern sequenziali
+    sequential_patterns = [
+        "123", "234", "345", "456", "567", "678", "789", "890",
+        "abc", "bcd", "cde", "def", "efg", "fgh", "ghi", "hij",
+        "qwe", "wer", "ert", "rty", "tyu", "yui", "uio", "iop",
+        "asd", "sdf", "dfg", "fgh", "ghj", "hjk", "jkl",
+        "zxc", "xcv", "cvb", "vbn", "bnm"
+    ]
+    
+    password_lower = password.lower()
+    
+    # Verifica sequenze
+    for pattern in sequential_patterns:
+        if pattern in password_lower:
+            return True
+    
+    # Verifica ripetizioni
+    for i in range(len(password) - 2):
+        if password[i] == password[i+1] == password[i+2]:
+            return True
+    
+    # Verifica pattern comuni
+    common_patterns = ["password", "admin", "user", "test", "demo", "guest"]
+    for pattern in common_patterns:
+        if pattern in password_lower:
+            return True
+    
+    return False
+
+def _calculate_password_strength_score(password: str, length: int, charset_size: int) -> int:
+    """Calcola un punteggio di forza della password (0-7)."""
+    score = 0
+    
+    # Lunghezza
+    if length >= 8: score += 1
+    if length >= 12: score += 1
+    if length >= 16: score += 1
+    
+    # Diversità caratteri
+    has_lower = any(c.islower() for c in password)
+    has_upper = any(c.isupper() for c in password)
+    has_digit = any(c.isdigit() for c in password)
+    has_symbol = any(not c.isalnum() for c in password)
+    
+    if has_lower: score += 1
+    if has_upper: score += 1
+    if has_digit: score += 1
+    if has_symbol: score += 1
+    
+    # Penalità per pattern comuni
+    if _has_common_patterns(password):
+        score = max(0, score - 2)
+    
+    return min(score, 7)
+
+def _analyze_password_composition(password: str) -> Dict[str, int]:
+    """Analizza la composizione della password."""
+    composition = {
+        "lowercase": sum(1 for c in password if c.islower()),
+        "uppercase": sum(1 for c in password if c.isupper()),
+        "digits": sum(1 for c in password if c.isdigit()),
+        "symbols": sum(1 for c in password if not c.isalnum()),
+        "total": len(password)
+    }
+    return composition
+
+def _estimate_crack_time(entropy_bits: float) -> str:
+    """Stima il tempo per craccare la password."""
+    # Ipotizza 1 miliardo di tentativi al secondo (GPU moderna)
+    attempts_per_second = 1_000_000_000
+    total_combinations = 2 ** entropy_bits
+    
+    # Tempo medio per craccare (metà delle combinazioni)
+    seconds_to_crack = (total_combinations / 2) / attempts_per_second
+    
+    if seconds_to_crack < 60:
+        return f"{seconds_to_crack:.1f} secondi"
+    elif seconds_to_crack < 3600:
+        return f"{seconds_to_crack/60:.1f} minuti"
+    elif seconds_to_crack < 86400:
+        return f"{seconds_to_crack/3600:.1f} ore"
+    elif seconds_to_crack < 31536000:
+        return f"{seconds_to_crack/86400:.1f} giorni"
+    elif seconds_to_crack < 31536000000:
+        return f"{seconds_to_crack/31536000:.1f} anni"
+    else:
+        return "Più di 1000 anni"
 
     @mcp.tool()
     def password_strength_check(password: str) -> Dict[str, Any]:
