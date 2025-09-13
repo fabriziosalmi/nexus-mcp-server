@@ -1,128 +1,61 @@
 # 🚀 Nexus MCP Server
 
-**Nexus** is an advanced, modular, and configurable MCP (Model Context Protocol) server that acts as a central hub for integrating a wide range of custom tools, making them available to a Large Language Model (LLM).
+**Nexus** is an advanced, modular, and configurable MCP (Model Context Protocol) server that acts as a central hub for integrating a wide range of custom tools, making them available to Large Language Models (LLMs) like Claude and VS Code Copilot.
 
 ## 📖 Quick Navigation
 
-- [📊 Tools Overview](#-tools-and-functions-overview)
-- [📋 Complete Tools Table](#-complete-tools-table)
-- [🎯 Design Philosophy](#-design-philosophy)
+- [🎯 Key Features](#-key-features)
+- [📸 Screenshots](#-screenshots)
+- [⚡ Quick Start](#-quick-start)
+- [🔧 VS Code Setup](#-vs-code-setup)
+- [🤖 Claude Desktop Setup](#-claude-desktop-setup)
 - [🖥️ Web Interface](#️-web-configuration-interface)
-- [🚀 Getting Started](#-getting-started)
-- [📝 Detailed Tool Documentation](#-detailed-tool-documentation)
 - [🐳 Docker Support](#-docker-support)
-- [📚 Additional Resources](#-additional-resources)
+- [📋 Tools Overview](#-tools-overview)
+- [📚 Documentation](#-documentation)
 
-## 📊 Tools and Functions Overview
+## 🎯 Key Features
 
-🛠️ **Available Tools**: **46**
-⚙️ **Total Functions**: **437+**
+### 🛠️ **120+ Tools** across 17 categories
+- **Mathematical Operations**: Advanced calculator, statistics, financial calculations
+- **Security & Cryptography**: Password generation, encryption, vulnerability scanning
+- **Code Generation**: Project scaffolding, API generation, design patterns
+- **File Operations**: Format conversion, archiving, PDF processing
+- **System Management**: Process monitoring, Docker integration, Git operations
+- **Network Tools**: Security scanning, DNS lookups, website analysis
+- **Data Processing**: JSON/YAML manipulation, text analysis, validation
 
-> 📋 **For detailed tool documentation with examples and parameters, see [TOOLS.md](TOOLS.md)**
+### ⚡ **Advanced Capabilities**
+- **Dynamic Tool Creation**: Create custom tools on-the-fly using `create_and_run_tool`
+- **Web Configuration Interface**: Real-time tool management without restarts
+- **Docker Integration**: Secure, isolated execution environments
+- **Hot Reload**: Update configurations without server downtime
+- **Multi-Client Support**: Works with VS Code, Claude Desktop, and HTTP API
 
-## 📋 Complete Tools Table
+### 🔒 **Security First**
+- Sandboxed file operations in `safe_files/` directory
+- Input validation and sanitization
+- Resource limits and timeout protection
+- Path traversal prevention
 
-| Tool | File | Functions | Description |
-|------|------|----------|-------------|
-| **Encoding Tools** | `encoding_tools.py` | **19** | **Data encoding and decoding (Base64, URL, HTML, Hex)** |
-| **Calculator** | `calculator.py` | **16** | **Advanced mathematical operations and calculations** |
-| **Cloud Tools** | `cloud_tools.py` | **16** | **Services and APIs for cloud platforms (AWS, Azure, GCP)** |
-| **Network Tools** | `network_tools.py` | **15** | **Network diagnostics and utilities** |
-| **Code Execution Tools** | `code_execution_tools.py` | **14** | **Secure environments for code execution + Dynamic Tools** |
-| **File Converter** | `file_converter.py` | **14** | **Conversion between different file formats** |
-| **Docker Tools** | `docker_tools.py` | **13** | **Docker container management** |
-| **Network Security Tools** | `network_security_tools.py` | **13** | **Network security scanning** |
-| **Regex Tools** | `regex_tools.py` | **13** | **Regular expression utilities** |
-| **Security Tools** | `security_tools.py` | **13** | **Security and cryptography utilities** |
-| **Code Generation Tools** | `code_generation_tools.py` | **12** | **Code template and structure generation** |
-| **Datetime Tools** | `datetime_tools.py` | **12** | **Date and time manipulation** |
-| **Image Processing** | `image_processing.py` | **12** | **Image manipulation and analysis** |
-| **JSON/YAML Tools** | `json_yaml_tools.py` | **12** | **JSON and YAML manipulation** |
-| **Log Analysis Tools** | `log_analysis_tools.py` | **12** | **Log file parsing and analysis** |
-| **Markdown Tools** | `markdown_tools.py` | **12** | **Markdown document processing** |
-| **Color Tools** | `color_tools.py` | **11** | **Color conversion and analysis** |
-| **Crypto Tools** | `crypto_tools.py` | **11** | **Cryptographic functions and hashing** |
-| **Data Analysis** | `data_analysis.py` | **11** | **Data processing and statistical analysis** |
-| **Database Tools** | `database_tools.py` | **11** | **Database management and queries** |
-| **Environment Tools** | `environment_tools.py` | **11** | **Environment variable management** |
-| **Git Tools** | `git_tools.py` | **11** | **Git repository management** |
-| **Process Management Tools** | `process_management_tools.py` | **11** | **Process control and monitoring** |
-| **String Tools** | `string_tools.py` | **11** | **String manipulation functions** |
-| **System Info** | `system_info.py` | **11** | **System information and monitoring** |
-| **Backup Tools** | `backup_tools.py` | **10** | **Advanced backup and archive management** |
-| **Email Tools** | `email_tools.py` | **10** | **Email validation and templates** |
-| **Performance Tools** | `performance_tools.py` | **10** | **System performance monitoring** |
-| **Audio Processing** | `audio_processing.py` | **9** | **Audio file processing and analysis** |
-| **Code Analysis Tools** | `code_analysis_tools.py` | **9** | **Code quality analysis and metrics** |
-| **PDF Tools** | `pdf_tools.py` | **9** | **PDF document processing** |
-| **Filesystem Reader** | `filesystem_reader.py` | **7** | **Secure file system access** |
-| **QR Code Tools** | `qr_code_tools.py` | **7** | **QR code generation and analysis** |
-| **Unit Converter** | `unit_converter.py` | **6** | **Unit conversion utilities** |
-| **UUID Tools** | `uuid_tools.py` | **6** | **UUID and ID generation** |
-| **Validator Tools** | `validator_tools.py` | **5** | **Data validation functions** |
-| **Video Processing** | `video_processing.py` | **5** | **Video file processing** |
-| **API Testing Tools** | `api_testing_tools.py` | **4** | **REST API testing and documentation** |
-| **Async Task Queue** | `async_task_queue.py` | **4** | **Asynchronous queue management for long-running tasks** |
-| **Text Analysis Tools** | `text_analysis_tools.py` | **4** | **Sentiment analysis and linguistics** |
-| **URL Tools** | `url_tools.py` | **4** | **URL manipulation and validation** |
-| **Archive Tools** | `archive_tools.py` | **3** | **ZIP, TAR, 7Z archive management** |
-| **Template Tools** | `template_tools.py` | **3** | **Code/config template generation** |
-| **Weather Tools** | `weather_tools.py` | **3** | **Weather information** |
-| **Web Fetcher** | `web_fetcher.py` | **1** | **Web content retrieval** |
-| **Workflow Orchestration** | `workflows.py` | **1** | **Meta-tool for complex workflow orchestration** |
+## 📸 Screenshots
 
-## 🎯 Design Philosophy
+### Claude Desktop Integration
+![Claude Desktop Integration](https://raw.githubusercontent.com/fabriziosalmi/nexus-mcp-server/refs/heads/main/nexus-mcp-server-claude-code-desktop.png)
 
-- **🎭 Central Orchestration, Distributed Logic**: The main server contains no tool logic, only the responsibility to load and serve them
-- **⚙️ Configuration-Driven**: Enable/disable tools via `config.json` file without recompilation
-- **🔒 Security First-Class**: Every tool implements rigorous security controls
-- **📚 Self-documentation**: Fully documented code for easy maintenance
-- **🔄 Workflow Orchestration**: Meta-tools for complex operation chains with a single call
-- **🚀 Dynamic Tool Creation**: Runtime generation of custom tools for specific needs
-- **🌐 Web UI Management**: Web interface for dynamic management and real-time monitoring
+### Tool Usage Examples
+![UUID Generation Example 1](https://raw.githubusercontent.com/fabriziosalmi/nexus-mcp-server/refs/heads/main/generate_uuid_1.png)
 
-## 🖥️ Web Configuration Interface
+![UUID Generation Example 2](https://raw.githubusercontent.com/fabriziosalmi/nexus-mcp-server/refs/heads/main/generate_uuid_2.png)
 
-**Nexus MCP Server** includes a **modern web interface** for dynamic configuration management without needing to restart the server.
-
-### ✨ Main Features
-
-- **🔧 Tools Dashboard**: View all available tools with checkboxes to enable/disable them
-- **📊 Real-time Metrics**: Monitor enabled tools, active sessions, and performance
-- **📋 Log Streaming**: Real-time server log display via Server-Sent Events
-- **⚡ Hot Reload**: Apply changes without server downtime
-- **🎨 Responsive Design**: Modern interface that works on desktop and mobile
-
-### 🚀 Starting the Web Interface
-
-```bash
-# Start the UI server on port 8888
-python ui_server.py
-
-# Access the web dashboard
-# http://localhost:8888
-```
-
-### 📸 Screenshots
-![claude-desktop](https://raw.githubusercontent.com/fabriziosalmi/nexus-mcp-server/refs/heads/main/nexus-mcp-server-claude-code-desktop.png)
-
-![uuid1](https://raw.githubusercontent.com/fabriziosalmi/nexus-mcp-server/refs/heads/main/generate_uuid_1.png)
-
-![uuid2](https://raw.githubusercontent.com/fabriziosalmi/nexus-mcp-server/refs/heads/main/generate_uuid_2.png)
-
-
-### 🔗 Complete Documentation
-
-For detailed information about the web interface, see: **[UI_CONFIGURATION.md](UI_CONFIGURATION.md)**
-
-## 🚀 Getting Started
+## ⚡ Quick Start
 
 ### 📋 Prerequisites
+- **Python 3.8+**
+- **VS Code** (for VS Code integration) or **Claude Desktop** (for Claude integration)
+- **Docker** (optional, for containerized deployment)
 
-- Python 3.8+
-- Docker (optional, for containerized deployment)
-
-### ⚡ Quick Setup
+### 🚀 Installation
 
 1. **Clone the repository**
    ```bash
@@ -140,14 +73,131 @@ For detailed information about the web interface, see: **[UI_CONFIGURATION.md](U
    python multi_server.py
    ```
 
-4. **Start the web interface (optional)**
+4. **Test the installation**
    ```bash
-   python ui_server.py
-   # Access at http://localhost:8888
+   python client.py add '{"a": 42, "b": 8}'
+   # Expected output: {"result": 50.0}
    ```
 
-### 🐳 Docker Quick Start
+## 🔧 VS Code Setup
 
+### Step 1: Install MCP Extension
+1. Open VS Code
+2. Go to Extensions (`Ctrl/Cmd + Shift + X`)
+3. Search for "Model Context Protocol" or "MCP"
+4. Install the official MCP extension
+
+### Step 2: Configure Settings
+Add to your VS Code `settings.json`:
+
+```json
+{
+  "mcp.servers": {
+    "nexus": {
+      "command": "python",
+      "args": ["multi_server.py"],
+      "cwd": "/absolute/path/to/nexus-mcp-server",
+      "env": {
+        "PYTHONPATH": "/absolute/path/to/nexus-mcp-server",
+        "MCP_SERVER_NAME": "NexusServer",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}
+```
+
+### Step 3: Connect and Use
+1. Open Command Palette (`Ctrl/Cmd + Shift + P`)
+2. Run "MCP: Connect to Server"
+3. Select "nexus" from the list
+4. Use tools in Copilot Chat: `@mcp generate_uuid4 {}`
+
+### Troubleshooting VS Code
+- **Server not starting**: Ensure Python path is correct and dependencies are installed
+- **Tools not available**: Check VS Code Output panel → "Model Context Protocol" for errors
+- **Permission errors**: Verify the `nexus-mcp-server` directory has proper read permissions
+
+## 🤖 Claude Desktop Setup
+
+### Step 1: Locate Configuration File
+Find your Claude Desktop configuration directory:
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **Linux**: `~/.config/claude/claude_desktop_config.json`
+
+### Step 2: Add Server Configuration
+Create or update the configuration file:
+
+```json
+{
+  "mcpServers": {
+    "nexus": {
+      "command": "python",
+      "args": ["multi_server.py"],
+      "cwd": "/absolute/path/to/nexus-mcp-server",
+      "env": {
+        "PYTHONPATH": "/absolute/path/to/nexus-mcp-server",
+        "MCP_SERVER_NAME": "NexusServer",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}
+```
+
+### Step 3: Restart Claude Desktop
+1. Quit Claude Desktop completely
+2. Restart Claude Desktop
+3. Verify connection by asking Claude to use a tool: "Generate a UUID for me"
+
+### Alternative: Minimal Configuration
+For testing with fewer tools, use the minimal configuration:
+
+```bash
+cp claude_desktop_config_minimal.json ~/Library/Application\ Support/Claude/claude_desktop_config.json
+```
+
+This provides 8 essential tools: Calculator, Crypto, DateTime, Encoding, String, System Info, UUID, and Validator tools.
+
+### Troubleshooting Claude Desktop
+- **Server not connecting**: Check the absolute paths in the configuration
+- **Module not found errors**: Ensure virtual environment is activated and dependencies installed
+- **Permission denied**: Make sure the directory and files are readable
+- **Check logs**: Look for `[nexus]` entries in Claude Desktop's application logs
+
+## 🖥️ Web Configuration Interface
+
+**Nexus MCP Server** includes a **modern web interface** for dynamic configuration management without needing to restart the server.
+
+### ✨ Features
+- **🔧 Tools Dashboard**: View and enable/disable tools with checkboxes
+- **📊 Real-time Metrics**: Monitor enabled tools, active sessions, and performance
+- **📋 Log Streaming**: Real-time server log display via Server-Sent Events
+- **⚡ Hot Reload**: Apply changes without server downtime
+- **🎨 Responsive Design**: Works on desktop and mobile
+
+### 🚀 Starting the Web Interface
+```bash
+# Start the UI server on port 8888
+python ui_server.py
+
+# Access the web dashboard
+open http://localhost:8888
+```
+
+### 🔧 Using the Interface
+1. **View Available Tools**: See all tools in the left panel
+2. **Enable/Disable Tools**: Use checkboxes to select tools
+3. **Apply Changes**: Click "Apply Changes" to update configuration
+4. **Monitor Metrics**: Watch real-time metrics in the right panel
+5. **View Logs**: Monitor server activity in the bottom panel
+
+## 🐳 Docker Support
+
+Nexus MCP Server includes comprehensive Docker support for easy deployment and isolation:
+
+### Quick Start with Docker
 ```bash
 # Build and run with Docker Compose
 docker-compose up nexus-mcp
@@ -157,59 +207,120 @@ docker build -t nexus-mcp-server .
 docker run --rm -i nexus-mcp-server
 ```
 
-### 🔧 Configuration
-
-- Edit `config.json` to enable/disable specific tools
-- Use the web interface for dynamic configuration without restarts
-- See [Claude Code Configuration](CLAUDE.md) for MCP client setup
-
-
-## 🐳 Docker Support
-
-Nexus MCP Server includes comprehensive Docker support for easy deployment and isolation:
-
+### Custom Configuration
 ```bash
-# Quick start with Docker Compose
-docker-compose up nexus-mcp
-
-# Custom configuration
-docker run --rm -i -v "./safe_files:/app/safe_files:rw" nexus-mcp-server:latest
+# Run with custom volume mapping
+docker run --rm -i \
+  -v "./safe_files:/app/safe_files:rw" \
+  -v "./config.json:/app/config.json:ro" \
+  nexus-mcp-server:latest
 ```
 
-For detailed Docker configuration, see [DEPLOYMENT.md](DEPLOYMENT.md).
+### Environment Variables
+```bash
+# Configure the container
+export PYTHONUNBUFFERED=1
+export MCP_SERVER_NAME=NexusServer
+export LOG_LEVEL=INFO
+```
 
-## 📚 Additional Resources
+## 📋 Tools Overview
 
-### 📖 Documentation
-- [📋 Complete Tools Reference](TOOLS.md) - Detailed documentation for all 437+ functions
-- [🖥️ Web Interface Guide](UI_CONFIGURATION.md) - Web dashboard configuration
-- [🐳 Deployment Guide](DEPLOYMENT.md) - Docker and production deployment
-- [🔧 Claude Code Setup](CLAUDE.md) - MCP client configuration
-- [🚀 Dynamic Tools](DYNAMIC_TOOLS.md) - Runtime tool creation
-- [📊 Monitoring](PROMETHEUS_MONITORING.md) - Performance monitoring setup
+🛠️ **Available Tools**: **120+**
+⚙️ **Total Functions**: **500+**
 
-### 🎯 Key Features
-- **120+ Tools** across 17 categories
-- **Web Configuration Interface** with real-time monitoring
-- **Workflow Orchestration** for complex operations
-- **Docker Integration** for secure, isolated execution
-- **Dynamic Tool Creation** at runtime
-- **Hot Configuration Reload** without server restart
+### 🗂️ Tool Categories
 
-### 🔒 Security Features
-- Sandboxed file operations in `safe_files/` directory
-- Input validation and sanitization
-- Resource limits and timeout protection
-- Secure token generation
-- Path traversal prevention
+| Category | Tools | Description |
+|----------|--------|-------------|
+| **Mathematical** | Calculator, Statistics, Unit Converter | Advanced calculations, statistical analysis, unit conversions |
+| **Security** | Crypto Tools, Security Scanner, Password Generator | Encryption, vulnerability scanning, secure token generation |
+| **Development** | Code Generator, Git Tools, Docker Manager | Project scaffolding, version control, container management |
+| **File Operations** | File Converter, Archive Tools, PDF Processor | Format conversion, compression, document processing |
+| **System** | System Info, Process Manager, Performance Monitor | System monitoring, resource management, performance analysis |
+| **Network** | Network Tools, Security Scanner, DNS Lookup | Network diagnostics, security assessment, connectivity tools |
+| **Data Processing** | JSON/YAML Tools, Text Analysis, Data Validator | Data manipulation, text processing, validation |
+| **String Operations** | String Tools, Regex Engine, Encoding/Decoding | Text manipulation, pattern matching, encoding conversion |
 
-### 🤝 Contributing
+> 📋 **For complete tool documentation with examples and parameters, see [TOOLS.md](TOOLS.md)**
+
+### 🚀 Key Features
+
+#### Dynamic Tool Creation
+Create custom tools on-the-fly with `create_and_run_tool`:
+```python
+# Example: Custom date converter
+code = '''
+from datetime import datetime
+custom_date = "20250907-143022"
+date_part, time_part = custom_date.split('-')
+dt = datetime(int(date_part[:4]), int(date_part[4:6]), int(date_part[6:8]),
+              int(time_part[:2]), int(time_part[2:4]), int(time_part[4:6]))
+print(f"ISO format: {dt.isoformat()}")
+'''
+result = create_and_run_tool(code, timeout=30, memory_limit_mb=64)
+```
+
+#### HTTP API Access
+Access tools via REST API from any programming language:
+```bash
+# Example API calls
+curl -X POST http://localhost:9999/tools/add/execute \
+  -H "Content-Type: application/json" \
+  -d '{"arguments": {"a": 15, "b": 27}}'
+
+curl http://localhost:9999/tools/generate_uuid4/execute
+```
+
+#### Monitoring & Observability
+- **Prometheus Metrics**: Built-in metrics for monitoring tool usage
+- **Real-time Logs**: Live log streaming via web interface
+- **Performance Tracking**: Execution time and error rate monitoring
+
+## 📚 Documentation
+
+### 📋 Main Documentation
+- **[TOOLS.md](TOOLS.md)** - Complete tools reference with 500+ functions, usage examples, and technical details
+- **[Docker Deployment](DEPLOYMENT.md)** - Production deployment guides and best practices
+- **[Web Interface](UI_CONFIGURATION.md)** - Advanced web dashboard configuration and features
+
+### 🔧 Setup Guides
+- **[Claude Desktop Setup](CLAUDE_SETUP.md)** - Step-by-step Claude Desktop integration
+- **[VS Code Troubleshooting](VSCODE_TROUBLESHOOTING.md)** - Common VS Code integration issues and solutions
+
+### 🚀 Advanced Features
+- **[Dynamic Tools](DYNAMIC_TOOLS.md)** - Runtime tool creation with `create_and_run_tool`
+- **[Enhanced API](ENHANCED_API.md)** - REST API access for any programming language
+- **[Prometheus Monitoring](PROMETHEUS_MONITORING.md)** - Production monitoring and metrics
+
+### 🔧 Development
+- **[WARP.md](WARP.md)** - Development environment setup and build commands
+
+## 🎯 Core Design Principles
+
+- **🎭 Modular Architecture**: Distributed tool logic with central orchestration
+- **⚙️ Configuration-Driven**: Enable/disable tools via `config.json` without recompilation
+- **🔒 Security First**: Rigorous security controls in every tool
+- **📚 Self-Documenting**: Comprehensive documentation and examples
+- **🔄 Workflow Support**: Meta-tools for complex operation chains
+- **🚀 Runtime Flexibility**: Dynamic tool creation and hot configuration reload
+
+## 🔒 Security Features
+
+- **Sandboxed Operations**: File operations restricted to `safe_files/` directory
+- **Input Validation**: Comprehensive sanitization of all parameters
+- **Resource Limits**: Memory, CPU, and timeout protection
+- **Path Traversal Prevention**: Secure file access controls
+- **Docker Isolation**: Optional containerized execution for enhanced security
+
+## 🤝 Contributing
 
 Contributions are welcome! Please see our contributing guidelines and feel free to submit issues and pull requests.
 
-### 📄 License
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
+
 **Nexus MCP Server** - Empowering LLMs with advanced tool orchestration and secure execution environments.
