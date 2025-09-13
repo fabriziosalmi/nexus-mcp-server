@@ -1,0 +1,13 @@
+{
+  "comment": "Minimal working configuration for Claude Desktop testing",
+  "enabled_tools": [
+    "calculator",
+    "crypto_tools",
+    "datetime_tools",
+    "encoding_tools",
+    "string_tools",
+    "system_info",
+    "uuid_tools",
+    "validator_tools"
+  ]
+}

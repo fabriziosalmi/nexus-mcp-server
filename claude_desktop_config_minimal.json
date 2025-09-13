@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "nexus-minimal": {
+      "command": "/Users/fab/GitHub/nexus/nexus-mcp-server/start_mcp_server_minimal.sh",
+      "args": [],
+      "env": {
+        "MCP_SERVER_NAME": "NexusServer",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}

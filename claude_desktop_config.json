@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "nexus": {
+      "command": "/Users/fab/GitHub/nexus/nexus-mcp-server/start_mcp_server.sh",
+      "args": [],
+      "env": {
+        "MCP_SERVER_NAME": "NexusServer",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}
