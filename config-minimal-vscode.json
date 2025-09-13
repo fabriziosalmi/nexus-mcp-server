@@ -1,0 +1,15 @@
+{
+  "comment": "Minimal configuration for VS Code MCP integration - excludes problematic tools",
+  "enabled_tools": [
+    "calculator",
+    "crypto_tools", 
+    "datetime_tools",
+    "encoding_tools",
+    "string_tools",
+    "system_info",
+    "uuid_tools",
+    "validator_tools",
+    "url_tools",
+    "unit_converter"
+  ]
+}

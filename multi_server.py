@@ -62,7 +62,13 @@ def main():
     # Initialize monitoring and track session
     monitoring = get_monitoring()
     
-    config = load_configuration()
+    # Simple argument parsing for config file
+    config_file = "config.json"
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--config" and len(sys.argv) > 2:
+            config_file = sys.argv[2]
+    
+    config = load_configuration(config_file)
     
     server_instance = FastMCP("NexusServer")
     

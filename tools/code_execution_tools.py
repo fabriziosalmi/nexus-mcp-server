@@ -1472,6 +1472,7 @@ if __name__ == "__main__":
             if 'temp_file' in locals() and os.path.exists(temp_file):
                 os.unlink(temp_file)
 
+    @staticmethod
     def _create_dynamic_tool_wrapper(user_code, tool_id):
         """Crea un wrapper sicuro per il tool dinamico."""
         wrapper_template = f'''#!/usr/bin/env python3

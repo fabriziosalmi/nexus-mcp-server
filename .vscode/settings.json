@@ -2,7 +2,7 @@
   "mcp.servers": {
     "nexus-mcp-local": {
       "command": "${command:python.interpreterPath}",
-      "args": ["multi_server.py"],
+      "args": ["multi_server.py", "--config", "config-minimal-vscode.json"],
       "cwd": "${workspaceFolder}",
       "env": {
         "PYTHONPATH": "${workspaceFolder}",

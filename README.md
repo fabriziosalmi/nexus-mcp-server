@@ -568,7 +568,7 @@ docker-compose up -d nexus-mcp
 docker run --rm -i nexus-mcp-server:latest python -c "print('OK')"
 ```
 
-### 3. Usage
+### ⚡ Usage
 
 ```bash
 # Local
@@ -578,7 +578,7 @@ python client.py <tool_name> '<json_arguments>'
 docker run --rm -i -v "./safe_files:/app/safe_files:rw" nexus-mcp-server:latest python client.py <tool> '<args>'
 ```
 
-### 3. Usage Examples
+### 💡 Usage Examples
 
 ```bash
 # Calculator
