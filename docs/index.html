@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Nexus MCP Server - Documentation</title>
+    <meta name="description" content="Comprehensive documentation for Nexus MCP Server - Your advanced MCP hub with 500+ tools for LLM integration">
+    <meta name="keywords" content="MCP, Model Context Protocol, Claude, VS Code, LLM, tools, server">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle">☰</button>
+        <h1><span class="rocket">🚀</span>Nexus MCP Server</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search documentation..." autocomplete="off">
+        </div>
+        
+        <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="#overview" class="active">🏠 Overview</a></li>
+            <li><a href="#quick-start">⚡ Quick Start</a></li>
+            <li><a href="#key-features">🎯 Key Features</a></li>
+            <li><a href="#screenshots">📸 Screenshots</a></li>
+            
+            <li class="section-header">Setup & Configuration</li>
+            <li><a href="pages/setup-vscode.html">🔧 VS Code Setup</a></li>
+            <li><a href="pages/setup-claude.html">🤖 Claude Desktop Setup</a></li>
+            <li><a href="pages/web-interface.html">🖥️ Web Interface</a></li>
+            <li><a href="pages/docker.html">🐳 Docker Support</a></li>
+            
+            <li class="section-header">Tools & Features</li>
+            <li><a href="pages/tools-overview.html">📋 Tools Overview</a></li>
+            <li><a href="pages/tools-reference.html">📚 Complete Tools Reference</a></li>
+            <li><a href="pages/dynamic-tools.html">🛠️ Dynamic Tools</a></li>
+            <li><a href="pages/enhanced-api.html">🌐 Enhanced API</a></li>
+            
+            <li class="section-header">Deployment & Operations</li>
+            <li><a href="pages/deployment.html">🚀 Deployment Guide</a></li>
+            <li><a href="pages/monitoring.html">📊 Monitoring & Metrics</a></li>
+            <li><a href="pages/troubleshooting.html">🔍 Troubleshooting</a></li>
+            
+            <li class="section-header">Examples & Tutorials</li>
+            <li><a href="pages/examples.html">💡 Examples</a></li>
+            <li><a href="pages/api-examples.html">🔌 API Examples</a></li>
+            <li><a href="pages/best-practices.html">✨ Best Practices</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <section id="overview">
+                <h1>🚀 Nexus MCP Server</h1>
+                <p class="lead" style="font-size: 1.25rem; margin-bottom: 2rem; color: var(--text-primary);">
+                    <strong>Nexus</strong> is an advanced, modular, and configurable MCP (Model Context Protocol) server that acts as a central hub for integrating a wide range of custom tools, making them available to Large Language Models (LLMs) like Claude and VS Code Copilot.
+                </p>
+
+                <div class="alert alert-info">
+                    <strong>🎯 Latest Update:</strong> Version 3.0 with Enhanced HTTP API, Dynamic Tool Creation, and Production Monitoring
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="feature-grid" style="margin: 2rem 0;">
+                    <div class="feature-card">
+                        <h3><span class="icon">🛠️</span>500+ Tools</h3>
+                        <p>Over 500 functions across 120+ tools in 17 categories - from mathematical operations to security scanning</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><span class="icon">🔒</span>Security First</h3>
+                        <p>Sandboxed execution, input validation, resource limits, and comprehensive security features</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><span class="icon">⚡</span>Dynamic Creation</h3>
+                        <p>Create custom tools on-the-fly with secure Docker execution for any computational task</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3><span class="icon">🌐</span>Universal API</h3>
+                        <p>REST API access from any programming language - Python, JavaScript, Go, Rust, Java, C#</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Table of Contents -->
+            <div class="toc-placeholder"></div>
+
+            <!-- Quick Start Section -->
+            <section id="quick-start">
+                <h2>⚡ Quick Start</h2>
+                
+                <div class="alert alert-warning">
+                    <strong>Prerequisites:</strong> Python 3.8+, Git, and optionally Docker for enhanced features
+                </div>
+
+                <h3>1. Clone and Setup</h3>
+                <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/fabriziosalmi/nexus-mcp-server.git
+cd nexus-mcp-server
+
+# Create virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate   # Windows
+
+# Install dependencies
+pip install -r requirements.txt</code></pre>
+
+                <h3>2. Test Installation</h3>
+                <pre><code class="language-bash"># Quick test
+python client.py add '{"a": 10, "b": 5}'
+
+# List available tools
+python list_tools.py</code></pre>
+
+                <h3>3. Configure Your Client</h3>
+                <div class="feature-grid">
+                    <div class="card">
+                        <h4>🔧 VS Code Setup</h4>
+                        <p>Configure for VS Code Copilot with optimized tool subset</p>
+                        <a href="pages/setup-vscode.html" class="nav-link">Setup Guide →</a>
+                    </div>
+                    <div class="card">
+                        <h4>🤖 Claude Desktop</h4>
+                        <p>Full feature access with all 500+ tools</p>
+                        <a href="pages/setup-claude.html" class="nav-link">Setup Guide →</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Features Section -->
+            <section id="key-features">
+                <h2>🎯 Key Features</h2>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3><span class="icon">🧮</span>Mathematical Operations</h3>
+                        <p>Advanced calculator, statistics, financial calculations, unit conversions</p>
+                        <ul>
+                            <li>Basic arithmetic and advanced math</li>
+                            <li>Statistical analysis functions</li>
+                            <li>Financial calculations</li>
+                            <li>Unit converter with 50+ units</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3><span class="icon">🔒</span>Security & Cryptography</h3>
+                        <p>Password generation, encryption, vulnerability scanning, network security</p>
+                        <ul>
+                            <li>Password and hash generation</li>
+                            <li>Encryption/decryption utilities</li>
+                            <li>Network security scanning</li>
+                            <li>Vulnerability assessment</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3><span class="icon">💻</span>Code Generation</h3>
+                        <p>Project scaffolding, API generation, design patterns, code analysis</p>
+                        <ul>
+                            <li>Project template generation</li>
+                            <li>API scaffolding</li>
+                            <li>Code quality analysis</li>
+                            <li>Design pattern implementation</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3><span class="icon">📁</span>File Operations</h3>
+                        <p>Format conversion, archiving, PDF processing, image manipulation</p>
+                        <ul>
+                            <li>File format conversion</li>
+                            <li>Archive management</li>
+                            <li>PDF document processing</li>
+                            <li>Image processing and analysis</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3><span class="icon">⚙️</span>System Management</h3>
+                        <p>Process monitoring, Docker integration, Git operations, performance analysis</p>
+                        <ul>
+                            <li>System information gathering</li>
+                            <li>Process monitoring</li>
+                            <li>Docker container management</li>
+                            <li>Git repository operations</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3><span class="icon">🌐</span>Network Tools</h3>
+                        <p>Security scanning, DNS lookups, website analysis, connectivity testing</p>
+                        <ul>
+                            <li>Network connectivity testing</li>
+                            <li>DNS resolution and analysis</li>
+                            <li>Website performance analysis</li>
+                            <li>Port scanning and security</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>⚡ Advanced Capabilities</h3>
+                <div class="alert alert-info">
+                    <ul style="margin: 0; padding-left: 1.5rem;">
+                        <li><strong>Dynamic Tool Creation:</strong> Create custom tools on-the-fly using <code>create_and_run_tool</code></li>
+                        <li><strong>Web Configuration Interface:</strong> Real-time tool management without restarts</li>
+                        <li><strong>Docker Integration:</strong> Secure, isolated execution environments</li>
+                        <li><strong>Hot Reload:</strong> Update configurations without server downtime</li>
+                        <li><strong>Multi-Client Support:</strong> Works with VS Code, Claude Desktop, and HTTP API</li>
+                        <li><strong>Automatic Client Detection:</strong> VSCode gets curated 99-function subset, Claude Desktop gets full 500+ functions</li>
+                    </ul>
+                </div>
+
+                <h3>🔒 Security First</h3>
+                <div class="alert alert-success">
+                    <ul style="margin: 0; padding-left: 1.5rem;">
+                        <li>Sandboxed file operations in <code>safe_files/</code> directory</li>
+                        <li>Input validation and sanitization</li>
+                        <li>Resource limits and timeout protection</li>
+                        <li>Path traversal prevention</li>
+                        <li>Docker-based isolation for dynamic tools</li>
+                        <li>Comprehensive security scanning tools</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Screenshots Section -->
+            <section id="screenshots">
+                <h2>📸 Screenshots</h2>
+
+                <h3>Claude Desktop Integration</h3>
+                <div class="card">
+                    <img src="assets/images/nexus-mcp-server-claude-code-desktop.png" 
+                         alt="Claude Desktop Integration" 
+                         style="width: 100%; height: auto; border-radius: 0.5rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                    <p style="margin-top: 1rem; text-align: center; color: var(--text-secondary);">
+                        Nexus MCP Server seamlessly integrated with Claude Desktop, providing access to all 500+ tools
+                    </p>
+                </div>
+
+                <h3>Tool Usage Examples</h3>
+                <div class="feature-grid">
+                    <div class="card">
+                        <img src="assets/images/generate_uuid_1.png" 
+                             alt="UUID Generation Example 1" 
+                             style="width: 100%; height: auto; border-radius: 0.5rem;">
+                        <h4 style="margin-top: 1rem;">UUID Generation</h4>
+                        <p>Example of generating UUIDs with different formats and validation</p>
+                    </div>
+                    <div class="card">
+                        <img src="assets/images/generate_uuid_2.png" 
+                             alt="UUID Generation Example 2" 
+                             style="width: 100%; height: auto; border-radius: 0.5rem;">
+                        <h4 style="margin-top: 1rem;">Advanced UUID Operations</h4>
+                        <p>Advanced UUID operations with validation and format conversion</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <div></div>
+                <a href="pages/setup-vscode.html" class="nav-link next">VS Code Setup</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize syntax highlighting
+        hljs.highlightAll();
+    </script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

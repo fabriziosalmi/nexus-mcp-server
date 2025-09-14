@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 VS Code Setup - Nexus MCP Server Documentation</title>
+    <meta name="description" content="Complete guide to setting up Nexus MCP Server with VS Code and GitHub Copilot">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle">☰</button>
+        <h1><span class="rocket">🚀</span>Nexus MCP Server</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search documentation..." autocomplete="off">
+        </div>
+        
+        <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="../index.html">🏠 Overview</a></li>
+            <li><a href="../index.html#quick-start">⚡ Quick Start</a></li>
+            <li><a href="../index.html#key-features">🎯 Key Features</a></li>
+            <li><a href="../index.html#screenshots">📸 Screenshots</a></li>
+            
+            <li class="section-header">Setup & Configuration</li>
+            <li><a href="setup-vscode.html" class="active">🔧 VS Code Setup</a></li>
+            <li><a href="setup-claude.html">🤖 Claude Desktop Setup</a></li>
+            <li><a href="web-interface.html">🖥️ Web Interface</a></li>
+            <li><a href="docker.html">🐳 Docker Support</a></li>
+            
+            <li class="section-header">Tools & Features</li>
+            <li><a href="tools-overview.html">📋 Tools Overview</a></li>
+            <li><a href="tools-reference.html">📚 Complete Tools Reference</a></li>
+            <li><a href="dynamic-tools.html">🛠️ Dynamic Tools</a></li>
+            <li><a href="enhanced-api.html">🌐 Enhanced API</a></li>
+            
+            <li class="section-header">Deployment & Operations</li>
+            <li><a href="deployment.html">🚀 Deployment Guide</a></li>
+            <li><a href="monitoring.html">📊 Monitoring & Metrics</a></li>
+            <li><a href="troubleshooting.html">🔍 Troubleshooting</a></li>
+            
+            <li class="section-header">Examples & Tutorials</li>
+            <li><a href="examples.html">💡 Examples</a></li>
+            <li><a href="api-examples.html">🔌 API Examples</a></li>
+            <li><a href="best-practices.html">✨ Best Practices</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>🔧 VS Code Setup</h1>
+            
+            <p class="lead">
+                Configure Nexus MCP Server with Visual Studio Code and GitHub Copilot for an optimized development experience with 99 carefully curated tools.
+            </p>
+
+            <div class="alert alert-info">
+                <strong>🎯 VS Code Optimization:</strong> Nexus automatically provides a curated subset of 99 most useful tools when used with VS Code to respect editor performance and tool limits.
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="toc-placeholder"></div>
+
+            <h2 id="prerequisites">📋 Prerequisites</h2>
+            
+            <div class="alert alert-warning">
+                <h4>Required Software</h4>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li><strong>Visual Studio Code</strong> - Latest version</li>
+                    <li><strong>Python 3.8+</strong> - For running Nexus MCP Server</li>
+                    <li><strong>MCP Extension</strong> - Official Model Context Protocol extension</li>
+                    <li><strong>GitHub Copilot</strong> - VS Code extension (optional but recommended)</li>
+                </ul>
+            </div>
+
+            <h2 id="installation">⚙️ Installation</h2>
+
+            <h3 id="step1">Step 1: Install MCP Extension</h3>
+            
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>Via VS Code Marketplace</h4>
+                    <ol>
+                        <li>Open VS Code</li>
+                        <li>Go to Extensions (Ctrl/Cmd + Shift + X)</li>
+                        <li>Search for "Model Context Protocol"</li>
+                        <li>Install the official MCP extension</li>
+                    </ol>
+                </div>
+                <div class="card">
+                    <h4>Via Command Line</h4>
+                    <pre><code class="language-bash">code --install-extension modelcontextprotocol.mcp</code></pre>
+                </div>
+            </div>
+
+            <h3 id="step2">Step 2: Configure Settings</h3>
+
+            <p>Add the following configuration to your VS Code settings.json file:</p>
+
+            <pre><code class="language-json">{
+  "mcp.servers": {
+    "nexus": {
+      "command": "python",
+      "args": ["/absolute/path/to/nexus-mcp-server/multi_server_minimal.py"],
+      "env": {
+        "PYTHONPATH": "/absolute/path/to/nexus-mcp-server",
+        "MCP_SERVER_NAME": "NexusServer",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}</code></pre>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Important:</strong> Replace <code>/absolute/path/to/nexus-mcp-server</code> with the actual absolute path to your Nexus installation directory.
+            </div>
+
+            <h3 id="step3">Step 3: Alternative Configuration Files</h3>
+
+            <p>Nexus provides pre-configured settings files for different use cases:</p>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🎯 Optimized Config</h4>
+                    <p><code>config-vscode.json</code> - Full feature set optimized for VS Code</p>
+                    <pre><code class="language-bash">cp config-vscode.json config.json</code></pre>
+                </div>
+                <div class="card">
+                    <h4>⚡ Minimal Config</h4>
+                    <p><code>config-minimal-vscode.json</code> - Essential tools only</p>
+                    <pre><code class="language-bash">cp config-minimal-vscode.json config.json</code></pre>
+                </div>
+            </div>
+
+            <h2 id="verification">✅ Verification</h2>
+
+            <h3 id="test-installation">Test the Installation</h3>
+
+            <ol>
+                <li><strong>Restart VS Code</strong> after adding the configuration</li>
+                <li><strong>Open Command Palette</strong> (Ctrl/Cmd + Shift + P)</li>
+                <li><strong>Type "MCP"</strong> to see available MCP commands</li>
+                <li><strong>Check the status</strong> in the VS Code status bar</li>
+            </ol>
+
+            <div class="alert alert-success">
+                <strong>✅ Success indicators:</strong>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li>MCP status shows "Connected" in the status bar</li>
+                    <li>Nexus tools appear in the command palette</li>
+                    <li>No error messages in the Output panel (MCP section)</li>
+                </ul>
+            </div>
+
+            <h3 id="test-tools">Test Available Tools</h3>
+
+            <p>Use the command palette to test some Nexus tools:</p>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🧮 Mathematical Operations</h4>
+                    <ul>
+                        <li>Search for "add" to test basic math</li>
+                        <li>Try "calculate" for advanced calculations</li>
+                        <li>Use "random" for random number generation</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>🔧 System Tools</h4>
+                    <ul>
+                        <li>Search for "system" to get system info</li>
+                        <li>Try "timestamp" for current time</li>
+                        <li>Use "uuid" for unique ID generation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="configuration">⚙️ Advanced Configuration</h2>
+
+            <h3 id="environment-variables">Environment Variables</h3>
+
+            <p>Customize Nexus behavior with these environment variables:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Description</th>
+                        <th>Default</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>MCP_SERVER_NAME</code></td>
+                        <td>Server identification name</td>
+                        <td><code>NexusServer</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>LOG_LEVEL</code></td>
+                        <td>Logging verbosity level</td>
+                        <td><code>INFO</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>PYTHONPATH</code></td>
+                        <td>Python module search path</td>
+                        <td>Current directory</td>
+                    </tr>
+                    <tr>
+                        <td><code>SAFE_FILES_DIR</code></td>
+                        <td>Directory for file operations</td>
+                        <td><code>safe_files</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 id="tool-selection">Tool Selection</h3>
+
+            <p>VS Code configuration automatically uses the optimized tool set. To customize which tools are available:</p>
+
+            <ol>
+                <li><strong>Edit config.json:</strong> Modify the enabled_tools list</li>
+                <li><strong>Use web interface:</strong> Dynamic tool management at runtime</li>
+                <li><strong>Environment flags:</strong> Set specific tool categories</li>
+            </ol>
+
+            <pre><code class="language-json">{
+  "enabled_tools": [
+    "basic_tools",
+    "calculator",
+    "system_info",
+    "crypto_tools",
+    "file_operations",
+    "datetime_tools"
+  ],
+  "client_detection": {
+    "vscode_limit": 99,
+    "claude_full_access": true
+  }
+}</code></pre>
+
+            <h2 id="usage">🚀 Usage Examples</h2>
+
+            <h3 id="github-copilot">With GitHub Copilot</h3>
+
+            <p>When using GitHub Copilot with Nexus, you can reference tools in your comments and code:</p>
+
+            <pre><code class="language-python"># Use Nexus to generate a UUID for this user
+user_id = nexus.generate_uuid()
+
+# Calculate the hash of this password
+password_hash = nexus.generate_hash("user_password", "sha256")
+
+# Get current system information
+system_info = nexus.system_overview()</code></pre>
+
+            <h3 id="command-palette">Command Palette Usage</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>📊 Data Processing</h4>
+                    <ul>
+                        <li><code>Nexus: JSON Validate</code> - Validate JSON data</li>
+                        <li><code>Nexus: String Clean</code> - Clean and normalize text</li>
+                        <li><code>Nexus: Base64 Encode</code> - Encode data to base64</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>🔒 Security Tools</h4>
+                    <ul>
+                        <li><code>Nexus: Password Generate</code> - Generate secure passwords</li>
+                        <li><code>Nexus: Hash Generate</code> - Create cryptographic hashes</li>
+                        <li><code>Nexus: Port Scan</code> - Network security scanning</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="troubleshooting">🔍 Troubleshooting</h2>
+
+            <h3 id="common-issues">Common Issues</h3>
+
+            <div class="alert alert-error">
+                <h4>Connection Failed</h4>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li>Check that Python path is correct and absolute</li>
+                    <li>Verify that all required packages are installed</li>
+                    <li>Ensure the Nexus server script is executable</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-warning">
+                <h4>Tools Not Appearing</h4>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li>Restart VS Code after configuration changes</li>
+                    <li>Check the Output panel for MCP errors</li>
+                    <li>Verify the config.json file is valid</li>
+                </ul>
+            </div>
+
+            <h3 id="debugging">Debugging Steps</h3>
+
+            <ol>
+                <li><strong>Enable Debug Logging:</strong></li>
+            </ol>
+
+            <pre><code class="language-json">{
+  "mcp.servers": {
+    "nexus": {
+      "env": {
+        "LOG_LEVEL": "DEBUG"
+      }
+    }
+  }
+}</code></pre>
+
+            <ol start="2">
+                <li><strong>Check Output Panel:</strong></li>
+            </ol>
+            <ul>
+                <li>Open Output panel (View → Output)</li>
+                <li>Select "Model Context Protocol" from dropdown</li>
+                <li>Look for connection and error messages</li>
+            </ul>
+
+            <ol start="3">
+                <li><strong>Manual Testing:</strong></li>
+            </ol>
+
+            <pre><code class="language-bash"># Test the server directly
+cd /path/to/nexus-mcp-server
+python multi_server_minimal.py
+
+# Test with client
+python client.py add '{"a": 5, "b": 3}'</code></pre>
+
+            <h2 id="performance">⚡ Performance Optimization</h2>
+
+            <h3 id="tool-limits">Tool Limits</h3>
+
+            <p>VS Code has performance considerations when loading many tools. Nexus handles this by:</p>
+
+            <ul>
+                <li><strong>Automatic Detection:</strong> Uses optimized tool set for VS Code</li>
+                <li><strong>Lazy Loading:</strong> Tools are loaded on-demand</li>
+                <li><strong>Caching:</strong> Results are cached to improve response times</li>
+                <li><strong>Resource Limits:</strong> Memory and CPU usage is controlled</li>
+            </ul>
+
+            <h3 id="configuration-tips">Configuration Tips</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🎯 Essential Tools Only</h4>
+                    <p>Use <code>config-minimal-vscode.json</code> for basic functionality</p>
+                </div>
+                <div class="card">
+                    <h4>🚀 Full Feature Set</h4>
+                    <p>Use <code>config-vscode.json</code> for comprehensive tools</p>
+                </div>
+                <div class="card">
+                    <h4>🔧 Custom Selection</h4>
+                    <p>Edit <code>config.json</code> to choose specific tool categories</p>
+                </div>
+            </div>
+
+            <h2 id="next-steps">🎯 Next Steps</h2>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>📚 Explore Tools</h4>
+                    <p>Learn about all available tools and their capabilities</p>
+                    <a href="tools-overview.html" class="nav-link">Tools Overview →</a>
+                </div>
+                <div class="card">
+                    <h4>🛠️ Dynamic Tools</h4>
+                    <p>Create custom tools on-the-fly for specific tasks</p>
+                    <a href="dynamic-tools.html" class="nav-link">Dynamic Tools →</a>
+                </div>
+                <div class="card">
+                    <h4>🌐 API Access</h4>
+                    <p>Use Nexus from any programming language</p>
+                    <a href="enhanced-api.html" class="nav-link">Enhanced API →</a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="../index.html" class="nav-link prev">Overview</a>
+                <a href="setup-claude.html" class="nav-link next">Claude Desktop Setup</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Scripts -->
+    <script>hljs.highlightAll();</script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
