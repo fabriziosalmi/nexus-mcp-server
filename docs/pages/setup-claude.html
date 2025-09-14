@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Claude Desktop Setup - Nexus MCP Server Documentation</title>
+    <meta name="description" content="Complete guide to setting up Nexus MCP Server with Claude Desktop for full access to 500+ tools">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle">☰</button>
+        <h1><span class="rocket">🚀</span>Nexus MCP Server</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search documentation..." autocomplete="off">
+        </div>
+        
+        <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="../index.html">🏠 Overview</a></li>
+            <li><a href="../index.html#quick-start">⚡ Quick Start</a></li>
+            <li><a href="../index.html#key-features">🎯 Key Features</a></li>
+            <li><a href="../index.html#screenshots">📸 Screenshots</a></li>
+            
+            <li class="section-header">Setup & Configuration</li>
+            <li><a href="setup-vscode.html">🔧 VS Code Setup</a></li>
+            <li><a href="setup-claude.html" class="active">🤖 Claude Desktop Setup</a></li>
+            <li><a href="web-interface.html">🖥️ Web Interface</a></li>
+            <li><a href="docker.html">🐳 Docker Support</a></li>
+            
+            <li class="section-header">Tools & Features</li>
+            <li><a href="tools-overview.html">📋 Tools Overview</a></li>
+            <li><a href="tools-reference.html">📚 Complete Tools Reference</a></li>
+            <li><a href="dynamic-tools.html">🛠️ Dynamic Tools</a></li>
+            <li><a href="enhanced-api.html">🌐 Enhanced API</a></li>
+            
+            <li class="section-header">Deployment & Operations</li>
+            <li><a href="deployment.html">🚀 Deployment Guide</a></li>
+            <li><a href="monitoring.html">📊 Monitoring & Metrics</a></li>
+            <li><a href="troubleshooting.html">🔍 Troubleshooting</a></li>
+            
+            <li class="section-header">Examples & Tutorials</li>
+            <li><a href="examples.html">💡 Examples</a></li>
+            <li><a href="api-examples.html">🔌 API Examples</a></li>
+            <li><a href="best-practices.html">✨ Best Practices</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>🤖 Claude Desktop Setup</h1>
+            
+            <p class="lead">
+                Configure Nexus MCP Server with Claude Desktop to access the complete suite of 500+ tools and advanced features including dynamic tool creation.
+            </p>
+
+            <div class="alert alert-success">
+                <strong>🎯 Full Feature Access:</strong> Claude Desktop gets unrestricted access to all Nexus capabilities, including the advanced dynamic tool creation system with Docker isolation.
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="toc-placeholder"></div>
+
+            <h2 id="prerequisites">📋 Prerequisites</h2>
+            
+            <div class="alert alert-warning">
+                <h4>Required Software</h4>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li><strong>Claude Desktop App</strong> - Latest version from Anthropic</li>
+                    <li><strong>Python 3.8+</strong> - For running Nexus MCP Server</li>
+                    <li><strong>Docker</strong> - Optional but recommended for dynamic tools</li>
+                    <li><strong>Git</strong> - For cloning the repository</li>
+                </ul>
+            </div>
+
+            <h2 id="installation">⚙️ Installation & Configuration</h2>
+
+            <h3 id="step1">Step 1: Install Nexus MCP Server</h3>
+
+            <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/fabriziosalmi/nexus-mcp-server.git
+cd nexus-mcp-server
+
+# Create virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate   # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Test installation
+python client.py add '{"a": 10, "b": 5}'</code></pre>
+
+            <h3 id="step2">Step 2: Configure Claude Desktop</h3>
+
+            <p>Claude Desktop reads its configuration from a JSON file in your user directory. The location depends on your operating system:</p>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🖥️ Windows</h4>
+                    <p><code>%APPDATA%\Claude\claude_desktop_config.json</code></p>
+                </div>
+                <div class="card">
+                    <h4>🍎 macOS</h4>
+                    <p><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></p>
+                </div>
+                <div class="card">
+                    <h4>🐧 Linux</h4>
+                    <p><code>~/.config/Claude/claude_desktop_config.json</code></p>
+                </div>
+            </div>
+
+            <h3 id="step3">Step 3: Add Nexus Configuration</h3>
+
+            <p>Create or edit the Claude Desktop configuration file with the following content:</p>
+
+            <pre><code class="language-json">{
+  "mcpServers": {
+    "nexus": {
+      "command": "python",
+      "args": ["/absolute/path/to/nexus-mcp-server/multi_server.py"],
+      "env": {
+        "PYTHONPATH": "/absolute/path/to/nexus-mcp-server",
+        "MCP_SERVER_NAME": "NexusServer",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}</code></pre>
+
+            <div class="alert alert-error">
+                <strong>⚠️ Critical:</strong> Replace <code>/absolute/path/to/nexus-mcp-server</code> with the actual absolute path to your Nexus installation directory. Relative paths will not work!
+            </div>
+
+            <h3 id="step4">Step 4: Pre-configured Templates</h3>
+
+            <p>Nexus provides ready-to-use configuration templates in the repository:</p>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🎯 Full Configuration</h4>
+                    <p><code>claude_desktop_config.json</code> - Complete feature set</p>
+                    <pre><code class="language-bash">cp claude_desktop_config.json ~/.config/Claude/claude_desktop_config.json</code></pre>
+                </div>
+                <div class="card">
+                    <h4>⚡ Minimal Configuration</h4>
+                    <p><code>claude_desktop_config_minimal.json</code> - Essential tools</p>
+                    <pre><code class="language-bash">cp claude_desktop_config_minimal.json ~/.config/Claude/claude_desktop_config.json</code></pre>
+                </div>
+            </div>
+
+            <h2 id="verification">✅ Verification & Testing</h2>
+
+            <h3 id="restart-claude">Step 1: Restart Claude Desktop</h3>
+
+            <ol>
+                <li>Completely quit Claude Desktop</li>
+                <li>Wait 5 seconds</li>
+                <li>Restart the application</li>
+                <li>Wait for the server to initialize (10-15 seconds)</li>
+            </ol>
+
+            <h3 id="test-connection">Step 2: Test the Connection</h3>
+
+            <p>In a new Claude conversation, try these test commands:</p>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🧮 Basic Math Test</h4>
+                    <pre><code>Can you add 15 and 27 using your tools?</code></pre>
+                    <p>Expected: Claude will use the <code>add</code> tool and return 42</p>
+                </div>
+                <div class="card">
+                    <h4>🔧 System Info Test</h4>
+                    <pre><code>What's the current system information?</code></pre>
+                    <p>Expected: Claude will use <code>system_overview</code> tool</p>
+                </div>
+            </div>
+
+            <h3 id="test-advanced">Step 3: Test Advanced Features</h3>
+
+            <div class="alert alert-info">
+                <h4>🚀 Dynamic Tool Creation Test</h4>
+                <p>Try asking Claude to create a custom tool:</p>
+                <pre><code>"Can you create a tool that converts temperatures from Celsius to Fahrenheit and test it with 25°C?"</code></pre>
+                <p>Claude should use the <code>create_and_run_tool</code> function to create and execute a custom temperature converter.</p>
+            </div>
+
+            <h2 id="features">🎯 Available Features</h2>
+
+            <h3 id="tool-categories">Tool Categories (500+ Tools)</h3>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="icon">🧮</span>Mathematical Operations</h3>
+                    <ul>
+                        <li>Basic and advanced calculations</li>
+                        <li>Statistical analysis</li>
+                        <li>Financial calculations</li>
+                        <li>Unit conversions</li>
+                    </ul>
+                    <span class="badge badge-primary">25+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🔒</span>Security & Cryptography</h3>
+                    <ul>
+                        <li>Password generation</li>
+                        <li>Encryption/decryption</li>
+                        <li>Hash generation</li>
+                        <li>Network security scanning</li>
+                    </ul>
+                    <span class="badge badge-error">40+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">💻</span>Code Generation</h3>
+                    <ul>
+                        <li>Project scaffolding</li>
+                        <li>API generation</li>
+                        <li>Code analysis</li>
+                        <li>Template creation</li>
+                    </ul>
+                    <span class="badge badge-warning">35+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📁</span>File Operations</h3>
+                    <ul>
+                        <li>Format conversion</li>
+                        <li>Archive management</li>
+                        <li>PDF processing</li>
+                        <li>Image manipulation</li>
+                    </ul>
+                    <span class="badge badge-success">50+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🌐</span>Network & Web</h3>
+                    <ul>
+                        <li>HTTP requests</li>
+                        <li>DNS operations</li>
+                        <li>Port scanning</li>
+                        <li>Website analysis</li>
+                    </ul>
+                    <span class="badge badge-primary">30+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📊</span>Data Processing</h3>
+                    <ul>
+                        <li>JSON/YAML manipulation</li>
+                        <li>Text analysis</li>
+                        <li>Log processing</li>
+                        <li>Database operations</li>
+                    </ul>
+                    <span class="badge badge-success">45+ Tools</span>
+                </div>
+            </div>
+
+            <h3 id="dynamic-tools">🛠️ Dynamic Tool Creation</h3>
+
+            <p>Claude Desktop gets access to the most advanced Nexus feature - dynamic tool creation:</p>
+
+            <div class="alert alert-info">
+                <ul style="margin: 0; padding-left: 1.5rem;">
+                    <li><strong>On-demand Tools:</strong> Create custom tools for specific tasks</li>
+                    <li><strong>Docker Isolation:</strong> Secure execution in isolated containers</li>
+                    <li><strong>Resource Limits:</strong> Memory and CPU constraints for safety</li>
+                    <li><strong>Code Validation:</strong> Automatic security checks</li>
+                    <li><strong>Temporary Execution:</strong> Tools are created, used, and disposed</li>
+                </ul>
+            </div>
+
+            <h2 id="usage-examples">🚀 Usage Examples</h2>
+
+            <h3 id="basic-examples">Basic Tool Usage</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🔐 Generate Secure Password</h4>
+                    <p><strong>Prompt:</strong> "Generate a 16-character password with symbols"</p>
+                    <p><strong>Tool Used:</strong> <code>password_generate</code></p>
+                </div>
+                <div class="card">
+                    <h4>🧮 Complex Calculations</h4>
+                    <p><strong>Prompt:</strong> "Calculate the compound interest for $1000 at 5% for 10 years"</p>
+                    <p><strong>Tool Used:</strong> <code>financial_calculator</code></p>
+                </div>
+            </div>
+
+            <h3 id="advanced-examples">Advanced Examples</h3>
+
+            <div class="card">
+                <h4>🛠️ Dynamic Tool Creation Example</h4>
+                <p><strong>Prompt:</strong></p>
+                <pre><code>"I need to parse a custom log format that looks like this:
+'[2024-01-15 10:30:45] ERROR: Connection failed to 192.168.1.100:8080'
+
+Can you create a tool to extract the timestamp, level, and IP address from such logs?"</code></pre>
+                
+                <p><strong>Expected Behavior:</strong></p>
+                <ol>
+                    <li>Claude analyzes the requirement</li>
+                    <li>Uses <code>create_and_run_tool</code> to create a custom parser</li>
+                    <li>Tests the tool with the provided example</li>
+                    <li>Returns the parsed data (timestamp, level, IP)</li>
+                </ol>
+            </div>
+
+            <h3 id="workflow-examples">Workflow Examples</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>📊 Data Analysis Workflow</h4>
+                    <ol>
+                        <li>Upload CSV data</li>
+                        <li>Clean and validate data</li>
+                        <li>Perform statistical analysis</li>
+                        <li>Generate visualizations</li>
+                        <li>Export results</li>
+                    </ol>
+                </div>
+                <div class="card">
+                    <h4>🔒 Security Assessment</h4>
+                    <ol>
+                        <li>Scan network ports</li>
+                        <li>Check SSL certificates</li>
+                        <li>Validate security headers</li>
+                        <li>Generate security report</li>
+                        <li>Recommend improvements</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h2 id="troubleshooting">🔍 Troubleshooting</h2>
+
+            <h3 id="common-issues">Common Issues</h3>
+
+            <div class="alert alert-error">
+                <h4>🚫 No Tools Available</h4>
+                <p><strong>Symptoms:</strong> Claude says it doesn't have access to tools</p>
+                <p><strong>Solutions:</strong></p>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li>Check the configuration file path is correct</li>
+                    <li>Verify the Python path is absolute</li>
+                    <li>Restart Claude Desktop completely</li>
+                    <li>Check for JSON syntax errors in config</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-warning">
+                <h4>⚠️ Connection Errors</h4>
+                <p><strong>Symptoms:</strong> Tools fail to execute or timeout</p>
+                <p><strong>Solutions:</strong></p>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li>Ensure Python dependencies are installed</li>
+                    <li>Check Python virtual environment activation</li>
+                    <li>Verify file permissions on Nexus directory</li>
+                    <li>Test server manually with <code>python client.py</code></li>
+                </ul>
+            </div>
+
+            <h3 id="debug-steps">Debug Steps</h3>
+
+            <ol>
+                <li><strong>Verify Configuration:</strong></li>
+            </ol>
+
+            <pre><code class="language-bash"># Check config file exists and is valid JSON
+cat ~/.config/Claude/claude_desktop_config.json | python -m json.tool</code></pre>
+
+            <ol start="2">
+                <li><strong>Test Server Manually:</strong></li>
+            </ol>
+
+            <pre><code class="language-bash">cd /path/to/nexus-mcp-server
+source .venv/bin/activate
+python multi_server.py
+
+# In another terminal
+python client.py system_overview</code></pre>
+
+            <ol start="3">
+                <li><strong>Check Logs:</strong></li>
+            </ol>
+
+            <p>Enable debug logging by setting <code>LOG_LEVEL</code> to <code>DEBUG</code> in the configuration:</p>
+
+            <pre><code class="language-json">{
+  "mcpServers": {
+    "nexus": {
+      "env": {
+        "LOG_LEVEL": "DEBUG"
+      }
+    }
+  }
+}</code></pre>
+
+            <h2 id="performance">⚡ Performance & Optimization</h2>
+
+            <h3 id="resource-usage">Resource Usage</h3>
+
+            <p>Nexus is optimized for Claude Desktop usage:</p>
+
+            <ul>
+                <li><strong>Memory Usage:</strong> ~50-100MB baseline, scales with active tools</li>
+                <li><strong>CPU Usage:</strong> Minimal when idle, scales with tool complexity</li>
+                <li><strong>Storage:</strong> ~100MB for base installation, additional for dynamic tools</li>
+                <li><strong>Network:</strong> Only for tools that require internet access</li>
+            </ul>
+
+            <h3 id="optimization-tips">Optimization Tips</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🎯 Tool Selection</h4>
+                    <p>Customize which tools are loaded to reduce memory usage</p>
+                    <pre><code class="language-json">"env": {
+  "ENABLED_TOOLS": "essential,math,security"
+}</code></pre>
+                </div>
+                <div class="card">
+                    <h4>🐳 Docker Optimization</h4>
+                    <p>Configure Docker for dynamic tools</p>
+                    <pre><code class="language-json">"env": {
+  "DOCKER_MEMORY_LIMIT": "128m",
+  "DOCKER_CPU_LIMIT": "0.5"
+}</code></pre>
+                </div>
+            </div>
+
+            <h2 id="next-steps">🎯 Next Steps</h2>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>📚 Explore All Tools</h4>
+                    <p>Browse the complete reference of 500+ available tools</p>
+                    <a href="tools-reference.html" class="nav-link">Complete Tools Reference →</a>
+                </div>
+                <div class="card">
+                    <h4>🛠️ Dynamic Tools</h4>
+                    <p>Learn about creating custom tools on-demand</p>
+                    <a href="dynamic-tools.html" class="nav-link">Dynamic Tools Guide →</a>
+                </div>
+                <div class="card">
+                    <h4>💡 Examples</h4>
+                    <p>See practical examples and use cases</p>
+                    <a href="examples.html" class="nav-link">Examples & Tutorials →</a>
+                </div>
+                <div class="card">
+                    <h4>🚀 Deployment</h4>
+                    <p>Deploy Nexus in production environments</p>
+                    <a href="deployment.html" class="nav-link">Deployment Guide →</a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="setup-vscode.html" class="nav-link prev">VS Code Setup</a>
+                <a href="web-interface.html" class="nav-link next">Web Interface</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Scripts -->
+    <script>hljs.highlightAll();</script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
