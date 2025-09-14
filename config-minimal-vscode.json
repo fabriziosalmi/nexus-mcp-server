@@ -1,15 +1,20 @@
 {
-  "comment": "Minimal configuration for VS Code MCP integration - excludes problematic tools",
+  "comment": "VSCode configuration limited to 100 tools max (99 functions across 12 tools) - Issue #22",
   "enabled_tools": [
     "calculator",
-    "crypto_tools", 
-    "datetime_tools",
-    "encoding_tools",
     "string_tools",
-    "system_info",
-    "uuid_tools",
+    "crypto_tools",
+    "encoding_tools",
+    "datetime_tools",
     "validator_tools",
+    "uuid_tools",
     "url_tools",
-    "unit_converter"
-  ]
+    "filesystem_reader",
+    "unit_converter",
+    "web_fetcher",
+    "workflows"
+  ],
+  "client_type": "vscode",
+  "max_tools_limit": 100,
+  "actual_function_count": 99
 }

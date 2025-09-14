@@ -1,6 +1,17 @@
 {
   "$schema": "https://github.com/modelcontextprotocol/servers/blob/main/schema/mcp.json",
   "mcpServers": {
+    "nexus-vscode": {
+      "command": "./start_mcp_server_vscode.sh",
+      "args": [],
+      "cwd": ".",
+      "env": {
+        "PYTHONPATH": ".",
+        "MCP_SERVER_NAME": "NexusServer-VSCode",
+        "MCP_CLIENT_TYPE": "vscode",
+        "LOG_LEVEL": "INFO"
+      }
+    },
     "nexus": {
       "command": "python",
       "args": ["multi_server.py"],
@@ -19,19 +30,12 @@
         "-i",
         "--network=host",
         "-v", "./safe_files:/app/safe_files:rw",
-        "-v", "./config.json:/app/config.json:ro",
+        "-v", "./config-vscode.json:/app/config.json:ro",
         "nexus-mcp-server:latest"
       ],
       "env": {
-        "MCP_SERVER_NAME": "NexusServer-Docker"
-      }
-    },
-    "nexus-compose": {
-      "command": "docker-compose",
-      "args": ["exec", "-T", "nexus-mcp", "python", "multi_server.py"],
-      "cwd": ".",
-      "env": {
-        "MCP_SERVER_NAME": "NexusServer-Compose"
+        "MCP_SERVER_NAME": "NexusServer-VSCode-Docker",
+        "MCP_CLIENT_TYPE": "vscode"
       }
     }
   }
