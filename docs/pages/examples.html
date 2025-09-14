@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💡 Examples - Nexus MCP Server Documentation</title>
+    <meta name="description" content="Practical examples and tutorials for using Nexus MCP Server">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle">☰</button>
+        <h1><span class="rocket">🚀</span>Nexus MCP Server</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search documentation..." autocomplete="off">
+        </div>
+        
+        <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="../index.html">🏠 Overview</a></li>
+            <li><a href="../index.html#quick-start">⚡ Quick Start</a></li>
+            <li><a href="../index.html#key-features">🎯 Key Features</a></li>
+            <li><a href="../index.html#screenshots">📸 Screenshots</a></li>
+            
+            <li class="section-header">Setup & Configuration</li>
+            <li><a href="setup-vscode.html">🔧 VS Code Setup</a></li>
+            <li><a href="setup-claude.html">🤖 Claude Desktop Setup</a></li>
+            <li><a href="web-interface.html">🖥️ Web Interface</a></li>
+            <li><a href="docker.html">🐳 Docker Support</a></li>
+            
+            <li class="section-header">Tools & Features</li>
+            <li><a href="tools-overview.html">📋 Tools Overview</a></li>
+            <li><a href="tools-reference.html">📚 Complete Tools Reference</a></li>
+            <li><a href="dynamic-tools.html">🛠️ Dynamic Tools</a></li>
+            <li><a href="enhanced-api.html">🌐 Enhanced API</a></li>
+            
+            <li class="section-header">Deployment & Operations</li>
+            <li><a href="deployment.html">🚀 Deployment Guide</a></li>
+            <li><a href="monitoring.html">📊 Monitoring & Metrics</a></li>
+            <li><a href="troubleshooting.html">🔍 Troubleshooting</a></li>
+            
+            <li class="section-header">Examples & Tutorials</li>
+            <li><a href="examples.html" class="active">💡 Examples</a></li>
+            <li><a href="api-examples.html">🔌 API Examples</a></li>
+            <li><a href="best-practices.html">✨ Best Practices</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>💡 Examples & Tutorials</h1>
+            
+            <p class="lead">
+                Practical examples showing how to use Nexus MCP Server tools for real-world tasks. From simple calculations to complex workflows.
+            </p>
+
+            <div class="alert alert-info">
+                <strong>🎯 Interactive Learning:</strong> These examples work with Claude Desktop, VS Code, or the HTTP API. Try them out!
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="toc-placeholder"></div>
+
+            <h2 id="basic-examples">🧮 Basic Tool Usage</h2>
+
+            <h3 id="mathematical-operations">Mathematical Operations</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>Simple Addition</h4>
+                    <p><strong>Claude Prompt:</strong></p>
+                    <pre><code>"Can you add 15 and 27 for me?"</code></pre>
+                    <p><strong>Expected Tool:</strong> <code>add</code></p>
+                    <p><strong>Result:</strong> 42</p>
+                </div>
+
+                <div class="card">
+                    <h4>Complex Calculation</h4>
+                    <p><strong>Claude Prompt:</strong></p>
+                    <pre><code>"Calculate the compound interest for $1000 at 5% annual rate for 10 years"</code></pre>
+                    <p><strong>Expected Tool:</strong> <code>compound_interest</code></p>
+                    <p><strong>Result:</strong> $1,628.89</p>
+                </div>
+            </div>
+
+            <h3 id="text-processing">Text Processing</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>String Cleaning</h4>
+                    <p><strong>Claude Prompt:</strong></p>
+                    <pre><code>"Clean this messy text: '  Hello   World!  '"</code></pre>
+                    <p><strong>Expected Tool:</strong> <code>string_clean</code></p>
+                    <p><strong>Result:</strong> "Hello World!"</p>
+                </div>
+
+                <div class="card">
+                    <h4>Base64 Encoding</h4>
+                    <p><strong>Claude Prompt:</strong></p>
+                    <pre><code>"Encode 'Hello World' to base64"</code></pre>
+                    <p><strong>Expected Tool:</strong> <code>base64_encode</code></p>
+                    <p><strong>Result:</strong> "SGVsbG8gV29ybGQ="</p>
+                </div>
+            </div>
+
+            <h2 id="security-examples">🔒 Security Tools</h2>
+
+            <h3 id="password-generation">Password Generation</h3>
+
+            <div class="card">
+                <h4>Secure Password</h4>
+                <p><strong>Claude Prompt:</strong></p>
+                <pre><code>"Generate a 16-character password with uppercase, lowercase, numbers, and symbols"</code></pre>
+                
+                <p><strong>Expected Tool:</strong> <code>password_generate</code></p>
+                <p><strong>Parameters:</strong></p>
+                <ul>
+                    <li>Length: 16</li>
+                    <li>Include uppercase: true</li>
+                    <li>Include numbers: true</li>
+                    <li>Include symbols: true</li>
+                </ul>
+                <p><strong>Sample Result:</strong> "K3@mP9#zX8$vN2qY"</p>
+            </div>
+
+            <h3 id="hash-generation">Hash Generation</h3>
+
+            <div class="card">
+                <h4>SHA256 Hash</h4>
+                <p><strong>Claude Prompt:</strong></p>
+                <pre><code>"Generate a SHA256 hash for the text 'nexus-mcp-server'"</code></pre>
+                
+                <p><strong>Expected Tool:</strong> <code>generate_hash</code></p>
+                <p><strong>Result:</strong> 
+                <code>b8c6f2ae89e7c6d3f4a1b5c2e8f9d7a3c5e2f8b4d6a9c1e7f3b5d8a2c4e6f1b9</code></p>
+            </div>
+
+            <h2 id="system-tools">🖥️ System Information</h2>
+
+            <h3 id="system-overview">System Overview</h3>
+
+            <div class="card">
+                <h4>Get System Information</h4>
+                <p><strong>Claude Prompt:</strong></p>
+                <pre><code>"Show me the current system information"</code></pre>
+                
+                <p><strong>Expected Tool:</strong> <code>system_overview</code></p>
+                <p><strong>Sample Result:</strong></p>
+                <pre><code class="language-json">{
+  "os": "Linux",
+  "platform": "linux",
+  "architecture": "x86_64",
+  "cpu_count": 8,
+  "memory_total": "16.0 GB",
+  "memory_available": "12.3 GB",
+  "uptime": "2 days, 5 hours"
+}</code></pre>
+            </div>
+
+            <h3 id="current-time">Current Time & Date</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>Current Timestamp</h4>
+                    <p><strong>Claude Prompt:</strong></p>
+                    <pre><code>"What's the current Unix timestamp?"</code></pre>
+                    <p><strong>Expected Tool:</strong> <code>current_timestamp</code></p>
+                    <p><strong>Result:</strong> 1705315845</p>
+                </div>
+
+                <div class="card">
+                    <h4>Formatted Date</h4>
+                    <p><strong>Claude Prompt:</strong></p>
+                    <pre><code>"Show me the current date and time in ISO format"</code></pre>
+                    <p><strong>Expected Tool:</strong> <code>current_datetime</code></p>
+                    <p><strong>Result:</strong> "2024-01-15T10:30:45Z"</p>
+                </div>
+            </div>
+
+            <h2 id="advanced-workflows">🚀 Advanced Workflows</h2>
+
+            <h3 id="data-processing-workflow">Data Processing Workflow</h3>
+
+            <div class="card">
+                <h4>CSV Data Analysis</h4>
+                <p><strong>Claude Prompt:</strong></p>
+                <pre><code>"I have CSV data with sales figures. Can you help me process it?
+
+Data:
+Name,Sales,Region
+John,1000,North
+Jane,1500,South
+Bob,800,North
+Alice,1200,South
+
+Please calculate:
+1. Total sales
+2. Average sales per person
+3. Sales by region"</code></pre>
+
+                <p><strong>Expected Workflow:</strong></p>
+                <ol>
+                    <li><strong>Parse CSV:</strong> <code>csv_parse</code> tool</li>
+                    <li><strong>Calculate totals:</strong> <code>add</code> tool multiple times</li>
+                    <li><strong>Calculate average:</strong> <code>divide</code> tool</li>
+                    <li><strong>Group by region:</strong> Data analysis tools</li>
+                </ol>
+
+                <p><strong>Expected Results:</strong></p>
+                <ul>
+                    <li>Total sales: $4,500</li>
+                    <li>Average sales: $1,125</li>
+                    <li>North region: $1,800</li>
+                    <li>South region: $2,700</li>
+                </ul>
+            </div>
+
+            <h3 id="security-audit">Security Audit Workflow</h3>
+
+            <div class="card">
+                <h4>Website Security Check</h4>
+                <p><strong>Claude Prompt:</strong></p>
+                <pre><code>"Please perform a basic security audit on example.com including:
+1. Port scan
+2. SSL certificate check
+3. HTTP headers analysis
+4. DNS information"</code></pre>
+
+                <p><strong>Expected Workflow:</strong></p>
+                <ol>
+                    <li><strong>Port Scan:</strong> <code>port_scan</code> tool</li>
+                    <li><strong>SSL Check:</strong> <code>ssl_certificate_info</code> tool</li>
+                    <li><strong>Headers:</strong> <code>http_headers_check</code> tool</li>
+                    <li><strong>DNS Lookup:</strong> <code>dns_lookup</code> tool</li>
+                </ol>
+            </div>
+
+            <h2 id="dynamic-tool-examples">🛠️ Dynamic Tool Creation Examples</h2>
+
+            <h3 id="custom-date-parser">Custom Date Parser</h3>
+
+            <div class="card">
+                <h4>Parse Legacy Date Format</h4>
+                <p><strong>Claude Prompt:</strong></p>
+                <pre><code>"I have dates in the format '15-JAN-2024 14:30' and need them converted to ISO format. Can you create a tool to parse this?"</code></pre>
+
+                <p><strong>Expected Behavior:</strong></p>
+                <ol>
+                    <li>Claude recognizes the need for a custom tool</li>
+                    <li>Uses <code>create_and_run_tool</code> to create a date parser</li>
+                    <li>Generates Python code to handle the specific format</li>
+                    <li>Tests with the provided example</li>
+                    <li>Returns parsed result: "2024-01-15T14:30:00"</li>
+                </ol>
+
+                <p><strong>Generated Tool Code:</strong></p>
+                <pre><code class="language-python">from datetime import datetime
+
+def parse_legacy_date(date_str):
+    """Parse date in format '15-JAN-2024 14:30' to ISO"""
+    try:
+        # Parse the custom format
+        dt = datetime.strptime(date_str, '%d-%b-%Y %H:%M')
+        return dt.isoformat()
+    except ValueError as e:
+        return f"Error parsing date: {e}"
+
+# Test with provided example
+result = parse_legacy_date("15-JAN-2024 14:30")
+print(f"ISO format: {result}")</code></pre>
+            </div>
+
+            <h3 id="data-transformer">Data Format Transformer</h3>
+
+            <div class="card">
+                <h4>Convert Proprietary Log Format</h4>
+                <p><strong>Claude Prompt:</strong></p>
+                <pre><code>"I have log entries like 'USER:john|ACTION:login|TIME:1705315845|STATUS:OK' and need them converted to JSON. Can you help?"</code></pre>
+
+                <p><strong>Dynamic Tool Creation:</strong></p>
+                <pre><code class="language-python">import json
+
+def parse_log_entry(log_str):
+    """Parse custom log format to JSON"""
+    try:
+        # Split by pipe and then by colon
+        parts = log_str.split('|')
+        result = {}
+        
+        for part in parts:
+            if ':' in part:
+                key, value = part.split(':', 1)
+                result[key.lower()] = value
+        
+        return json.dumps(result, indent=2)
+    except Exception as e:
+        return f"Error: {e}"
+
+# Test with example
+log_entry = "USER:john|ACTION:login|TIME:1705315845|STATUS:OK"
+result = parse_log_entry(log_entry)
+print(result)</code></pre>
+
+                <p><strong>Output:</strong></p>
+                <pre><code class="language-json">{
+  "user": "john",
+  "action": "login", 
+  "time": "1705315845",
+  "status": "OK"
+}</code></pre>
+            </div>
+
+            <h2 id="api-integration">🌐 API Integration Examples</h2>
+
+            <h3 id="python-script">Python Script Integration</h3>
+
+            <div class="card">
+                <h4>Automated Report Generation</h4>
+                <pre><code class="language-python">#!/usr/bin/env python3
+"""
+Daily report generator using Nexus MCP Server API
+"""
+
+import requests
+import json
+from datetime import datetime
+
+NEXUS_URL = "http://localhost:9999"
+
+def call_nexus_tool(tool_name, args):
+    """Execute a Nexus tool via HTTP API"""
+    response = requests.post(f"{NEXUS_URL}/execute", json={
+        "tool_name": tool_name,
+        "arguments": args
+    })
+    return response.json()
+
+def generate_daily_report():
+    """Generate a daily system report"""
+    print("🚀 Daily System Report")
+    print("=" * 50)
+    
+    # Get current time
+    time_result = call_nexus_tool("current_datetime", {})
+    print(f"📅 Generated: {time_result['result']['datetime']}")
+    
+    # Get system info
+    system_result = call_nexus_tool("system_overview", {})
+    system_info = system_result['result']
+    
+    print(f"💻 System: {system_info.get('os', 'Unknown')}")
+    print(f"🔧 CPU Cores: {system_info.get('cpu_count', 'Unknown')}")
+    print(f"💾 Memory: {system_info.get('memory_total', 'Unknown')}")
+    print(f"⏱️  Uptime: {system_info.get('uptime', 'Unknown')}")
+    
+    # Generate secure password for daily use
+    password_result = call_nexus_tool("password_generate", {
+        "length": 12,
+        "include_symbols": True
+    })
+    print(f"🔒 Daily Password: {password_result['result']['password']}")
+    
+    # Calculate some metrics
+    calc_result = call_nexus_tool("add", {"a": 100, "b": 50})
+    print(f"📊 Sample Calculation: {calc_result['result']['sum']}")
+
+if __name__ == "__main__":
+    generate_daily_report()</code></pre>
+            </div>
+
+            <h2 id="troubleshooting-examples">🔍 Troubleshooting Examples</h2>
+
+            <h3 id="common-issues">Common Issues & Solutions</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>Tool Not Found</h4>
+                    <p><strong>Problem:</strong> "Tool 'calculate' not found"</p>
+                    <p><strong>Solution:</strong></p>
+                    <ul>
+                        <li>Check tool name: Use <code>add</code> instead of <code>calculate</code></li>
+                        <li>List available tools first</li>
+                        <li>Check configuration file</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>Invalid Arguments</h4>
+                    <p><strong>Problem:</strong> Arguments validation fails</p>
+                    <p><strong>Solution:</strong></p>
+                    <ul>
+                        <li>Check parameter names and types</li>
+                        <li>Ensure required parameters are provided</li>
+                        <li>Use correct data types (numbers vs strings)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="best-practices">✨ Best Practices</h2>
+
+            <div class="alert alert-info">
+                <h4>💡 Tips for Effective Usage</h4>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li><strong>Be Specific:</strong> Provide clear, detailed prompts for better tool selection</li>
+                    <li><strong>Use Examples:</strong> Include sample data when asking for transformations</li>
+                    <li><strong>Chain Operations:</strong> Break complex tasks into smaller steps</li>
+                    <li><strong>Validate Results:</strong> Always verify outputs, especially for critical operations</li>
+                    <li><strong>Error Handling:</strong> Be prepared for tool failures and have fallback strategies</li>
+                </ul>
+            </div>
+
+            <h3 id="effective-prompts">Effective Prompting</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>✅ Good Prompt</h4>
+                    <pre><code>"Generate a SHA256 hash for the password 'mySecret123' and also create a secure 16-character replacement password with symbols"</code></pre>
+                    <p><strong>Why it's good:</strong> Clear, specific, actionable</p>
+                </div>
+
+                <div class="card">
+                    <h4>❌ Poor Prompt</h4>
+                    <pre><code>"Do some security stuff"</code></pre>
+                    <p><strong>Why it's poor:</strong> Vague, no clear objective</p>
+                </div>
+            </div>
+
+            <h2 id="next-steps">🎯 Next Steps</h2>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🔌 API Examples</h4>
+                    <p>Explore language-specific API integration examples</p>
+                    <a href="api-examples.html" class="nav-link">API Examples →</a>
+                </div>
+                <div class="card">
+                    <h4>🛠️ Dynamic Tools</h4>
+                    <p>Learn more about creating custom tools on-demand</p>
+                    <a href="dynamic-tools.html" class="nav-link">Dynamic Tools →</a>
+                </div>
+                <div class="card">
+                    <h4>📚 Complete Reference</h4>
+                    <p>Browse all available tools and their parameters</p>
+                    <a href="tools-reference.html" class="nav-link">Tools Reference →</a>
+                </div>
+                <div class="card">
+                    <h4>🚀 Deployment</h4>
+                    <p>Deploy Nexus in production environments</p>
+                    <a href="deployment.html" class="nav-link">Deployment Guide →</a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="troubleshooting.html" class="nav-link prev">Troubleshooting</a>
+                <a href="api-examples.html" class="nav-link next">API Examples</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Scripts -->
+    <script>hljs.highlightAll();</script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

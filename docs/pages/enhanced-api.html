@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌐 Enhanced API - Nexus MCP Server Documentation</title>
+    <meta name="description" content="REST API access to Nexus MCP Server from any programming language">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle">☰</button>
+        <h1><span class="rocket">🚀</span>Nexus MCP Server</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search documentation..." autocomplete="off">
+        </div>
+        
+        <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="../index.html">🏠 Overview</a></li>
+            <li><a href="../index.html#quick-start">⚡ Quick Start</a></li>
+            <li><a href="../index.html#key-features">🎯 Key Features</a></li>
+            <li><a href="../index.html#screenshots">📸 Screenshots</a></li>
+            
+            <li class="section-header">Setup & Configuration</li>
+            <li><a href="setup-vscode.html">🔧 VS Code Setup</a></li>
+            <li><a href="setup-claude.html">🤖 Claude Desktop Setup</a></li>
+            <li><a href="web-interface.html">🖥️ Web Interface</a></li>
+            <li><a href="docker.html">🐳 Docker Support</a></li>
+            
+            <li class="section-header">Tools & Features</li>
+            <li><a href="tools-overview.html">📋 Tools Overview</a></li>
+            <li><a href="tools-reference.html">📚 Complete Tools Reference</a></li>
+            <li><a href="dynamic-tools.html">🛠️ Dynamic Tools</a></li>
+            <li><a href="enhanced-api.html" class="active">🌐 Enhanced API</a></li>
+            
+            <li class="section-header">Deployment & Operations</li>
+            <li><a href="deployment.html">🚀 Deployment Guide</a></li>
+            <li><a href="monitoring.html">📊 Monitoring & Metrics</a></li>
+            <li><a href="troubleshooting.html">🔍 Troubleshooting</a></li>
+            
+            <li class="section-header">Examples & Tutorials</li>
+            <li><a href="examples.html">💡 Examples</a></li>
+            <li><a href="api-examples.html">🔌 API Examples</a></li>
+            <li><a href="best-practices.html">✨ Best Practices</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>🌐 Enhanced HTTP API</h1>
+            
+            <p class="lead">
+                Access all Nexus MCP Server tools from any programming language using our comprehensive REST API. No MCP protocol knowledge required!
+            </p>
+
+            <div class="alert alert-success">
+                <strong>🎯 Universal Access:</strong> Use Nexus from Python, JavaScript, Go, Rust, Java, C#, or any language that supports HTTP requests.
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="toc-placeholder"></div>
+
+            <h2 id="overview">🌟 Overview</h2>
+
+            <p>The Enhanced HTTP API transforms Nexus from a Python/MCP-specific tool into a universal, language-agnostic service that can be integrated into any technology stack.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="icon">🔄</span>Dynamic Tool Discovery</h3>
+                    <ul>
+                        <li>Automatic detection of all tools</li>
+                        <li>Zero configuration required</li>
+                        <li>Hot reload support</li>
+                        <li>Metadata extraction</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🌐</span>Language-Agnostic Access</h3>
+                    <ul>
+                        <li>Standard HTTP/JSON interface</li>
+                        <li>Any programming language</li>
+                        <li>Simple integration</li>
+                        <li>No MCP dependency</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📚</span>Comprehensive Documentation</h3>
+                    <ul>
+                        <li>OpenAPI/Swagger docs</li>
+                        <li>Interactive testing</li>
+                        <li>Tool metadata</li>
+                        <li>Error handling details</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📊</span>Production Ready</h3>
+                    <ul>
+                        <li>Prometheus monitoring</li>
+                        <li>Health checks</li>
+                        <li>Error tracking</li>
+                        <li>Performance metrics</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="quick-start">⚡ Quick Start</h2>
+
+            <h3 id="start-server">1. Start the HTTP Server</h3>
+
+            <pre><code class="language-bash"># Start the enhanced HTTP API server
+python http_server.py
+
+# Server starts on http://localhost:9999
+# API documentation available at http://localhost:9999/docs</code></pre>
+
+            <h3 id="test-api">2. Test the API</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🌐 Browser Testing</h4>
+                    <p>Visit the interactive documentation:</p>
+                    <ul>
+                        <li><strong>Swagger UI:</strong> <code>http://localhost:9999/docs</code></li>
+                        <li><strong>ReDoc:</strong> <code>http://localhost:9999/redoc</code></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>⚡ Quick Test</h4>
+                    <pre><code class="language-bash"># Health check
+curl http://localhost:9999/
+
+# List tools
+curl http://localhost:9999/tools
+
+# Execute a tool
+curl -X POST http://localhost:9999/execute \
+  -H "Content-Type: application/json" \
+  -d '{"tool_name": "add", "arguments": {"a": 5, "b": 3}}'</code></pre>
+                </div>
+            </div>
+
+            <h2 id="api-endpoints">📋 API Endpoints</h2>
+
+            <h3 id="health-discovery">Health & Discovery</h3>
+
+            <div class="card">
+                <h4><code>GET /</code> - Health Check</h4>
+                <p>Basic health check endpoint</p>
+                
+                <pre><code class="language-json">{
+  "status": "healthy",
+  "message": "Nexus MCP Server Enhanced API is running",
+  "tools_count": 39,
+  "server_info": {
+    "name": "NexusServer-Enhanced",
+    "version": "3.0.0",
+    "type": "HTTP-MCP Bridge"
+  }
+}</code></pre>
+            </div>
+
+            <div class="card">
+                <h4><code>GET /tools</code> - List All Tools</h4>
+                <p>Get complete list of available tools with metadata</p>
+                
+                <pre><code class="language-json">{
+  "tools": [
+    {
+      "name": "add",
+      "description": "Calculate the sum of two numbers (a + b)",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "a": {"type": "number", "description": "First number"},
+          "b": {"type": "number", "description": "Second number"}
+        },
+        "required": ["a", "b"]
+      }
+    }
+  ],
+  "count": 39,
+  "server_info": {...}
+}</code></pre>
+            </div>
+
+            <div class="card">
+                <h4><code>GET /tools/{tool_name}</code> - Tool Details</h4>
+                <p>Get detailed information about a specific tool</p>
+                
+                <pre><code class="language-json">{
+  "name": "add",
+  "description": "Calculate the sum of two numbers (a + b)",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "a": {"type": "number"},
+      "b": {"type": "number"}
+    },
+    "required": ["a", "b"]
+  }
+}</code></pre>
+            </div>
+
+            <h3 id="tool-execution">Tool Execution</h3>
+
+            <div class="card">
+                <h4><code>POST /execute</code> - Execute Tool</h4>
+                <p>Execute any available tool with parameters</p>
+                
+                <p><strong>Request:</strong></p>
+                <pre><code class="language-json">{
+  "tool_name": "add",
+  "arguments": {
+    "a": 10,
+    "b": 5
+  }
+}</code></pre>
+
+                <p><strong>Response:</strong></p>
+                <pre><code class="language-json">{
+  "success": true,
+  "result": {
+    "sum": 15,
+    "operation": "10 + 5",
+    "message": "Addition completed successfully"
+  },
+  "execution_time": 0.001,
+  "tool_name": "add"
+}</code></pre>
+            </div>
+
+            <div class="card">
+                <h4><code>POST /tools/{tool_name}/execute</code> - Direct Tool Execution</h4>
+                <p>Execute specific tool directly via URL path</p>
+                
+                <pre><code class="language-bash">curl -X POST http://localhost:9999/tools/add/execute \
+  -H "Content-Type: application/json" \
+  -d '{"a": 15, "b": 27}'</code></pre>
+            </div>
+
+            <h3 id="monitoring">Monitoring & Metrics</h3>
+
+            <div class="card">
+                <h4><code>GET /health</code> - Detailed Health Check</h4>
+                <p>Comprehensive health status with system information</p>
+                
+                <pre><code class="language-json">{
+  "status": "healthy",
+  "timestamp": "2024-01-15T10:30:45Z",
+  "uptime": 3600,
+  "system": {
+    "cpu_percent": 5.2,
+    "memory_percent": 15.8,
+    "disk_percent": 45.3
+  },
+  "tools": {
+    "total": 39,
+    "enabled": 39,
+    "failed": 0
+  }
+}</code></pre>
+            </div>
+
+            <div class="card">
+                <h4><code>GET /metrics</code> - Prometheus Metrics</h4>
+                <p>Prometheus-compatible metrics for monitoring</p>
+                
+                <pre><code class="language-text"># HELP mcp_tool_executions_total Total number of tool executions
+# TYPE mcp_tool_executions_total counter
+mcp_tool_executions_total{tool_name="add",status="success"} 42
+
+# HELP mcp_tool_execution_duration_seconds Tool execution duration
+# TYPE mcp_tool_execution_duration_seconds histogram
+mcp_tool_execution_duration_seconds_bucket{tool_name="add",le="0.1"} 38</code></pre>
+            </div>
+
+            <h2 id="language-examples">💻 Language Examples</h2>
+
+            <h3 id="python-example">🐍 Python</h3>
+
+            <div class="card">
+                <h4>Using requests library</h4>
+                <pre><code class="language-python">import requests
+
+# API base URL
+BASE_URL = "http://localhost:9999"
+
+def call_nexus_tool(tool_name, arguments):
+    """Execute a Nexus tool via HTTP API"""
+    response = requests.post(
+        f"{BASE_URL}/execute",
+        json={
+            "tool_name": tool_name,
+            "arguments": arguments
+        }
+    )
+    return response.json()
+
+# Example usage
+result = call_nexus_tool("add", {"a": 10, "b": 5})
+print(f"Result: {result['result']['sum']}")
+
+# Generate secure password
+password_result = call_nexus_tool("password_generate", {
+    "length": 16,
+    "include_symbols": True
+})
+print(f"Password: {password_result['result']['password']}")
+
+# Get system information
+system_info = call_nexus_tool("system_overview", {})
+print(f"OS: {system_info['result']['os']}")
+</code></pre>
+            </div>
+
+            <h3 id="javascript-example">🌐 JavaScript/Node.js</h3>
+
+            <div class="card">
+                <h4>Using fetch API</h4>
+                <pre><code class="language-javascript">class NexusClient {
+    constructor(baseUrl = 'http://localhost:9999') {
+        this.baseUrl = baseUrl;
+    }
+
+    async executeTool(toolName, arguments) {
+        const response = await fetch(`${this.baseUrl}/execute`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                tool_name: toolName,
+                arguments: arguments
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    }
+
+    async listTools() {
+        const response = await fetch(`${this.baseUrl}/tools`);
+        return await response.json();
+    }
+}
+
+// Example usage
+const nexus = new NexusClient();
+
+// Execute mathematical calculation
+nexus.executetool('add', { a: 15, b: 27 })
+    .then(result => {
+        console.log(`Sum: ${result.result.sum}`);
+    });
+
+// Generate UUID
+nexus.executeTools('generate_uuid', { version: 4 })
+    .then(result => {
+        console.log(`UUID: ${result.result.uuid}`);
+    });
+</code></pre>
+            </div>
+
+            <h3 id="go-example">🔷 Go</h3>
+
+            <div class="card">
+                <h4>Using net/http</h4>
+                <pre><code class="language-go">package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+type NexusClient struct {
+    BaseURL string
+    Client  *http.Client
+}
+
+type ExecuteRequest struct {
+    ToolName  string                 `json:"tool_name"`
+    Arguments map[string]interface{} `json:"arguments"`
+}
+
+type ExecuteResponse struct {
+    Success       bool                   `json:"success"`
+    Result        map[string]interface{} `json:"result"`
+    ExecutionTime float64                `json:"execution_time"`
+    ToolName      string                 `json:"tool_name"`
+}
+
+func NewNexusClient(baseURL string) *NexusClient {
+    return &NexusClient{
+        BaseURL: baseURL,
+        Client:  &http.Client{},
+    }
+}
+
+func (c *NexusClient) ExecuteTool(toolName string, arguments map[string]interface{}) (*ExecuteResponse, error) {
+    reqBody := ExecuteRequest{
+        ToolName:  toolName,
+        Arguments: arguments,
+    }
+    
+    jsonData, err := json.Marshal(reqBody)
+    if err != nil {
+        return nil, err
+    }
+    
+    resp, err := c.Client.Post(
+        c.BaseURL+"/execute",
+        "application/json",
+        bytes.NewBuffer(jsonData),
+    )
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+    
+    body, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+    
+    var result ExecuteResponse
+    err = json.Unmarshal(body, &result)
+    return &result, err
+}
+
+func main() {
+    client := NewNexusClient("http://localhost:9999")
+    
+    // Execute addition
+    result, err := client.ExecuteTool("add", map[string]interface{}{
+        "a": 10,
+        "b": 5,
+    })
+    
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    
+    fmt.Printf("Sum: %.0f\n", result.Result["sum"])
+}
+</code></pre>
+            </div>
+
+            <h3 id="rust-example">🦀 Rust</h3>
+
+            <div class="card">
+                <h4>Using reqwest and serde</h4>
+                <pre><code class="language-rust">use reqwest;
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+
+#[derive(Serialize)]
+struct ExecuteRequest {
+    tool_name: String,
+    arguments: HashMap<String, serde_json::Value>,
+}
+
+#[derive(Deserialize)]
+struct ExecuteResponse {
+    success: bool,
+    result: HashMap<String, serde_json::Value>,
+    execution_time: f64,
+    tool_name: String,
+}
+
+struct NexusClient {
+    base_url: String,
+    client: reqwest::Client,
+}
+
+impl NexusClient {
+    fn new(base_url: String) -> Self {
+        NexusClient {
+            base_url,
+            client: reqwest::Client::new(),
+        }
+    }
+
+    async fn execute_tool(&self, tool_name: &str, arguments: HashMap<String, serde_json::Value>) -> Result<ExecuteResponse, Box<dyn std::error::Error>> {
+        let request = ExecuteRequest {
+            tool_name: tool_name.to_string(),
+            arguments,
+        };
+
+        let response = self.client
+            .post(&format!("{}/execute", self.base_url))
+            .json(&request)
+            .send()
+            .await?;
+
+        let result: ExecuteResponse = response.json().await?;
+        Ok(result)
+    }
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let client = NexusClient::new("http://localhost:9999".to_string());
+    
+    let mut args = HashMap::new();
+    args.insert("a".to_string(), serde_json::Value::Number(serde_json::Number::from(10)));
+    args.insert("b".to_string(), serde_json::Value::Number(serde_json::Number::from(5)));
+    
+    let result = client.execute_tool("add", args).await?;
+    
+    println!("Sum: {}", result.result.get("sum").unwrap());
+    
+    Ok(())
+}
+</code></pre>
+            </div>
+
+            <h2 id="error-handling">🚨 Error Handling</h2>
+
+            <h3 id="error-responses">Error Response Format</h3>
+
+            <div class="card">
+                <h4>Standard Error Response</h4>
+                <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "TOOL_NOT_FOUND",
+    "message": "Tool 'invalid_tool' not found",
+    "details": {
+      "available_tools": ["add", "subtract", "multiply", "divide"],
+      "suggestion": "Did you mean 'add'?"
+    }
+  },
+  "timestamp": "2024-01-15T10:30:45Z"
+}</code></pre>
+            </div>
+
+            <h3 id="error-codes">Common Error Codes</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>HTTP Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>TOOL_NOT_FOUND</code></td>
+                        <td>404</td>
+                        <td>Requested tool does not exist</td>
+                    </tr>
+                    <tr>
+                        <td><code>INVALID_ARGUMENTS</code></td>
+                        <td>400</td>
+                        <td>Tool arguments are invalid or missing</td>
+                    </tr>
+                    <tr>
+                        <td><code>EXECUTION_ERROR</code></td>
+                        <td>500</td>
+                        <td>Tool execution failed</td>
+                    </tr>
+                    <tr>
+                        <td><code>TIMEOUT</code></td>
+                        <td>408</td>
+                        <td>Tool execution timed out</td>
+                    </tr>
+                    <tr>
+                        <td><code>RATE_LIMIT</code></td>
+                        <td>429</td>
+                        <td>Too many requests</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 id="configuration">⚙️ Configuration</h2>
+
+            <h3 id="server-config">Server Configuration</h3>
+
+            <pre><code class="language-python"># Start server with custom configuration
+python http_server.py \
+    --host 0.0.0.0 \
+    --port 8080 \
+    --workers 4 \
+    --timeout 300</code></pre>
+
+            <h3 id="environment-variables">Environment Variables</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>NEXUS_API_HOST</code></td>
+                        <td><code>localhost</code></td>
+                        <td>API server host</td>
+                    </tr>
+                    <tr>
+                        <td><code>NEXUS_API_PORT</code></td>
+                        <td><code>9999</code></td>
+                        <td>API server port</td>
+                    </tr>
+                    <tr>
+                        <td><code>NEXUS_API_WORKERS</code></td>
+                        <td><code>1</code></td>
+                        <td>Number of worker processes</td>
+                    </tr>
+                    <tr>
+                        <td><code>NEXUS_API_TIMEOUT</code></td>
+                        <td><code>60</code></td>
+                        <td>Request timeout in seconds</td>
+                    </tr>
+                    <tr>
+                        <td><code>NEXUS_ENABLE_CORS</code></td>
+                        <td><code>true</code></td>
+                        <td>Enable CORS headers</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 id="benefits">✨ Benefits</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="icon">🔧</span>No Tool Modifications</h3>
+                    <p>Enhancement is implemented upstream - no changes to individual tool files required</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🌍</span>Language Independence</h3>
+                    <p>Use Nexus from any programming language that supports HTTP requests</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📈</span>Automatic Scaling</h3>
+                    <p>New tools are immediately API-accessible without additional configuration</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🚀</span>Production Ready</h3>
+                    <p>Comprehensive error handling, monitoring, and performance tracking</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📋</span>Standards Compliant</h3>
+                    <p>OpenAPI documentation and REST principles for easy integration</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">👨‍💻</span>Developer Friendly</h3>
+                    <p>Interactive documentation, examples, and comprehensive error messages</p>
+                </div>
+            </div>
+
+            <h2 id="next-steps">🎯 Next Steps</h2>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🔌 API Examples</h4>
+                    <p>Explore practical examples in multiple programming languages</p>
+                    <a href="api-examples.html" class="nav-link">API Examples →</a>
+                </div>
+                <div class="card">
+                    <h4>🚀 Deployment</h4>
+                    <p>Deploy the API server in production environments</p>
+                    <a href="deployment.html" class="nav-link">Deployment Guide →</a>
+                </div>
+                <div class="card">
+                    <h4>📊 Monitoring</h4>
+                    <p>Set up monitoring and metrics for the API</p>
+                    <a href="monitoring.html" class="nav-link">Monitoring →</a>
+                </div>
+                <div class="card">
+                    <h4>📚 All Tools</h4>
+                    <p>Browse the complete collection of available tools</p>
+                    <a href="tools-reference.html" class="nav-link">Tools Reference →</a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="dynamic-tools.html" class="nav-link prev">Dynamic Tools</a>
+                <a href="deployment.html" class="nav-link next">Deployment Guide</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Scripts -->
+    <script>hljs.highlightAll();</script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

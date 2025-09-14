@@ -1,0 +1,73 @@
+# GitHub Pages Configuration for Nexus MCP Server Documentation
+
+# Build settings
+source: docs
+destination: _site
+
+# Plugins
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+
+# Site settings
+title: "Nexus MCP Server Documentation"
+description: "Comprehensive documentation for Nexus MCP Server - Your advanced MCP hub with 500+ tools for LLM integration"
+url: "https://fabriziosalmi.github.io"
+baseurl: "/nexus-mcp-server"
+
+# Repository information
+github:
+  repository_name: nexus-mcp-server
+  repository_url: https://github.com/fabriziosalmi/nexus-mcp-server
+
+# Exclude from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - .gitignore
+
+# Include
+include:
+  - assets/
+  - pages/
+
+# Markdown processing
+markdown: kramdown
+highlighter: rouge
+
+# Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+# Collections
+collections:
+  pages:
+    output: true
+    permalink: /:name/
+
+# SEO settings
+author: Fabrizio Salmi
+twitter:
+  username: fabriziosalmi
+  card: summary_large_image
+
+# Social
+social:
+  name: Fabrizio Salmi
+  links:
+    - https://github.com/fabriziosalmi
+
+# Analytics (optional)
+google_analytics: # Add your Google Analytics ID here if needed
+
+# Custom variables
+nexus:
+  version: "3.0.0"
+  tools_count: "500+"
+  categories: 17

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛠️ Dynamic Tools - Nexus MCP Server Documentation</title>
+    <meta name="description" content="Learn about creating custom tools on-the-fly with Nexus MCP Server's dynamic tool creation system">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle">☰</button>
+        <h1><span class="rocket">🚀</span>Nexus MCP Server</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search documentation..." autocomplete="off">
+        </div>
+        
+        <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="../index.html">🏠 Overview</a></li>
+            <li><a href="../index.html#quick-start">⚡ Quick Start</a></li>
+            <li><a href="../index.html#key-features">🎯 Key Features</a></li>
+            <li><a href="../index.html#screenshots">📸 Screenshots</a></li>
+            
+            <li class="section-header">Setup & Configuration</li>
+            <li><a href="setup-vscode.html">🔧 VS Code Setup</a></li>
+            <li><a href="setup-claude.html">🤖 Claude Desktop Setup</a></li>
+            <li><a href="web-interface.html">🖥️ Web Interface</a></li>
+            <li><a href="docker.html">🐳 Docker Support</a></li>
+            
+            <li class="section-header">Tools & Features</li>
+            <li><a href="tools-overview.html">📋 Tools Overview</a></li>
+            <li><a href="tools-reference.html">📚 Complete Tools Reference</a></li>
+            <li><a href="dynamic-tools.html" class="active">🛠️ Dynamic Tools</a></li>
+            <li><a href="enhanced-api.html">🌐 Enhanced API</a></li>
+            
+            <li class="section-header">Deployment & Operations</li>
+            <li><a href="deployment.html">🚀 Deployment Guide</a></li>
+            <li><a href="monitoring.html">📊 Monitoring & Metrics</a></li>
+            <li><a href="troubleshooting.html">🔍 Troubleshooting</a></li>
+            
+            <li class="section-header">Examples & Tutorials</li>
+            <li><a href="examples.html">💡 Examples</a></li>
+            <li><a href="api-examples.html">🔌 API Examples</a></li>
+            <li><a href="best-practices.html">✨ Best Practices</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>🛠️ Dynamic One-Time Tools</h1>
+            
+            <p class="lead">
+                The most advanced Nexus feature that allows LLMs to create custom tools on-the-fly for specific tasks that don't have existing solutions. This represents the pinnacle of agentic capabilities.
+            </p>
+
+            <div class="alert alert-success">
+                <strong>🎯 Revolutionary Feature:</strong> Dynamic tool creation enables true on-demand tool generation for any computational task within security constraints.
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="toc-placeholder"></div>
+
+            <h2 id="overview">🌟 Overview</h2>
+
+            <p>Dynamic One-Time Tools enable the following groundbreaking workflow:</p>
+
+            <ol>
+                <li><strong>LLM Identifies Gap:</strong> Determines no existing tool can solve the problem</li>
+                <li><strong>Code Generation:</strong> LLM writes Python code for the specific task</li>
+                <li><strong>Dynamic Execution:</strong> <code>create_and_run_tool</code> executes the code safely</li>
+                <li><strong>Result Integration:</strong> Output is returned for further processing</li>
+            </ol>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="icon">🔒</span>Maximum Security</h3>
+                    <p>Complete Docker isolation with resource limits and security validation</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="icon">⚡</span>On-Demand Creation</h3>
+                    <p>Tools are created, executed, and disposed for specific tasks</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="icon">🎯</span>Task-Specific</h3>
+                    <p>Perfect solution for unique problems that don't fit existing tools</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="icon">🧠</span>AI-Driven</h3>
+                    <p>LLMs can autonomously create tools based on natural language requirements</p>
+                </div>
+            </div>
+
+            <h2 id="function-reference">📚 Function Reference</h2>
+
+            <h3 id="function-signature">Function Signature</h3>
+
+            <pre><code class="language-python">create_and_run_tool(
+    python_code: str, 
+    timeout: int = 60, 
+    memory_limit_mb: int = 128
+) -> Dict[str, Any]</code></pre>
+
+            <h3 id="parameters">Parameters</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Range</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>python_code</code></td>
+                        <td>str</td>
+                        <td>Required</td>
+                        <td>-</td>
+                        <td>The Python code for the custom tool</td>
+                    </tr>
+                    <tr>
+                        <td><code>timeout</code></td>
+                        <td>int</td>
+                        <td>60</td>
+                        <td>10-300</td>
+                        <td>Execution timeout in seconds</td>
+                    </tr>
+                    <tr>
+                        <td><code>memory_limit_mb</code></td>
+                        <td>int</td>
+                        <td>128</td>
+                        <td>32-512</td>
+                        <td>Memory limit in megabytes</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 id="security-features">🔒 Security Features</h2>
+
+            <p>The dynamic tool system implements multiple layers of security to ensure safe execution:</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="icon">🔍</span>Code Security Validation</h3>
+                    <ul>
+                        <li>Scans for dangerous patterns</li>
+                        <li>Validates import statements</li>
+                        <li>Checks for file system access</li>
+                        <li>Prevents network operations</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🐳</span>Docker Isolation</h3>
+                    <ul>
+                        <li>Complete environment isolation</li>
+                        <li>No access to host system</li>
+                        <li>Temporary container creation</li>
+                        <li>Automatic cleanup after execution</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">⚙️</span>Resource Limits</h3>
+                    <ul>
+                        <li>CPU usage restrictions (0.5 cores)</li>
+                        <li>Memory limits (32-512MB)</li>
+                        <li>Execution time limits (10-300s)</li>
+                        <li>No network access</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📁</span>Filesystem Restrictions</h3>
+                    <ul>
+                        <li>Read-only filesystem</li>
+                        <li>Limited /tmp space (10MB)</li>
+                        <li>No persistent storage</li>
+                        <li>Non-root execution (nexus:1000)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="execution-modes">🚀 Execution Modes</h2>
+
+            <h3 id="docker-mode">1. Docker Mode (Recommended)</h3>
+
+            <div class="alert alert-success">
+                <h4>🎯 Production Ready</h4>
+                <p>The Docker mode provides maximum security and is recommended for all production deployments.</p>
+            </div>
+
+            <div class="card">
+                <h4>Features:</h4>
+                <ul>
+                    <li><strong>Maximum Security:</strong> Complete isolation in Docker container</li>
+                    <li><strong>Resource Limits:</strong> Memory (32-512MB), CPU (0.5 cores)</li>
+                    <li><strong>Network Isolation:</strong> No network access during execution</li>
+                    <li><strong>Filesystem:</strong> Read-only with limited /tmp access (10MB)</li>
+                    <li><strong>User Security:</strong> Non-root execution (nexus:1000)</li>
+                    <li><strong>Cleanup:</strong> Automatic container and image removal</li>
+                </ul>
+            </div>
+
+            <h3 id="fallback-mode">2. Fallback Mode</h3>
+
+            <div class="alert alert-warning">
+                <h4>⚠️ Limited Security</h4>
+                <p>Fallback mode is used when Docker is unavailable. It provides reduced security compared to Docker mode.</p>
+            </div>
+
+            <div class="card">
+                <h4>Features:</h4>
+                <ul>
+                    <li><strong>Local Execution:</strong> Runs on the host system when Docker is unavailable</li>
+                    <li><strong>Restricted Environment:</strong> Limited builtins and import restrictions</li>
+                    <li><strong>Resource Limits:</strong> Memory and CPU limits via system calls</li>
+                    <li><strong>Security:</strong> Code validation and import filtering</li>
+                    <li><strong>Isolation:</strong> Process-level isolation only</li>
+                </ul>
+            </div>
+
+            <h2 id="response-format">📋 Response Format</h2>
+
+            <p>The function returns a comprehensive response with execution details:</p>
+
+            <pre><code class="language-json">{
+  "success": true,
+  "tool_id": "abc12345",
+  "execution_mode": "docker_isolated",
+  "timeout_seconds": 60,
+  "memory_limit_mb": 128,
+  "security_check": {
+    "safe": true,
+    "violations": []
+  },
+  "docker_image": "nexus-dynamic-tool-abc12345",
+  "container_name": "nexus-dynamic-tool-abc12345",
+  "container_execution_time_seconds": 1.234,
+  "container_return_code": 0,
+  "container_stderr": "",
+  "tool_result": {
+    "success": true,
+    "tool_id": "abc12345",
+    "execution_time_seconds": 0.123,
+    "stdout": "Tool output here...",
+    "stderr": "",
+    "message": "Dynamic tool executed successfully"
+  }
+}</code></pre>
+
+            <h2 id="examples">💡 Usage Examples</h2>
+
+            <h3 id="example1">Example 1: Custom Date Converter</h3>
+
+            <div class="card">
+                <h4>Scenario: Convert proprietary date format</h4>
+                <p><strong>Task:</strong> Convert "20250907-143022" format to ISO format</p>
+                
+                <pre><code class="language-python"># LLM generates this code dynamically
+python_code = """
+from datetime import datetime
+
+custom_date = "20250907-143022"
+date_part, time_part = custom_date.split("-")
+
+dt = datetime(
+    int(date_part[:4]),    # year
+    int(date_part[4:6]),   # month  
+    int(date_part[6:8]),   # day
+    int(time_part[:2]),    # hour
+    int(time_part[2:4]),   # minute
+    int(time_part[4:6])    # second
+)
+
+print(f"ISO: {dt.isoformat()}")
+print(f"Human: {dt.strftime('%Y-%m-%d %H:%M:%S')}")
+"""
+
+# Claude calls this automatically
+result = create_and_run_tool(python_code, timeout=30, memory_limit_mb=64)</code></pre>
+
+                <p><strong>Output:</strong></p>
+                <pre><code>ISO: 2025-09-07T14:30:22
+Human: 2025-09-07 14:30:22</code></pre>
+            </div>
+
+            <h3 id="example2">Example 2: Data Format Converter</h3>
+
+            <div class="card">
+                <h4>Scenario: Convert legacy pipe-separated data to JSON</h4>
+                <p><strong>Task:</strong> Parse "JOHN|25|NYC|50000" format into structured JSON</p>
+
+                <pre><code class="language-python"># Dynamic tool for legacy data conversion
+python_code = """
+import json
+
+legacy_data = "JOHN|25|NYC|50000\\nJANE|30|LA|75000"
+records = []
+
+for line in legacy_data.strip().split("\\n"):
+    if line.strip():
+        name, age, city, salary = line.split("|")
+        records.append({
+            "name": name,
+            "age": int(age),
+            "city": city,
+            "salary": int(salary)
+        })
+
+print(json.dumps(records, indent=2))
+"""
+
+result = create_and_run_tool(python_code, timeout=45)</code></pre>
+
+                <p><strong>Output:</strong></p>
+                <pre><code class="language-json">[
+  {
+    "name": "JOHN",
+    "age": 25,
+    "city": "NYC",
+    "salary": 50000
+  },
+  {
+    "name": "JANE",
+    "age": 30,
+    "city": "LA",
+    "salary": 75000
+  }
+]</code></pre>
+            </div>
+
+            <h3 id="example3">Example 3: Mathematical Calculator</h3>
+
+            <div class="card">
+                <h4>Scenario: Custom mathematical function</h4>
+                <p><strong>Task:</strong> Calculate the nth pentagonal number with verification</p>
+
+                <pre><code class="language-python"># Specialized mathematical calculation
+python_code = """
+def pentagonal_number(n):
+    '''Calculate the nth pentagonal number: n(3n-1)/2'''
+    return n * (3 * n - 1) // 2
+
+def verify_pentagonal(p):
+    '''Verify if a number is pentagonal'''
+    # Using quadratic formula: n = (1 + sqrt(1 + 24p)) / 6
+    import math
+    discriminant = 1 + 24 * p
+    if discriminant < 0:
+        return False
+    
+    sqrt_d = math.sqrt(discriminant)
+    n = (1 + sqrt_d) / 6
+    
+    return n == int(n) and n > 0
+
+# Calculate pentagonal numbers
+for i in range(1, 11):
+    pent = pentagonal_number(i)
+    is_valid = verify_pentagonal(pent)
+    print(f"P({i}) = {pent}, Valid: {is_valid}")
+
+# Test specific number
+test_num = 145
+print(f"\\nIs {test_num} pentagonal? {verify_pentagonal(test_num)}")
+"""
+
+result = create_and_run_tool(python_code, timeout=30, memory_limit_mb=64)</code></pre>
+            </div>
+
+            <h2 id="use-cases">🎯 Use Cases</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="icon">🔄</span>Data Format Conversion</h3>
+                    <ul>
+                        <li>Convert proprietary formats</li>
+                        <li>Parse legacy data structures</li>
+                        <li>Transform between data formats</li>
+                        <li>Extract structured data from text</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🧮</span>Mathematical Computations</h3>
+                    <ul>
+                        <li>Custom mathematical algorithms</li>
+                        <li>Statistical calculations</li>
+                        <li>Number theory operations</li>
+                        <li>Complex formula implementations</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📝</span>Text Processing</h3>
+                    <ul>
+                        <li>Custom parsing logic</li>
+                        <li>Text analysis algorithms</li>
+                        <li>Format-specific extraction</li>
+                        <li>Content transformation</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🔬</span>Algorithm Implementation</h3>
+                    <ul>
+                        <li>Specific algorithms for unique problems</li>
+                        <li>Prototype development</li>
+                        <li>Research computations</li>
+                        <li>One-off calculations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="best-practices">✨ Best Practices</h2>
+
+            <h3 id="code-quality">Code Quality Guidelines</h3>
+
+            <div class="alert alert-info">
+                <h4>💡 Writing Effective Dynamic Tools</h4>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li><strong>Clear Output:</strong> Use print() statements for results</li>
+                    <li><strong>Error Handling:</strong> Include try/except blocks for robustness</li>
+                    <li><strong>Documentation:</strong> Add comments for complex logic</li>
+                    <li><strong>Input Validation:</strong> Validate data before processing</li>
+                    <li><strong>Efficiency:</strong> Optimize for the given resource limits</li>
+                </ul>
+            </div>
+
+            <h3 id="security-guidelines">Security Guidelines</h3>
+
+            <div class="alert alert-warning">
+                <h4>🔒 Security Considerations</h4>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li><strong>No Network Access:</strong> Tools cannot make external requests</li>
+                    <li><strong>No File System:</strong> Limited to temporary storage only</li>
+                    <li><strong>No Persistent State:</strong> Each execution is isolated</li>
+                    <li><strong>Resource Limits:</strong> Stay within memory and time constraints</li>
+                    <li><strong>Safe Libraries:</strong> Only use standard Python libraries</li>
+                </ul>
+            </div>
+
+            <h3 id="performance-tips">Performance Tips</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>⚡ Optimization</h4>
+                    <ul>
+                        <li>Minimize memory usage</li>
+                        <li>Use efficient algorithms</li>
+                        <li>Avoid unnecessary computations</li>
+                        <li>Profile execution time</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>🎯 Resource Management</h4>
+                    <ul>
+                        <li>Choose appropriate timeout values</li>
+                        <li>Set memory limits based on task complexity</li>
+                        <li>Monitor execution patterns</li>
+                        <li>Clean up variables when possible</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="troubleshooting">🔍 Troubleshooting</h2>
+
+            <h3 id="common-errors">Common Errors</h3>
+
+            <div class="alert alert-error">
+                <h4>🚫 Execution Failures</h4>
+                <p><strong>Symptoms:</strong> Tool execution fails or times out</p>
+                <p><strong>Solutions:</strong></p>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li>Check Docker is installed and running</li>
+                    <li>Verify Python code syntax</li>
+                    <li>Ensure imports are available</li>
+                    <li>Increase timeout or memory limits</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-warning">
+                <h4>⚠️ Security Violations</h4>
+                <p><strong>Symptoms:</strong> Code is rejected before execution</p>
+                <p><strong>Solutions:</strong></p>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li>Remove file system access attempts</li>
+                    <li>Avoid network-related imports</li>
+                    <li>Check for dangerous function calls</li>
+                    <li>Use only allowed standard libraries</li>
+                </ul>
+            </div>
+
+            <h3 id="debugging-tips">Debugging Tips</h3>
+
+            <ol>
+                <li><strong>Test Locally:</strong> Verify code works in a standard Python environment</li>
+                <li><strong>Use Print Statements:</strong> Add debug output to track execution</li>
+                <li><strong>Check Resource Usage:</strong> Monitor memory and time consumption</li>
+                <li><strong>Simplify First:</strong> Start with simple versions and build complexity</li>
+            </ol>
+
+            <h2 id="limitations">⚠️ Limitations</h2>
+
+            <div class="alert alert-warning">
+                <h4>Current Limitations</h4>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li><strong>No Network Access:</strong> Cannot make HTTP requests or external connections</li>
+                    <li><strong>Standard Library Only:</strong> No pip packages or external dependencies</li>
+                    <li><strong>No Persistent Storage:</strong> Cannot save files or maintain state between executions</li>
+                    <li><strong>Resource Constraints:</strong> Limited CPU, memory, and execution time</li>
+                    <li><strong>Docker Dependency:</strong> Requires Docker for maximum security features</li>
+                </ul>
+            </div>
+
+            <h2 id="next-steps">🎯 Next Steps</h2>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>💡 Try Examples</h4>
+                    <p>Experiment with the provided examples and create your own variations</p>
+                    <a href="examples.html" class="nav-link">Examples & Tutorials →</a>
+                </div>
+                <div class="card">
+                    <h4>🌐 API Integration</h4>
+                    <p>Use dynamic tools through the REST API from any programming language</p>
+                    <a href="enhanced-api.html" class="nav-link">Enhanced API →</a>
+                </div>
+                <div class="card">
+                    <h4>🚀 Deployment</h4>
+                    <p>Deploy Nexus with dynamic tools in production environments</p>
+                    <a href="deployment.html" class="nav-link">Deployment Guide →</a>
+                </div>
+                <div class="card">
+                    <h4>📚 Complete Tools</h4>
+                    <p>Explore all 500+ built-in tools available alongside dynamic creation</p>
+                    <a href="tools-reference.html" class="nav-link">Tools Reference →</a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="tools-reference.html" class="nav-link prev">Tools Reference</a>
+                <a href="enhanced-api.html" class="nav-link next">Enhanced API</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Scripts -->
+    <script>hljs.highlightAll();</script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

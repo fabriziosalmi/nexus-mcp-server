@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📋 Tools Overview - Nexus MCP Server Documentation</title>
+    <meta name="description" content="Comprehensive overview of 500+ tools across 17 categories in Nexus MCP Server">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle">☰</button>
+        <h1><span class="rocket">🚀</span>Nexus MCP Server</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search documentation..." autocomplete="off">
+        </div>
+        
+        <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="../index.html">🏠 Overview</a></li>
+            <li><a href="../index.html#quick-start">⚡ Quick Start</a></li>
+            <li><a href="../index.html#key-features">🎯 Key Features</a></li>
+            <li><a href="../index.html#screenshots">📸 Screenshots</a></li>
+            
+            <li class="section-header">Setup & Configuration</li>
+            <li><a href="setup-vscode.html">🔧 VS Code Setup</a></li>
+            <li><a href="setup-claude.html">🤖 Claude Desktop Setup</a></li>
+            <li><a href="web-interface.html">🖥️ Web Interface</a></li>
+            <li><a href="docker.html">🐳 Docker Support</a></li>
+            
+            <li class="section-header">Tools & Features</li>
+            <li><a href="tools-overview.html" class="active">📋 Tools Overview</a></li>
+            <li><a href="tools-reference.html">📚 Complete Tools Reference</a></li>
+            <li><a href="dynamic-tools.html">🛠️ Dynamic Tools</a></li>
+            <li><a href="enhanced-api.html">🌐 Enhanced API</a></li>
+            
+            <li class="section-header">Deployment & Operations</li>
+            <li><a href="deployment.html">🚀 Deployment Guide</a></li>
+            <li><a href="monitoring.html">📊 Monitoring & Metrics</a></li>
+            <li><a href="troubleshooting.html">🔍 Troubleshooting</a></li>
+            
+            <li class="section-header">Examples & Tutorials</li>
+            <li><a href="examples.html">💡 Examples</a></li>
+            <li><a href="api-examples.html">🔌 API Examples</a></li>
+            <li><a href="best-practices.html">✨ Best Practices</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>📋 Tools Overview</h1>
+            
+            <p class="lead">
+                Nexus MCP Server provides over 500 functions across 120+ tools in 17 categories, making it the most comprehensive MCP server available for LLM integration.
+            </p>
+
+            <!-- Statistics Overview -->
+            <div class="feature-grid" style="margin: 2rem 0;">
+                <div class="feature-card">
+                    <h3><span class="icon">🛠️</span>120+ Tools</h3>
+                    <p>Comprehensive collection of specialized tools</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="icon">⚙️</span>500+ Functions</h3>
+                    <p>Individual functions across all tool categories</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="icon">🏗️</span>17 Categories</h3>
+                    <p>Organized into logical functional groups</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="icon">🔒</span>Security First</h3>
+                    <p>All tools include comprehensive security features</p>
+                </div>
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="toc-placeholder"></div>
+
+            <h2 id="categories">🗂️ Tool Categories</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="icon">🧮</span>Mathematical Operations</h3>
+                    <p>Advanced calculator with scientific functions, statistics, financial calculations, and unit conversions</p>
+                    <ul>
+                        <li>Basic arithmetic operations</li>
+                        <li>Trigonometric functions</li>
+                        <li>Statistical analysis</li>
+                        <li>Financial calculations</li>
+                        <li>Unit conversions (50+ units)</li>
+                    </ul>
+                    <span class="badge badge-primary">25+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🔒</span>Security & Cryptography</h3>
+                    <p>Comprehensive security toolkit with encryption, hashing, password generation, and vulnerability scanning</p>
+                    <ul>
+                        <li>Password generation & validation</li>
+                        <li>Cryptographic hashing</li>
+                        <li>Encryption/decryption</li>
+                        <li>Network security scanning</li>
+                        <li>Vulnerability assessment</li>
+                    </ul>
+                    <span class="badge badge-error">40+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">💻</span>Development Tools</h3>
+                    <p>Code generation, analysis, and development utilities for multiple programming languages</p>
+                    <ul>
+                        <li>Project scaffolding</li>
+                        <li>Code quality analysis</li>
+                        <li>API generation</li>
+                        <li>Template creation</li>
+                        <li>Git operations</li>
+                    </ul>
+                    <span class="badge badge-warning">35+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📁</span>File Operations</h3>
+                    <p>Comprehensive file management with format conversion, archiving, and document processing</p>
+                    <ul>
+                        <li>Format conversion (PDF, images, documents)</li>
+                        <li>Archive management (ZIP, TAR, 7Z)</li>
+                        <li>PDF processing</li>
+                        <li>Image manipulation</li>
+                        <li>Document analysis</li>
+                    </ul>
+                    <span class="badge badge-success">50+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🖥️</span>System Management</h3>
+                    <p>System monitoring, process management, and performance analysis tools</p>
+                    <ul>
+                        <li>System information gathering</li>
+                        <li>Process monitoring</li>
+                        <li>Performance analysis</li>
+                        <li>Environment management</li>
+                        <li>Resource monitoring</li>
+                    </ul>
+                    <span class="badge badge-primary">30+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🌐</span>Network Tools</h3>
+                    <p>Network diagnostics, connectivity testing, and web-related utilities</p>
+                    <ul>
+                        <li>Network connectivity testing</li>
+                        <li>DNS operations</li>
+                        <li>Port scanning</li>
+                        <li>Website analysis</li>
+                        <li>HTTP requests</li>
+                    </ul>
+                    <span class="badge badge-success">30+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📊</span>Data Processing</h3>
+                    <p>Data manipulation, analysis, and transformation tools for various formats</p>
+                    <ul>
+                        <li>JSON/YAML processing</li>
+                        <li>CSV manipulation</li>
+                        <li>Data validation</li>
+                        <li>Statistical analysis</li>
+                        <li>Text processing</li>
+                    </ul>
+                    <span class="badge badge-warning">45+ Tools</span>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">🔤</span>String Operations</h3>
+                    <p>Text manipulation, encoding/decoding, and string analysis utilities</p>
+                    <ul>
+                        <li>String manipulation</li>
+                        <li>Regular expressions</li>
+                        <li>Encoding/decoding (Base64, URL, etc.)</li>
+                        <li>Text analysis</li>
+                        <li>Pattern matching</li>
+                    </ul>
+                    <span class="badge badge-primary">25+ Tools</span>
+                </div>
+            </div>
+
+            <h2 id="complete-table">📋 Complete Tools Table</h2>
+
+            <p>Here's the comprehensive list of all available tools organized by the number of functions:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tool Category</th>
+                        <th>File</th>
+                        <th>Functions</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Encoding Tools</strong></td>
+                        <td><code>encoding_tools.py</code></td>
+                        <td><span class="badge badge-primary">19</span></td>
+                        <td>Data encoding and decoding (Base64, URL, HTML, Hex)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Calculator</strong></td>
+                        <td><code>calculator.py</code></td>
+                        <td><span class="badge badge-primary">16</span></td>
+                        <td>Advanced mathematical operations and calculations</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cloud Tools</strong></td>
+                        <td><code>cloud_tools.py</code></td>
+                        <td><span class="badge badge-primary">16</span></td>
+                        <td>Services and APIs for cloud platforms (AWS, Azure, GCP)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Network Tools</strong></td>
+                        <td><code>network_tools.py</code></td>
+                        <td><span class="badge badge-success">15</span></td>
+                        <td>Network diagnostics and utilities</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Code Execution Tools</strong></td>
+                        <td><code>code_execution_tools.py</code></td>
+                        <td><span class="badge badge-error">14</span></td>
+                        <td>Secure environments for code execution + Dynamic Tools</td>
+                    </tr>
+                    <tr>
+                        <td><strong>File Converter</strong></td>
+                        <td><code>file_converter.py</code></td>
+                        <td><span class="badge badge-success">14</span></td>
+                        <td>Conversion between different file formats</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Docker Tools</strong></td>
+                        <td><code>docker_tools.py</code></td>
+                        <td><span class="badge badge-warning">13</span></td>
+                        <td>Docker container management</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Network Security Tools</strong></td>
+                        <td><code>network_security_tools.py</code></td>
+                        <td><span class="badge badge-error">13</span></td>
+                        <td>Network security scanning</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Regex Tools</strong></td>
+                        <td><code>regex_tools.py</code></td>
+                        <td><span class="badge badge-warning">13</span></td>
+                        <td>Regular expression utilities</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security Tools</strong></td>
+                        <td><code>security_tools.py</code></td>
+                        <td><span class="badge badge-error">13</span></td>
+                        <td>Security and cryptography utilities</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Code Generation Tools</strong></td>
+                        <td><code>code_generation_tools.py</code></td>
+                        <td><span class="badge badge-warning">12</span></td>
+                        <td>Code template and structure generation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DateTime Tools</strong></td>
+                        <td><code>datetime_tools.py</code></td>
+                        <td><span class="badge badge-warning">12</span></td>
+                        <td>Date and time manipulation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Image Processing</strong></td>
+                        <td><code>image_processing.py</code></td>
+                        <td><span class="badge badge-warning">12</span></td>
+                        <td>Image manipulation and analysis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>JSON/YAML Tools</strong></td>
+                        <td><code>json_yaml_tools.py</code></td>
+                        <td><span class="badge badge-warning">12</span></td>
+                        <td>JSON and YAML manipulation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Log Analysis Tools</strong></td>
+                        <td><code>log_analysis_tools.py</code></td>
+                        <td><span class="badge badge-warning">12</span></td>
+                        <td>Log file parsing and analysis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Markdown Tools</strong></td>
+                        <td><code>markdown_tools.py</code></td>
+                        <td><span class="badge badge-warning">12</span></td>
+                        <td>Markdown document processing</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-info">
+                <strong>📚 Complete Reference:</strong> For detailed documentation of every function, parameters, and examples, see the <a href="tools-reference.html">Complete Tools Reference</a> page.
+            </div>
+
+            <h2 id="featured-tools">⭐ Featured Tools</h2>
+
+            <h3 id="dynamic-tools">🛠️ Dynamic Tool Creation</h3>
+
+            <div class="card">
+                <h4>Most Advanced Feature: <code>create_and_run_tool</code></h4>
+                <p>The pinnacle of Nexus capabilities - create custom tools on-the-fly for any computational task:</p>
+                
+                <ul>
+                    <li><strong>Docker Isolation:</strong> Secure execution in isolated containers</li>
+                    <li><strong>Resource Limits:</strong> Memory (32-512MB), CPU (0.5 cores)</li>
+                    <li><strong>Security Validation:</strong> Automatic code safety checks</li>
+                    <li><strong>Temporary Execution:</strong> Tools are created, used, and disposed</li>
+                </ul>
+
+                <p><strong>Example Use Cases:</strong></p>
+                <ul>
+                    <li>Custom data format converters</li>
+                    <li>Specific mathematical algorithms</li>
+                    <li>Proprietary file parsers</li>
+                    <li>Unique text processing tasks</li>
+                </ul>
+
+                <a href="dynamic-tools.html" class="nav-link">Learn More About Dynamic Tools →</a>
+            </div>
+
+            <h3 id="calculator">🧮 Advanced Calculator</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>Mathematical Operations</h4>
+                    <ul>
+                        <li>Basic arithmetic with precision control</li>
+                        <li>Trigonometric functions</li>
+                        <li>Logarithmic operations</li>
+                        <li>Number theory functions</li>
+                        <li>Statistical calculations</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Example Functions</h4>
+                    <ul>
+                        <li><code>add(a, b)</code> - Addition</li>
+                        <li><code>calculate_sin(angle)</code> - Trigonometry</li>
+                        <li><code>fibonacci(n)</code> - Number sequences</li>
+                        <li><code>statistical_mean(data)</code> - Statistics</li>
+                        <li><code>compound_interest(p, r, t)</code> - Finance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 id="security-tools">🔒 Security Suite</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>Cryptography Tools</h4>
+                    <ul>
+                        <li>Password generation with custom rules</li>
+                        <li>Hash functions (MD5, SHA1, SHA256, etc.)</li>
+                        <li>Encryption/decryption (AES, RSA)</li>
+                        <li>Digital signatures</li>
+                        <li>Key derivation functions</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Security Scanning</h4>
+                    <ul>
+                        <li>Port scanning and discovery</li>
+                        <li>Vulnerability assessment</li>
+                        <li>SSL/TLS certificate analysis</li>
+                        <li>Network security auditing</li>
+                        <li>Security headers validation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="tool-integration">🔗 Tool Integration</h2>
+
+            <h3 id="client-detection">🎯 Automatic Client Detection</h3>
+
+            <p>Nexus automatically optimizes the tool set based on the client:</p>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>VS Code Integration</h4>
+                    <ul>
+                        <li><strong>Tool Limit:</strong> 99 most essential tools</li>
+                        <li><strong>Performance:</strong> Optimized for editor responsiveness</li>
+                        <li><strong>Selection:</strong> Curated for development workflows</li>
+                        <li><strong>Memory:</strong> Minimal resource usage</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Claude Desktop</h4>
+                    <ul>
+                        <li><strong>Full Access:</strong> All 500+ functions available</li>
+                        <li><strong>Advanced Features:</strong> Dynamic tool creation enabled</li>
+                        <li><strong>Complex Tasks:</strong> Support for multi-step workflows</li>
+                        <li><strong>Resource Rich:</strong> Full computational capabilities</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 id="configuration">⚙️ Tool Configuration</h3>
+
+            <p>Customize which tools are available through various methods:</p>
+
+            <div class="alert alert-info">
+                <h4>Configuration Options:</h4>
+                <ul style="margin: 0.5rem 0 0 1.5rem;">
+                    <li><strong>Config Files:</strong> Use pre-configured JSON files for different scenarios</li>
+                    <li><strong>Environment Variables:</strong> Control tool categories via environment flags</li>
+                    <li><strong>Web Interface:</strong> Dynamic tool management at runtime</li>
+                    <li><strong>API Configuration:</strong> Programmatic control via REST API</li>
+                </ul>
+            </div>
+
+            <h2 id="performance">⚡ Performance Characteristics</h2>
+
+            <h3 id="resource-usage">Resource Usage</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Resource</th>
+                        <th>Baseline</th>
+                        <th>With Active Tools</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Memory</td>
+                        <td>50-100MB</td>
+                        <td>100-300MB</td>
+                        <td>Scales with tool complexity</td>
+                    </tr>
+                    <tr>
+                        <td>CPU</td>
+                        <td>&lt; 1%</td>
+                        <td>Variable</td>
+                        <td>Depends on tool operations</td>
+                    </tr>
+                    <tr>
+                        <td>Storage</td>
+                        <td>~100MB</td>
+                        <td>+Dynamic tools</td>
+                        <td>Docker images for dynamic tools</td>
+                    </tr>
+                    <tr>
+                        <td>Network</td>
+                        <td>None</td>
+                        <td>Tool-dependent</td>
+                        <td>Only for network-based tools</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 id="optimization-tips">Optimization Tips</h3>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>🎯 Tool Selection</h4>
+                    <p>Choose only the tools you need to minimize resource usage</p>
+                    <pre><code class="language-json">{
+  "enabled_tools": [
+    "calculator",
+    "system_info",
+    "security_tools"
+  ]
+}</code></pre>
+                </div>
+                <div class="card">
+                    <h4>🚀 Performance Mode</h4>
+                    <p>Use minimal configurations for resource-constrained environments</p>
+                    <pre><code class="language-bash">cp config-minimal.json config.json</code></pre>
+                </div>
+            </div>
+
+            <h2 id="next-steps">🎯 Next Steps</h2>
+
+            <div class="feature-grid">
+                <div class="card">
+                    <h4>📚 Complete Reference</h4>
+                    <p>Explore detailed documentation for every tool and function</p>
+                    <a href="tools-reference.html" class="nav-link">Tools Reference →</a>
+                </div>
+                <div class="card">
+                    <h4>🛠️ Dynamic Tools</h4>
+                    <p>Learn about creating custom tools on-demand</p>
+                    <a href="dynamic-tools.html" class="nav-link">Dynamic Tools →</a>
+                </div>
+                <div class="card">
+                    <h4>💡 Examples</h4>
+                    <p>See practical examples and use cases</p>
+                    <a href="examples.html" class="nav-link">Examples →</a>
+                </div>
+                <div class="card">
+                    <h4>🌐 API Access</h4>
+                    <p>Use tools from any programming language</p>
+                    <a href="enhanced-api.html" class="nav-link">Enhanced API →</a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="web-interface.html" class="nav-link prev">Web Interface</a>
+                <a href="tools-reference.html" class="nav-link next">Complete Tools Reference</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Scripts -->
+    <script>hljs.highlightAll();</script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
