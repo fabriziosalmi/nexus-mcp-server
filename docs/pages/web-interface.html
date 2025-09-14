@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🖥️ Web Interface - Nexus MCP Server Documentation</title>
+    <meta name="description" content="Complete guide to using the Nexus MCP Server web-based configuration interface">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle">☰</button>
+        <h1><span class="rocket">🚀</span>Nexus MCP Server</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search documentation..." autocomplete="off">
+        </div>
+        
+        <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="../index.html">🏠 Overview</a></li>
+            <li><a href="../index.html#quick-start">⚡ Quick Start</a></li>
+            <li><a href="../index.html#key-features">🎯 Key Features</a></li>
+            <li><a href="../index.html#screenshots">📸 Screenshots</a></li>
+            
+            <li class="section-header">Setup & Configuration</li>
+            <li><a href="setup-vscode.html">🔧 VS Code Setup</a></li>
+            <li><a href="setup-claude.html">🤖 Claude Desktop Setup</a></li>
+            <li><a href="web-interface.html" class="active">🖥️ Web Interface</a></li>
+            <li><a href="docker.html">🐳 Docker Support</a></li>
+            
+            <li class="section-header">Tools & Features</li>
+            <li><a href="tools-overview.html">📋 Tools Overview</a></li>
+            <li><a href="tools-reference.html">📚 Complete Tools Reference</a></li>
+            <li><a href="dynamic-tools.html">🛠️ Dynamic Tools</a></li>
+            <li><a href="enhanced-api.html">🌐 Enhanced API</a></li>
+            
+            <li class="section-header">Deployment & Operations</li>
+            <li><a href="deployment.html">🚀 Deployment Guide</a></li>
+            <li><a href="monitoring.html">📊 Monitoring & Metrics</a></li>
+            <li><a href="troubleshooting.html">🔍 Troubleshooting</a></li>
+            
+            <li class="section-header">Examples & Tutorials</li>
+            <li><a href="examples.html">💡 Examples</a></li>
+            <li><a href="api-examples.html">🔌 API Examples</a></li>
+            <li><a href="best-practices.html">✨ Best Practices</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>🖥️ Web Interface</h1>
+            <p class="lead">Manage and configure your Nexus MCP Server through an intuitive web-based dashboard with real-time monitoring and dynamic tool management.</p>
+
+            <div class="alert alert-info">
+                <strong>🎯 Key Benefits:</strong> Real-time tool management, zero-downtime configuration updates, live monitoring, and interactive tool testing - all without server restarts.
+            </div>
+
+            <h2 id="overview">📋 Interface Overview</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="icon">🔧</span>Tool Dashboard</h3>
+                    <p>Visual interface to enable/disable tools with real-time configuration updates</p>
+                    <ul>
+                        <li>Automatic tool discovery</li>
+                        <li>Intuitive checkbox interface</li>
+                        <li>Quick select/deselect all</li>
+                        <li>Tool descriptions and metadata</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📊</span>Real-time Metrics</h3>
+                    <p>Live monitoring of server status and performance metrics</p>
+                    <ul>
+                        <li>Active tools count</li>
+                        <li>Server health status</li>
+                        <li>Active sessions monitoring</li>
+                        <li>Auto-refreshing data</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">📋</span>Live Log Stream</h3>
+                    <p>Real-time log monitoring with color-coded severity levels</p>
+                    <ul>
+                        <li>Server-Sent Events (SSE)</li>
+                        <li>Colored log levels</li>
+                        <li>Auto-scroll to latest</li>
+                        <li>Configurable buffer size</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="icon">⚡</span>Hot Reload</h3>
+                    <p>Apply configuration changes without server downtime</p>
+                    <ul>
+                        <li>Dynamic configuration updates</li>
+                        <li>Automatic config.json saving</li>
+                        <li>Instant feedback</li>
+                        <li>Zero interruption</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="getting-started">🚀 Getting Started</h2>
+
+            <h3 id="launching">Launch the Web Interface</h3>
+            <div class="card">
+                <h4>Start the UI Server</h4>
+                <pre><code class="language-bash"># Launch the web interface server
+python ui_server.py
+
+# The interface will be available at:
+# http://localhost:8888</code></pre>
+                
+                <div class="alert alert-success">
+                    <strong>✅ Default Configuration:</strong>
+                    <ul style="margin: 0; padding-left: 1.5rem;">
+                        <li><strong>Host:</strong> 0.0.0.0 (accepts connections from all addresses)</li>
+                        <li><strong>Port:</strong> 8888</li>
+                        <li><strong>Log Level:</strong> INFO</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 id="access">Access the Dashboard</h3>
+            <div class="card">
+                <h4>Open in Browser</h4>
+                <p>Navigate to <strong>http://localhost:8888</strong> in your web browser to access the dashboard.</p>
+                
+                <div class="alert alert-warning">
+                    <strong>⚠️ Network Access:</strong> The UI server binds to 0.0.0.0, making it accessible from other devices on your network. Ensure proper firewall configuration in production environments.
+                </div>
+            </div>
+
+            <h2 id="dashboard-features">🎛️ Dashboard Features</h2>
+
+            <h3 id="tool-management">Tool Management Panel</h3>
+            <div class="card">
+                <h4>Dynamic Tool Configuration</h4>
+                <p>The main dashboard provides a comprehensive view of all available tools:</p>
+                
+                <ul>
+                    <li><strong>Tool Discovery:</strong> Automatically scans the <code>tools/</code> directory for Python modules</li>
+                    <li><strong>Status Indicators:</strong> Visual checkboxes show enabled/disabled state</li>
+                    <li><strong>Tool Descriptions:</strong> Extracted from module docstrings and comments</li>
+                    <li><strong>Bulk Operations:</strong> Select All / Deselect All buttons for quick configuration</li>
+                </ul>
+
+                <h5>Quick Actions:</h5>
+                <pre><code class="language-bash"># Enable all mathematical tools
+# Use the web interface to quickly enable:
+# - Basic Math (add, subtract, multiply, divide)
+# - Advanced Math (factorial, fibonacci, prime_check)
+# - Statistics (mean, median, mode)
+
+# Enable file operation tools
+# Toggle on file-related tools:
+# - File Operations (create, read, write, delete)
+# - Directory Operations (list, create, remove)
+# - Archive Operations (zip, unzip, tar)</code></pre>
+            </div>
+
+            <h3 id="metrics-monitoring">Metrics & Monitoring</h3>
+            <div class="card">
+                <h4>Real-time Server Metrics</h4>
+                <p>The metrics panel displays live server information updated every 5 seconds:</p>
+                
+                <div class="feature-grid" style="margin: 1rem 0;">
+                    <div class="metric-card">
+                        <h5>📊 Tools Status</h5>
+                        <ul>
+                            <li>Enabled tools count</li>
+                            <li>Total available tools</li>
+                            <li>Configuration status</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h5>🔗 Connection Info</h5>
+                        <ul>
+                            <li>Active MCP sessions</li>
+                            <li>HTTP API status</li>
+                            <li>Server uptime</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3 id="log-streaming">Live Log Streaming</h3>
+            <div class="card">
+                <h4>Real-time Log Monitoring</h4>
+                <p>Monitor server activity with the integrated log viewer:</p>
+                
+                <ul>
+                    <li><strong>Server-Sent Events:</strong> Real-time log streaming without page refresh</li>
+                    <li><strong>Color Coding:</strong> Different colors for INFO, WARNING, ERROR levels</li>
+                    <li><strong>Auto-scroll:</strong> Automatically scrolls to show the latest entries</li>
+                    <li><strong>Buffer Management:</strong> Maintains the last 100 log entries in memory</li>
+                </ul>
+
+                <h5>Log Levels:</h5>
+                <ul>
+                    <li><span style="color: #28a745;">🟢 INFO:</span> General information and successful operations</li>
+                    <li><span style="color: #ffc107;">🟡 WARNING:</span> Potential issues or important notices</li>
+                    <li><span style="color: #dc3545;">🔴 ERROR:</span> Errors and exceptions</li>
+                </ul>
+            </div>
+
+            <h2 id="configuration">⚙️ Configuration Management</h2>
+
+            <h3 id="hot-reload">Hot Reload System</h3>
+            <div class="card">
+                <h4>Zero-Downtime Updates</h4>
+                <p>The web interface provides seamless configuration updates:</p>
+                
+                <ol>
+                    <li><strong>Make Changes:</strong> Toggle tools on/off using the checkboxes</li>
+                    <li><strong>Auto-Save:</strong> Configuration is automatically saved to <code>config.json</code></li>
+                    <li><strong>Hot Reload:</strong> Server reloads configuration without stopping</li>
+                    <li><strong>Immediate Effect:</strong> Changes take effect instantly</li>
+                </ol>
+
+                <div class="alert alert-success">
+                    <strong>✅ Benefits of Hot Reload:</strong>
+                    <ul style="margin: 0; padding-left: 1.5rem;">
+                        <li>No service interruption</li>
+                        <li>Active connections maintained</li>
+                        <li>Instant configuration application</li>
+                        <li>Real-time feedback</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 id="config-backup">Configuration Backup</h3>
+            <div class="card">
+                <h4>Automatic Backup System</h4>
+                <pre><code class="language-bash"># Configuration files are automatically backed up before changes
+# Backup location: config.json.backup.timestamp
+
+# Example backup files:
+config.json.backup.2024-01-15-10-30-00
+config.json.backup.2024-01-15-11-45-30
+config.json.backup.2024-01-15-14-20-15
+
+# Restore from backup if needed:
+cp config.json.backup.2024-01-15-10-30-00 config.json
+# Then restart the server</code></pre>
+            </div>
+
+            <h2 id="api-endpoints">🔌 Web Interface API</h2>
+
+            <h3 id="ui-api-endpoints">Available Endpoints</h3>
+            <div class="card">
+                <h4>Tool Management API</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Method</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/api/tools/available</code></td>
+                            <td>GET</td>
+                            <td>List all tools with current status</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/tools/configure</code></td>
+                            <td>POST</td>
+                            <td>Update tool configuration and reload</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/metrics</code></td>
+                            <td>GET</td>
+                            <td>Get real-time server metrics</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/logs/stream</code></td>
+                            <td>GET</td>
+                            <td>Server-Sent Events log stream</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/health</code></td>
+                            <td>GET</td>
+                            <td>UI server health check</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="api-usage">API Usage Examples</h3>
+            <div class="card">
+                <h4>Programmatic Configuration</h4>
+                <pre><code class="language-python"># Get available tools
+import requests
+
+# List all tools with status
+response = requests.get('http://localhost:8888/api/tools/available')
+tools_info = response.json()
+
+print(f"Total tools: {len(tools_info['tools'])}")
+for tool in tools_info['tools']:
+    status = "✅" if tool['enabled'] else "❌"
+    print(f"{status} {tool['name']}: {tool['description']}")
+
+# Update tool configuration
+new_config = {
+    "enabled_tools": [
+        "add", "subtract", "multiply", "divide",
+        "create_file", "read_file", "list_files"
+    ]
+}
+
+response = requests.post(
+    'http://localhost:8888/api/tools/configure',
+    json=new_config
+)
+
+if response.status_code == 200:
+    print("✅ Configuration updated successfully")
+else:
+    print(f"❌ Error: {response.text}")
+</code></pre>
+            </div>
+
+            <h2 id="monitoring-integration">📊 Monitoring Integration</h2>
+
+            <h3 id="prometheus-metrics">Prometheus Integration</h3>
+            <div class="card">
+                <h4>Metrics Collection</h4>
+                <p>The web interface integrates with the existing Prometheus monitoring system:</p>
+                
+                <ul>
+                    <li><strong>Tool Usage Metrics:</strong> Track which tools are most frequently used</li>
+                    <li><strong>Configuration Changes:</strong> Monitor configuration update frequency</li>
+                    <li><strong>UI Access:</strong> Track web interface usage patterns</li>
+                    <li><strong>Error Rates:</strong> Monitor configuration errors and failures</li>
+                </ul>
+
+                <h5>Example Metrics:</h5>
+                <pre><code class="language-bash"># View metrics endpoint
+curl http://localhost:8888/api/metrics
+
+# Example response:
+{
+  "ui_server": {
+    "uptime_seconds": 3600,
+    "total_configurations": 15,
+    "active_sessions": 2
+  },
+  "nexus_server": {
+    "enabled_tools": 25,
+    "total_tools": 120,
+    "active_connections": 3
+  }
+}</code></pre>
+            </div>
+
+            <h2 id="security">🔒 Security Considerations</h2>
+
+            <div class="alert alert-warning">
+                <h4>⚠️ Security Best Practices</h4>
+                <ul>
+                    <li><strong>Network Binding:</strong> UI server binds to 0.0.0.0 - restrict access in production</li>
+                    <li><strong>Authentication:</strong> No built-in authentication - use reverse proxy for auth</li>
+                    <li><strong>Configuration Access:</strong> UI can modify server configuration - limit access</li>
+                    <li><strong>Log Exposure:</strong> Live logs may contain sensitive information</li>
+                </ul>
+            </div>
+
+            <h3 id="production-security">Production Security Setup</h3>
+            <div class="card">
+                <h4>Reverse Proxy with Authentication</h4>
+                <pre><code class="language-bash"># Example Nginx configuration for secured access
+server {
+    listen 80;
+    server_name nexus-ui.yourdomain.com;
+    
+    # Basic authentication
+    auth_basic "Nexus MCP UI";
+    auth_basic_user_file /etc/nginx/.htpasswd;
+    
+    location / {
+        proxy_pass http://localhost:8888;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        
+        # WebSocket support for SSE
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+
+# Create authentication file
+sudo htpasswd -c /etc/nginx/.htpasswd admin</code></pre>
+            </div>
+
+            <h2 id="troubleshooting">🔍 Troubleshooting</h2>
+
+            <h3 id="common-issues">Common Issues</h3>
+            <div class="card">
+                <h4>UI Server Won't Start</h4>
+                <div class="alert alert-warning">
+                    <h5>Port Already in Use</h5>
+                    <pre><code class="language-bash"># Check what's using port 8888
+sudo netstat -tlnp | grep :8888
+
+# Or use lsof
+sudo lsof -i :8888
+
+# Start on different port
+python ui_server.py --port 8889</code></pre>
+                </div>
+
+                <div class="alert alert-warning">
+                    <h5>Can't Connect to Main Server</h5>
+                    <pre><code class="language-bash"># Verify main server is running
+curl http://localhost:9999/
+
+# Check UI server logs
+python ui_server.py --log-level DEBUG
+
+# Verify configuration file exists
+ls -la config.json</code></pre>
+                </div>
+            </div>
+
+            <h3 id="debugging">Debugging Features</h3>
+            <div class="card">
+                <h4>Debug Mode</h4>
+                <pre><code class="language-bash"># Run UI server in debug mode
+python ui_server.py --debug
+
+# Enable verbose logging
+python ui_server.py --log-level DEBUG
+
+# Check server status
+python ui_server.py --status</code></pre>
+            </div>
+
+            <h2 id="advanced-features">🚀 Advanced Features</h2>
+
+            <h3 id="custom-themes">Custom Themes</h3>
+            <div class="card">
+                <h4>Customization Options</h4>
+                <p>The web interface supports customization through CSS variables and themes:</p>
+                
+                <ul>
+                    <li><strong>Dark/Light Mode:</strong> Automatic theme switching based on system preference</li>
+                    <li><strong>Custom CSS:</strong> Override styles with custom CSS files</li>
+                    <li><strong>Responsive Design:</strong> Mobile-friendly interface</li>
+                    <li><strong>Accessibility:</strong> ARIA labels and keyboard navigation support</li>
+                </ul>
+            </div>
+
+            <h3 id="plugin-system">Plugin System</h3>
+            <div class="card">
+                <h4>Extending the Interface</h4>
+                <p>The web interface can be extended with custom plugins:</p>
+                
+                <pre><code class="language-python"># Example plugin structure
+# plugins/custom_dashboard.py
+
+class CustomDashboardPlugin:
+    def __init__(self, ui_server):
+        self.ui_server = ui_server
+    
+    def register_routes(self):
+        @self.ui_server.app.route('/api/custom/dashboard')
+        def custom_dashboard():
+            return {"custom_data": "example"}
+    
+    def get_widget_html(self):
+        return '''
+        <div class="custom-widget">
+            <h3>Custom Dashboard</h3>
+            <p>Your custom content here</p>
+        </div>
+        '''
+
+# Load plugin
+plugin = CustomDashboardPlugin(ui_server)
+plugin.register_routes()
+</code></pre>
+            </div>
+
+            <h2 id="next-steps">🎯 Next Steps</h2>
+
+            <div class="nav-grid">
+                <div class="card">
+                    <h4>📊 Monitoring</h4>
+                    <p>Set up comprehensive monitoring and metrics</p>
+                    <a href="monitoring.html" class="nav-link">Monitoring Guide →</a>
+                </div>
+                <div class="card">
+                    <h4>🔌 API Examples</h4>
+                    <p>Learn to integrate with the HTTP API</p>
+                    <a href="api-examples.html" class="nav-link">API Examples →</a>
+                </div>
+                <div class="card">
+                    <h4>🐳 Docker</h4>
+                    <p>Deploy with Docker containers</p>
+                    <a href="docker.html" class="nav-link">Docker Support →</a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="setup-claude.html" class="nav-link prev">Claude Desktop Setup</a>
+                <a href="docker.html" class="nav-link next">Docker Support</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔌 API Examples - Nexus MCP Server Documentation</title>
+    <meta name="description" content="Practical examples and code samples for using the Nexus MCP Server HTTP API">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle">☰</button>
+        <h1><span class="rocket">🚀</span>Nexus MCP Server</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search documentation..." autocomplete="off">
+        </div>
+        
+        <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="../index.html">🏠 Overview</a></li>
+            <li><a href="../index.html#quick-start">⚡ Quick Start</a></li>
+            <li><a href="../index.html#key-features">🎯 Key Features</a></li>
+            <li><a href="../index.html#screenshots">📸 Screenshots</a></li>
+            
+            <li class="section-header">Setup & Configuration</li>
+            <li><a href="setup-vscode.html">🔧 VS Code Setup</a></li>
+            <li><a href="setup-claude.html">🤖 Claude Desktop Setup</a></li>
+            <li><a href="web-interface.html">🖥️ Web Interface</a></li>
+            <li><a href="docker.html">🐳 Docker Support</a></li>
+            
+            <li class="section-header">Tools & Features</li>
+            <li><a href="tools-overview.html">📋 Tools Overview</a></li>
+            <li><a href="tools-reference.html">📚 Complete Tools Reference</a></li>
+            <li><a href="dynamic-tools.html">🛠️ Dynamic Tools</a></li>
+            <li><a href="enhanced-api.html">🌐 Enhanced API</a></li>
+            
+            <li class="section-header">Deployment & Operations</li>
+            <li><a href="deployment.html">🚀 Deployment Guide</a></li>
+            <li><a href="monitoring.html">📊 Monitoring & Metrics</a></li>
+            <li><a href="troubleshooting.html">🔍 Troubleshooting</a></li>
+            
+            <li class="section-header">Examples & Tutorials</li>
+            <li><a href="examples.html">💡 Examples</a></li>
+            <li><a href="api-examples.html" class="active">🔌 API Examples</a></li>
+            <li><a href="best-practices.html">✨ Best Practices</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>🔌 API Examples</h1>
+            <p class="lead">Practical examples and code samples for integrating with the Nexus MCP Server HTTP API across different programming languages.</p>
+
+            <div class="alert alert-info">
+                <strong>🎯 Base URL:</strong> All examples assume the server is running at <code>http://localhost:9999</code>. Adjust the URL according to your deployment.
+            </div>
+
+            <h2 id="getting-started">🚀 Getting Started</h2>
+
+            <h3 id="health-check">Health Check</h3>
+            <div class="card">
+                <h4>Verify Server Status</h4>
+                <pre><code class="language-bash"># Using curl
+curl http://localhost:9999/
+
+# Using httpie
+http GET localhost:9999</code></pre>
+                
+                <h5>Expected Response:</h5>
+                <pre><code class="language-json">{
+  "status": "healthy",
+  "message": "Nexus MCP Server Enhanced API is running",
+  "tools_count": 39,
+  "server_info": {
+    "name": "NexusServer-Enhanced",
+    "version": "3.0.0",
+    "type": "HTTP-MCP Bridge"
+  }
+}</code></pre>
+            </div>
+
+            <h3 id="list-tools">List Available Tools</h3>
+            <div class="card">
+                <h4>Discover Tools</h4>
+                <pre><code class="language-bash"># Get all tools
+curl http://localhost:9999/tools
+
+# Get tools with detailed schemas
+curl http://localhost:9999/tools?include_schema=true</code></pre>
+            </div>
+
+            <h2 id="python-examples">🐍 Python Examples</h2>
+
+            <h3 id="python-basic">Basic API Client</h3>
+            <div class="card">
+                <h4>Simple Python Client</h4>
+                <pre><code class="language-python">import requests
+import json
+
+class NexusClient:
+    def __init__(self, base_url="http://localhost:9999"):
+        self.base_url = base_url
+        self.session = requests.Session()
+    
+    def health_check(self):
+        """Check server health"""
+        response = self.session.get(f"{self.base_url}/")
+        return response.json()
+    
+    def list_tools(self, include_schema=False):
+        """List available tools"""
+        params = {"include_schema": include_schema} if include_schema else {}
+        response = self.session.get(f"{self.base_url}/tools", params=params)
+        return response.json()
+    
+    def execute_tool(self, tool_name, arguments=None):
+        """Execute a tool with given arguments"""
+        payload = {
+            "tool_name": tool_name,
+            "arguments": arguments or {}
+        }
+        response = self.session.post(
+            f"{self.base_url}/execute",
+            json=payload,
+            headers={"Content-Type": "application/json"}
+        )
+        return response.json()
+
+# Usage example
+client = NexusClient()
+
+# Check server health
+health = client.health_check()
+print(f"Server status: {health['status']}")
+
+# List tools
+tools = client.list_tools()
+print(f"Available tools: {len(tools['tools'])}")
+
+# Execute a simple math operation
+result = client.execute_tool("add", {"a": 5, "b": 3})
+print(f"5 + 3 = {result['result']}")
+</code></pre>
+            </div>
+
+            <h3 id="python-advanced">Advanced Python Examples</h3>
+            <div class="card">
+                <h4>File Operations</h4>
+                <pre><code class="language-python">def file_operations_example():
+    client = NexusClient()
+    
+    # Create a file
+    create_result = client.execute_tool("create_file", {
+        "path": "test.txt",
+        "content": "Hello, Nexus!"
+    })
+    print(f"File created: {create_result}")
+    
+    # Read the file
+    read_result = client.execute_tool("read_file", {
+        "path": "test.txt"
+    })
+    print(f"File content: {read_result['content']}")
+    
+    # List files in directory
+    list_result = client.execute_tool("list_files", {
+        "path": "."
+    })
+    print(f"Files: {list_result['files']}")
+
+file_operations_example()
+</code></pre>
+            </div>
+
+            <div class="card">
+                <h4>System Information</h4>
+                <pre><code class="language-python">def system_info_example():
+    client = NexusClient()
+    
+    # Get system information
+    sys_info = client.execute_tool("get_system_info")
+    print("System Info:")
+    for key, value in sys_info['result'].items():
+        print(f"  {key}: {value}")
+    
+    # Check disk usage
+    disk_usage = client.execute_tool("get_disk_usage", {"path": "/"})
+    print(f"Disk usage: {disk_usage}")
+    
+    # Get current time
+    current_time = client.execute_tool("get_current_time")
+    print(f"Current time: {current_time['result']}")
+
+system_info_example()
+</code></pre>
+            </div>
+
+            <h2 id="javascript-examples">🟨 JavaScript Examples</h2>
+
+            <h3 id="javascript-nodejs">Node.js Client</h3>
+            <div class="card">
+                <h4>Node.js with Axios</h4>
+                <pre><code class="language-javascript">const axios = require('axios');
+
+class NexusClient {
+    constructor(baseUrl = 'http://localhost:9999') {
+        this.baseUrl = baseUrl;
+        this.client = axios.create({
+            baseURL: baseUrl,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+    async healthCheck() {
+        try {
+            const response = await this.client.get('/');
+            return response.data;
+        } catch (error) {
+            throw new Error(`Health check failed: ${error.message}`);
+        }
+    }
+
+    async listTools(includeSchema = false) {
+        const params = includeSchema ? { include_schema: true } : {};
+        const response = await this.client.get('/tools', { params });
+        return response.data;
+    }
+
+    async executeTool(toolName, arguments = {}) {
+        const payload = {
+            tool_name: toolName,
+            arguments: arguments
+        };
+        const response = await this.client.post('/execute', payload);
+        return response.data;
+    }
+}
+
+// Usage example
+async function main() {
+    const client = new NexusClient();
+    
+    try {
+        // Check health
+        const health = await client.healthCheck();
+        console.log(`Server status: ${health.status}`);
+        
+        // List tools
+        const tools = await client.listTools();
+        console.log(`Available tools: ${tools.tools.length}`);
+        
+        // Execute calculator
+        const result = await client.executeTool('multiply', { a: 6, b: 7 });
+        console.log(`6 * 7 = ${result.result}`);
+        
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+}
+
+main();
+</code></pre>
+            </div>
+
+            <h3 id="javascript-browser">Browser JavaScript</h3>
+            <div class="card">
+                <h4>Browser Fetch API</h4>
+                <pre><code class="language-javascript">class BrowserNexusClient {
+    constructor(baseUrl = 'http://localhost:9999') {
+        this.baseUrl = baseUrl;
+    }
+
+    async makeRequest(endpoint, options = {}) {
+        const url = `${this.baseUrl}${endpoint}`;
+        const response = await fetch(url, {
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            },
+            ...options
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    }
+
+    async executeTool(toolName, arguments = {}) {
+        return await this.makeRequest('/execute', {
+            method: 'POST',
+            body: JSON.stringify({
+                tool_name: toolName,
+                arguments: arguments
+            })
+        });
+    }
+}
+
+// Usage in web page
+document.addEventListener('DOMContentLoaded', async () => {
+    const client = new BrowserNexusClient();
+    
+    // Example: Random number generation
+    const randomResult = await client.executeTool('generate_random_number', {
+        min: 1,
+        max: 100
+    });
+    
+    document.getElementById('result').textContent = 
+        `Random number: ${randomResult.result}`;
+});
+</code></pre>
+            </div>
+
+            <h2 id="curl-examples">🌐 cURL Examples</h2>
+
+            <h3 id="curl-basic">Basic Operations</h3>
+            <div class="card">
+                <h4>Mathematical Operations</h4>
+                <pre><code class="language-bash"># Addition
+curl -X POST http://localhost:9999/execute \
+  -H "Content-Type: application/json" \
+  -d '{"tool_name": "add", "arguments": {"a": 10, "b": 5}}'
+
+# Subtraction
+curl -X POST http://localhost:9999/execute \
+  -H "Content-Type: application/json" \
+  -d '{"tool_name": "subtract", "arguments": {"a": 10, "b": 3}}'
+
+# Calculate percentage
+curl -X POST http://localhost:9999/execute \
+  -H "Content-Type: application/json" \
+  -d '{"tool_name": "calculate_percentage", "arguments": {"value": 25, "total": 200}}'
+</code></pre>
+            </div>
+
+            <h3 id="curl-text">Text Processing</h3>
+            <div class="card">
+                <h4>String Operations</h4>
+                <pre><code class="language-bash"># Count words
+curl -X POST http://localhost:9999/execute \
+  -H "Content-Type: application/json" \
+  -d '{"tool_name": "count_words", "arguments": {"text": "Hello world from Nexus"}}'
+
+# Convert to uppercase
+curl -X POST http://localhost:9999/execute \
+  -H "Content-Type: application/json" \
+  -d '{"tool_name": "to_uppercase", "arguments": {"text": "hello nexus"}}'
+
+# Generate UUID
+curl -X POST http://localhost:9999/execute \
+  -H "Content-Type: application/json" \
+  -d '{"tool_name": "generate_uuid"}'
+</code></pre>
+            </div>
+
+            <h2 id="go-examples">🐹 Go Examples</h2>
+
+            <div class="card">
+                <h4>Go HTTP Client</h4>
+                <pre><code class="language-go">package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+type NexusClient struct {
+    BaseURL string
+    Client  *http.Client
+}
+
+type ExecuteRequest struct {
+    ToolName  string                 `json:"tool_name"`
+    Arguments map[string]interface{} `json:"arguments"`
+}
+
+type ExecuteResponse struct {
+    Result interface{} `json:"result"`
+    Error  string      `json:"error,omitempty"`
+}
+
+func NewNexusClient(baseURL string) *NexusClient {
+    return &NexusClient{
+        BaseURL: baseURL,
+        Client:  &http.Client{},
+    }
+}
+
+func (nc *NexusClient) ExecuteTool(toolName string, args map[string]interface{}) (*ExecuteResponse, error) {
+    reqBody := ExecuteRequest{
+        ToolName:  toolName,
+        Arguments: args,
+    }
+    
+    jsonData, err := json.Marshal(reqBody)
+    if err != nil {
+        return nil, err
+    }
+    
+    resp, err := nc.Client.Post(
+        nc.BaseURL+"/execute",
+        "application/json",
+        bytes.NewBuffer(jsonData),
+    )
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+    
+    body, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return nil, err
+    }
+    
+    var result ExecuteResponse
+    err = json.Unmarshal(body, &result)
+    if err != nil {
+        return nil, err
+    }
+    
+    return &result, nil
+}
+
+func main() {
+    client := NewNexusClient("http://localhost:9999")
+    
+    // Example: Calculate factorial
+    result, err := client.ExecuteTool("factorial", map[string]interface{}{
+        "n": 5,
+    })
+    
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    
+    fmt.Printf("Factorial of 5: %v\n", result.Result)
+}
+</code></pre>
+            </div>
+
+            <h2 id="error-handling">🚨 Error Handling</h2>
+
+            <div class="card">
+                <h4>Robust Error Handling (Python)</h4>
+                <pre><code class="language-python">import requests
+from requests.exceptions import RequestException, Timeout, ConnectionError
+
+class NexusAPIError(Exception):
+    """Custom exception for Nexus API errors"""
+    pass
+
+class RobustNexusClient:
+    def __init__(self, base_url="http://localhost:9999", timeout=30):
+        self.base_url = base_url
+        self.timeout = timeout
+        self.session = requests.Session()
+    
+    def execute_tool_safe(self, tool_name, arguments=None, retries=3):
+        """Execute tool with comprehensive error handling"""
+        payload = {
+            "tool_name": tool_name,
+            "arguments": arguments or {}
+        }
+        
+        for attempt in range(retries):
+            try:
+                response = self.session.post(
+                    f"{self.base_url}/execute",
+                    json=payload,
+                    timeout=self.timeout,
+                    headers={"Content-Type": "application/json"}
+                )
+                
+                # Check HTTP status
+                response.raise_for_status()
+                
+                result = response.json()
+                
+                # Check for API-level errors
+                if 'error' in result:
+                    raise NexusAPIError(f"Tool execution failed: {result['error']}")
+                
+                return result
+                
+            except ConnectionError:
+                if attempt == retries - 1:
+                    raise NexusAPIError("Unable to connect to Nexus server")
+                print(f"Connection failed, retrying... ({attempt + 1}/{retries})")
+                
+            except Timeout:
+                if attempt == retries - 1:
+                    raise NexusAPIError("Request timed out")
+                print(f"Request timed out, retrying... ({attempt + 1}/{retries})")
+                
+            except requests.HTTPError as e:
+                raise NexusAPIError(f"HTTP error: {e.response.status_code}")
+                
+            except ValueError as e:
+                raise NexusAPIError(f"Invalid JSON response: {e}")
+        
+        raise NexusAPIError("Max retries exceeded")
+
+# Usage with error handling
+client = RobustNexusClient()
+
+try:
+    result = client.execute_tool_safe("divide", {"a": 10, "b": 0})
+    print(result)
+except NexusAPIError as e:
+    print(f"API Error: {e}")
+except Exception as e:
+    print(f"Unexpected error: {e}")
+</code></pre>
+            </div>
+
+            <h2 id="batch-operations">📦 Batch Operations</h2>
+
+            <div class="card">
+                <h4>Multiple Tool Execution</h4>
+                <pre><code class="language-python">async def batch_execute_example():
+    """Execute multiple tools concurrently"""
+    import asyncio
+    import aiohttp
+    
+    async def execute_tool_async(session, tool_name, arguments):
+        payload = {
+            "tool_name": tool_name,
+            "arguments": arguments
+        }
+        
+        async with session.post(
+            "http://localhost:9999/execute",
+            json=payload
+        ) as response:
+            return await response.json()
+    
+    async with aiohttp.ClientSession() as session:
+        tasks = [
+            execute_tool_async(session, "add", {"a": 1, "b": 2}),
+            execute_tool_async(session, "multiply", {"a": 3, "b": 4}),
+            execute_tool_async(session, "subtract", {"a": 10, "b": 5}),
+            execute_tool_async(session, "divide", {"a": 20, "b": 4}),
+        ]
+        
+        results = await asyncio.gather(*tasks)
+        
+        for i, result in enumerate(results):
+            print(f"Task {i + 1}: {result}")
+
+# Run batch operations
+asyncio.run(batch_execute_example())
+</code></pre>
+            </div>
+
+            <h2 id="dynamic-tools">🛠️ Dynamic Tool Creation</h2>
+
+            <div class="card">
+                <h4>Creating Custom Tools</h4>
+                <pre><code class="language-python">def create_custom_tool_example():
+    """Example of creating and using dynamic tools"""
+    client = NexusClient()
+    
+    # Create a custom Python tool
+    tool_code = '''
+def process_data(data_list, operation="sum"):
+    """Process a list of numbers with specified operation"""
+    if operation == "sum":
+        return sum(data_list)
+    elif operation == "average":
+        return sum(data_list) / len(data_list) if data_list else 0
+    elif operation == "max":
+        return max(data_list) if data_list else None
+    elif operation == "min":
+        return min(data_list) if data_list else None
+    else:
+        return "Unknown operation"
+'''
+    
+    # Create the dynamic tool
+    create_result = client.execute_tool("create_and_run_tool", {
+        "name": "data_processor",
+        "code": tool_code,
+        "language": "python",
+        "arguments": {
+            "data_list": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            "operation": "average"
+        }
+    })
+    
+    print(f"Dynamic tool result: {create_result}")
+
+create_custom_tool_example()
+</code></pre>
+            </div>
+
+            <h2 id="integration-patterns">🔗 Integration Patterns</h2>
+
+            <h3 id="webhook-pattern">Webhook Integration</h3>
+            <div class="card">
+                <h4>Webhook Handler Example</h4>
+                <pre><code class="language-python">from flask import Flask, request, jsonify
+import requests
+
+app = Flask(__name__)
+nexus_client = NexusClient("http://localhost:9999")
+
+@app.route('/webhook/process', methods=['POST'])
+def process_webhook():
+    """Process incoming webhook data with Nexus tools"""
+    data = request.json
+    
+    try:
+        # Use Nexus to process the webhook data
+        if data.get('type') == 'text_analysis':
+            result = nexus_client.execute_tool("analyze_text", {
+                "text": data.get('content', '')
+            })
+            
+        elif data.get('type') == 'calculation':
+            result = nexus_client.execute_tool("calculate", {
+                "expression": data.get('expression', '')
+            })
+            
+        else:
+            return jsonify({"error": "Unknown webhook type"}), 400
+        
+        return jsonify({
+            "status": "success",
+            "result": result
+        })
+        
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+if __name__ == '__main__':
+    app.run(port=5000)
+</code></pre>
+            </div>
+
+            <h2 id="performance-tips">⚡ Performance Tips</h2>
+
+            <div class="alert alert-success">
+                <h4>🚀 Optimization Strategies</h4>
+                <ul>
+                    <li><strong>Connection Pooling:</strong> Reuse HTTP connections with session objects</li>
+                    <li><strong>Async Operations:</strong> Use async/await for concurrent tool execution</li>
+                    <li><strong>Caching:</strong> Cache tool metadata and frequently used results</li>
+                    <li><strong>Batch Requests:</strong> Group multiple operations when possible</li>
+                    <li><strong>Timeout Handling:</strong> Set appropriate timeouts for long-running tools</li>
+                </ul>
+            </div>
+
+            <h2 id="next-steps">🎯 Next Steps</h2>
+
+            <div class="nav-grid">
+                <div class="card">
+                    <h4>🌐 Enhanced API</h4>
+                    <p>Learn about the complete API reference</p>
+                    <a href="enhanced-api.html" class="nav-link">Enhanced API →</a>
+                </div>
+                <div class="card">
+                    <h4>🛠️ Dynamic Tools</h4>
+                    <p>Create custom tools on-the-fly</p>
+                    <a href="dynamic-tools.html" class="nav-link">Dynamic Tools →</a>
+                </div>
+                <div class="card">
+                    <h4>✨ Best Practices</h4>
+                    <p>Optimize your integration with best practices</p>
+                    <a href="best-practices.html" class="nav-link">Best Practices →</a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="examples.html" class="nav-link prev">Examples</a>
+                <a href="best-practices.html" class="nav-link next">Best Practices</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
