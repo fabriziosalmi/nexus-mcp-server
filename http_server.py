@@ -128,7 +128,7 @@ app = FastAPI(
     
     All tools are auto-discovered and exposed without manual configuration.
     """,
-    version="3.0.0",
+    version="0.9.1",
     docs_url="/docs",
     redoc_url="/redoc",
     contact={
@@ -157,7 +157,7 @@ async def health_check():
         tools_count=len(available_tools),
         server_info={
             "name": "NexusServer-Enhanced",
-            "version": "3.0.0",
+            "version": "0.9.1",
             "type": "HTTP-MCP Bridge"
         }
     )
@@ -170,7 +170,7 @@ async def list_all_tools():
         count=len(tools_list),
         server_info={
             "name": "NexusServer-Enhanced",
-            "version": "3.0.0"
+            "version": "0.9.1"
         }
     )
 

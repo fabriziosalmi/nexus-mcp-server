@@ -68,6 +68,6 @@ google_analytics: # Add your Google Analytics ID here if needed
 
 # Custom variables
 nexus:
-  version: "3.0.0"
+  version: "0.9.1"
   tools_count: "500+"
   categories: 17
