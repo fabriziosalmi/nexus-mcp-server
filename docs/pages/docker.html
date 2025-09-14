@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐳 Docker Support - Nexus MCP Server Documentation</title>
+    <meta name="description" content="Complete guide to running Nexus MCP Server with Docker and Docker Compose">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle">☰</button>
+        <h1><span class="rocket">🚀</span>Nexus MCP Server</h1>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search documentation..." autocomplete="off">
+        </div>
+        
+        <button class="theme-toggle" title="Toggle theme">🌙</button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="../index.html">🏠 Overview</a></li>
+            <li><a href="../index.html#quick-start">⚡ Quick Start</a></li>
+            <li><a href="../index.html#key-features">🎯 Key Features</a></li>
+            <li><a href="../index.html#screenshots">📸 Screenshots</a></li>
+            
+            <li class="section-header">Setup & Configuration</li>
+            <li><a href="setup-vscode.html">🔧 VS Code Setup</a></li>
+            <li><a href="setup-claude.html">🤖 Claude Desktop Setup</a></li>
+            <li><a href="web-interface.html">🖥️ Web Interface</a></li>
+            <li><a href="docker.html" class="active">🐳 Docker Support</a></li>
+            
+            <li class="section-header">Tools & Features</li>
+            <li><a href="tools-overview.html">📋 Tools Overview</a></li>
+            <li><a href="tools-reference.html">📚 Complete Tools Reference</a></li>
+            <li><a href="dynamic-tools.html">🛠️ Dynamic Tools</a></li>
+            <li><a href="enhanced-api.html">🌐 Enhanced API</a></li>
+            
+            <li class="section-header">Deployment & Operations</li>
+            <li><a href="deployment.html">🚀 Deployment Guide</a></li>
+            <li><a href="monitoring.html">📊 Monitoring & Metrics</a></li>
+            <li><a href="troubleshooting.html">🔍 Troubleshooting</a></li>
+            
+            <li class="section-header">Examples & Tutorials</li>
+            <li><a href="examples.html">💡 Examples</a></li>
+            <li><a href="api-examples.html">🔌 API Examples</a></li>
+            <li><a href="best-practices.html">✨ Best Practices</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1>🐳 Docker Support</h1>
+            <p class="lead">Run Nexus MCP Server in containerized environments with Docker and Docker Compose for consistent, portable deployments.</p>
+
+            <div class="alert alert-info">
+                <strong>🎯 Benefits:</strong> Docker provides isolated execution environments, consistent deployments across systems, easy scaling, and simplified dependency management.
+            </div>
+
+            <h2 id="quick-start">🚀 Quick Start with Docker</h2>
+
+            <h3 id="docker-run">Single Container</h3>
+            <div class="card">
+                <h4>Build and Run</h4>
+                <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/fabriziosalmi/nexus-mcp-server.git
+cd nexus-mcp-server
+
+# Build the Docker image
+docker build -t nexus-mcp-server .
+
+# Run the container
+docker run -d \
+  --name nexus-mcp \
+  -p 9999:9999 \
+  -v $(pwd)/safe_files:/app/safe_files:rw \
+  -v $(pwd)/config.json:/app/config.json:ro \
+  nexus-mcp-server</code></pre>
+            </div>
+
+            <h3 id="docker-compose">Docker Compose (Recommended)</h3>
+            <div class="card">
+                <h4>Start with Docker Compose</h4>
+                <pre><code class="language-bash"># Start the service
+docker-compose up -d
+
+# View logs
+docker-compose logs -f nexus-mcp
+
+# Stop the service
+docker-compose down</code></pre>
+            </div>
+
+            <h2 id="docker-compose-config">📋 Docker Compose Configuration</h2>
+
+            <div class="card">
+                <h4>docker-compose.yml</h4>
+                <pre><code class="language-yaml">services:
+  nexus-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nexus-mcp-server:latest
+    container_name: nexus-mcp-server
+    
+    # Expose HTTP API port
+    ports:
+      - "9999:9999"
+    
+    # Volume mounts for data persistence
+    volumes:
+      # Safe files directory for file operations
+      - ./safe_files:/app/safe_files:rw
+      # Configuration file (read-only)
+      - ./config.json:/app/config.json:ro
+      # Logs directory (optional)
+      - ./logs:/app/logs:rw
+    
+    # Environment variables
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MCP_SERVER_NAME=NexusServer
+      - MCP_SERVER_VERSION=2.0.0
+      - LOG_LEVEL=INFO
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9999/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Restart policy
+    restart: unless-stopped</code></pre>
+            </div>
+
+            <h2 id="dockerfile">🏗️ Dockerfile Details</h2>
+
+            <div class="card">
+                <h4>Multi-stage Build</h4>
+                <pre><code class="language-dockerfile">FROM python:3.12-slim
+
+# Metadata
+LABEL maintainer="Nexus MCP Server"
+LABEL description="Advanced, modular and configurable MCP server"
+LABEL version="2.0.0"
+
+# Environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Create non-root user for security
+RUN groupadd -r nexus && useradd -r -g nexus -m nexus
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gcc \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p safe_files logs && \
+    chown -R nexus:nexus /app
+
+# Switch to non-root user
+USER nexus
+
+# Expose port
+EXPOSE 9999
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:9999/ || exit 1
+
+# Default command
+CMD ["python", "http_server.py"]</code></pre>
+            </div>
+
+            <h2 id="container-management">🔧 Container Management</h2>
+
+            <h3 id="common-commands">Common Commands</h3>
+            <div class="card">
+                <h4>Docker Commands</h4>
+                <pre><code class="language-bash"># View running containers
+docker ps
+
+# View all containers
+docker ps -a
+
+# View container logs
+docker logs nexus-mcp
+
+# Follow logs in real-time
+docker logs -f nexus-mcp
+
+# Execute commands in running container
+docker exec -it nexus-mcp bash
+
+# Stop container
+docker stop nexus-mcp
+
+# Remove container
+docker rm nexus-mcp
+
+# Remove image
+docker rmi nexus-mcp-server</code></pre>
+            </div>
+
+            <h3 id="docker-compose-commands">Docker Compose Commands</h3>
+            <div class="card">
+                <h4>Compose Management</h4>
+                <pre><code class="language-bash"># Start services in background
+docker-compose up -d
+
+# Start and rebuild
+docker-compose up -d --build
+
+# View service status
+docker-compose ps
+
+# View logs for all services
+docker-compose logs
+
+# View logs for specific service
+docker-compose logs nexus-mcp
+
+# Stop services
+docker-compose stop
+
+# Stop and remove containers
+docker-compose down
+
+# Stop and remove containers + volumes
+docker-compose down -v
+
+# Scale service (if configured)
+docker-compose up -d --scale nexus-mcp=3</code></pre>
+            </div>
+
+            <h2 id="volumes-persistence">💾 Volumes and Data Persistence</h2>
+
+            <div class="card">
+                <h4>Important Volumes</h4>
+                <ul>
+                    <li><strong>safe_files/</strong> - File operations directory (read-write)</li>
+                    <li><strong>config.json</strong> - Server configuration (read-only)</li>
+                    <li><strong>logs/</strong> - Application logs (read-write, optional)</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Data Persistence:</strong> Use volume mounts to persist data between container restarts. The <code>safe_files</code> directory should always be mounted to preserve file operations.
+            </div>
+
+            <h2 id="environment-variables">🌍 Environment Variables</h2>
+
+            <div class="card">
+                <h4>Configuration Options</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>PYTHONUNBUFFERED</code></td>
+                            <td>1</td>
+                            <td>Ensure Python output is not buffered</td>
+                        </tr>
+                        <tr>
+                            <td><code>MCP_SERVER_NAME</code></td>
+                            <td>NexusServer</td>
+                            <td>Server identifier</td>
+                        </tr>
+                        <tr>
+                            <td><code>MCP_SERVER_VERSION</code></td>
+                            <td>2.0.0</td>
+                            <td>Server version</td>
+                        </tr>
+                        <tr>
+                            <td><code>LOG_LEVEL</code></td>
+                            <td>INFO</td>
+                            <td>Logging level (DEBUG, INFO, WARNING, ERROR)</td>
+                        </tr>
+                        <tr>
+                            <td><code>HTTP_HOST</code></td>
+                            <td>0.0.0.0</td>
+                            <td>HTTP server bind address</td>
+                        </tr>
+                        <tr>
+                            <td><code>HTTP_PORT</code></td>
+                            <td>9999</td>
+                            <td>HTTP server port</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="security">🔒 Security Considerations</h2>
+
+            <div class="alert alert-success">
+                <h4>Built-in Security Features</h4>
+                <ul>
+                    <li><strong>Non-root user:</strong> Container runs as unprivileged user</li>
+                    <li><strong>Read-only configuration:</strong> Config file mounted read-only</li>
+                    <li><strong>Isolated execution:</strong> Docker provides process isolation</li>
+                    <li><strong>Resource limits:</strong> Can be configured via Docker</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h4>Resource Limits Example</h4>
+                <pre><code class="language-yaml">services:
+  nexus-mcp:
+    # ... other configuration ...
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M</code></pre>
+            </div>
+
+            <h2 id="monitoring">📊 Monitoring and Health Checks</h2>
+
+            <div class="card">
+                <h4>Health Check Endpoint</h4>
+                <pre><code class="language-bash"># Manual health check
+curl http://localhost:9999/
+
+# Expected response
+{
+  "status": "healthy",
+  "message": "Nexus MCP Server Enhanced API is running",
+  "tools_count": 39,
+  "server_info": {
+    "name": "NexusServer-Enhanced",
+    "version": "3.0.0",
+    "type": "HTTP-MCP Bridge"
+  }
+}</code></pre>
+            </div>
+
+            <h2 id="troubleshooting">🔍 Troubleshooting</h2>
+
+            <div class="card">
+                <h4>Common Issues</h4>
+                <div class="alert alert-warning">
+                    <h5>Port Already in Use</h5>
+                    <p>If port 9999 is already in use:</p>
+                    <pre><code class="language-bash"># Change port mapping
+docker run -p 8888:9999 nexus-mcp-server
+
+# Or in docker-compose.yml
+ports:
+  - "8888:9999"</code></pre>
+                </div>
+
+                <div class="alert alert-warning">
+                    <h5>Permission Issues</h5>
+                    <p>If you encounter permission issues with volumes:</p>
+                    <pre><code class="language-bash"># Fix ownership
+sudo chown -R $(id -u):$(id -g) safe_files logs
+
+# Or use bind mounts with correct permissions
+docker run -v $(pwd)/safe_files:/app/safe_files:rw ...</code></pre>
+                </div>
+
+                <div class="alert alert-warning">
+                    <h5>Container Won't Start</h5>
+                    <p>Check logs for startup issues:</p>
+                    <pre><code class="language-bash"># View container logs
+docker logs nexus-mcp
+
+# Run in foreground for debugging
+docker run --rm -it nexus-mcp-server</code></pre>
+                </div>
+            </div>
+
+            <h2 id="next-steps">🎯 Next Steps</h2>
+
+            <div class="nav-grid">
+                <div class="card">
+                    <h4>🌐 Enhanced API</h4>
+                    <p>Learn about the HTTP API for programmatic access</p>
+                    <a href="enhanced-api.html" class="nav-link">Enhanced API →</a>
+                </div>
+                <div class="card">
+                    <h4>🔌 API Examples</h4>
+                    <p>Practical examples using the HTTP API</p>
+                    <a href="api-examples.html" class="nav-link">API Examples →</a>
+                </div>
+                <div class="card">
+                    <h4>🖥️ Web Interface</h4>
+                    <p>Use the web-based configuration interface</p>
+                    <a href="web-interface.html" class="nav-link">Web Interface →</a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="nav-links">
+                <a href="web-interface.html" class="nav-link prev">Web Interface</a>
+                <a href="tools-overview.html" class="nav-link next">Tools Overview</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Scripts -->
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>
