@@ -1,0 +1,82 @@
+{
+  "comment": "VSCode configuration - Limited to 100 tools maximum (99 functions across 12 essential tools) - Issue #22",
+  "client_type": "vscode",
+  "max_tools_limit": 100,
+  "actual_function_count": 99,
+  "enabled_tools": [
+    "calculator",
+    "string_tools", 
+    "crypto_tools",
+    "encoding_tools",
+    "datetime_tools",
+    "validator_tools",
+    "uuid_tools",
+    "url_tools",
+    "filesystem_reader",
+    "unit_converter",
+    "web_fetcher",
+    "workflows"
+  ],
+  "tools": {
+    "calculator": {
+      "enabled": true,
+      "description": "Sistema di calcolo matematico avanzato con funzioni complete",
+      "function_count": 16
+    },
+    "string_tools": {
+      "enabled": true, 
+      "description": "Advanced string manipulation, analysis and transformation tools",
+      "function_count": 11
+    },
+    "crypto_tools": {
+      "enabled": true,
+      "description": "Suite completa strumenti crittografici professionali per sicurezza applicazioni", 
+      "function_count": 11
+    },
+    "encoding_tools": {
+      "enabled": true,
+      "description": "Suite completa encoding/decoding con supporto multi-formato",
+      "function_count": 19
+    },
+    "datetime_tools": {
+      "enabled": true,
+      "description": "Suite completa gestione date, tempi e timezone con analisi avanzata",
+      "function_count": 12
+    },
+    "validator_tools": {
+      "enabled": true,
+      "description": "Suite completa validazione dati con controlli di formato e integrità",
+      "function_count": 5
+    },
+    "uuid_tools": {
+      "enabled": true,
+      "description": "UUID generation and analysis tools",
+      "function_count": 6
+    },
+    "url_tools": {
+      "enabled": true,
+      "description": "URL manipulation and analysis tools", 
+      "function_count": 4
+    },
+    "filesystem_reader": {
+      "enabled": true,
+      "description": "File system operations and content reading",
+      "function_count": 7
+    },
+    "unit_converter": {
+      "enabled": true,
+      "description": "Universal unit conversion tool",
+      "function_count": 6
+    },
+    "web_fetcher": {
+      "enabled": true,
+      "description": "Web content fetching and processing",
+      "function_count": 1
+    },
+    "workflows": {
+      "enabled": true,
+      "description": "Workflow automation and management",
+      "function_count": 1
+    }
+  }
+}

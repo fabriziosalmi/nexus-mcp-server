@@ -31,6 +31,7 @@
 - **Docker Integration**: Secure, isolated execution environments
 - **Hot Reload**: Update configurations without server downtime
 - **Multi-Client Support**: Works with VS Code, Claude Desktop, and HTTP API
+- **Automatic Client Detection**: VSCode gets curated 99-function subset, Claude Desktop gets full 437+ functions
 
 ### 🔒 **Security First**
 - Sandboxed file operations in `safe_files/` directory
@@ -81,6 +82,8 @@
 
 ## 🔧 VS Code Setup
 
+> **⚠️ Important**: VS Code has a limit of 128 MCP tools. Nexus automatically uses a curated subset of tools (99 functions across 12 essential tools) for VS Code while providing the full tool suite for Claude Desktop.
+
 ### Step 1: Install MCP Extension
 1. Open VS Code
 2. Go to Extensions (`Ctrl/Cmd + Shift + X`)
@@ -88,14 +91,37 @@
 4. Install the official MCP extension
 
 ### Step 2: Configure Settings
+
+**Option A: Using the VSCode-optimized configuration (Recommended)**
+
 Add to your VS Code `settings.json`:
+
+```json
+{
+  "mcp.servers": {
+    "nexus-vscode": {
+      "command": "./start_mcp_server_vscode.sh",
+      "args": [],
+      "cwd": "/absolute/path/to/nexus-mcp-server",
+      "env": {
+        "PYTHONPATH": "/absolute/path/to/nexus-mcp-server",
+        "MCP_SERVER_NAME": "NexusServer-VSCode",
+        "MCP_CLIENT_TYPE": "vscode",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}
+```
+
+**Option B: Manual configuration selection**
 
 ```json
 {
   "mcp.servers": {
     "nexus": {
       "command": "python",
-      "args": ["multi_server.py"],
+      "args": ["multi_server.py", "--config", "config-vscode.json"],
       "cwd": "/absolute/path/to/nexus-mcp-server",
       "env": {
         "PYTHONPATH": "/absolute/path/to/nexus-mcp-server",
@@ -107,16 +133,38 @@ Add to your VS Code `settings.json`:
 }
 ```
 
+### VSCode Tool Limitations & Configuration
+
+VS Code is limited to 128 MCP tools maximum. Nexus automatically detects VS Code and loads a curated configuration:
+
+**VSCode Configuration (99 functions across 12 tools):**
+- `calculator` - Mathematical operations (16 functions)
+- `string_tools` - Text manipulation (11 functions) 
+- `crypto_tools` - Encryption/security (11 functions)
+- `encoding_tools` - Text encoding/decoding (19 functions)
+- `datetime_tools` - Date/time operations (12 functions)
+- `validator_tools` - Data validation (5 functions)
+- `uuid_tools` - UUID generation (6 functions)
+- `url_tools` - URL operations (4 functions)
+- `filesystem_reader` - File operations (7 functions)
+- `unit_converter` - Unit conversions (6 functions)
+- `web_fetcher` - Web content fetching (1 function)
+- `workflows` - Workflow automation (1 function)
+
+**Claude Desktop Configuration:**
+- All 46 tools available (437+ functions)
+
 ### Step 3: Connect and Use
 1. Open Command Palette (`Ctrl/Cmd + Shift + P`)
 2. Run "MCP: Connect to Server"
-3. Select "nexus" from the list
+3. Select "nexus-vscode" from the list
 4. Use tools in Copilot Chat: `@mcp generate_uuid4 {}`
 
 ### Troubleshooting VS Code
 - **Server not starting**: Ensure Python path is correct and dependencies are installed
 - **Tools not available**: Check VS Code Output panel → "Model Context Protocol" for errors
 - **Permission errors**: Verify the `nexus-mcp-server` directory has proper read permissions
+- **Tool limit exceeded**: Use the VSCode-specific configuration which limits tools to 99 functions
 
 ## 🤖 Claude Desktop Setup
 
