@@ -123,35 +123,35 @@ def _assess_audio_quality(sample_rate: int, bit_depth: int, duration: float) -> 
     # Sample rate scoring
     if sample_rate >= 48000:
         quality_score += 3
-        sr_quality = "Eccellente"
+        sr_quality = "Excellent"
     elif sample_rate >= 44100:
         quality_score += 2
-        sr_quality = "Buona"
+        sr_quality = "Good"
     elif sample_rate >= 22050:
         quality_score += 1
-        sr_quality = "Accettabile"
+        sr_quality = "Acceptable"
     else:
-        sr_quality = "Bassa"
+        sr_quality = "Low"
     
     # Bit depth scoring
     if bit_depth >= 24:
         quality_score += 3
-        bd_quality = "Professionale"
+        bd_quality = "Professional"
     elif bit_depth >= 16:
         quality_score += 2
         bd_quality = "CD Quality"
     else:
-        bd_quality = "Bassa"
+        bd_quality = "Low"
     
     # Overall assessment
     if quality_score >= 5:
-        overall = "Eccellente (Hi-Fi)"
+        overall = "Excellent (Hi-Fi)"
     elif quality_score >= 4:
-        overall = "Buona (Standard)"
+        overall = "Good (Standard)"
     elif quality_score >= 2:
-        overall = "Accettabile"
+        overall = "Acceptable"
     else:
-        overall = "Bassa qualità"
+        overall = "Low qualità"
     
     return {
         "overall": overall,
@@ -181,7 +181,7 @@ def _estimate_audio_properties(audio_data: bytes, format_type: str) -> Dict[str,
     """Estimate audio properties for non-WAV formats."""
     estimates = {"method": "heuristic_estimation"}
     
-    # Stime basate su dimensioni tipiche per formato
+    # Estimates based on typical sizes for format
     if format_type == "MP3":
         # MP3 tipicamente 128-320 kbps
         estimated_bitrate = 128  # kbps conservative estimate
@@ -764,7 +764,7 @@ def register_tools(mcp):
                     N = next_pow2
                 
                 # Simplified recursion for small dimensions
-                if N <= 64:  # Limite per evitare troppa ricorsione
+                if N <= 64:  # Limit to avoid too much recursion
                     result = []
                     for k in range(N):
                         sum_val = 0
