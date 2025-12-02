@@ -192,7 +192,7 @@ def register_tools(mcp):
             7: "6.1 Surround",
             8: "7.1 Surround"
         }
-        return layouts.get(channels, f"{channels} canali")
+        return layouts.get(channels, f"{channels} channels")
 
     def _assess_audio_quality(sample_rate: int, bit_depth: int, duration: float) -> Dict[str, str]:
         """Assess audio quality."""
@@ -424,14 +424,14 @@ def register_tools(mcp):
                 if N <= 1:
                     return x
                 
-                # Per semplicità, usiamo solo potenze di 2
+                # For simplicity, we only use powers of 2
                 if N & (N-1) != 0:
-                    # Riempi con zeri fino alla prossima potenza di 2
+                    # Fill with zeros to the next power of 2
                     next_pow2 = 1 << (N - 1).bit_length()
                     x = x + [0] * (next_pow2 - N)
                     N = next_pow2
                 
-                # Ricorsione semplificata per piccole dimensioni
+                # Simplified recursion for small dimensions
                 if N <= 64:  # Limite per evitare troppa ricorsione
                     result = []
                     for k in range(N):
@@ -442,13 +442,13 @@ def register_tools(mcp):
                         result.append(sum_val)
                     return result
                 else:
-                    return x  # Fallback per dimensioni grandi
+                    return x  # Fallback for large dimensions
             
             # Analizza in finestre
             window_size = min(fft_size, len(samples))
             window_data = samples[:window_size]
             
-            # Applica finestra di Hanning semplificata
+            # Apply simplified Hanning window
             for i in range(len(window_data)):
                 hanning = 0.5 * (1 - math.cos(2 * math.pi * i / (len(window_data) - 1)))
                 window_data[i] *= hanning
@@ -456,7 +456,7 @@ def register_tools(mcp):
             # Esegui FFT
             fft_result = simple_fft(window_data)
             
-            # Calcola magnitudini
+            # Calculate magnitudes
             magnitudes = [abs(x) for x in fft_result[:len(fft_result)//2]]
             
             # Trova frequenze dominanti
@@ -473,10 +473,10 @@ def register_tools(mcp):
                             "relative_strength": round(magnitude / max_magnitude, 3)
                         })
             
-            # Ordina per magnitude
+            # Sort by magnitude
             dominant_frequencies.sort(key=lambda x: x['magnitude'], reverse=True)
             
-            # Analisi delle frequenze
+            # Frequency analysis
             def classify_frequency(freq):
                 if freq < 60:
                     return "Sub-bass"
@@ -561,7 +561,7 @@ def register_tools(mcp):
             else:
                 return {"success": False, "error": "Solo audio 16-bit supportato"}
             
-            # Applica fattore volume
+            # Apply volume factor
             max_value = 32767
             min_value = -32768
             clipped_samples = 0
@@ -711,7 +711,7 @@ def register_tools(mcp):
             if params.nchannels > 1:
                 samples = samples[::params.nchannels]
             
-            # Calcola caratteristiche temporali
+            # Calculate temporal characteristics
             duration = frames / params.framerate
             max_amplitude = max(abs(s) for s in samples) if samples else 0
             rms = math.sqrt(sum(s**2 for s in samples) / len(samples)) if samples else 0
@@ -725,18 +725,18 @@ def register_tools(mcp):
             energy = sum(s**2 for s in samples)
             avg_power = energy / len(samples) if samples else 0
             
-            # Analisi distribuzione ampiezze
+            # Analyze amplitude distribution
             amplitude_histogram = {}
             for sample in samples[::100]:  # Campiona per performance
                 bucket = int(abs(sample) // 3277)  # 10% buckets
                 amplitude_histogram[bucket] = amplitude_histogram.get(bucket, 0) + 1
             
-            # Calcola statistiche temporali
+            # Calculate temporal statistics
             silence_threshold = max_amplitude * 0.01  # 1% del massimo
             silence_samples = sum(1 for s in samples if abs(s) < silence_threshold)
             silence_percentage = (silence_samples / len(samples)) * 100 if samples else 0
             
-            # Stima pitch dominante (metodo autocorrelazione semplificato)
+            # Estimate dominant pitch (simplified autocorrelation method)
             def estimate_pitch(samples, sample_rate, min_freq=50, max_freq=800):
                 # Limita campioni per performance
                 samples = samples[:sample_rate]  # Max 1 secondo
@@ -779,7 +779,7 @@ def register_tools(mcp):
                 },
                 "audio_classification": {
                     "likely_content": _classify_audio_content(zcr, silence_percentage, estimated_pitch),
-                    "audio_quality": "Alta" if max_amplitude > 20000 and silence_percentage < 50 else "Media"
+                    "audio_quality": "High" if max_amplitude > 20000 and silence_percentage < 50 else "Medium"
                 },
                 "technical_info": {
                     "sample_rate": params.framerate,
@@ -835,7 +835,7 @@ def register_tools(mcp):
                         f"End time {end_time}s exceeds audio duration of {total_duration}s."
                     )
                 
-                # Calcola frame di inizio e fine
+                # Calculate start and end frames
                 start_frame = int(start_time * params.framerate)
                 end_frame = int(end_time * params.framerate)
                 
@@ -915,7 +915,7 @@ def register_tools(mcp):
                     else:
                         return {"success": False, "error": "Solo audio 16-bit supportato"}
             
-            # Applica crossfade se richiesto
+            # Apply crossfade if requested
             if crossfade_duration > 0 and len(audio_files_base64) > 1:
                 all_samples = _apply_crossfade(all_samples, file_durations, 
                                                   crossfade_duration, common_params)
@@ -948,13 +948,13 @@ def register_tools(mcp):
     def _apply_crossfade(samples: List[int], durations: List[float], 
                         fade_duration: float, params) -> List[int]:
         """Apply crossfade between audio segments."""
-        # Implementazione semplificata del crossfade
+        # Simplified crossfade implementation
         fade_samples = int(fade_duration * params.framerate * params.nchannels)
         
-        # Per semplicità, applichiamo solo fade out/in sui bordi
+        # For simplicity, we only apply fade out/in at the edges
         result_samples = list(samples)
         
-        # Calcola posizioni dei file
+        # Calculate file positions
         current_pos = 0
         for i, duration in enumerate(durations[:-1]):  # Tutti tranne l'ultimo
             file_samples = int(duration * params.framerate * params.nchannels)
@@ -998,7 +998,7 @@ def register_tools(mcp):
             
             duration = frames / params.framerate
             
-            # Analisi avanzata delle caratteristiche
+            # Advanced feature analysis
             features = {
                 "basic_properties": _extract_basic_features(samples, params),
                 "spectral_features": _extract_spectral_features(samples, params.framerate),
@@ -1035,7 +1035,7 @@ def register_tools(mcp):
 
     def _extract_spectral_features(samples: List[int], sample_rate: int) -> Dict[str, Any]:
         """Extract spectral features."""
-        # Analisi spettrale semplificata
+        # Simplified spectral analysis
         spectral_centroid = _calculate_spectral_centroid(samples, sample_rate)
         dominant_freq = _find_dominant_frequency(samples, sample_rate)
         
@@ -1091,11 +1091,11 @@ def register_tools(mcp):
     # Helper methods for advanced analysis
     def _calculate_spectral_centroid(samples: List[int], sample_rate: int) -> float:
         """Calculate the spectral centroid."""
-        # Implementazione semplificata
+        # Simplified implementation
         freqs = []
         mags = []
         
-        # FFT semplificata per frequenze principali
+        # Simplified FFT for main frequencies
         for i in range(1, min(100, len(samples)//2)):
             freq = i * sample_rate / len(samples)
             if freq < sample_rate / 2:
