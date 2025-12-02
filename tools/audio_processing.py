@@ -39,34 +39,41 @@ def _classify_audio_content(zcr: float, silence_percentage: float, pitch: Option
     else:
         return "Audio complesso/Musica"
 
-def _validate_audio_params(sample_rate: int, duration: float, amplitude: float) -> Dict[str, Any]:
-    """Valida parametri audio e applica limiti di sicurezza."""
-    errors = []
+def _validate_audio_params(sample_rate: int, duration: float, amplitude: float) -> None:
+    """Validate audio parameters and enforce security limits.
     
-    if sample_rate not in [8000, 11025, 16000, 22050, 44100, 48000, 96000]:
-        sample_rate = 44100
-        errors.append("Sample rate corretto a 44100 Hz")
+    Raises:
+        ValueError: If any parameter is out of acceptable range
+    """
+    valid_sample_rates = [8000, 11025, 16000, 22050, 44100, 48000, 96000]
+    
+    if sample_rate not in valid_sample_rates:
+        raise ValueError(
+            f"Invalid sample rate: {sample_rate} Hz. "
+            f"Must be one of: {', '.join(map(str, valid_sample_rates))} Hz"
+        )
     
     if duration > 30.0:
-        duration = 30.0
-        errors.append("Durata limitata a 30 secondi")
-    elif duration <= 0:
-        duration = 1.0
-        errors.append("Durata corretta a 1 secondo")
+        raise ValueError(
+            f"Duration {duration}s exceeds maximum limit of 30.0 seconds. "
+            f"Please reduce the duration."
+        )
+    
+    if duration <= 0:
+        raise ValueError(
+            f"Invalid duration: {duration}s. Duration must be greater than 0."
+        )
     
     if amplitude > 1.0:
-        amplitude = 1.0
-        errors.append("Ampiezza limitata a 1.0")
-    elif amplitude < 0.0:
-        amplitude = 0.1
-        errors.append("Ampiezza corretta a 0.1")
+        raise ValueError(
+            f"Amplitude {amplitude} exceeds maximum limit of 1.0. "
+            f"Please reduce the amplitude."
+        )
     
-    return {
-        "sample_rate": sample_rate,
-        "duration": duration,
-        "amplitude": amplitude,
-        "warnings": errors
-    }
+    if amplitude < 0.0:
+        raise ValueError(
+            f"Invalid amplitude: {amplitude}. Amplitude must be non-negative."
+        )
 
 def _detect_audio_format(data: bytes) -> str:
     """Detect audio format from magic numbers."""
@@ -287,13 +294,10 @@ def register_tools(mcp):
             fade_out: Fade out duration in seconds
         """
         try:
-            # Parameter validation
-            validation = _validate_audio_params(sample_rate, duration, amplitude)
-            sample_rate = validation["sample_rate"]
-            duration = validation["duration"]
-            amplitude = validation["amplitude"]
+            # Parameter validation - will raise ValueError if params are invalid
+            _validate_audio_params(sample_rate, duration, amplitude)
             
-            # Additional limits
+            # Additional limits for secondary parameters (these can be clamped)
             frequency = max(20, min(frequency, sample_rate // 2))
             modulation_freq = max(0, min(modulation_freq, 50))
             fade_in = max(0, min(fade_in, duration / 2))
@@ -370,8 +374,7 @@ def register_tools(mcp):
                     "file_size_kb": round(len(output_buffer.getvalue()) / 1024, 2),
                     "bit_depth": 16,
                     "channels": 1
-                },
-                "validation_warnings": validation.get("warnings", [])
+                }
             }
             
         except Exception as e:
@@ -526,17 +529,23 @@ def register_tools(mcp):
     @mcp.tool()
     def adjust_audio_volume(audio_base64: str, volume_factor: float) -> Dict[str, Any]:
         """
-        Modifica volume di un file audio WAV.
+        Adjust volume of a WAV audio file.
         
         Args:
-            audio_base64: Audio WAV codificato in base64
-            volume_factor: Fattore di volume (0.5 = dimezza, 2.0 = raddoppia)
+            audio_base64: WAV audio encoded in base64
+            volume_factor: Volume factor (0.5 = halve, 2.0 = double, max 5.0)
         """
         try:
-            # Limiti di sicurezza
-            volume_factor = max(0.0, min(volume_factor, 5.0))  # 0x - 5x volume
+            # Validate volume factor
+            if volume_factor < 0.0:
+                raise ValueError(f"Invalid volume_factor: {volume_factor}. Must be non-negative.")
+            if volume_factor > 5.0:
+                raise ValueError(
+                    f"Volume factor {volume_factor} exceeds maximum limit of 5.0. "
+                    f"Please reduce the volume factor."
+                )
             
-            # Decodifica base64
+            # Decode base64
             audio_data = base64.b64decode(audio_base64)
             audio_io = io.BytesIO(audio_data)
             
@@ -810,9 +819,21 @@ def register_tools(mcp):
                 total_frames = wav_file.getnframes()
                 total_duration = total_frames / params.framerate
                 
-                # Validazione tempi
-                start_time = max(0, min(start_time, total_duration))
-                end_time = max(start_time + 0.1, min(end_time, total_duration))
+                # Validate time parameters
+                if start_time < 0:
+                    raise ValueError(f"Invalid start_time: {start_time}. Must be non-negative.")
+                if start_time > total_duration:
+                    raise ValueError(
+                        f"Start time {start_time}s exceeds audio duration of {total_duration}s."
+                    )
+                if end_time <= start_time:
+                    raise ValueError(
+                        f"End time {end_time}s must be greater than start time {start_time}s."
+                    )
+                if end_time > total_duration:
+                    raise ValueError(
+                        f"End time {end_time}s exceeds audio duration of {total_duration}s."
+                    )
                 
                 # Calcola frame di inizio e fine
                 start_frame = int(start_time * params.framerate)
