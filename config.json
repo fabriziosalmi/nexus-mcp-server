@@ -8,7 +8,6 @@
     "backup_tools",
     "calculator",
     "cloud_tools",
-    "code_analysis_tools",
     "code_execution_tools",
     "code_generation_tools",
     "color_tools",
@@ -53,7 +52,7 @@
       "enabled": true,
       "description": "Gestione coda task asincroni per operazioni a lunga durata",
       "features": [
-        "Esecuzione asincrona con priorità",
+        "Esecuzione asincrona con priorit\u00e0",
         "Sistema retry automatico",
         "Monitoraggio progresso tempo reale",
         "Persistenza su file",
@@ -92,7 +91,7 @@
         "Analisi spettrale con FFT ottimizzata",
         "Rilevamento features per ML",
         "Effetti audio (fade, crossfade)",
-        "Valutazione qualità automatica",
+        "Valutazione qualit\u00e0 automatica",
         "Supporto formati professionali"
       ],
       "supported_formats": {
@@ -173,7 +172,7 @@
         "Backup incrementali con delta detection",
         "Crittografia file con chiavi personalizzate",
         "Database SQLite per tracking cronologia",
-        "Verifica integrità con hash multipli",
+        "Verifica integrit\u00e0 con hash multipli",
         "Ripristino selettivo con pattern matching",
         "Gestione retention automatica",
         "Compressione multi-algoritmo",
@@ -258,7 +257,7 @@
         "Logaritmi e funzioni esponenziali",
         "Teoria dei numeri (GCD, LCM, primi)",
         "Statistiche descrittive complete",
-        "Conversioni unità multi-categoria",
+        "Conversioni unit\u00e0 multi-categoria",
         "Calcoli finanziari (interessi, investimenti)",
         "Valutazione sicura espressioni matematiche",
         "Costanti matematiche fondamentali"
@@ -612,185 +611,6 @@
           "Encrypt data at rest",
           "Use TLS for data in transit",
           "Proper key management"
-        ]
-      }
-    },
-    "code_analysis_tools": {
-      "enabled": true,
-      "description": "Suite completa analisi codice con focus su sicurezza e qualità",
-      "version": "2.0",
-      "features": [
-        "Analisi sintassi con AST parsing",
-        "Security vulnerability scanning",
-        "Analisi dipendenze e import tracking",
-        "Quality metrics e complexity analysis",
-        "Documentazione coverage e quality",
-        "Performance analysis e optimization",
-        "Test coverage estimation",
-        "Code improvement suggestions",
-        "Multi-language pattern detection"
-      ],
-      "supported_languages": {
-        "python": {
-          "analysis_level": "complete",
-          "features": [
-            "ast_parsing",
-            "security_scan",
-            "style_check",
-            "complexity_metrics"
-          ],
-          "frameworks": [
-            "unittest",
-            "pytest",
-            "doctest"
-          ]
-        },
-        "javascript": {
-          "analysis_level": "pattern_based",
-          "features": [
-            "security_scan",
-            "style_check",
-            "pattern_detection"
-          ],
-          "frameworks": [
-            "jest",
-            "mocha",
-            "jasmine"
-          ]
-        }
-      },
-      "security_vulnerabilities": {
-        "python": [
-          "SQL Injection",
-          "Command Injection",
-          "Path Traversal",
-          "Hardcoded Secrets",
-          "Insecure Randomness",
-          "Unsafe Deserialization"
-        ],
-        "javascript": [
-          "XSS (Cross-Site Scripting)",
-          "Prototype Pollution",
-          "Code Injection"
-        ]
-      },
-      "code_metrics": {
-        "complexity": [
-          "cyclomatic",
-          "halstead",
-          "maintainability_index"
-        ],
-        "quality": [
-          "style_score",
-          "documentation_coverage",
-          "test_coverage"
-        ],
-        "security": [
-          "vulnerability_count",
-          "security_score"
-        ],
-        "maintainability": [
-          "pattern_adherence",
-          "anti_pattern_count"
-        ]
-      },
-      "analysis_categories": {
-        "syntax": [
-          "validate",
-          "parse_ast",
-          "count_constructs"
-        ],
-        "security": [
-          "vulnerability_scan",
-          "dependency_check",
-          "secret_detection"
-        ],
-        "style": [
-          "formatting",
-          "naming_conventions",
-          "best_practices"
-        ],
-        "patterns": [
-          "design_patterns",
-          "anti_patterns",
-          "code_smells"
-        ],
-        "documentation": [
-          "docstring_coverage",
-          "comment_analysis",
-          "api_docs"
-        ],
-        "performance": [
-          "optimization_opportunities",
-          "bottleneck_detection"
-        ],
-        "testing": [
-          "coverage_estimation",
-          "framework_detection",
-          "test_quality"
-        ],
-        "dependencies": [
-          "import_analysis",
-          "security_assessment",
-          "version_tracking"
-        ]
-      },
-      "severity_levels": [
-        "Critical",
-        "High",
-        "Medium",
-        "Low",
-        "Info"
-      ],
-      "rating_scales": {
-        "security": [
-          "Excellent",
-          "Good",
-          "Fair",
-          "Poor"
-        ],
-        "quality": [
-          "Excellent",
-          "Good",
-          "Fair",
-          "Poor"
-        ],
-        "complexity": [
-          "Very Low",
-          "Low",
-          "Medium",
-          "High",
-          "Very High"
-        ],
-        "maintainability": [
-          "Excellent",
-          "Good",
-          "Fair",
-          "Needs Improvement"
-        ]
-      },
-      "thresholds": {
-        "max_cyclomatic_complexity": 20,
-        "max_function_length": 50,
-        "min_documentation_coverage": 70,
-        "max_nesting_level": 4,
-        "min_test_coverage": 60
-      },
-      "integrations": {
-        "ci_cd": [
-          "GitHub Actions",
-          "GitLab CI",
-          "Jenkins"
-        ],
-        "ides": [
-          "VS Code",
-          "PyCharm",
-          "IntelliJ"
-        ],
-        "quality_gates": [
-          "SonarQube",
-          "CodeClimate",
-          "Codacy"
         ]
       }
     },
@@ -1346,12 +1166,12 @@
     },
     "color_tools": {
       "enabled": true,
-      "description": "Suite professionale gestione colori con teoria, accessibilità e psicologia",
+      "description": "Suite professionale gestione colori con teoria, accessibilit\u00e0 e psicologia",
       "version": "2.0",
       "features": [
         "Conversioni formato multi-standard",
         "Generazione palette teoria del colore",
-        "Analisi accessibilità WCAG completa",
+        "Analisi accessibilit\u00e0 WCAG completa",
         "Simulazione daltonismo accurata",
         "Gradient creator con easing",
         "Psicologia e significato colori",
@@ -1536,7 +1356,7 @@
         "Password hashing con salt (PBKDF2/scrypt)",
         "Generazione keypair RSA",
         "Token crittograficamente sicuri",
-        "Analisi entropia e casualità",
+        "Analisi entropia e casualit\u00e0",
         "Password generation sicura",
         "Timing-safe comparisons",
         "Security assessment tools"
@@ -1942,11 +1762,11 @@
         "Creazione database SQLite con schema",
         "Import/export dati multi-formato",
         "Validazione query SQL sicura",
-        "Generazione schema da entità",
+        "Generazione schema da entit\u00e0",
         "Sistema backup completo",
         "Ottimizzazione performance automatica",
         "Documentazione database automatica",
-        "Validazione integrità dati",
+        "Validazione integrit\u00e0 dati",
         "Esecuzione query sicura"
       ],
       "supported_databases": {
@@ -2130,7 +1950,7 @@
     },
     "datetime_tools": {
       "enabled": true,
-      "description": "Suite completa gestione date, orari e fusi orari con funzionalità avanzate",
+      "description": "Suite completa gestione date, orari e fusi orari con funzionalit\u00e0 avanzate",
       "version": "2.0",
       "features": [
         "Timestamp conversions Unix/ISO",
@@ -3384,7 +3204,7 @@
         "Filter application artistici",
         "Watermarking testo e immagine",
         "Batch processing operazioni",
-        "Image comparison e similarità",
+        "Image comparison e similarit\u00e0",
         "Histogram analysis dettagliata",
         "Color palette extraction"
       ],
