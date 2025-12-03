@@ -39,39 +39,46 @@ def _classify_audio_content(zcr: float, silence_percentage: float, pitch: Option
     else:
         return "Audio complesso/Musica"
 
-def _validate_audio_params(sample_rate: int, duration: float, amplitude: float) -> Dict[str, Any]:
-    """Valida parametri audio e applica limiti di sicurezza."""
-    errors = []
+def _validate_audio_params(sample_rate: int, duration: float, amplitude: float) -> None:
+    """Validate audio parameters and enforce security limits.
     
-    if sample_rate not in [8000, 11025, 16000, 22050, 44100, 48000, 96000]:
-        sample_rate = 44100
-        errors.append("Sample rate corretto a 44100 Hz")
+    Raises:
+        ValueError: If any parameter is out of acceptable range
+    """
+    valid_sample_rates = [8000, 11025, 16000, 22050, 44100, 48000, 96000]
+    
+    if sample_rate not in valid_sample_rates:
+        raise ValueError(
+            f"Invalid sample rate: {sample_rate} Hz. "
+            f"Must be one of: {', '.join(map(str, valid_sample_rates))} Hz"
+        )
     
     if duration > 30.0:
-        duration = 30.0
-        errors.append("Durata limitata a 30 secondi")
-    elif duration <= 0:
-        duration = 1.0
-        errors.append("Durata corretta a 1 secondo")
+        raise ValueError(
+            f"Duration {duration}s exceeds maximum limit of 30.0 seconds. "
+            f"Please reduce the duration."
+        )
+    
+    if duration <= 0:
+        raise ValueError(
+            f"Invalid duration: {duration}s. Duration must be greater than 0."
+        )
     
     if amplitude > 1.0:
-        amplitude = 1.0
-        errors.append("Ampiezza limitata a 1.0")
-    elif amplitude < 0.0:
-        amplitude = 0.1
-        errors.append("Ampiezza corretta a 0.1")
+        raise ValueError(
+            f"Amplitude {amplitude} exceeds maximum limit of 1.0. "
+            f"Please reduce the amplitude."
+        )
     
-    return {
-        "sample_rate": sample_rate,
-        "duration": duration,
-        "amplitude": amplitude,
-        "warnings": errors
-    }
+    if amplitude < 0.0:
+        raise ValueError(
+            f"Invalid amplitude: {amplitude}. Amplitude must be non-negative."
+        )
 
 def _detect_audio_format(data: bytes) -> str:
-    """Rileva il formato audio dai magic numbers."""
+    """Detect audio format from magic numbers."""
     if len(data) < 12:
-        return "Troppo piccolo"
+        return "Too small"
     
     # WAV
     if data[:4] == b'RIFF' and data[8:12] == b'WAVE':
@@ -92,26 +99,453 @@ def _detect_audio_format(data: bytes) -> str:
     elif data[:4] == b'FORM' and data[8:12] == b'AIFF':
         return "AIFF"
     else:
-        return "Sconosciuto"
+        return "Unknown"
 
+def _get_channel_layout(channels: int) -> str:
+    """Determine the channel layout."""
+    layouts = {
+        1: "Mono",
+        2: "Stereo",
+        3: "2.1 Surround",
+        4: "Quadraphonic",
+        5: "5.0 Surround",
+        6: "5.1 Surround",
+        7: "6.1 Surround",
+        8: "7.1 Surround"
+    }
+    return layouts.get(channels, f"{channels} channels")
+
+
+def _assess_audio_quality(sample_rate: int, bit_depth: int, duration: float) -> Dict[str, str]:
+    """Assess audio quality."""
+    quality_score = 0
+    
+    # Sample rate scoring
+    if sample_rate >= 48000:
+        quality_score += 3
+        sr_quality = "Excellent"
+    elif sample_rate >= 44100:
+        quality_score += 2
+        sr_quality = "Good"
+    elif sample_rate >= 22050:
+        quality_score += 1
+        sr_quality = "Acceptable"
+    else:
+        sr_quality = "Low"
+    
+    # Bit depth scoring
+    if bit_depth >= 24:
+        quality_score += 3
+        bd_quality = "Professional"
+    elif bit_depth >= 16:
+        quality_score += 2
+        bd_quality = "CD Quality"
+    else:
+        bd_quality = "Low"
+    
+    # Overall assessment
+    if quality_score >= 5:
+        overall = "Excellent (Hi-Fi)"
+    elif quality_score >= 4:
+        overall = "Good (Standard)"
+    elif quality_score >= 2:
+        overall = "Acceptable"
+    else:
+        overall = "Low qualità"
+    
+    return {
+        "overall": overall,
+        "sample_rate_quality": sr_quality,
+        "bit_depth_quality": bd_quality,
+        "recommendations": _get_quality_recommendations(sample_rate, bit_depth)
+    }
+
+
+def _get_quality_recommendations(sample_rate: int, bit_depth: int) -> List[str]:
+    """Provide recommendations to improve quality."""
+    recommendations = []
+    
+    if sample_rate < 44100:
+        recommendations.append("Consider upsampling to 44.1kHz or higher")
+    if bit_depth < 16:
+        recommendations.append("Increase bit depth to at least 16-bit")
+    if sample_rate == 44100 and bit_depth == 16:
+        recommendations.append("CD quality standard - adequate for most uses")
+    if sample_rate >= 48000 and bit_depth >= 24:
+        recommendations.append("Professional quality - ideal for audio production")
+    
+    return recommendations
+
+
+def _estimate_audio_properties(audio_data: bytes, format_type: str) -> Dict[str, Any]:
+    """Estimate audio properties for non-WAV formats."""
+    estimates = {"method": "heuristic_estimation"}
+    
+    # Estimates based on typical sizes for format
+    if format_type == "MP3":
+        # MP3 tipicamente 128-320 kbps
+        estimated_bitrate = 128  # kbps conservative estimate
+        estimated_duration = (len(audio_data) * 8) / (estimated_bitrate * 1000)
+        estimates.update({
+            "estimated_duration_seconds": round(estimated_duration, 1),
+            "estimated_bitrate_kbps": estimated_bitrate,
+            "compression": "Lossy (MP3)"
+        })
+    elif format_type == "FLAC":
+        estimates.update({
+            "compression": "Lossless",
+            "typical_compression_ratio": "50-60%"
+        })
+    
+    return estimates
+
+
+def _apply_crossfade(samples: List[int], durations: List[float], 
+                    fade_duration: float, params) -> List[int]:
+    """Apply crossfade between audio segments."""
+    # Simplified crossfade implementation
+    fade_samples = int(fade_duration * params.framerate * params.nchannels)
+    
+    # For simplicity, we only apply fade out/in at the edges
+    result_samples = list(samples)
+    
+    # Calculate file positions
+    current_pos = 0
+    for i, duration in enumerate(durations[:-1]):  # Tutti tranne l'ultimo
+        file_samples = int(duration * params.framerate * params.nchannels)
+        
+        # Fade out del file corrente
+        fade_start = current_pos + file_samples - fade_samples
+        for j in range(fade_samples):
+            if fade_start + j < len(result_samples):
+                fade_factor = 1.0 - (j / fade_samples)
+                result_samples[fade_start + j] = int(result_samples[fade_start + j] * fade_factor)
+        
+        current_pos += file_samples
+    
+    return result_samples
+
+
+def _extract_basic_features(samples: List[int], params) -> Dict[str, Any]:
+    """Extract basic audio features."""
+    max_amp = max(abs(s) for s in samples) if samples else 0
+    rms = math.sqrt(sum(s**2 for s in samples) / len(samples)) if samples else 0
+    
+    return {
+        "max_amplitude": max_amp,
+        "rms_amplitude": round(rms, 2),
+        "dynamic_range_db": round(20 * math.log10(max_amp / (rms + 1)), 2),
+        "peak_to_rms_ratio": round(max_amp / (rms + 1), 2),
+        "amplitude_distribution": _analyze_amplitude_distribution(samples)
+    }
+
+
+def _extract_spectral_features(samples: List[int], sample_rate: int) -> Dict[str, Any]:
+    """Extract spectral features."""
+    # Simplified spectral analysis
+    spectral_centroid = _calculate_spectral_centroid(samples, sample_rate)
+    dominant_freq = _find_dominant_frequency(samples, sample_rate)
+    
+    return {
+        "spectral_centroid_hz": round(spectral_centroid, 2),
+        "dominant_frequency_hz": round(dominant_freq, 2),
+        "frequency_classification": _classify_pitch(dominant_freq),
+        "bandwidth_estimate": _estimate_bandwidth(samples, sample_rate)
+    }
+
+
+def _extract_temporal_features(samples: List[int], sample_rate: int) -> Dict[str, Any]:
+    """Extract temporal features."""
+    zcr = _calculate_zero_crossing_rate(samples)
+    onset_times = _detect_onsets(samples, sample_rate)
+    
+    return {
+        "zero_crossing_rate": round(zcr, 4),
+        "onset_detection": {
+            "onset_times": onset_times[:10],  # Prime 10 per brevità
+            "onset_count": len(onset_times),
+            "average_onset_interval": round(sum(onset_times[i+1] - onset_times[i] 
+                                              for i in range(len(onset_times)-1)) / max(1, len(onset_times)-1), 2) if len(onset_times) > 1 else 0
+        }
+    }
+
+
+def _extract_perceptual_features(samples: List[int], sample_rate: int) -> Dict[str, Any]:
+    """Extract perceptual features."""
+    loudness = _calculate_loudness(samples)
+    brightness = _calculate_brightness(samples, sample_rate)
+    
+    return {
+        "perceived_loudness": loudness,
+        "brightness_metric": brightness,
+        "content_classification": _classify_audio_content(
+            _calculate_zero_crossing_rate(samples),
+            _calculate_silence_percentage(samples),
+            _find_dominant_frequency(samples, sample_rate)
+        )
+    }
+
+
+def _extract_quality_metrics(samples: List[int], params) -> Dict[str, Any]:
+    """Extract audio quality metrics."""
+    snr = _estimate_snr(samples)
+    thd = _estimate_thd(samples, params.framerate)
+    
+    return {
+        "estimated_snr_db": round(snr, 2),
+        "estimated_thd_percent": round(thd * 100, 2),
+        "quality_score": _calculate_quality_score(snr, thd, params),
+        "clipping_detection": _detect_clipping(samples)
+    }
+
+# Helper methods for advanced analysis
+
+def _calculate_spectral_centroid(samples: List[int], sample_rate: int) -> float:
+    """Calculate the spectral centroid."""
+    # Simplified implementation
+    freqs = []
+    mags = []
+    
+    # Simplified FFT for main frequencies
+    for i in range(1, min(100, len(samples)//2)):
+        freq = i * sample_rate / len(samples)
+        if freq < sample_rate / 2:
+            mag = abs(sum(samples[j] * math.cos(2 * math.pi * i * j / len(samples)) 
+                        for j in range(0, len(samples), len(samples)//100)))
+            freqs.append(freq)
+            mags.append(mag)
+    
+    if not mags:
+        return 0
+    
+    weighted_sum = sum(f * m for f, m in zip(freqs, mags))
+    magnitude_sum = sum(mags)
+    
+    return weighted_sum / magnitude_sum if magnitude_sum > 0 else 0
+
+
+def _find_dominant_frequency(samples: List[int], sample_rate: int) -> float:
+    """Find the dominant frequency via autocorrelation."""
+    if len(samples) < 100:
+        return 0
+    
+    # Autocorrelazione semplificata
+    max_correlation = 0
+    best_period = 0
+    
+    min_period = sample_rate // 800  # Max 800 Hz
+    max_period = sample_rate // 50   # Min 50 Hz
+    
+    test_samples = samples[:min(sample_rate, len(samples))]
+    
+    for period in range(min_period, min(max_period, len(test_samples)//2)):
+        correlation = sum(test_samples[i] * test_samples[i + period] 
+                        for i in range(len(test_samples) - period))
+        
+        if correlation > max_correlation:
+            max_correlation = correlation
+            best_period = period
+    
+    return sample_rate / best_period if best_period > 0 else 0
+
+
+def _calculate_zero_crossing_rate(samples: List[int]) -> float:
+    """Calculate the zero crossing rate."""
+    if len(samples) < 2:
+        return 0
+    
+    zero_crossings = sum(1 for i in range(1, len(samples)) 
+                       if (samples[i] >= 0) != (samples[i-1] >= 0))
+    return zero_crossings / len(samples)
+
+
+def _calculate_silence_percentage(samples: List[int]) -> float:
+    """Calculate the silence percentage."""
+    if not samples:
+        return 100
+    
+    max_amp = max(abs(s) for s in samples)
+    threshold = max_amp * 0.01  # 1% del massimo
+    
+    silence_samples = sum(1 for s in samples if abs(s) < threshold)
+    return (silence_samples / len(samples)) * 100
+
+
+def _analyze_amplitude_distribution(samples: List[int]) -> Dict[str, Any]:
+    """Analyze amplitude distribution."""
+    if not samples:
+        return {}
+    
+    max_amp = max(abs(s) for s in samples)
+    if max_amp == 0:
+        return {"uniform": True}
+    
+    # Create histogram buckets
+    buckets = [0] * 10
+    for sample in samples:
+        bucket_idx = min(9, int(abs(sample) / (max_amp / 10)))
+        buckets[bucket_idx] += 1
+    
+    total = len(samples)
+    return {
+        "histogram": buckets,
+        "percentages": [round(b / total * 100, 2) for b in buckets]
+    }
+
+
+def _estimate_bandwidth(samples: List[int], sample_rate: int) -> Dict[str, Any]:
+    """Estimate frequency bandwidth."""
+    # Simplified bandwidth estimation
+    return {
+        "estimated_bandwidth_hz": sample_rate / 2,  # Nyquist limit
+        "method": "theoretical_maximum"
+    }
+
+
+def _detect_onsets(samples: List[int], sample_rate: int) -> List[float]:
+    """Detect onset times in audio."""
+    if len(samples) < 100:
+        return []
+    
+    # Simple onset detection based on energy changes
+    window_size = sample_rate // 20  # 50ms windows
+    onsets = []
+    
+    prev_energy = 0
+    for i in range(0, len(samples) - window_size, window_size):
+        window = samples[i:i + window_size]
+        energy = sum(s**2 for s in window) / len(window)
+        
+        # Detect significant energy increase
+        if energy > prev_energy * 1.5 and prev_energy > 0:
+            onset_time = i / sample_rate
+            onsets.append(round(onset_time, 3))
+        
+        prev_energy = energy
+    
+    return onsets[:20]  # Limit to first 20 onsets
+
+
+def _calculate_loudness(samples: List[int]) -> Dict[str, Any]:
+    """Calculate perceived loudness."""
+    if not samples:
+        return {"loudness_lufs": 0}
+    
+    rms = math.sqrt(sum(s**2 for s in samples) / len(samples))
+    # Simplified loudness estimation (not true LUFS)
+    loudness_db = 20 * math.log10(rms + 1) if rms > 0 else -float('inf')
+    
+    return {
+        "loudness_db": round(loudness_db, 2),
+        "rms_amplitude": round(rms, 2),
+        "loudness_category": "Loud" if loudness_db > 70 else "Medium" if loudness_db > 50 else "Quiet"
+    }
+
+
+def _calculate_brightness(samples: List[int], sample_rate: int) -> float:
+    """Calculate brightness (high frequency content)."""
+    # Simplified brightness calculation
+    # Higher zero crossing rate indicates more high frequencies
+    if len(samples) < 2:
+        return 0
+    
+    zero_crossings = sum(1 for i in range(1, len(samples)) 
+                       if (samples[i] >= 0) != (samples[i-1] >= 0))
+    zcr = zero_crossings / len(samples)
+    
+    # Normalize to 0-1 range
+    brightness = min(1.0, zcr * 10)
+    return round(brightness, 3)
+
+
+def _estimate_snr(samples: List[int]) -> float:
+    """Estimate signal-to-noise ratio."""
+    if not samples:
+        return 0
+    
+    max_amp = max(abs(s) for s in samples)
+    
+    # Estimate noise floor (bottom 10% of amplitudes)
+    sorted_amps = sorted([abs(s) for s in samples])
+    noise_floor_idx = len(sorted_amps) // 10
+    noise_floor = sorted_amps[noise_floor_idx] if sorted_amps else 1
+    
+    # Calculate SNR in dB
+    snr = 20 * math.log10(max_amp / (noise_floor + 1)) if noise_floor > 0 else 100
+    return min(100, max(0, snr))
+
+
+def _estimate_thd(samples: List[int], sample_rate: int) -> float:
+    """Estimate total harmonic distortion."""
+    # Simplified THD estimation
+    # In a real implementation, this would analyze harmonic frequencies
+    if not samples:
+        return 0
+    
+    # Use zero crossing rate as a proxy for distortion
+    zcr = _calculate_zero_crossing_rate(samples)
+    
+    # Higher ZCR might indicate more distortion
+    # This is a very rough approximation
+    thd = min(0.5, zcr * 2)
+    return round(thd, 4)
+
+
+def _calculate_quality_score(snr: float, thd: float, params) -> int:
+    """Calculate overall quality score."""
+    # Score based on SNR (0-100)
+    snr_score = min(100, snr)
+    
+    # Penalty for THD
+    thd_penalty = thd * 100
+    
+    # Bonus for high sample rate and bit depth
+    sr_bonus = 10 if params.framerate >= 44100 else 0
+    bd_bonus = 10 if params.sampwidth >= 2 else 0
+    
+    quality = snr_score - thd_penalty + sr_bonus + bd_bonus
+    return int(max(0, min(100, quality)))
+
+
+def _detect_clipping(samples: List[int]) -> Dict[str, Any]:
+    """Detect clipping in audio."""
+    if not samples:
+        return {"clipping_detected": False}
+    
+    max_value = 32767
+    min_value = -32768
+    
+    clipped_samples = sum(1 for s in samples if s >= max_value or s <= min_value)
+    clipping_percentage = (clipped_samples / len(samples)) * 100
+    
+    return {
+        "clipping_detected": clipped_samples > 0,
+        "clipped_samples": clipped_samples,
+        "clipping_percentage": round(clipping_percentage, 2),
+        "severity": "High" if clipping_percentage > 5 else "Medium" if clipping_percentage > 1 else "Low" if clipped_samples > 0 else "None"
+    }
+
+# ...existing methods continue with enhanced implementations...
+
+# ...existing code...
 def register_tools(mcp):
-    """Registra i tool di elaborazione audio con l'istanza del server MCP."""
-    logging.info("🎵 Registrazione tool-set: Audio Processing Tools")
+    """Register audio processing tools with the MCP server instance."""
+    logging.info("🎵 Registering tool-set: Audio Processing Tools")
 
     @mcp.tool()
     def analyze_audio_metadata(audio_base64: str) -> Dict[str, Any]:
         """
-        Analizza metadata dettagliati di un file audio da base64.
+        Analyze detailed metadata of an audio file from base64.
         
         Args:
-            audio_base64: File audio codificato in base64
+            audio_base64: Audio file encoded in base64
         """
         try:
-            # Decodifica base64
+            # Decode base64
             audio_data = base64.b64decode(audio_base64)
             file_size_kb = len(audio_data) / 1024
             
-            # Rileva formato
+            # Detect format
             format_detected = _detect_audio_format(audio_data)
             
             result = {
@@ -121,7 +555,7 @@ def register_tools(mcp):
                 "analysis_timestamp": datetime.now(timezone.utc).isoformat()
             }
             
-            # Analisi WAV dettagliata
+            # Detailed WAV analysis
             if format_detected == "WAV":
                 try:
                     audio_io = io.BytesIO(audio_data)
@@ -132,7 +566,7 @@ def register_tools(mcp):
                         sample_width = wav_file.getsampwidth()
                         duration = frames / sample_rate if sample_rate > 0 else 0
                         
-                        # Calcola bitrate effettivo
+                        # Calculate effective bitrate
                         bits_per_sample = sample_width * 8
                         bitrate_bps = sample_rate * channels * bits_per_sample
                         
@@ -146,127 +580,32 @@ def register_tools(mcp):
                                 "bit_depth": bits_per_sample,
                                 "total_frames": frames,
                                 "bitrate_kbps": round(bitrate_bps / 1000, 1),
-                                "channel_layout": self._get_channel_layout(channels)
+                                "channel_layout": _get_channel_layout(channels)
                             },
                             "file_metrics": {
-                                "compression_ratio": "Nessuna (WAV non compresso)",
+                                "compression_ratio": "None (uncompressed WAV)",
                                 "data_rate_mbps": round((len(audio_data) * 8) / (duration * 1_000_000), 2) if duration > 0 else 0,
                                 "samples_per_channel": frames,
                                 "total_samples": frames * channels
                             },
-                            "quality_assessment": self._assess_audio_quality(sample_rate, bits_per_sample, duration)
+                            "quality_assessment": _assess_audio_quality(sample_rate, bits_per_sample, duration)
                         })
                 except wave.Error as e:
-                    result["error"] = f"Errore lettura WAV: {str(e)}"
+                    result["error"] = f"WAV reading error: {str(e)}"
             
             else:
-                # Analisi generica per altri formati
+                # Generic analysis for other formats
                 result.update({
-                    "note": "Analisi limitata per questo formato",
-                    "recommendation": "Converti in WAV per analisi dettagliata",
-                    "estimated_properties": self._estimate_audio_properties(audio_data, format_detected)
+                    "note": "Limited analysis for this format",
+                    "recommendation": "Convert to WAV for detailed analysis",
+                    "estimated_properties": _estimate_audio_properties(audio_data, format_detected)
                 })
             
             return result
             
         except Exception as e:
-            logging.error(f"Errore in analyze_audio_metadata: {e}")
+            logging.error(f"Error in analyze_audio_metadata: {e}")
             return {"success": False, "error": str(e)}
-
-    def _get_channel_layout(self, channels: int) -> str:
-        """Determina il layout dei canali."""
-        layouts = {
-            1: "Mono",
-            2: "Stereo",
-            3: "2.1 Surround",
-            4: "Quadraphonic",
-            5: "5.0 Surround",
-            6: "5.1 Surround",
-            7: "6.1 Surround",
-            8: "7.1 Surround"
-        }
-        return layouts.get(channels, f"{channels} canali")
-
-    def _assess_audio_quality(self, sample_rate: int, bit_depth: int, duration: float) -> Dict[str, str]:
-        """Valuta la qualità audio."""
-        quality_score = 0
-        
-        # Sample rate scoring
-        if sample_rate >= 48000:
-            quality_score += 3
-            sr_quality = "Eccellente"
-        elif sample_rate >= 44100:
-            quality_score += 2
-            sr_quality = "Buona"
-        elif sample_rate >= 22050:
-            quality_score += 1
-            sr_quality = "Accettabile"
-        else:
-            sr_quality = "Bassa"
-        
-        # Bit depth scoring
-        if bit_depth >= 24:
-            quality_score += 3
-            bd_quality = "Professionale"
-        elif bit_depth >= 16:
-            quality_score += 2
-            bd_quality = "CD Quality"
-        else:
-            bd_quality = "Bassa"
-        
-        # Overall assessment
-        if quality_score >= 5:
-            overall = "Eccellente (Hi-Fi)"
-        elif quality_score >= 4:
-            overall = "Buona (Standard)"
-        elif quality_score >= 2:
-            overall = "Accettabile"
-        else:
-            overall = "Bassa qualità"
-        
-        return {
-            "overall": overall,
-            "sample_rate_quality": sr_quality,
-            "bit_depth_quality": bd_quality,
-            "recommendations": self._get_quality_recommendations(sample_rate, bit_depth)
-        }
-
-    def _get_quality_recommendations(self, sample_rate: int, bit_depth: int) -> List[str]:
-        """Fornisce raccomandazioni per migliorare la qualità."""
-        recommendations = []
-        
-        if sample_rate < 44100:
-            recommendations.append("Considera upsampling a 44.1kHz o superiore")
-        if bit_depth < 16:
-            recommendations.append("Aumenta la profondità di bit ad almeno 16-bit")
-        if sample_rate == 44100 and bit_depth == 16:
-            recommendations.append("Qualità CD standard - adeguata per la maggior parte degli usi")
-        if sample_rate >= 48000 and bit_depth >= 24:
-            recommendations.append("Qualità professionale - ideale per produzione audio")
-        
-        return recommendations
-
-    def _estimate_audio_properties(self, audio_data: bytes, format_type: str) -> Dict[str, Any]:
-        """Stima proprietà audio per formati non WAV."""
-        estimates = {"method": "heuristic_estimation"}
-        
-        # Stime basate su dimensioni tipiche per formato
-        if format_type == "MP3":
-            # MP3 tipicamente 128-320 kbps
-            estimated_bitrate = 128  # kbps conservative estimate
-            estimated_duration = (len(audio_data) * 8) / (estimated_bitrate * 1000)
-            estimates.update({
-                "estimated_duration_seconds": round(estimated_duration, 1),
-                "estimated_bitrate_kbps": estimated_bitrate,
-                "compression": "Lossy (MP3)"
-            })
-        elif format_type == "FLAC":
-            estimates.update({
-                "compression": "Lossless",
-                "typical_compression_ratio": "50-60%"
-            })
-        
-        return estimates
 
     @mcp.tool()
     def generate_advanced_waveform(waveform_type: str, frequency: float, duration: float, 
@@ -274,39 +613,36 @@ def register_tools(mcp):
                                  modulation_freq: float = 0, fade_in: float = 0, 
                                  fade_out: float = 0) -> Dict[str, Any]:
         """
-        Genera forme d'onda avanzate con modulazione e fade.
+        Generate advanced waveforms with modulation and fade.
         
         Args:
-            waveform_type: Tipo di onda ('sine', 'square', 'triangle', 'sawtooth', 'noise')
-            frequency: Frequenza principale in Hz
-            duration: Durata in secondi
-            sample_rate: Frequenza di campionamento
-            amplitude: Ampiezza (0.0-1.0)
-            modulation_freq: Frequenza di modulazione AM (0 = nessuna)
-            fade_in: Durata fade in in secondi
-            fade_out: Durata fade out in secondi
+            waveform_type: Waveform type ('sine', 'square', 'triangle', 'sawtooth', 'noise')
+            frequency: Main frequency in Hz
+            duration: Duration in seconds
+            sample_rate: Sampling rate
+            amplitude: Amplitude (0.0-1.0)
+            modulation_freq: AM modulation frequency (0 = none)
+            fade_in: Fade in duration in seconds
+            fade_out: Fade out duration in seconds
         """
         try:
-            # Validazione parametri
-            validation = _validate_audio_params(sample_rate, duration, amplitude)
-            sample_rate = validation["sample_rate"]
-            duration = validation["duration"]
-            amplitude = validation["amplitude"]
+            # Parameter validation - will raise ValueError if params are invalid
+            _validate_audio_params(sample_rate, duration, amplitude)
             
-            # Limiti aggiuntivi
+            # Additional limits for secondary parameters (these can be clamped)
             frequency = max(20, min(frequency, sample_rate // 2))
             modulation_freq = max(0, min(modulation_freq, 50))
             fade_in = max(0, min(fade_in, duration / 2))
             fade_out = max(0, min(fade_out, duration / 2))
             
-            # Genera campioni
+            # Generate samples
             num_samples = int(sample_rate * duration)
             samples = []
             
             for i in range(num_samples):
                 t = i / sample_rate
                 
-                # Genera forma d'onda base
+                # Generate base waveform
                 if waveform_type == "sine":
                     sample = math.sin(2 * math.pi * frequency * t)
                 elif waveform_type == "square":
@@ -323,12 +659,12 @@ def register_tools(mcp):
                 else:
                     sample = math.sin(2 * math.pi * frequency * t)  # Default to sine
                 
-                # Modulazione di ampiezza
+                # Amplitude modulation
                 if modulation_freq > 0:
                     modulation = 0.5 * (1 + math.sin(2 * math.pi * modulation_freq * t))
                     sample *= modulation
                 
-                # Applicazione fade
+                # Apply fade
                 fade_factor = 1.0
                 if fade_in > 0 and t < fade_in:
                     fade_factor *= t / fade_in
@@ -337,11 +673,11 @@ def register_tools(mcp):
                 
                 sample *= amplitude * fade_factor
                 
-                # Converte a 16-bit signed integer
+                # Convert to 16-bit signed integer
                 sample_int = max(-32767, min(32767, int(sample * 32767)))
                 samples.append(sample_int)
             
-            # Crea file WAV
+            # Create WAV file
             output_buffer = io.BytesIO()
             with wave.open(output_buffer, 'wb') as wav_file:
                 wav_file.setnchannels(1)
@@ -370,12 +706,11 @@ def register_tools(mcp):
                     "file_size_kb": round(len(output_buffer.getvalue()) / 1024, 2),
                     "bit_depth": 16,
                     "channels": 1
-                },
-                "validation_warnings": validation.get("warnings", [])
+                }
             }
             
         except Exception as e:
-            logging.error(f"Errore in generate_advanced_waveform: {e}")
+            logging.error(f"Error in generate_advanced_waveform: {e}")
             return {"success": False, "error": str(e)}
 
     @mcp.tool()
@@ -421,15 +756,15 @@ def register_tools(mcp):
                 if N <= 1:
                     return x
                 
-                # Per semplicità, usiamo solo potenze di 2
+                # For simplicity, we only use powers of 2
                 if N & (N-1) != 0:
-                    # Riempi con zeri fino alla prossima potenza di 2
+                    # Fill with zeros to the next power of 2
                     next_pow2 = 1 << (N - 1).bit_length()
                     x = x + [0] * (next_pow2 - N)
                     N = next_pow2
                 
-                # Ricorsione semplificata per piccole dimensioni
-                if N <= 64:  # Limite per evitare troppa ricorsione
+                # Simplified recursion for small dimensions
+                if N <= 64:  # Limit to avoid too much recursion
                     result = []
                     for k in range(N):
                         sum_val = 0
@@ -439,13 +774,13 @@ def register_tools(mcp):
                         result.append(sum_val)
                     return result
                 else:
-                    return x  # Fallback per dimensioni grandi
+                    return x  # Fallback for large dimensions
             
             # Analizza in finestre
             window_size = min(fft_size, len(samples))
             window_data = samples[:window_size]
             
-            # Applica finestra di Hanning semplificata
+            # Apply simplified Hanning window
             for i in range(len(window_data)):
                 hanning = 0.5 * (1 - math.cos(2 * math.pi * i / (len(window_data) - 1)))
                 window_data[i] *= hanning
@@ -453,7 +788,7 @@ def register_tools(mcp):
             # Esegui FFT
             fft_result = simple_fft(window_data)
             
-            # Calcola magnitudini
+            # Calculate magnitudes
             magnitudes = [abs(x) for x in fft_result[:len(fft_result)//2]]
             
             # Trova frequenze dominanti
@@ -470,10 +805,10 @@ def register_tools(mcp):
                             "relative_strength": round(magnitude / max_magnitude, 3)
                         })
             
-            # Ordina per magnitude
+            # Sort by magnitude
             dominant_frequencies.sort(key=lambda x: x['magnitude'], reverse=True)
             
-            # Analisi delle frequenze
+            # Frequency analysis
             def classify_frequency(freq):
                 if freq < 60:
                     return "Sub-bass"
@@ -526,17 +861,23 @@ def register_tools(mcp):
     @mcp.tool()
     def adjust_audio_volume(audio_base64: str, volume_factor: float) -> Dict[str, Any]:
         """
-        Modifica volume di un file audio WAV.
+        Adjust volume of a WAV audio file.
         
         Args:
-            audio_base64: Audio WAV codificato in base64
-            volume_factor: Fattore di volume (0.5 = dimezza, 2.0 = raddoppia)
+            audio_base64: WAV audio encoded in base64
+            volume_factor: Volume factor (0.5 = halve, 2.0 = double, max 5.0)
         """
         try:
-            # Limiti di sicurezza
-            volume_factor = max(0.0, min(volume_factor, 5.0))  # 0x - 5x volume
+            # Validate volume factor
+            if volume_factor < 0.0:
+                raise ValueError(f"Invalid volume_factor: {volume_factor}. Must be non-negative.")
+            if volume_factor > 5.0:
+                raise ValueError(
+                    f"Volume factor {volume_factor} exceeds maximum limit of 5.0. "
+                    f"Please reduce the volume factor."
+                )
             
-            # Decodifica base64
+            # Decode base64
             audio_data = base64.b64decode(audio_base64)
             audio_io = io.BytesIO(audio_data)
             
@@ -552,7 +893,7 @@ def register_tools(mcp):
             else:
                 return {"success": False, "error": "Solo audio 16-bit supportato"}
             
-            # Applica fattore volume
+            # Apply volume factor
             max_value = 32767
             min_value = -32768
             clipped_samples = 0
@@ -702,7 +1043,7 @@ def register_tools(mcp):
             if params.nchannels > 1:
                 samples = samples[::params.nchannels]
             
-            # Calcola caratteristiche temporali
+            # Calculate temporal characteristics
             duration = frames / params.framerate
             max_amplitude = max(abs(s) for s in samples) if samples else 0
             rms = math.sqrt(sum(s**2 for s in samples) / len(samples)) if samples else 0
@@ -716,18 +1057,18 @@ def register_tools(mcp):
             energy = sum(s**2 for s in samples)
             avg_power = energy / len(samples) if samples else 0
             
-            # Analisi distribuzione ampiezze
+            # Analyze amplitude distribution
             amplitude_histogram = {}
             for sample in samples[::100]:  # Campiona per performance
                 bucket = int(abs(sample) // 3277)  # 10% buckets
                 amplitude_histogram[bucket] = amplitude_histogram.get(bucket, 0) + 1
             
-            # Calcola statistiche temporali
+            # Calculate temporal statistics
             silence_threshold = max_amplitude * 0.01  # 1% del massimo
             silence_samples = sum(1 for s in samples if abs(s) < silence_threshold)
             silence_percentage = (silence_samples / len(samples)) * 100 if samples else 0
             
-            # Stima pitch dominante (metodo autocorrelazione semplificato)
+            # Estimate dominant pitch (simplified autocorrelation method)
             def estimate_pitch(samples, sample_rate, min_freq=50, max_freq=800):
                 # Limita campioni per performance
                 samples = samples[:sample_rate]  # Max 1 secondo
@@ -761,7 +1102,7 @@ def register_tools(mcp):
                 },
                 "spectral_features": {
                     "estimated_pitch_hz": round(estimated_pitch, 2) if estimated_pitch > 0 else None,
-                    "pitch_classification": self._classify_pitch(estimated_pitch) if estimated_pitch > 0 else "Non determinato"
+                    "pitch_classification": _classify_pitch(estimated_pitch) if estimated_pitch > 0 else "Not determined"
                 },
                 "energy_features": {
                     "total_energy": energy,
@@ -769,8 +1110,8 @@ def register_tools(mcp):
                     "peak_to_average_ratio": round(max_amplitude / (rms + 1), 2)
                 },
                 "audio_classification": {
-                    "likely_content": self._classify_audio_content(zcr, silence_percentage, estimated_pitch),
-                    "audio_quality": "Alta" if max_amplitude > 20000 and silence_percentage < 50 else "Media"
+                    "likely_content": _classify_audio_content(zcr, silence_percentage, estimated_pitch),
+                    "audio_quality": "High" if max_amplitude > 20000 and silence_percentage < 50 else "Medium"
                 },
                 "technical_info": {
                     "sample_rate": params.framerate,
@@ -810,11 +1151,23 @@ def register_tools(mcp):
                 total_frames = wav_file.getnframes()
                 total_duration = total_frames / params.framerate
                 
-                # Validazione tempi
-                start_time = max(0, min(start_time, total_duration))
-                end_time = max(start_time + 0.1, min(end_time, total_duration))
+                # Validate time parameters
+                if start_time < 0:
+                    raise ValueError(f"Invalid start_time: {start_time}. Must be non-negative.")
+                if start_time > total_duration:
+                    raise ValueError(
+                        f"Start time {start_time}s exceeds audio duration of {total_duration}s."
+                    )
+                if end_time <= start_time:
+                    raise ValueError(
+                        f"End time {end_time}s must be greater than start time {start_time}s."
+                    )
+                if end_time > total_duration:
+                    raise ValueError(
+                        f"End time {end_time}s exceeds audio duration of {total_duration}s."
+                    )
                 
-                # Calcola frame di inizio e fine
+                # Calculate start and end frames
                 start_frame = int(start_time * params.framerate)
                 end_frame = int(end_time * params.framerate)
                 
@@ -894,9 +1247,9 @@ def register_tools(mcp):
                     else:
                         return {"success": False, "error": "Solo audio 16-bit supportato"}
             
-            # Applica crossfade se richiesto
+            # Apply crossfade if requested
             if crossfade_duration > 0 and len(audio_files_base64) > 1:
-                all_samples = self._apply_crossfade(all_samples, file_durations, 
+                all_samples = _apply_crossfade(all_samples, file_durations, 
                                                   crossfade_duration, common_params)
             
             # Crea file concatenato
@@ -923,31 +1276,6 @@ def register_tools(mcp):
             
         except Exception as e:
             return {"success": False, "error": str(e)}
-
-    def _apply_crossfade(self, samples: List[int], durations: List[float], 
-                        fade_duration: float, params) -> List[int]:
-        """Applica crossfade tra segmenti audio."""
-        # Implementazione semplificata del crossfade
-        fade_samples = int(fade_duration * params.framerate * params.nchannels)
-        
-        # Per semplicità, applichiamo solo fade out/in sui bordi
-        result_samples = list(samples)
-        
-        # Calcola posizioni dei file
-        current_pos = 0
-        for i, duration in enumerate(durations[:-1]):  # Tutti tranne l'ultimo
-            file_samples = int(duration * params.framerate * params.nchannels)
-            
-            # Fade out del file corrente
-            fade_start = current_pos + file_samples - fade_samples
-            for j in range(fade_samples):
-                if fade_start + j < len(result_samples):
-                    fade_factor = 1.0 - (j / fade_samples)
-                    result_samples[fade_start + j] = int(result_samples[fade_start + j] * fade_factor)
-            
-            current_pos += file_samples
-        
-        return result_samples
 
     @mcp.tool()
     def detect_audio_features_advanced(audio_base64: str) -> Dict[str, Any]:
@@ -977,13 +1305,13 @@ def register_tools(mcp):
             
             duration = frames / params.framerate
             
-            # Analisi avanzata delle caratteristiche
+            # Advanced feature analysis
             features = {
-                "basic_properties": self._extract_basic_features(samples, params),
-                "spectral_features": self._extract_spectral_features(samples, params.framerate),
-                "temporal_features": self._extract_temporal_features(samples, params.framerate),
-                "perceptual_features": self._extract_perceptual_features(samples, params.framerate),
-                "quality_metrics": self._extract_quality_metrics(samples, params)
+                "basic_properties": _extract_basic_features(samples, params),
+                "spectral_features": _extract_spectral_features(samples, params.framerate),
+                "temporal_features": _extract_temporal_features(samples, params.framerate),
+                "perceptual_features": _extract_perceptual_features(samples, params.framerate),
+                "quality_metrics": _extract_quality_metrics(samples, params)
             }
             
             return {
@@ -999,142 +1327,3 @@ def register_tools(mcp):
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def _extract_basic_features(self, samples: List[int], params) -> Dict[str, Any]:
-        """Estrae caratteristiche audio di base."""
-        max_amp = max(abs(s) for s in samples) if samples else 0
-        rms = math.sqrt(sum(s**2 for s in samples) / len(samples)) if samples else 0
-        
-        return {
-            "max_amplitude": max_amp,
-            "rms_amplitude": round(rms, 2),
-            "dynamic_range_db": round(20 * math.log10(max_amp / (rms + 1)), 2),
-            "peak_to_rms_ratio": round(max_amp / (rms + 1), 2),
-            "amplitude_distribution": self._analyze_amplitude_distribution(samples)
-        }
-
-    def _extract_spectral_features(self, samples: List[int], sample_rate: int) -> Dict[str, Any]:
-        """Estrae caratteristiche spettrali."""
-        # Analisi spettrale semplificata
-        spectral_centroid = self._calculate_spectral_centroid(samples, sample_rate)
-        dominant_freq = self._find_dominant_frequency(samples, sample_rate)
-        
-        return {
-            "spectral_centroid_hz": round(spectral_centroid, 2),
-            "dominant_frequency_hz": round(dominant_freq, 2),
-            "frequency_classification": _classify_pitch(dominant_freq),
-            "bandwidth_estimate": self._estimate_bandwidth(samples, sample_rate)
-        }
-
-    def _extract_temporal_features(self, samples: List[int], sample_rate: int) -> Dict[str, Any]:
-        """Estrae caratteristiche temporali."""
-        zcr = self._calculate_zero_crossing_rate(samples)
-        onset_times = self._detect_onsets(samples, sample_rate)
-        
-        return {
-            "zero_crossing_rate": round(zcr, 4),
-            "onset_detection": {
-                "onset_times": onset_times[:10],  # Prime 10 per brevità
-                "onset_count": len(onset_times),
-                "average_onset_interval": round(sum(onset_times[i+1] - onset_times[i] 
-                                                  for i in range(len(onset_times)-1)) / max(1, len(onset_times)-1), 2) if len(onset_times) > 1 else 0
-            }
-        }
-
-    def _extract_perceptual_features(self, samples: List[int], sample_rate: int) -> Dict[str, Any]:
-        """Estrae caratteristiche percettive."""
-        loudness = self._calculate_loudness(samples)
-        brightness = self._calculate_brightness(samples, sample_rate)
-        
-        return {
-            "perceived_loudness": loudness,
-            "brightness_metric": brightness,
-            "content_classification": _classify_audio_content(
-                self._calculate_zero_crossing_rate(samples),
-                self._calculate_silence_percentage(samples),
-                self._find_dominant_frequency(samples, sample_rate)
-            )
-        }
-
-    def _extract_quality_metrics(self, samples: List[int], params) -> Dict[str, Any]:
-        """Estrae metriche di qualità audio."""
-        snr = self._estimate_snr(samples)
-        thd = self._estimate_thd(samples, params.framerate)
-        
-        return {
-            "estimated_snr_db": round(snr, 2),
-            "estimated_thd_percent": round(thd * 100, 2),
-            "quality_score": self._calculate_quality_score(snr, thd, params),
-            "clipping_detection": self._detect_clipping(samples)
-        }
-
-    # Helper methods for advanced analysis
-    def _calculate_spectral_centroid(self, samples: List[int], sample_rate: int) -> float:
-        """Calcola il centroide spettrale."""
-        # Implementazione semplificata
-        freqs = []
-        mags = []
-        
-        # FFT semplificata per frequenze principali
-        for i in range(1, min(100, len(samples)//2)):
-            freq = i * sample_rate / len(samples)
-            if freq < sample_rate / 2:
-                mag = abs(sum(samples[j] * math.cos(2 * math.pi * i * j / len(samples)) 
-                            for j in range(0, len(samples), len(samples)//100)))
-                freqs.append(freq)
-                mags.append(mag)
-        
-        if not mags:
-            return 0
-        
-        weighted_sum = sum(f * m for f, m in zip(freqs, mags))
-        magnitude_sum = sum(mags)
-        
-        return weighted_sum / magnitude_sum if magnitude_sum > 0 else 0
-
-    def _find_dominant_frequency(self, samples: List[int], sample_rate: int) -> float:
-        """Trova la frequenza dominante tramite autocorrelazione."""
-        if len(samples) < 100:
-            return 0
-        
-        # Autocorrelazione semplificata
-        max_correlation = 0
-        best_period = 0
-        
-        min_period = sample_rate // 800  # Max 800 Hz
-        max_period = sample_rate // 50   # Min 50 Hz
-        
-        test_samples = samples[:min(sample_rate, len(samples))]
-        
-        for period in range(min_period, min(max_period, len(test_samples)//2)):
-            correlation = sum(test_samples[i] * test_samples[i + period] 
-                            for i in range(len(test_samples) - period))
-            
-            if correlation > max_correlation:
-                max_correlation = correlation
-                best_period = period
-        
-        return sample_rate / best_period if best_period > 0 else 0
-
-    def _calculate_zero_crossing_rate(self, samples: List[int]) -> float:
-        """Calcola il tasso di attraversamento dello zero."""
-        if len(samples) < 2:
-            return 0
-        
-        zero_crossings = sum(1 for i in range(1, len(samples)) 
-                           if (samples[i] >= 0) != (samples[i-1] >= 0))
-        return zero_crossings / len(samples)
-
-    def _calculate_silence_percentage(self, samples: List[int]) -> float:
-        """Calcola la percentuale di silenzio."""
-        if not samples:
-            return 100
-        
-        max_amp = max(abs(s) for s in samples)
-        threshold = max_amp * 0.01  # 1% del massimo
-        
-        silence_samples = sum(1 for s in samples if abs(s) < threshold)
-        return (silence_samples / len(samples)) * 100
-
-    # ...existing methods continue with enhanced implementations...
-    
-    # ...existing code...
